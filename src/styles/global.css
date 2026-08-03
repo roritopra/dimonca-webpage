@@ -1,0 +1,13 @@
+@import 'tailwindcss';
+
+@theme {
+	--color-beige: #f7f2e8;
+	--color-brown: #3a200e;
+	--color-brown-300: #89796e;
+	--color-brown-400: #614d3e;
+	--color-pink: #f45d8c;
+	--color-pink-200: #fbbed1;
+
+	--font-sans: 'Poppins', ui-sans-serif, system-ui, sans-serif;
+	--font-script: 'Sacramento', cursive;
+}

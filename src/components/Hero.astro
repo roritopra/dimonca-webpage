@@ -1,341 +1,72 @@
----
-const gridLine = {
-	left: ['0', '62.1', '124.2', '186.3', '248.4', '310.5', '372.6', '434.7', '496.8', '553', '615.1', '677.2', '739.3', '801.4', '863.5', '925.6', '987.7', '1049.8', '1111', '1173.1', '1235.2', '1297.3', '1359.4', '1421.5', '1483.6', '1536.7', '1598.8'],
-};
----
+<section class="relative h-[775px] w-full overflow-hidden bg-brown-400">
+	<div class="absolute top-0 bottom-0 left-1/2 min-w-[1440px] -translate-x-1/2">
+		<div
+			class="absolute inset-0 bg-[repeating-linear-gradient(90deg,#89796e_0px_31px,transparent_31px_62.1px)]"
+			aria-hidden="true"
+		></div>
 
-<section class="hero">
-	<div class="hero-inner">
-		<div class="grid-lines" style={`left:${gridLine.left[0]}px`} aria-hidden="true"></div>
-
-		<div class="ellipse" aria-hidden="true">
-			<img src="/images/ellipse-hero.svg" alt="" />
+		<div class="pointer-events-none absolute top-[118px] left-[446px] h-[524px] w-[524px] mix-blend-overlay" aria-hidden="true">
+			<img class="block h-full w-full" src="/images/ellipse-hero.svg" alt="" />
 		</div>
 
-		<p class="script script-left" aria-hidden="true">Galleta</p>
-		<p class="script script-right" aria-hidden="true">Habibi</p>
+		<p
+			class="pointer-events-none absolute top-[33.68px] left-[157.8px] z-[1] font-script text-[203.79px] leading-none whitespace-nowrap text-pink-200"
+			aria-hidden="true"
+			>Galleta</p
+		>
+		<p
+			class="pointer-events-none absolute top-[33.68px] left-[1252.2px] z-[1] w-[502.2px] -translate-x-full text-right font-script text-[203.79px] leading-none whitespace-nowrap text-pink-200"
+			aria-hidden="true"
+			>Habibi</p
+		>
 
-		<div class="cookie">
-			<img class="cookie-main" src="/images/cookie-hero.png" alt="Galleta Habibi partida con crema de pistacho" />
-			<div class="cream cream-right">
-				<img src="/images/cream-hero.png" alt="" />
-			</div>
-			<div class="cream cream-left">
-				<img src="/images/cream-hero.png" alt="" />
-			</div>
+		<div class="absolute top-[115.95px] left-[446.12px] z-[2] h-[522.26px] w-[522.26px]">
+			<img
+				class="absolute inset-0 h-full w-full object-cover"
+				src="/images/cream-hero.png"
+				alt="Galleta Habibi partida con crema de pistacho"
+			/>
 		</div>
 
-		<div class="badge">
-			<img class="badge-star" src="/images/star-hero.svg" alt="" />
-			<span class="badge-label">Nueva</span>
+		<div class="absolute top-[186.68px] left-[831px] z-[3]">
+			<img class="block h-full w-full" src="/images/star-hero.svg" alt="" />
+			<span
+				class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-sans text-[27px] leading-[1.2] font-bold whitespace-nowrap text-center text-brown"
+				>Nueva</span
+			>
 		</div>
 
-		<div class="hero-copy">
-			<h2 class="hero-title">Galleta Habibi</h2>
-			<p class="hero-desc">
+		<div class="absolute top-[310.9px] left-[214px] z-[3] w-[243px]">
+			<h2 class="mb-3 font-sans text-[38px] leading-[1.2] font-bold text-beige">Galleta Habibi</h2>
+			<p class="font-sans text-[21.6px] leading-[1.2] text-beige">
 				Galleta de chocolate tipo brownie, rellena con una exquisita crema de pistacho artesanal.
 				Un postre al mejor estilo Dubai.
 			</p>
 		</div>
 
-		<a class="cta" href="#menu">
+		<a
+			class="absolute top-[658px] left-[595px] z-[3] flex h-[49px] w-[218.1px] items-center justify-center gap-2 whitespace-nowrap rounded-[57px] bg-pink px-4 py-2 font-sans text-[19px] leading-[1.2] font-bold text-beige no-underline hover:brightness-95"
+			href="#menu"
+		>
 			Ver menú
-			<span class="cta-icon"><img src="/images/chef-hat.svg" alt="" /></span>
+			<span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-[22.68px] bg-beige p-[6.67px]">
+				<img class="block h-[16.01px] w-[16.01px]" src="/images/chef-hat.svg" alt="" />
+			</span>
 		</a>
 
-		<button class="arrow arrow-prev" type="button" aria-label="Anterior">
-			<img src="/images/chevron-left.svg" alt="" />
+		<button
+			class="absolute top-[332px] left-[95px] z-[4] flex h-[73px] w-[73px] cursor-pointer items-center justify-center rounded-[94.4px] border-[3.05px] border-beige bg-pink p-[15.23px] hover:brightness-95"
+			type="button"
+			aria-label="Anterior"
+		>
+			<img class="block h-[36.55px] w-[36.55px]" src="/images/chevron-left.svg" alt="" />
 		</button>
-		<button class="arrow arrow-next" type="button" aria-label="Siguiente">
-			<img src="/images/chevron-left.svg" alt="" />
+		<button
+			class="absolute top-[268.13px] left-[1219.13px] z-[4] flex h-[73px] w-[73px] cursor-pointer items-center justify-center rounded-[94.4px] border-[3.05px] border-beige bg-pink p-[15.23px] hover:brightness-95"
+			type="button"
+			aria-label="Siguiente"
+		>
+			<img class="block h-[36.55px] w-[36.55px] rotate-180" src="/images/chevron-left.svg" alt="" />
 		</button>
 	</div>
 </section>
-
-<style>
-	.hero {
-		position: relative;
-		width: 100%;
-		height: 775px;
-		overflow: hidden;
-		background: #614d3e;
-	}
-
-	.hero-inner {
-		position: absolute;
-		inset: 0;
-		min-width: 1440px;
-		left: 50%;
-		transform: translateX(-50%);
-	}
-
-	.grid-lines {
-		position: absolute;
-		top: 0;
-		bottom: 0;
-		width: 31px;
-		background: #89796e;
-		box-shadow:
-			62.1px 0 0 #89796e,
-			124.2px 0 0 #89796e,
-			186.3px 0 0 #89796e,
-			248.4px 0 0 #89796e,
-			310.5px 0 0 #89796e,
-			372.6px 0 0 #89796e,
-			434.7px 0 0 #89796e,
-			496.8px 0 0 #89796e,
-			553px 0 0 #89796e,
-			615.1px 0 0 #89796e,
-			677.2px 0 0 #89796e,
-			739.3px 0 0 #89796e,
-			801.4px 0 0 #89796e,
-			863.5px 0 0 #89796e,
-			925.6px 0 0 #89796e,
-			987.7px 0 0 #89796e,
-			1049.8px 0 0 #89796e,
-			1111px 0 0 #89796e,
-			1173.1px 0 0 #89796e,
-			1235.2px 0 0 #89796e,
-			1297.3px 0 0 #89796e,
-			1359.4px 0 0 #89796e,
-			1421.5px 0 0 #89796e,
-			1483.6px 0 0 #89796e,
-			1536.7px 0 0 #89796e;
-	}
-
-	.ellipse {
-		position: absolute;
-		left: 446px;
-		top: 118px;
-		width: 524px;
-		height: 524px;
-		mix-blend-mode: overlay;
-		pointer-events: none;
-	}
-
-	.ellipse img {
-		display: block;
-		width: 100%;
-		height: 100%;
-	}
-
-	.script {
-		position: absolute;
-		top: 33.68px;
-		font-family: 'Sacramento', cursive;
-		font-size: 203.79px;
-		line-height: 1;
-		color: #fbbed1;
-		white-space: nowrap;
-		pointer-events: none;
-		z-index: 1;
-	}
-
-	.script-left {
-		left: 157.8px;
-	}
-
-	.script-right {
-		left: 1252.2px;
-		width: 502.2px;
-		text-align: right;
-		transform: translateX(-100%);
-	}
-
-	.cookie {
-		position: absolute;
-		left: 446.12px;
-		top: 115.95px;
-		width: 522.26px;
-		height: 522.26px;
-		z-index: 2;
-	}
-
-	.cookie-main {
-		position: absolute;
-		left: 0;
-		top: 0;
-		width: 522.26px;
-		height: 522.26px;
-		object-fit: cover;
-		box-shadow: 0px 16.083px 43.084px 0px #3a200e;
-	}
-
-	.cream {
-		position: absolute;
-		top: 0;
-		height: 515.51px;
-		overflow: hidden;
-		pointer-events: none;
-	}
-
-	.cream-right {
-		left: 704.58px;
-		width: 259.63px;
-	}
-
-	.cream-right img {
-		position: absolute;
-		top: -0.06%;
-		left: -98.55%;
-		width: 198.55%;
-		height: 100%;
-		max-width: none;
-	}
-
-	.cream-left {
-		left: 448.71px;
-		width: 255.87px;
-	}
-
-	.cream-left img {
-		position: absolute;
-		top: -0.06%;
-		left: 0;
-		width: 201.47%;
-		height: 100%;
-		max-width: none;
-	}
-
-	.badge {
-		position: absolute;
-		left: 831px;
-		top: 186.68px;
-		width: 224.1px;
-		height: 224.1px;
-		z-index: 3;
-	}
-
-	.badge-star {
-		display: block;
-		width: 100%;
-		height: 100%;
-	}
-
-	.badge-label {
-		position: absolute;
-		left: 112.05px;
-		top: 112.05px;
-		transform: translate(-50%, -50%);
-		font-family: 'Poppins', sans-serif;
-		font-size: 27px;
-		font-weight: 700;
-		line-height: 1.2;
-		text-align: center;
-		color: #3a200e;
-		white-space: nowrap;
-	}
-
-	.hero-copy {
-		position: absolute;
-		left: 214px;
-		top: 310.9px;
-		width: 243px;
-		z-index: 3;
-	}
-
-	.hero-title {
-		margin: 0 0 12px;
-		font-family: 'Poppins', sans-serif;
-		font-size: 38px;
-		font-weight: 700;
-		line-height: 1.2;
-		color: #f7f2e8;
-	}
-
-	.hero-desc {
-		margin: 0;
-		font-family: 'Poppins', sans-serif;
-		font-size: 21.6px;
-		font-weight: 400;
-		line-height: 1.2;
-		color: #f7f2e8;
-	}
-
-	.cta {
-		position: absolute;
-		left: 595px;
-		top: 658px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		gap: 8px;
-		width: 218.1px;
-		height: 49px;
-		padding: 8px 16px;
-		border-radius: 57px;
-		background: #f45d8c;
-		color: #f7f2e8;
-		font-family: 'Poppins', sans-serif;
-		font-size: 19px;
-		font-weight: 700;
-		line-height: 1.2;
-		text-decoration: none;
-		white-space: nowrap;
-		box-sizing: border-box;
-		z-index: 3;
-	}
-
-	.cta:hover {
-		filter: brightness(0.95);
-	}
-
-	.cta-icon {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		flex-shrink: 0;
-		width: 32px;
-		height: 32px;
-		padding: 6.67px;
-		border-radius: 22.68px;
-		background: #f7f2e8;
-		box-sizing: border-box;
-	}
-
-	.cta-icon img {
-		display: block;
-		width: 16.01px;
-		height: 16.01px;
-	}
-
-	.arrow {
-		position: absolute;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		width: 73px;
-		height: 73px;
-		padding: 15.23px;
-		border: 3.05px solid #f7f2e8;
-		border-radius: 94.4px;
-		background: #f45d8c;
-		box-sizing: border-box;
-		cursor: pointer;
-		z-index: 4;
-	}
-
-	.arrow:hover {
-		filter: brightness(0.95);
-	}
-
-	.arrow img {
-		display: block;
-		width: 36.55px;
-		height: 36.55px;
-	}
-
-	.arrow-prev {
-		left: 95px;
-		top: 332px;
-	}
-
-	.arrow-next {
-		left: 1219.13px;
-		top: 268.13px;
-	}
-
-	.arrow-next img {
-		transform: rotate(180deg);
-	}
-</style>

@@ -89,13 +89,15 @@
 
 	if (cookie && leftHalf && rightHalf) {
 		cookie.addEventListener('mouseenter', () => {
-			animate(leftHalf, { x: -2 }, { duration: 0.4, ease: 'easeOut' });
-			animate(rightHalf, { x: 2 }, { duration: 0.4, ease: 'easeOut' });
+			animate(cookie, { rotate: -15 }, { duration: 0.3, ease: 'easeOut' });
+			animate(leftHalf, { x: -2 }, { duration: 0.3, ease: 'easeOut' });
+			animate(rightHalf, { x: 2 }, { duration: 0.3, ease: 'easeOut' });
 		});
 
 		cookie.addEventListener('mouseleave', () => {
-			animate(leftHalf, { x: 0 }, { duration: 0.4, ease: 'easeInOut' });
-			animate(rightHalf, { x: 0 }, { duration: 0.4, ease: 'easeInOut' });
+			animate(cookie, { rotate: 0 }, { duration: 0.3, ease: 'easeInOut' });
+			animate(leftHalf, { x: 0 }, { duration: 0.3, ease: 'easeInOut' });
+			animate(rightHalf, { x: 0 }, { duration: 0.3, ease: 'easeInOut' });
 		});
 	}
 </script>

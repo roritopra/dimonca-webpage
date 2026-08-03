@@ -20,10 +20,15 @@
 			>Habibi</p
 		>
 
-		<div class="absolute top-[115.95px] left-[446.12px] z-[2] h-[522.26px] w-[522.26px]">
+		<div id="hero-cookie" class="group absolute top-[115.95px] left-[446.12px] z-[2] h-[522.26px] w-[522.26px]">
 			<img
-				class="absolute inset-0 h-full w-full object-cover"
+				class="absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ease-in-out group-hover:opacity-0"
 				src="/images/cream-hero.png"
+				alt="Galleta Habibi"
+			/>
+			<img
+				class="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-500 ease-in-out group-hover:opacity-100"
+				src="/images/cookie-hero.png"
 				alt="Galleta Habibi partida con crema de pistacho"
 			/>
 		</div>
@@ -70,3 +75,17 @@
 		</button>
 	</div>
 </section>
+
+<script>
+	import { animate, hover } from 'motion';
+
+	const cookie = document.getElementById('hero-cookie');
+
+	if (cookie) {
+		hover(
+			cookie,
+			() => animate(cookie, { scale: 1.05 }, { duration: 0.35, ease: 'easeOut' }),
+			() => animate(cookie, { scale: 1 }, { duration: 0.35, ease: 'easeInOut' })
+		);
+	}
+</script>

@@ -82,10 +82,12 @@
 	const cookie = document.getElementById('hero-cookie');
 
 	if (cookie) {
-		hover(
-			cookie,
-			() => animate(cookie, { scale: 1.05 }, { duration: 0.35, ease: 'easeOut' }),
-			() => animate(cookie, { scale: 1 }, { duration: 0.35, ease: 'easeInOut' })
-		);
+		hover(cookie, (element, isHovering) => {
+			if (isHovering) {
+				animate(cookie, { scale: 1.05 }, { duration: 0.35, ease: 'easeOut' });
+			} else {
+				animate(cookie, { scale: 1 }, { duration: 0.35, ease: 'easeInOut' });
+			}
+		});
 	}
 </script>

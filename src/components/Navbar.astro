@@ -2,11 +2,11 @@
 import { Icon } from 'astro-icon/components';
 
 const categories = [
-	{ label: 'Galletas', img: '/images/cookie.png' },
-	{ label: 'Cuchareables', img: '/images/cuchareable.png' },
-	{ label: 'Brownies', img: '/images/brownie.png' },
-	{ label: 'Pasteles', img: '/images/cake.png' },
-	{ label: 'Más Productos', img: '/images/crookie.png' },
+	{ label: 'Galletas', img: '/images/cookie.png', imgHover: '/images/cookie-hover.png' },
+	{ label: 'Cuchareables', img: '/images/cuchareable.png', imgHover: '/images/cuchareable-hover.png' },
+	{ label: 'Brownies', img: '/images/brownie.png', imgHover: '/images/brownie-hover.png' },
+	{ label: 'Pasteles', img: '/images/cake.png', imgHover: '/images/cake-hover.png' },
+	{ label: 'Más Productos', img: '/images/crookie.png', imgHover: '/images/crookie-hover.png' },
 ];
 ---
 
@@ -62,8 +62,11 @@ const categories = [
 	>
 		{
 			categories.map((c) => (
-				<a class="flex w-[121px] flex-col items-center justify-center gap-[9px] no-underline" href={`#${c.label.toLowerCase().replace(/\s+/g, '-')}`}>
-					<img class="block h-[121px] w-[121px] object-cover object-center" src={c.img} alt={c.label} />
+				<a class="group/item flex w-[121px] flex-col items-center justify-center gap-[9px] no-underline" href={`#${c.label.toLowerCase().replace(/\s+/g, '-')}`}>
+					<div class="relative h-[121px] w-[121px] overflow-clip">
+						<img class="absolute inset-0 block h-full w-full object-cover object-center" src={c.img} alt={c.label} />
+						<img class="absolute inset-0 block h-full w-full object-cover object-center opacity-0" src={c.imgHover} alt="" aria-hidden="true" />
+					</div>
 					<p class="m-0 text-center text-[15px] leading-[1.2] text-brown">{c.label}</p>
 				</a>
 			))
@@ -72,14 +75,17 @@ const categories = [
 </header>
 
 <script>
-	import { animate, hover } from 'motion';
+	import { animate } from 'motion';
 
 	const navbar = document.getElementById('navbar');
 	const menuBtn = document.getElementById('menu-btn');
 	const dropdown = document.getElementById('dropdown');
 
 	if (navbar && menuBtn && dropdown) {
+		let isOpen = false;
+
 		const open = () => {
+			isOpen = true;
 			navbar.dataset.open = 'true';
 			menuBtn.setAttribute('aria-expanded', 'true');
 			animate(
@@ -88,7 +94,9 @@ const categories = [
 				{ duration: 0.25, ease: 'easeOut' }
 			);
 		};
+
 		const close = () => {
+			isOpen = false;
 			delete navbar.dataset.open;
 			menuBtn.setAttribute('aria-expanded', 'false');
 			animate(
@@ -98,7 +106,56 @@ const categories = [
 			);
 		};
 
-		hover(menuBtn, open);
-		hover(navbar, () => {}, close);
+		menuBtn.addEventListener('click', () => {
+			isOpen ? close() : open();
+		});
+
+		document.addEventListener('click', (e) => {
+			if (isOpen && !navbar.contains(e.target as Node)) {
+				close();
+			}
+		});
+
+		dropdown.querySelectorAll('a').forEach((link) => {
+			const imgs = link.querySelectorAll('img');
+			const label = link.querySelector('p');
+			const [img, imgHover] = imgs;
+
+			link.addEventListener('mouseenter', () => {
+				if (img && imgHover) {
+					animate(img, { opacity: 0, scale: 0.94 }, { duration: 0.25, ease: 'easeOut' });
+					animate(
+						imgHover,
+						{ opacity: 1, scale: 1.06 },
+						{ duration: 0.25, ease: 'easeOut' }
+					);
+				}
+				if (label) {
+					animate(
+						label,
+						{ color: '#c34a70' },
+						{ duration: 0.2, ease: 'easeOut' }
+					);
+				}
+			});
+
+			link.addEventListener('mouseleave', () => {
+				if (img && imgHover) {
+					animate(img, { opacity: 1, scale: 1 }, { duration: 0.25, ease: 'easeOut' });
+					animate(
+						imgHover,
+						{ opacity: 0, scale: 0.94 },
+						{ duration: 0.25, ease: 'easeOut' }
+					);
+				}
+				if (label) {
+					animate(
+						label,
+						{ color: '#3a200e' },
+						{ duration: 0.2, ease: 'easeOut' }
+					);
+				}
+			});
+		});
 	}
 </script>

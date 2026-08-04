@@ -35,6 +35,13 @@
 					alt="Galleta Habibi"
 				/>
 			</div>
+			<img
+				id="hero-cookie-cracked"
+				class="pointer-events-none absolute inset-0 h-full w-full object-cover"
+				style="opacity: 0;"
+				src="/images/cookie-hero.png"
+				alt="Galleta Habibi partida con crema de pistacho"
+			/>
 		</div>
 
 		<div class="absolute top-[186.68px] left-207.75 z-3">
@@ -81,23 +88,38 @@
 </section>
 
 <script>
-	import { animate, hover } from 'motion';
+	import { animate } from 'motion';
 
 	const cookie = document.getElementById('hero-cookie');
 	const leftHalf = document.getElementById('hero-cookie-left');
 	const rightHalf = document.getElementById('hero-cookie-right');
+	const cracked = document.getElementById('hero-cookie-cracked');
 
-	if (cookie && leftHalf && rightHalf) {
+	let crackedTimeout: ReturnType<typeof setTimeout> | null = null;
+
+	if (cookie && leftHalf && rightHalf && cracked) {
 		cookie.addEventListener('mouseenter', () => {
 			animate(cookie, { rotate: -15 }, { type: 'spring', stiffness: 350, damping: 14, mass: 1 });
 			animate(leftHalf, { x: -2 }, { type: 'spring', stiffness: 350, damping: 14, mass: 1 });
 			animate(rightHalf, { x: 2 }, { type: 'spring', stiffness: 350, damping: 14, mass: 1 });
+
+			crackedTimeout = setTimeout(() => {
+				animate(cracked, { opacity: 1 }, { duration: 0.1, ease: 'easeOut' });
+				animate(leftHalf, { opacity: 0 }, { duration: 0.1, ease: 'easeOut' });
+				animate(rightHalf, { opacity: 0 }, { duration: 0.1, ease: 'easeOut' });
+				animate(cookie, { scale: 1.1 }, { type: 'spring', stiffness: 300, damping: 18, mass: 1 });
+			}, 50);
 		});
 
 		cookie.addEventListener('mouseleave', () => {
-			animate(cookie, { rotate: 0 }, { type: 'spring', stiffness: 300, damping: 16, mass: 1 });
-			animate(leftHalf, { x: 0 }, { type: 'spring', stiffness: 300, damping: 16, mass: 1 });
-			animate(rightHalf, { x: 0 }, { type: 'spring', stiffness: 300, damping: 16, mass: 1 });
+			if (crackedTimeout) {
+				clearTimeout(crackedTimeout);
+				crackedTimeout = null;
+			}
+			animate(cookie, { rotate: 0, scale: 1 }, { type: 'spring', stiffness: 300, damping: 16, mass: 1 });
+			animate(leftHalf, { x: 0, opacity: 1 }, { type: 'spring', stiffness: 300, damping: 16, mass: 1 });
+			animate(rightHalf, { x: 0, opacity: 1 }, { type: 'spring', stiffness: 300, damping: 16, mass: 1 });
+			animate(cracked, { opacity: 0 }, { duration: 0.3, ease: 'easeInOut' });
 		});
 	}
 </script>

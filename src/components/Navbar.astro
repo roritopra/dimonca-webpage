@@ -61,15 +61,30 @@ const categories = [
 		aria-label="Categorías del menú"
 	>
 		{
-			categories.map((c) => (
-				<a class="group/item flex w-[121px] flex-col items-center justify-center gap-[9px] no-underline" href={`#${c.label.toLowerCase().replace(/\s+/g, '-')}`}>
-					<div class="relative h-[121px] w-[121px] overflow-clip">
-						<img class="absolute inset-0 block h-full w-full object-cover object-center" src={c.img} alt={c.label} />
-						<img class="absolute inset-0 block h-full w-full object-cover object-center opacity-0" src={c.imgHover} alt="" aria-hidden="true" />
-					</div>
-					<p class="m-0 text-center text-[15px] leading-[1.2] text-brown">{c.label}</p>
-				</a>
-			))
+			categories.map((c) =>
+				c.label === 'Galletas' ? (
+					<a data-category="galletas" class="flex w-[121px] flex-col items-center justify-center gap-[9px] no-underline" href="#galletas">
+						<div class="nav-cookie-wrap relative h-[121px] w-[121px]">
+							<div class="nav-cookie-left absolute inset-y-0 left-0 w-1/2 overflow-hidden">
+								<img class="absolute top-0 left-0 h-full w-[121px] max-w-none object-cover" src={c.img} alt={c.label} />
+							</div>
+							<div class="nav-cookie-right absolute inset-y-0 right-0 w-1/2 overflow-hidden">
+								<img class="absolute top-0 right-0 h-full w-[121px] max-w-none object-cover" src={c.img} alt="" aria-hidden="true" />
+							</div>
+							<img class="nav-cookie-cracked pointer-events-none absolute inset-0 h-full w-full object-cover" style="opacity: 0;" src={c.imgHover} alt="" aria-hidden="true" />
+						</div>
+						<p class="m-0 text-center text-[15px] leading-[1.2] text-brown">{c.label}</p>
+					</a>
+				) : (
+					<a class="flex w-[121px] flex-col items-center justify-center gap-[9px] no-underline" href={`#${c.label.toLowerCase().replace(/\s+/g, '-')}`}>
+						<div class="relative h-[121px] w-[121px] overflow-clip">
+							<img class="absolute inset-0 block h-full w-full object-cover object-center" src={c.img} alt={c.label} />
+							<img class="absolute inset-0 block h-full w-full object-cover object-center opacity-0" src={c.imgHover} alt="" aria-hidden="true" />
+						</div>
+						<p class="m-0 text-center text-[15px] leading-[1.2] text-brown">{c.label}</p>
+					</a>
+				)
+			)
 		}
 	</nav>
 </header>
@@ -116,45 +131,55 @@ const categories = [
 			}
 		});
 
-		dropdown.querySelectorAll('a').forEach((link) => {
-			const imgs = link.querySelectorAll('img');
+		const galletasLink = dropdown.querySelector<HTMLAnchorElement>('[data-category="galletas"]');
+		if (galletasLink) {
+				const cookieWrap = galletasLink.querySelector<HTMLElement>('.nav-cookie-wrap');
+				const leftHalf = galletasLink.querySelector<HTMLElement>('.nav-cookie-left');
+				const rightHalf = galletasLink.querySelector<HTMLElement>('.nav-cookie-right');
+				const cracked = galletasLink.querySelector<HTMLElement>('.nav-cookie-cracked');
+				const label = galletasLink.querySelector('p');
+			let crackedTimeout: ReturnType<typeof setTimeout> | null = null;
+
+				galletasLink.addEventListener('mouseenter', () => {
+					animate(cookieWrap!, { rotate: -17 }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
+					animate(leftHalf!, { x: -2 }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
+					animate(rightHalf!, { x: 2 }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
+					crackedTimeout = setTimeout(() => {
+						animate(cracked!, { opacity: 1 }, { duration: 0.1, ease: 'easeOut' });
+						animate(leftHalf!, { opacity: 0 }, { duration: 0.1, ease: 'easeOut' });
+						animate(rightHalf!, { opacity: 0 }, { duration: 0.1, ease: 'easeOut' });
+					}, 50);
+					if (label) animate(label, { color: '#c34a70' }, { duration: 0.2, ease: 'easeOut' });
+				});
+
+				galletasLink.addEventListener('mouseleave', () => {
+					if (crackedTimeout) { clearTimeout(crackedTimeout); crackedTimeout = null; }
+					animate(cookieWrap!, { rotate: 0 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
+					animate(leftHalf!, { x: 0, opacity: 1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
+					animate(rightHalf!, { x: 0, opacity: 1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
+					animate(cracked!, { opacity: 0 }, { duration: 0.3, ease: 'easeInOut' });
+					if (label) animate(label, { color: '#3a200e' }, { duration: 0.2, ease: 'easeOut' });
+				});
+		}
+
+		dropdown.querySelectorAll<HTMLAnchorElement>('a:not([data-category="galletas"])').forEach((link) => {
+			const [img, imgHover] = link.querySelectorAll('img');
 			const label = link.querySelector('p');
-			const [img, imgHover] = imgs;
 
 			link.addEventListener('mouseenter', () => {
 				if (img && imgHover) {
 					animate(img, { opacity: 0, scale: 0.94 }, { duration: 0.25, ease: 'easeOut' });
-					animate(
-						imgHover,
-						{ opacity: 1, scale: 1.06 },
-						{ duration: 0.25, ease: 'easeOut' }
-					);
+					animate(imgHover, { opacity: 1, scale: 1.06 }, { duration: 0.25, ease: 'easeOut' });
 				}
-				if (label) {
-					animate(
-						label,
-						{ color: '#c34a70' },
-						{ duration: 0.2, ease: 'easeOut' }
-					);
-				}
+				if (label) animate(label, { color: '#c34a70' }, { duration: 0.2, ease: 'easeOut' });
 			});
 
 			link.addEventListener('mouseleave', () => {
 				if (img && imgHover) {
 					animate(img, { opacity: 1, scale: 1 }, { duration: 0.25, ease: 'easeOut' });
-					animate(
-						imgHover,
-						{ opacity: 0, scale: 0.94 },
-						{ duration: 0.25, ease: 'easeOut' }
-					);
+					animate(imgHover, { opacity: 0, scale: 0.94 }, { duration: 0.25, ease: 'easeOut' });
 				}
-				if (label) {
-					animate(
-						label,
-						{ color: '#3a200e' },
-						{ duration: 0.2, ease: 'easeOut' }
-					);
-				}
+				if (label) animate(label, { color: '#3a200e' }, { duration: 0.2, ease: 'easeOut' });
 			});
 		});
 	}

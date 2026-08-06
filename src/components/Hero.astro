@@ -12,7 +12,7 @@ import { Icon } from 'astro-icon/components';
 			></div>
 
 			<div class="absolute top-0 bottom-0 left-1/2 flex min-w-360 -translate-x-1/2 items-center">
-				<div class="relative h-[775px] w-full">
+				<div class="hero-content relative h-[775px] w-full">
 					<div class="pointer-events-none absolute top-29.5 left-111.5 h-131 w-131 mix-blend-overlay" aria-hidden="true">
 						<img class="block h-full w-full" src="/images/ellipse-hero.svg" alt="" />
 					</div>
@@ -85,7 +85,7 @@ import { Icon } from 'astro-icon/components';
 			></div>
 
 			<div class="absolute top-0 bottom-0 left-1/2 flex min-w-360 -translate-x-1/2 items-center">
-				<div class="relative h-[775px] w-full">
+				<div class="hero-content relative h-[775px] w-full">
 					<div class="pointer-events-none absolute top-29.5 left-111.5 h-131 w-131 mix-blend-overlay" aria-hidden="true">
 						<img class="block h-full w-full" src="/images/ellipse-hero-blue.svg" alt="" />
 					</div>
@@ -187,6 +187,10 @@ import { Icon } from 'astro-icon/components';
 	const prevBtn = document.getElementById('hero-prev');
 	const nextBtn = document.getElementById('hero-next');
 
+	const EXIT_MS = 600;
+	const PAUSE_MS = 800;
+	const ENTER_MS = 600;
+
 	let current = 0;
 	let transitioning = false;
 
@@ -199,17 +203,65 @@ import { Icon } from 'astro-icon/components';
 
 		const from = slides[current];
 		const to = slides[index];
+		const fromContent = from.querySelector<HTMLElement>('.hero-content');
+		const toContent = to.querySelector<HTMLElement>('.hero-content');
+		const fromStar = from.querySelector<HTMLElement>('#hero-star, #hero-star-2');
+		const toStar = to.querySelector<HTMLElement>('#hero-star, #hero-star-2');
 
 		animate(
 			from,
-			{ opacity: 0, visibility: 'hidden', pointerEvents: 'none' },
-			{ duration: 0.4, ease: 'easeInOut' }
+			{ opacity: 0 },
+			{ duration: EXIT_MS / 1000, ease: 'easeInOut' }
 		);
-		animate(
-			to,
-			{ opacity: 1, visibility: 'visible', pointerEvents: 'auto' },
-			{ duration: 0.4, ease: 'easeInOut', onComplete: () => (transitioning = false) }
-		);
+		if (fromContent) {
+			animate(
+				fromContent,
+				{ opacity: 0 },
+				{ duration: EXIT_MS / 1000, ease: 'easeInOut' }
+			);
+		}
+		if (fromStar) {
+			animate(
+				fromStar,
+				{ opacity: 0, scale: 0.85, y: 24, rotate: -45 },
+				{ duration: EXIT_MS / 1000, ease: 'backIn' }
+			);
+		}
+
+		setTimeout(() => {
+			animate(
+				to,
+				{ opacity: 1, visibility: 'visible', pointerEvents: 'auto' },
+				{ duration: ENTER_MS / 1000, ease: 'easeInOut' }
+			);
+			if (toContent) {
+				animate(
+					toContent,
+					{ opacity: 0 },
+					{ duration: 0, ease: 'easeOut' }
+				);
+				animate(
+					toContent,
+					{ opacity: 1 },
+					{ duration: ENTER_MS / 1000, ease: 'easeInOut' }
+				);
+			}
+			if (toStar) {
+				animate(
+					toStar,
+					{ opacity: 0, scale: 0.9, y: -16, rotate: 45 },
+					{ duration: 0, ease: 'easeOut' }
+				);
+				animate(
+					toStar,
+					{ opacity: 1, scale: 1, y: 0, rotate: 0 },
+					{ duration: ENTER_MS / 1000, ease: 'backOut' }
+				);
+			}
+			transitioning = false;
+			from.style.visibility = 'hidden';
+			from.style.pointerEvents = 'none';
+		}, EXIT_MS + PAUSE_MS);
 
 		current = index;
 	};

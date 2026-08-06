@@ -208,11 +208,6 @@ import { Icon } from 'astro-icon/components';
 		const fromStar = from.querySelector<HTMLElement>('#hero-star, #hero-star-2');
 		const toStar = to.querySelector<HTMLElement>('#hero-star, #hero-star-2');
 
-		animate(
-			from,
-			{ opacity: 0 },
-			{ duration: EXIT_MS / 1000, ease: 'easeInOut' }
-		);
 		if (fromContent) {
 			animate(
 				fromContent,
@@ -229,38 +224,27 @@ import { Icon } from 'astro-icon/components';
 		}
 
 		setTimeout(() => {
-			animate(
-				to,
-				{ opacity: 1, visibility: 'visible', pointerEvents: 'auto' },
-				{ duration: ENTER_MS / 1000, ease: 'easeInOut' }
-			);
+			from.style.visibility = 'hidden';
+			from.style.pointerEvents = 'none';
+			to.style.opacity = '1';
+			to.style.visibility = 'visible';
+			to.style.pointerEvents = 'auto';
+
 			if (toContent) {
 				animate(
 					toContent,
-					{ opacity: 0 },
-					{ duration: 0, ease: 'easeOut' }
-				);
-				animate(
-					toContent,
-					{ opacity: 1 },
+					{ opacity: [0, 1] },
 					{ duration: ENTER_MS / 1000, ease: 'easeInOut' }
 				);
 			}
 			if (toStar) {
 				animate(
 					toStar,
-					{ opacity: 0, scale: 0.9, y: -16, rotate: 45 },
-					{ duration: 0, ease: 'easeOut' }
-				);
-				animate(
-					toStar,
-					{ opacity: 1, scale: 1, y: 0, rotate: 0 },
+					{ opacity: [0, 1], scale: [0.9, 1], y: [-16, 0], rotate: [45, 0] },
 					{ duration: ENTER_MS / 1000, ease: 'backOut' }
 				);
 			}
 			transitioning = false;
-			from.style.visibility = 'hidden';
-			from.style.pointerEvents = 'none';
 		}, EXIT_MS + PAUSE_MS);
 
 		current = index;

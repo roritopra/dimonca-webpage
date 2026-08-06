@@ -1,3 +1,7 @@
+---
+import { Icon } from 'astro-icon/components';
+---
+
 <section class="relative h-220 w-full overflow-hidden bg-brown-400">
 	<div id="hero-carousel" class="absolute inset-0">
 		<!-- Slide 1: Galleta Habibi -->
@@ -157,19 +161,19 @@
 
 			<button
 				id="hero-prev"
-				class="pointer-events-auto absolute top-83 left-23.75 z-4 flex h-18.25 w-18.25 cursor-pointer items-center justify-center rounded-[94.4px] border-[3.05px] border-beige bg-pink p-[15.23px] hover:brightness-95"
+				class="pointer-events-auto absolute top-83 left-23.75 z-4 flex h-20 w-20 cursor-pointer items-center justify-center rounded-full border-[3px] border-white bg-pink text-beige hover:brightness-95"
 				type="button"
 				aria-label="Anterior"
 			>
-				<img class="block h-[36.55px] w-[36.55px]" src="/images/chevron-left.svg" alt="" />
+				<Icon name="lucide:chevron-left" class="h-10 w-10 shrink-0" aria-hidden="true" />
 			</button>
 			<button
 				id="hero-next"
-				class="pointer-events-auto absolute top-[268.13px] left-[1219.13px] z-4 flex h-18.25 w-18.25 cursor-pointer items-center justify-center rounded-[94.4px] border-[3.05px] border-beige bg-pink p-[15.23px] hover:brightness-95"
+				class="pointer-events-auto absolute top-[268.13px] left-[1219.13px] z-4 flex h-20 w-20 cursor-pointer items-center justify-center rounded-full border-[3px] border-white bg-pink text-beige hover:brightness-95"
 				type="button"
 				aria-label="Siguiente"
 			>
-				<img class="block h-[36.55px] w-[36.55px] rotate-180" src="/images/chevron-left.svg" alt="" />
+				<Icon name="lucide:chevron-right" class="h-10 w-10 shrink-0" aria-hidden="true" />
 			</button>
 		</div>
 	</div>

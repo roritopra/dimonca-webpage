@@ -33,13 +33,15 @@ const stripes = Array.from({ length: 24 }, (_, i) => ({
 					<p
 						class="pointer-events-none absolute top-[33.68px] left-[157.8px] z-1 font-script text-[203.79px] leading-none whitespace-nowrap text-pink-200"
 						aria-hidden="true"
-						>Galleta</p
 					>
+						<span class="hero-title-word inline-block" data-dir="left">Galleta</span>
+					</p>
 					<p
 						class="pointer-events-none absolute top-[33.68px] left-[1252.2px] z-1 w-[502.2px] -translate-x-full text-right font-script text-[203.79px] leading-none whitespace-nowrap text-pink-200"
 						aria-hidden="true"
-						>Habibi</p
 					>
+						<span class="hero-title-word inline-block" data-dir="right">Habibi</span>
+					</p>
 
 					<div id="hero-cookie" class="absolute top-[52.08px] left-[382.25px] z-2 h-[650px] w-[650px]">
 						<div id="hero-cookie-left" class="absolute inset-y-0 left-0 w-1/2 overflow-hidden">
@@ -75,7 +77,9 @@ const stripes = Array.from({ length: 24 }, (_, i) => ({
 					</div>
 
 					<div class="absolute top-[310.9px] left-53.5 z-3 w-60.75">
-						<h2 class="mb-3 font-sans text-[38px] leading-[1.2] font-bold text-beige">Galleta Habibi</h2>
+						<h2 class="mb-3 font-sans text-[38px] leading-[1.2] font-bold text-beige">
+							Galleta Habibi
+						</h2>
 						<p class="font-sans text-[21.6px] leading-[1.2] text-beige">
 							Galleta de chocolate tipo brownie, rellena con una exquisita crema de pistacho artesanal.
 							Un postre al mejor estilo Dubai.
@@ -113,13 +117,15 @@ const stripes = Array.from({ length: 24 }, (_, i) => ({
 					<p
 						class="pointer-events-none absolute top-[33.68px] left-[157.8px] z-1 font-script text-[203.79px] leading-none whitespace-nowrap text-pink"
 						aria-hidden="true"
-						>Crookie</p
 					>
+						<span class="hero-title-word inline-block" data-dir="left">Crookie</span>
+					</p>
 					<p
 						class="pointer-events-none absolute top-[33.68px] left-[1252.2px] z-1 w-[502.2px] -translate-x-full text-right font-script text-[203.79px] leading-none whitespace-nowrap text-pink"
 						aria-hidden="true"
-						>Chips</p
 					>
+						<span class="hero-title-word inline-block" data-dir="right">Chips</span>
+					</p>
 
 					<div id="hero-crookie" class="absolute top-[52.08px] left-[382.25px] z-2 h-[650px] w-[650px]">
 						<div id="hero-crookie-left" class="absolute inset-y-0 left-0 w-1/2 overflow-hidden">
@@ -155,7 +161,9 @@ const stripes = Array.from({ length: 24 }, (_, i) => ({
 					</div>
 
 					<div class="absolute top-[310.9px] left-53.5 z-3 w-60.75">
-						<h2 class="mb-3 font-sans text-[38px] leading-[1.2] font-bold text-brown">Crookie Chips</h2>
+						<h2 class="mb-3 font-sans text-[38px] leading-[1.2] font-bold text-brown">
+							Crookie Chips
+						</h2>
 						<p class="font-sans text-[21.6px] leading-[1.2] text-brown-600">
 							Croissant + galleta de chips de chocolate + relleno de nutella. Hojaldrado, super crocante y con
 							un centro cremoso de chocolate.
@@ -229,6 +237,8 @@ const stripes = Array.from({ length: 24 }, (_, i) => ({
 		const toStar = to.querySelector<HTMLElement>('#hero-star, #hero-star-2');
 		const fromStripes = Array.from(from.querySelectorAll<HTMLElement>('.hero-stripe'));
 		const toStripes = Array.from(to.querySelectorAll<HTMLElement>('.hero-stripe'));
+		const fromTitles = Array.from(from.querySelectorAll<HTMLElement>('.hero-title-word'));
+		const toTitles = Array.from(to.querySelectorAll<HTMLElement>('.hero-title-word'));
 		const travel = from.offsetHeight;
 
 		fromStripes.forEach((stripe) => {
@@ -236,6 +246,16 @@ const stripes = Array.from({ length: 24 }, (_, i) => ({
 			animate(
 				stripe,
 				{ y: dir * travel, opacity: 0 },
+				{ duration: EXIT_MS / 1000, ease: 'easeInOut' }
+			);
+		});
+
+		fromTitles.forEach((word) => {
+			const isLeft = word.dataset.dir === 'left';
+			const targetX = isLeft ? -150 : 150;
+			animate(
+				word,
+				{ x: targetX, opacity: 0 },
 				{ duration: EXIT_MS / 1000, ease: 'easeInOut' }
 			);
 		});
@@ -275,6 +295,15 @@ const stripes = Array.from({ length: 24 }, (_, i) => ({
 					stripe,
 					{ y: [dir * travel, 0], opacity: [0, 1] },
 					{ duration: ENTER_MS / 1000, ease: 'easeInOut' }
+				);
+			});
+			toTitles.forEach((word) => {
+				const isLeft = word.dataset.dir === 'left';
+				const startX = isLeft ? -150 : 150;
+				animate(
+					word,
+					{ x: [startX, 0], opacity: [0, 1] },
+					{ duration: ENTER_MS / 1000, ease: 'easeOut' }
 				);
 			});
 			if (toStar) {

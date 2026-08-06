@@ -20,17 +20,17 @@
 			>Habibi</p
 		>
 
-		<div id="hero-cookie" class="absolute top-[115.95px] left-[446.12px] z-2 h-[522.26px] w-[522.26px]">
+		<div id="hero-cookie" class="absolute top-[52.08px] left-[382.25px] z-2 h-[650px] w-[650px]">
 			<div id="hero-cookie-left" class="absolute inset-y-0 left-0 w-1/2 overflow-hidden">
 				<img
-					class="absolute top-0 left-0 h-full w-[522.26px] max-w-none"
+					class="absolute top-0 left-0 h-full w-[650px] max-w-none"
 					src="/images/cream-hero.png"
 					alt="Galleta Habibi"
 				/>
 			</div>
 			<div id="hero-cookie-right" class="absolute inset-y-0 right-0 w-1/2 overflow-hidden">
 				<img
-					class="absolute top-0 right-0 h-full w-[522.26px] max-w-none"
+					class="absolute top-0 right-0 h-full w-[650px] max-w-none"
 					src="/images/cream-hero.png"
 					alt="Galleta Habibi"
 				/>
@@ -44,7 +44,7 @@
 			/>
 		</div>
 
-		<div class="absolute top-[186.68px] left-207.75 z-3 h-[279.66px] w-[282.03px]">
+		<div class="absolute top-[186.68px] left-[167.75px] z-3 h-[279.66px] w-[282.03px]">
 			<img class="block h-full w-full" src="/images/star-hero.svg" alt="" />
 			<span
 				class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-sans text-[27px] leading-[1.2] font-bold whitespace-nowrap text-center text-brown"
@@ -99,10 +99,12 @@
 	let crackedTimeout: ReturnType<typeof setTimeout> | null = null;
 
 	if (cookie && leftHalf && rightHalf && cracked) {
+		const slide = cookie.offsetWidth / 522.26 * 2;
+
 		cookie.addEventListener('mouseenter', () => {
 			animate(cookie, { rotate: -15 }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
-			animate(leftHalf, { x: -2 }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
-			animate(rightHalf, { x: 2 }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
+			animate(leftHalf, { x: -slide }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
+			animate(rightHalf, { x: slide }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
 
 			crackedTimeout = setTimeout(() => {
 				animate(cracked, { opacity: 1 }, { duration: 0.1, ease: 'easeOut' });

@@ -61,30 +61,45 @@ const categories = [
 		aria-label="Categorías del menú"
 	>
 		{
-			categories.map((c) =>
-				c.label === 'Galletas' ? (
-					<a data-category="galletas" class="flex w-[121px] flex-col items-center justify-center gap-[9px] no-underline" href="#galletas">
-						<div class="nav-cookie-wrap relative h-[121px] w-[121px]">
-							<div class="nav-cookie-left absolute inset-y-0 left-0 w-1/2 overflow-hidden">
-								<img class="absolute top-0 left-0 h-full w-[121px] max-w-none object-cover" src={c.img} alt={c.label} />
+			categories.map((c) => {
+				if (c.label === 'Galletas' || c.label === 'Más Productos') {
+					return (
+						<a data-category="split" class="flex w-[121px] flex-col items-center justify-center gap-[9px] no-underline" href={`#${c.label.toLowerCase().replace(/\s+/g, '-')}`}>
+							<div class="nav-cookie-wrap relative h-[121px] w-[121px]">
+								<div class="nav-cookie-left absolute inset-y-0 left-0 w-1/2 overflow-hidden">
+									<img class="absolute top-0 left-0 h-full w-[121px] max-w-none object-cover" src={c.img} alt={c.label} />
+								</div>
+								<div class="nav-cookie-right absolute inset-y-0 right-0 w-1/2 overflow-hidden">
+									<img class="absolute top-0 right-0 h-full w-[121px] max-w-none object-cover" src={c.img} alt="" aria-hidden="true" />
+								</div>
+								<img class="nav-cookie-cracked pointer-events-none absolute inset-0 h-full w-full object-cover" style="opacity: 0;" src={c.imgHover} alt="" aria-hidden="true" />
 							</div>
-							<div class="nav-cookie-right absolute inset-y-0 right-0 w-1/2 overflow-hidden">
-								<img class="absolute top-0 right-0 h-full w-[121px] max-w-none object-cover" src={c.img} alt="" aria-hidden="true" />
+							<p class="m-0 text-center text-[15px] leading-[1.2] text-brown">{c.label}</p>
+						</a>
+					);
+				} else if (c.label === 'Brownies') {
+					return (
+						<a data-category="brownies" class="flex w-[121px] flex-col items-center justify-center gap-[9px] no-underline" href="#brownies">
+							<div class="relative h-[121px] w-[121px]">
+								<img class="brownie-left absolute inset-0 block h-full w-full object-cover object-center opacity-0" src="/images/brownie-pistacho.png" alt="" aria-hidden="true" />
+								<img class="brownie-right absolute inset-0 block h-full w-full object-cover object-center opacity-0" src="/images/brownie-redvelvet.png" alt="" aria-hidden="true" />
+								<img class="brownie-center absolute inset-0 block h-full w-full object-cover object-center z-10" src="/images/brownie-clasico.png" alt={c.label} />
 							</div>
-							<img class="nav-cookie-cracked pointer-events-none absolute inset-0 h-full w-full object-cover" style="opacity: 0;" src={c.imgHover} alt="" aria-hidden="true" />
-						</div>
-						<p class="m-0 text-center text-[15px] leading-[1.2] text-brown">{c.label}</p>
-					</a>
-				) : (
-					<a class="flex w-[121px] flex-col items-center justify-center gap-[9px] no-underline" href={`#${c.label.toLowerCase().replace(/\s+/g, '-')}`}>
-						<div class="relative h-[121px] w-[121px] overflow-clip">
-							<img class="absolute inset-0 block h-full w-full object-cover object-center" src={c.img} alt={c.label} />
-							<img class="absolute inset-0 block h-full w-full object-cover object-center opacity-0" src={c.imgHover} alt="" aria-hidden="true" />
-						</div>
-						<p class="m-0 text-center text-[15px] leading-[1.2] text-brown">{c.label}</p>
-					</a>
-				)
-			)
+							<p class="m-0 text-center text-[15px] leading-[1.2] text-brown">{c.label}</p>
+						</a>
+					);
+				} else {
+					return (
+						<a class="flex w-[121px] flex-col items-center justify-center gap-[9px] no-underline" href={`#${c.label.toLowerCase().replace(/\s+/g, '-')}`}>
+							<div class="relative h-[121px] w-[121px] overflow-clip">
+								<img class="absolute inset-0 block h-full w-full object-cover object-center" src={c.img} alt={c.label} />
+								<img class="absolute inset-0 block h-full w-full object-cover object-center opacity-0" src={c.imgHover} alt="" aria-hidden="true" />
+							</div>
+							<p class="m-0 text-center text-[15px] leading-[1.2] text-brown">{c.label}</p>
+						</a>
+					);
+				}
+			})
 		}
 	</nav>
 </header>
@@ -131,38 +146,71 @@ const categories = [
 			}
 		});
 
-		const galletasLink = dropdown.querySelector<HTMLAnchorElement>('[data-category="galletas"]');
-		if (galletasLink) {
-				const cookieWrap = galletasLink.querySelector<HTMLElement>('.nav-cookie-wrap');
-				const leftHalf = galletasLink.querySelector<HTMLElement>('.nav-cookie-left');
-				const rightHalf = galletasLink.querySelector<HTMLElement>('.nav-cookie-right');
-				const cracked = galletasLink.querySelector<HTMLElement>('.nav-cookie-cracked');
-				const label = galletasLink.querySelector('p');
+		dropdown.querySelectorAll<HTMLAnchorElement>('[data-category="split"]').forEach((splitLink) => {
+			const cookieWrap = splitLink.querySelector<HTMLElement>('.nav-cookie-wrap');
+			const leftHalf = splitLink.querySelector<HTMLElement>('.nav-cookie-left');
+			const rightHalf = splitLink.querySelector<HTMLElement>('.nav-cookie-right');
+			const cracked = splitLink.querySelector<HTMLElement>('.nav-cookie-cracked');
+			const label = splitLink.querySelector('p');
 			let crackedTimeout: ReturnType<typeof setTimeout> | null = null;
 
-				galletasLink.addEventListener('mouseenter', () => {
-					animate(cookieWrap!, { rotate: -17 }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
-					animate(leftHalf!, { x: -2 }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
-					animate(rightHalf!, { x: 2 }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
-					crackedTimeout = setTimeout(() => {
-						animate(cracked!, { opacity: 1 }, { duration: 0.1, ease: 'easeOut' });
-						animate(leftHalf!, { opacity: 0 }, { duration: 0.1, ease: 'easeOut' });
-						animate(rightHalf!, { opacity: 0 }, { duration: 0.1, ease: 'easeOut' });
-					}, 50);
-					if (label) animate(label, { color: '#c34a70' }, { duration: 0.2, ease: 'easeOut' });
-				});
+			splitLink.addEventListener('mouseenter', () => {
+				animate(cookieWrap!, { rotate: -17 }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
+				animate(leftHalf!, { x: -2 }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
+				animate(rightHalf!, { x: 2 }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
+				crackedTimeout = setTimeout(() => {
+					animate(cracked!, { opacity: 1 }, { duration: 0.1, ease: 'easeOut' });
+					animate(leftHalf!, { opacity: 0 }, { duration: 0.1, ease: 'easeOut' });
+					animate(rightHalf!, { opacity: 0 }, { duration: 0.1, ease: 'easeOut' });
+				}, 50);
+				if (label) animate(label, { color: '#c34a70' }, { duration: 0.2, ease: 'easeOut' });
+			});
 
-				galletasLink.addEventListener('mouseleave', () => {
-					if (crackedTimeout) { clearTimeout(crackedTimeout); crackedTimeout = null; }
-					animate(cookieWrap!, { rotate: 0 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
-					animate(leftHalf!, { x: 0, opacity: 1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
-					animate(rightHalf!, { x: 0, opacity: 1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
-					animate(cracked!, { opacity: 0 }, { duration: 0.3, ease: 'easeInOut' });
-					if (label) animate(label, { color: '#3a200e' }, { duration: 0.2, ease: 'easeOut' });
-				});
+			splitLink.addEventListener('mouseleave', () => {
+				if (crackedTimeout) { clearTimeout(crackedTimeout); crackedTimeout = null; }
+				animate(cookieWrap!, { rotate: 0 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
+				animate(leftHalf!, { x: 0, opacity: 1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
+				animate(rightHalf!, { x: 0, opacity: 1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
+				animate(cracked!, { opacity: 0 }, { duration: 0.3, ease: 'easeInOut' });
+				if (label) animate(label, { color: '#3a200e' }, { duration: 0.2, ease: 'easeOut' });
+			});
+		});
+
+		const browniesLink = dropdown.querySelector<HTMLAnchorElement>('[data-category="brownies"]');
+		if (browniesLink) {
+			const bLeft = browniesLink.querySelector<HTMLElement>('.brownie-left');
+			const bRight = browniesLink.querySelector<HTMLElement>('.brownie-right');
+			const bCenter = browniesLink.querySelector<HTMLElement>('.brownie-center');
+			const label = browniesLink.querySelector('p');
+
+			browniesLink.addEventListener('mouseenter', () => {
+				if (bLeft) {
+					animate(bLeft, { opacity: 1, x: -30, y: 4, rotate: -12, scale: 0.9 }, { type: 'spring', stiffness: 300, damping: 20 });
+				}
+				if (bRight) {
+					animate(bRight, { opacity: 1, x: 30, y: 4, rotate: 12, scale: 0.9 }, { type: 'spring', stiffness: 300, damping: 20 });
+				}
+				if (bCenter) {
+					animate(bCenter, { scale: 1.05, y: -4 }, { type: 'spring', stiffness: 300, damping: 20 });
+				}
+				if (label) animate(label, { color: '#c34a70' }, { duration: 0.2, ease: 'easeOut' });
+			});
+
+			browniesLink.addEventListener('mouseleave', () => {
+				if (bLeft) {
+					animate(bLeft, { opacity: 0, x: 0, y: 0, rotate: 0, scale: 1 }, { duration: 0.25, ease: 'easeInOut' });
+				}
+				if (bRight) {
+					animate(bRight, { opacity: 0, x: 0, y: 0, rotate: 0, scale: 1 }, { duration: 0.25, ease: 'easeInOut' });
+				}
+				if (bCenter) {
+					animate(bCenter, { scale: 1, y: 0 }, { duration: 0.25, ease: 'easeInOut' });
+				}
+				if (label) animate(label, { color: '#3a200e' }, { duration: 0.2, ease: 'easeOut' });
+			});
 		}
 
-		dropdown.querySelectorAll<HTMLAnchorElement>('a:not([data-category="galletas"])').forEach((link) => {
+		dropdown.querySelectorAll<HTMLAnchorElement>('a:not([data-category="split"]):not([data-category="brownies"])').forEach((link) => {
 			const [img, imgHover] = link.querySelectorAll('img');
 			const label = link.querySelector('p');
 

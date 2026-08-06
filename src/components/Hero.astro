@@ -1,69 +1,152 @@
 <section class="relative h-220 w-full overflow-hidden bg-brown-400">
-	<div
-		class="absolute inset-0 bg-[repeating-linear-gradient(90deg,#89796e_0px_31px,transparent_31px_62.1px)]"
-		aria-hidden="true"
-	></div>
+	<div id="hero-carousel" class="absolute inset-0">
+		<!-- Slide 1: Galleta Habibi -->
+		<div id="hero-slide-1" class="absolute inset-0" data-slide="0">
+			<div
+				class="absolute inset-0 bg-[repeating-linear-gradient(90deg,#89796e_0px_31px,transparent_31px_62.1px)]"
+				aria-hidden="true"
+			></div>
 
-	<div class="absolute top-0 bottom-0 left-1/2 flex min-w-360 -translate-x-1/2 items-center">
+			<div class="absolute top-0 bottom-0 left-1/2 flex min-w-360 -translate-x-1/2 items-center">
+				<div class="relative h-[775px] w-full">
+					<div class="pointer-events-none absolute top-29.5 left-111.5 h-131 w-131 mix-blend-overlay" aria-hidden="true">
+						<img class="block h-full w-full" src="/images/ellipse-hero.svg" alt="" />
+					</div>
+
+					<p
+						class="pointer-events-none absolute top-[33.68px] left-[157.8px] z-1 font-script text-[203.79px] leading-none whitespace-nowrap text-pink-200"
+						aria-hidden="true"
+						>Galleta</p
+					>
+					<p
+						class="pointer-events-none absolute top-[33.68px] left-[1252.2px] z-1 w-[502.2px] -translate-x-full text-right font-script text-[203.79px] leading-none whitespace-nowrap text-pink-200"
+						aria-hidden="true"
+						>Habibi</p
+					>
+
+					<div id="hero-cookie" class="absolute top-[52.08px] left-[382.25px] z-2 h-[650px] w-[650px]">
+						<div id="hero-cookie-left" class="absolute inset-y-0 left-0 w-1/2 overflow-hidden">
+							<img
+								class="absolute top-0 left-0 h-full w-[650px] max-w-none"
+								src="/images/cream-hero.png"
+								alt="Galleta Habibi"
+							/>
+						</div>
+						<div id="hero-cookie-right" class="absolute inset-y-0 right-0 w-1/2 overflow-hidden">
+							<img
+								class="absolute top-0 right-0 h-full w-[650px] max-w-none"
+								src="/images/cream-hero.png"
+								alt="Galleta Habibi"
+							/>
+						</div>
+						<img
+							id="hero-cookie-cracked"
+							class="pointer-events-none absolute inset-0 h-full w-full object-cover"
+							style="opacity: 0;"
+							src="/images/cookie-hero.png"
+							alt="Galleta Habibi partida con crema de pistacho"
+						/>
+					</div>
+
+					<div id="hero-star" class="absolute top-[186.68px] left-200 z-3 h-[279.66px] w-[282.03px]">
+						<img class="block h-full w-full" src="/images/star-hero.svg" alt="" />
+						<span
+							class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-sans text-[27px] leading-[1.2] font-bold whitespace-nowrap text-center text-brown"
+							style="margin-left: 14.4px; margin-top: -12.6px"
+							>Nueva</span
+						>
+					</div>
+
+					<div class="absolute top-[310.9px] left-53.5 z-3 w-60.75">
+						<h2 class="mb-3 font-sans text-[38px] leading-[1.2] font-bold text-beige">Galleta Habibi</h2>
+						<p class="font-sans text-[21.6px] leading-[1.2] text-beige">
+							Galleta de chocolate tipo brownie, rellena con una exquisita crema de pistacho artesanal.
+							Un postre al mejor estilo Dubai.
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Slide 2: Crookie Chips -->
+		<div
+			id="hero-slide-2"
+			class="absolute inset-0 bg-blue-500"
+			data-slide="1"
+			style="opacity: 0; visibility: hidden; pointer-events: none;"
+		>
+			<div
+				class="absolute inset-0 bg-[repeating-linear-gradient(90deg,#d7ebfb_0px_31px,transparent_31px_62.1px)]"
+				aria-hidden="true"
+			></div>
+
+			<div class="absolute top-0 bottom-0 left-1/2 flex min-w-360 -translate-x-1/2 items-center">
+				<div class="relative h-[775px] w-full">
+					<div class="pointer-events-none absolute top-29.5 left-111.5 h-131 w-131 mix-blend-overlay" aria-hidden="true">
+						<img class="block h-full w-full" src="/images/ellipse-hero-blue.svg" alt="" />
+					</div>
+
+					<p
+						class="pointer-events-none absolute top-[33.68px] left-[157.8px] z-1 font-script text-[203.79px] leading-none whitespace-nowrap text-pink"
+						aria-hidden="true"
+						>Crookie</p
+					>
+					<p
+						class="pointer-events-none absolute top-[33.68px] left-[1252.2px] z-1 w-[502.2px] -translate-x-full text-right font-script text-[203.79px] leading-none whitespace-nowrap text-pink"
+						aria-hidden="true"
+						>Chips</p
+					>
+
+					<div id="hero-crookie" class="absolute top-[52.08px] left-[382.25px] z-2 h-[650px] w-[650px]">
+						<div id="hero-crookie-left" class="absolute inset-y-0 left-0 w-1/2 overflow-hidden">
+							<img
+								class="absolute top-0 left-0 h-full w-[650px] max-w-none object-cover"
+								src="/images/crookie-hero.png"
+								alt="Crookie Chips"
+							/>
+						</div>
+						<div id="hero-crookie-right" class="absolute inset-y-0 right-0 w-1/2 overflow-hidden">
+							<img
+								class="absolute top-0 right-0 h-full w-[650px] max-w-none object-cover"
+								src="/images/crookie-hero.png"
+								alt="Crookie Chips"
+							/>
+						</div>
+						<img
+							id="hero-crookie-split"
+							class="pointer-events-none absolute inset-0 h-full w-full object-cover"
+							style="opacity: 0;"
+							src="/images/crookie-hero-split.png"
+							alt="Crookie partido con crema de nutella"
+						/>
+					</div>
+
+					<div id="hero-star-2" class="absolute top-[186.68px] left-200 z-3 h-[311px] w-[314px]">
+						<img class="block h-full w-full" src="/images/star-hero-2.svg" alt="" />
+						<span
+							class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-sans text-[30px] leading-[1.2] font-bold whitespace-nowrap text-center text-white"
+							style="margin-left: 14.5px; margin-top: -14.4px"
+							>Nueva</span
+						>
+					</div>
+
+					<div class="absolute top-[310.9px] left-53.5 z-3 w-60.75">
+						<h2 class="mb-3 font-sans text-[38px] leading-[1.2] font-bold text-brown">Crookie Chips</h2>
+						<p class="font-sans text-[21.6px] leading-[1.2] text-brown-600">
+							Croissant + galleta de chips de chocolate + relleno de nutella. Hojaldrado, super crocante y con
+							un centro cremoso de chocolate.
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Capa compartida: botones del carrusel -->
+	<div class="pointer-events-none absolute top-0 bottom-0 left-1/2 z-10 flex min-w-360 -translate-x-1/2 items-center">
 		<div class="relative h-[775px] w-full">
-			<div class="pointer-events-none absolute top-29.5 left-111.5 h-131 w-131 mix-blend-overlay" aria-hidden="true">
-				<img class="block h-full w-full" src="/images/ellipse-hero.svg" alt="" />
-			</div>
-
-			<p
-				class="pointer-events-none absolute top-[33.68px] left-[157.8px] z-1 font-script text-[203.79px] leading-none whitespace-nowrap text-pink-200"
-				aria-hidden="true"
-				>Galleta</p
-			>
-			<p
-				class="pointer-events-none absolute top-[33.68px] left-[1252.2px] z-1 w-[502.2px] -translate-x-full text-right font-script text-[203.79px] leading-none whitespace-nowrap text-pink-200"
-				aria-hidden="true"
-				>Habibi</p
-			>
-
-			<div id="hero-cookie" class="absolute top-[52.08px] left-[382.25px] z-2 h-[650px] w-[650px]">
-				<div id="hero-cookie-left" class="absolute inset-y-0 left-0 w-1/2 overflow-hidden">
-					<img
-						class="absolute top-0 left-0 h-full w-[650px] max-w-none"
-						src="/images/cream-hero.png"
-						alt="Galleta Habibi"
-					/>
-				</div>
-				<div id="hero-cookie-right" class="absolute inset-y-0 right-0 w-1/2 overflow-hidden">
-					<img
-						class="absolute top-0 right-0 h-full w-[650px] max-w-none"
-						src="/images/cream-hero.png"
-						alt="Galleta Habibi"
-					/>
-				</div>
-				<img
-					id="hero-cookie-cracked"
-					class="pointer-events-none absolute inset-0 h-full w-full object-cover"
-					style="opacity: 0;"
-					src="/images/cookie-hero.png"
-					alt="Galleta Habibi partida con crema de pistacho"
-				/>
-			</div>
-
-			<div id="hero-star" class="absolute top-[186.68px] left-200 z-3 h-[279.66px] w-[282.03px]">
-				<img class="block h-full w-full" src="/images/star-hero.svg" alt="" />
-				<span
-					class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-sans text-[27px] leading-[1.2] font-bold whitespace-nowrap text-center text-brown"
-					style="margin-left: 14.4px; margin-top: -12.6px"
-					>Nueva</span
-				>
-			</div>
-
-			<div class="absolute top-[310.9px] left-53.5 z-3 w-60.75">
-				<h2 class="mb-3 font-sans text-[38px] leading-[1.2] font-bold text-beige">Galleta Habibi</h2>
-				<p class="font-sans text-[21.6px] leading-[1.2] text-beige">
-					Galleta de chocolate tipo brownie, rellena con una exquisita crema de pistacho artesanal.
-					Un postre al mejor estilo Dubai.
-				</p>
-			</div>
-
 			<a
-				class="absolute top-164.5 left-148.75 z-3 flex h-12.25 w-[218.1px] items-center justify-center gap-2 whitespace-nowrap rounded-[57px] bg-pink px-4 py-2 font-sans text-[19px] leading-[1.2] font-bold text-beige no-underline hover:brightness-95"
+				class="pointer-events-auto absolute top-164.5 left-148.75 z-3 flex h-12.25 w-[218.1px] items-center justify-center gap-2 whitespace-nowrap rounded-[57px] bg-pink px-4 py-2 font-sans text-[19px] leading-[1.2] font-bold text-beige no-underline hover:brightness-95"
 				href="#menu"
 			>
 				Ver menú
@@ -73,14 +156,16 @@
 			</a>
 
 			<button
-				class="absolute top-83 left-23.75 z-4 flex h-18.25 w-18.25 cursor-pointer items-center justify-center rounded-[94.4px] border-[3.05px] border-beige bg-pink p-[15.23px] hover:brightness-95"
+				id="hero-prev"
+				class="pointer-events-auto absolute top-83 left-23.75 z-4 flex h-18.25 w-18.25 cursor-pointer items-center justify-center rounded-[94.4px] border-[3.05px] border-beige bg-pink p-[15.23px] hover:brightness-95"
 				type="button"
 				aria-label="Anterior"
 			>
 				<img class="block h-[36.55px] w-[36.55px]" src="/images/chevron-left.svg" alt="" />
 			</button>
 			<button
-				class="absolute top-[268.13px] left-[1219.13px] z-4 flex h-18.25 w-18.25 cursor-pointer items-center justify-center rounded-[94.4px] border-[3.05px] border-beige bg-pink p-[15.23px] hover:brightness-95"
+				id="hero-next"
+				class="pointer-events-auto absolute top-[268.13px] left-[1219.13px] z-4 flex h-18.25 w-18.25 cursor-pointer items-center justify-center rounded-[94.4px] border-[3.05px] border-beige bg-pink p-[15.23px] hover:brightness-95"
 				type="button"
 				aria-label="Siguiente"
 			>
@@ -93,48 +178,118 @@
 <script>
 	import { animate } from 'motion';
 
+	const carousel = document.getElementById('hero-carousel');
+	const slides = carousel ? Array.from(carousel.querySelectorAll<HTMLElement>('[data-slide]')) : [];
+	const prevBtn = document.getElementById('hero-prev');
+	const nextBtn = document.getElementById('hero-next');
+
+	let current = 0;
+	let transitioning = false;
+
+	const goTo = (index: number) => {
+		if (transitioning || index === current || !slides[index]) return;
+		transitioning = true;
+
+		resetCookie();
+		resetCrookie();
+
+		const from = slides[current];
+		const to = slides[index];
+
+		animate(
+			from,
+			{ opacity: 0, visibility: 'hidden', pointerEvents: 'none' },
+			{ duration: 0.4, ease: 'easeInOut' }
+		);
+		animate(
+			to,
+			{ opacity: 1, visibility: 'visible', pointerEvents: 'auto' },
+			{ duration: 0.4, ease: 'easeInOut', onComplete: () => (transitioning = false) }
+		);
+
+		current = index;
+	};
+
+	prevBtn?.addEventListener('click', () => goTo(current === 0 ? slides.length - 1 : current - 1));
+	nextBtn?.addEventListener('click', () => goTo(current === slides.length - 1 ? 0 : current + 1));
+
 	const cookie = document.getElementById('hero-cookie');
 	const leftHalf = document.getElementById('hero-cookie-left');
 	const rightHalf = document.getElementById('hero-cookie-right');
 	const cracked = document.getElementById('hero-cookie-cracked');
 	const star = document.getElementById('hero-star');
 
-	let crackedTimeout: ReturnType<typeof setTimeout> | null = null;
+	let cookieTimeout: ReturnType<typeof setTimeout> | null = null;
 
-	if (cookie && leftHalf && rightHalf && cracked) {
+	const startCookie = () => {
+		if (cookieTimeout || !cookie || !leftHalf || !rightHalf || !cracked) return;
 		const slide = cookie.offsetWidth / 522.26 * 2;
+		animate(cookie, { rotate: -15 }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
+		animate(leftHalf, { x: -slide }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
+		animate(rightHalf, { x: slide }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
 
-		const startSplit = () => {
-			if (crackedTimeout) return;
-			animate(cookie, { rotate: -15 }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
-			animate(leftHalf, { x: -slide }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
-			animate(rightHalf, { x: slide }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
+		cookieTimeout = setTimeout(() => {
+			animate(cracked, { opacity: 1 }, { duration: 0.1, ease: 'easeOut' });
+			animate(leftHalf, { opacity: 0 }, { duration: 0.1, ease: 'easeOut' });
+			animate(rightHalf, { opacity: 0 }, { duration: 0.1, ease: 'easeOut' });
+			animate(cookie, { scale: 1.1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
+		}, 50);
+	};
 
-			crackedTimeout = setTimeout(() => {
-				animate(cracked, { opacity: 1 }, { duration: 0.1, ease: 'easeOut' });
-				animate(leftHalf, { opacity: 0 }, { duration: 0.1, ease: 'easeOut' });
-				animate(rightHalf, { opacity: 0 }, { duration: 0.1, ease: 'easeOut' });
-				animate(cookie, { scale: 1.1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
-			}, 50);
-		};
-
-		const resetSplit = () => {
-			if (crackedTimeout) {
-				clearTimeout(crackedTimeout);
-				crackedTimeout = null;
-			}
-			animate(cookie, { rotate: 0, scale: 1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
-			animate(leftHalf, { x: 0, opacity: 1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
-			animate(rightHalf, { x: 0, opacity: 1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
-			animate(cracked, { opacity: 0 }, { duration: 0.3, ease: 'easeInOut' });
-		};
-
-		cookie.addEventListener('mouseenter', startSplit);
-		cookie.addEventListener('mouseleave', resetSplit);
-
-		if (star) {
-			star.addEventListener('mouseenter', startSplit);
-			star.addEventListener('mouseleave', resetSplit);
+	const resetCookie = () => {
+		if (!cookie || !leftHalf || !rightHalf || !cracked) return;
+		if (cookieTimeout) {
+			clearTimeout(cookieTimeout);
+			cookieTimeout = null;
 		}
-	}
+		animate(cookie, { rotate: 0, scale: 1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
+		animate(leftHalf, { x: 0, opacity: 1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
+		animate(rightHalf, { x: 0, opacity: 1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
+		animate(cracked, { opacity: 0 }, { duration: 0.3, ease: 'easeInOut' });
+	};
+
+	cookie?.addEventListener('mouseenter', startCookie);
+	cookie?.addEventListener('mouseleave', resetCookie);
+	star?.addEventListener('mouseenter', startCookie);
+	star?.addEventListener('mouseleave', resetCookie);
+
+	const crookie = document.getElementById('hero-crookie');
+	const crookieLeft = document.getElementById('hero-crookie-left');
+	const crookieRight = document.getElementById('hero-crookie-right');
+	const crookieSplit = document.getElementById('hero-crookie-split');
+	const star2 = document.getElementById('hero-star-2');
+
+	let crookieTimeout: ReturnType<typeof setTimeout> | null = null;
+
+	const startCrookie = () => {
+		if (crookieTimeout || !crookie || !crookieLeft || !crookieRight || !crookieSplit) return;
+		const slide = crookie.offsetWidth / 650 * 3;
+		animate(crookie, { rotate: -3.64 }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
+		animate(crookieLeft, { x: -slide }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
+		animate(crookieRight, { x: slide }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
+
+		crookieTimeout = setTimeout(() => {
+			animate(crookieSplit, { opacity: 1 }, { duration: 0.1, ease: 'easeOut' });
+			animate(crookieLeft, { opacity: 0 }, { duration: 0.1, ease: 'easeOut' });
+			animate(crookieRight, { opacity: 0 }, { duration: 0.1, ease: 'easeOut' });
+			animate(crookie, { scale: 1.065 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
+		}, 50);
+	};
+
+	const resetCrookie = () => {
+		if (!crookie || !crookieLeft || !crookieRight || !crookieSplit) return;
+		if (crookieTimeout) {
+			clearTimeout(crookieTimeout);
+			crookieTimeout = null;
+		}
+		animate(crookie, { rotate: 0, scale: 1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
+		animate(crookieLeft, { x: 0, opacity: 1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
+		animate(crookieRight, { x: 0, opacity: 1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
+		animate(crookieSplit, { opacity: 0 }, { duration: 0.3, ease: 'easeInOut' });
+	};
+
+	crookie?.addEventListener('mouseenter', startCrookie);
+	crookie?.addEventListener('mouseleave', resetCrookie);
+	star2?.addEventListener('mouseenter', startCrookie);
+	star2?.addEventListener('mouseleave', resetCrookie);
 </script>

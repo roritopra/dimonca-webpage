@@ -1,4 +1,4 @@
-<section class="relative h-193.75 w-full overflow-hidden bg-brown-400">
+<section class="relative h-220 w-full overflow-hidden bg-brown-400">
 	<div
 		class="absolute inset-0 bg-[repeating-linear-gradient(90deg,#89796e_0px_31px,transparent_31px_62.1px)]"
 		aria-hidden="true"
@@ -44,7 +44,7 @@
 			/>
 		</div>
 
-		<div class="absolute top-[186.68px] left-200 z-3 h-[279.66px] w-[282.03px]">
+		<div id="hero-star" class="absolute top-[186.68px] left-200 z-3 h-[279.66px] w-[282.03px]">
 			<img class="block h-full w-full" src="/images/star-hero.svg" alt="" />
 			<span
 				class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-sans text-[27px] leading-[1.2] font-bold whitespace-nowrap text-center text-brown"
@@ -95,13 +95,15 @@
 	const leftHalf = document.getElementById('hero-cookie-left');
 	const rightHalf = document.getElementById('hero-cookie-right');
 	const cracked = document.getElementById('hero-cookie-cracked');
+	const star = document.getElementById('hero-star');
 
 	let crackedTimeout: ReturnType<typeof setTimeout> | null = null;
 
 	if (cookie && leftHalf && rightHalf && cracked) {
 		const slide = cookie.offsetWidth / 522.26 * 2;
 
-		cookie.addEventListener('mouseenter', () => {
+		const startSplit = () => {
+			if (crackedTimeout) return;
 			animate(cookie, { rotate: -15 }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
 			animate(leftHalf, { x: -slide }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
 			animate(rightHalf, { x: slide }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
@@ -112,9 +114,9 @@
 				animate(rightHalf, { opacity: 0 }, { duration: 0.1, ease: 'easeOut' });
 				animate(cookie, { scale: 1.1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
 			}, 50);
-		});
+		};
 
-		cookie.addEventListener('mouseleave', () => {
+		const resetSplit = () => {
 			if (crackedTimeout) {
 				clearTimeout(crackedTimeout);
 				crackedTimeout = null;
@@ -123,6 +125,14 @@
 			animate(leftHalf, { x: 0, opacity: 1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
 			animate(rightHalf, { x: 0, opacity: 1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
 			animate(cracked, { opacity: 0 }, { duration: 0.3, ease: 'easeInOut' });
-		});
+		};
+
+		cookie.addEventListener('mouseenter', startSplit);
+		cookie.addEventListener('mouseleave', resetSplit);
+
+		if (star) {
+			star.addEventListener('mouseenter', startSplit);
+			star.addEventListener('mouseleave', resetSplit);
+		}
 	}
 </script>

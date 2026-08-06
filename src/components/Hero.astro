@@ -1,15 +1,28 @@
 ---
 import { Icon } from 'astro-icon/components';
+
+const stripes = Array.from({ length: 24 }, (_, i) => ({
+	left: (i * (62.1 / 1440)) * 100,
+	width: (31 / 1440) * 100,
+	up: i % 2 === 0,
+}));
 ---
 
 <section class="relative h-220 w-full overflow-hidden bg-brown-400">
 	<div id="hero-carousel" class="absolute inset-0">
 		<!-- Slide 1: Galleta Habibi -->
 		<div id="hero-slide-1" class="absolute inset-0" data-slide="0">
-			<div
-				class="absolute inset-0 bg-[repeating-linear-gradient(90deg,#89796e_0px_31px,transparent_31px_62.1px)]"
-				aria-hidden="true"
-			></div>
+			<div class="absolute inset-0 overflow-hidden" aria-hidden="true">
+				{
+					stripes.map((s) => (
+						<div
+							class="hero-stripe absolute top-0 bottom-0 bg-[#89796e]"
+							style={`left: ${s.left}%; width: ${s.width}%;`}
+							data-dir={s.up ? 'up' : 'down'}
+						></div>
+					))
+				}
+			</div>
 
 			<div class="absolute top-0 bottom-0 left-1/2 flex min-w-360 -translate-x-1/2 items-center">
 				<div class="hero-content relative h-[775px] w-full">
@@ -79,10 +92,17 @@ import { Icon } from 'astro-icon/components';
 			data-slide="1"
 			style="opacity: 0; visibility: hidden; pointer-events: none;"
 		>
-			<div
-				class="absolute inset-0 bg-[repeating-linear-gradient(90deg,#d7ebfb_0px_31px,transparent_31px_62.1px)]"
-				aria-hidden="true"
-			></div>
+			<div class="absolute inset-0 overflow-hidden" aria-hidden="true">
+				{
+					stripes.map((s) => (
+						<div
+							class="hero-stripe absolute top-0 bottom-0 bg-[#d7ebfb]"
+							style={`left: ${s.left}%; width: ${s.width}%;`}
+							data-dir={s.up ? 'up' : 'down'}
+						></div>
+					))
+				}
+			</div>
 
 			<div class="absolute top-0 bottom-0 left-1/2 flex min-w-360 -translate-x-1/2 items-center">
 				<div class="hero-content relative h-[775px] w-full">
@@ -207,6 +227,18 @@ import { Icon } from 'astro-icon/components';
 		const toContent = to.querySelector<HTMLElement>('.hero-content');
 		const fromStar = from.querySelector<HTMLElement>('#hero-star, #hero-star-2');
 		const toStar = to.querySelector<HTMLElement>('#hero-star, #hero-star-2');
+		const fromStripes = Array.from(from.querySelectorAll<HTMLElement>('.hero-stripe'));
+		const toStripes = Array.from(to.querySelectorAll<HTMLElement>('.hero-stripe'));
+		const travel = from.offsetHeight;
+
+		fromStripes.forEach((stripe) => {
+			const dir = stripe.dataset.dir === 'up' ? -1 : 1;
+			animate(
+				stripe,
+				{ y: dir * travel, opacity: 0 },
+				{ duration: EXIT_MS / 1000, ease: 'easeInOut' }
+			);
+		});
 
 		if (fromContent) {
 			animate(
@@ -237,6 +269,14 @@ import { Icon } from 'astro-icon/components';
 					{ duration: ENTER_MS / 1000, ease: 'easeInOut' }
 				);
 			}
+			toStripes.forEach((stripe) => {
+				const dir = stripe.dataset.dir === 'up' ? -1 : 1;
+				animate(
+					stripe,
+					{ y: [dir * travel, 0], opacity: [0, 1] },
+					{ duration: ENTER_MS / 1000, ease: 'easeInOut' }
+				);
+			});
 			if (toStar) {
 				animate(
 					toStar,

@@ -76,7 +76,7 @@ const stripes = Array.from({ length: 24 }, (_, i) => ({
 						>
 					</div>
 
-					<div class="absolute top-[310.9px] left-53.5 z-3 w-60.75">
+					<div class="hero-left-info absolute top-[310.9px] left-53.5 z-3 w-60.75">
 						<h2 class="mb-3 font-sans text-[38px] leading-[1.2] font-bold text-beige">
 							Galleta Habibi
 						</h2>
@@ -160,7 +160,7 @@ const stripes = Array.from({ length: 24 }, (_, i) => ({
 						>
 					</div>
 
-					<div class="absolute top-[310.9px] left-53.5 z-3 w-60.75">
+					<div class="hero-left-info absolute top-[310.9px] left-53.5 z-3 w-60.75">
 						<h2 class="mb-3 font-sans text-[38px] leading-[1.2] font-bold text-brown">
 							Crookie Chips
 						</h2>
@@ -233,6 +233,10 @@ const stripes = Array.from({ length: 24 }, (_, i) => ({
 		const to = slides[index];
 		const fromContent = from.querySelector<HTMLElement>('.hero-content');
 		const toContent = to.querySelector<HTMLElement>('.hero-content');
+		const fromLeftInfo = from.querySelector<HTMLElement>('.hero-left-info');
+		const toLeftInfo = to.querySelector<HTMLElement>('.hero-left-info');
+		const fromCookieImg = from.querySelector<HTMLElement>('#hero-cookie, #hero-crookie');
+		const toCookieImg = to.querySelector<HTMLElement>('#hero-cookie, #hero-crookie');
 		const fromStar = from.querySelector<HTMLElement>('#hero-star, #hero-star-2');
 		const toStar = to.querySelector<HTMLElement>('#hero-star, #hero-star-2');
 		const fromStripes = Array.from(from.querySelectorAll<HTMLElement>('.hero-stripe'));
@@ -260,13 +264,22 @@ const stripes = Array.from({ length: 24 }, (_, i) => ({
 			);
 		});
 
-		if (fromContent) {
+		if (fromLeftInfo) {
 			animate(
-				fromContent,
-				{ opacity: 0 },
+				fromLeftInfo,
+				{ x: -120, opacity: 0 },
 				{ duration: EXIT_MS / 1000, ease: 'easeInOut' }
 			);
 		}
+
+		if (fromCookieImg) {
+			animate(
+				fromCookieImg,
+				{ opacity: 0, scale: 0.8, rotate: -25 },
+				{ duration: EXIT_MS / 1000, ease: 'backIn' }
+			);
+		}
+
 		if (fromStar) {
 			animate(
 				fromStar,
@@ -282,13 +295,6 @@ const stripes = Array.from({ length: 24 }, (_, i) => ({
 			to.style.visibility = 'visible';
 			to.style.pointerEvents = 'auto';
 
-			if (toContent) {
-				animate(
-					toContent,
-					{ opacity: [0, 1] },
-					{ duration: ENTER_MS / 1000, ease: 'easeInOut' }
-				);
-			}
 			toStripes.forEach((stripe) => {
 				const dir = stripe.dataset.dir === 'up' ? -1 : 1;
 				animate(
@@ -306,6 +312,20 @@ const stripes = Array.from({ length: 24 }, (_, i) => ({
 					{ duration: ENTER_MS / 1000, ease: 'easeOut' }
 				);
 			});
+			if (toLeftInfo) {
+				animate(
+					toLeftInfo,
+					{ x: [-120, 0], opacity: [0, 1] },
+					{ duration: ENTER_MS / 1000, ease: 'easeOut' }
+				);
+			}
+			if (toCookieImg) {
+				animate(
+					toCookieImg,
+					{ opacity: [0, 1], scale: [0.8, 1], rotate: [25, 0] },
+					{ duration: ENTER_MS / 1000, ease: 'backOut' }
+				);
+			}
 			if (toStar) {
 				animate(
 					toStar,

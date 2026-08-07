@@ -13,4 +13,13 @@
 
 	--font-sans: 'Poppins', ui-sans-serif, system-ui, sans-serif;
 	--font-script: 'Sacramento', cursive;
+	--font-exmouth: 'Exmouth', cursive;
+}
+
+@font-face {
+	font-family: 'Exmouth';
+	src: url('/fonts/exmouth_.woff') format('woff');
+	font-weight: normal;
+	font-style: normal;
+	font-display: swap;
 }

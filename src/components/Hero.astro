@@ -92,7 +92,7 @@ const stripes = Array.from({ length: 24 }, (_, i) => ({
 		<!-- Slide 2: Crookie Chips -->
 		<div
 			id="hero-slide-2"
-			class="absolute inset-0 bg-blue-500"
+			class="absolute inset-0 bg-blue-500 transition-opacity duration-300"
 			data-slide="1"
 			style="opacity: 0; visibility: hidden; pointer-events: none;"
 		>
@@ -289,11 +289,14 @@ const stripes = Array.from({ length: 24 }, (_, i) => ({
 		}
 
 		setTimeout(() => {
-			from.style.visibility = 'hidden';
-			from.style.pointerEvents = 'none';
-			to.style.opacity = '1';
+			animate(from, { opacity: 0 }, { duration: 0.3, ease: 'easeInOut' }).then(() => {
+				from.style.visibility = 'hidden';
+				from.style.pointerEvents = 'none';
+			});
+
 			to.style.visibility = 'visible';
 			to.style.pointerEvents = 'auto';
+			animate(to, { opacity: [0, 1] }, { duration: 0.4, ease: 'easeInOut' });
 
 			toStripes.forEach((stripe) => {
 				const dir = stripe.dataset.dir === 'up' ? -1 : 1;

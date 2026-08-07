@@ -127,17 +127,17 @@ const stripes = Array.from({ length: 24 }, (_, i) => ({
 						<span class="hero-title-word inline-block" data-dir="right">Chips</span>
 					</p>
 
-					<div id="hero-crookie" class="absolute top-[52.08px] left-[382.25px] z-2 h-[650px] w-[650px]">
+					<div id="hero-crookie" class="absolute top-[17.08px] left-[347.25px] z-2 h-[720px] w-[720px]">
 						<div id="hero-crookie-left" class="absolute inset-y-0 left-0 w-1/2 overflow-hidden">
 							<img
-								class="absolute top-0 left-0 h-full w-[650px] max-w-none object-cover"
+								class="absolute top-0 left-0 h-full w-[720px] max-w-none object-cover"
 								src="/images/crookie-hero.png"
 								alt="Crookie Chips"
 							/>
 						</div>
 						<div id="hero-crookie-right" class="absolute inset-y-0 right-0 w-1/2 overflow-hidden">
 							<img
-								class="absolute top-0 right-0 h-full w-[650px] max-w-none object-cover"
+								class="absolute top-0 right-0 h-full w-[720px] max-w-none object-cover"
 								src="/images/crookie-hero.png"
 								alt="Crookie Chips"
 							/>
@@ -395,7 +395,7 @@ const stripes = Array.from({ length: 24 }, (_, i) => ({
 
 	const startCrookie = () => {
 		if (crookieTimeout || !crookie || !crookieLeft || !crookieRight || !crookieSplit) return;
-		const slide = crookie.offsetWidth / 650 * 3;
+		const slide = crookie.offsetWidth / 720 * 3;
 		animate(crookie, { rotate: -3.64 }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
 		animate(crookieLeft, { x: -slide }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
 		animate(crookieRight, { x: slide }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });

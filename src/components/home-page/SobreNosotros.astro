@@ -1,112 +1,102 @@
 ---
-import { Icon } from 'astro-icon/components';
+import { Icon } from "astro-icon/components";
 
 const photos = [
-	{
-		src: '/images/sobre-1.png',
-		alt: '',
-		container: 'left-[-86px] top-[-64.56px] h-[346.4px] w-[275.93px]',
-		rotate: '-rotate-[9.08deg]',
-		box: 'h-[314.16px] w-[229.22px] border-[1.83px] border-pink',
-	},
-	{
-		src: '/images/sobre-2.png',
-		alt: '',
-		container: 'left-[calc(25%+91.97px)] top-[-49.81px] h-[248.03px] w-[268.38px]',
-		rotate: 'rotate-[12.27deg]',
-		box: 'h-[203.73px] w-[230.34px] border-[1.84px] border-brown',
-	},
-	{
-		src: '/images/sobre-3.png',
-		alt: '',
-		container: 'left-[calc(25%+107.26px)] top-[501.1px] h-[293.37px] w-[262.34px]',
-		rotate: '-rotate-[10.28deg]',
-		box: 'h-[258.31px] w-[219.78px] border-[1.75px] border-blue-500',
-	},
-	{
-		src: '/images/sobre-4.png',
-		alt: '',
-		container: 'left-[-85px] top-[517.03px] h-[222.82px] w-[254.32px]',
-		rotate: 'rotate-[13.61deg]',
-		box: 'h-[176.25px] w-[219px] border-[1.75px] border-pink',
-	},
+  { src: "/images/sobre-1.png", alt: "", justify: "justify-start" },
+  { src: "/images/sobre-2.png", alt: "", justify: "justify-end" },
+  { src: "/images/sobre-4.png", alt: "", justify: "justify-start" },
+  { src: "/images/sobre-3.png", alt: "", justify: "justify-start" },
 ];
 ---
 
-<section class="relative w-full overflow-hidden bg-beige">
-	<div class="relative h-[723px] w-full">
-		<div class="absolute inset-0 left-1/2 w-[1440px] max-w-full -translate-x-1/2">
-			{photos.map((p) => (
-				<div
-					class={`absolute flex items-center justify-center ${p.container}`}
-				>
-					<div class={`${p.rotate}`}>
-						<div class={`relative overflow-hidden ${p.box}`}>
-							<img class="absolute inset-0 h-full w-full object-cover" src={p.src} alt={p.alt} />
-						</div>
-					</div>
-				</div>
-			))}
+<section class="w-full bg-beige">
+  <div
+    class="mx-auto flex max-w-[1440px] flex-wrap items-center justify-center gap-16 px-20 py-16"
+  >
+    <div class="relative grid w-[540px] max-w-full grid-cols-2 gap-x-5 gap-y-8">
+      {
+        photos.map((p) => (
+          <div class={`flex flex-col ${p.justify}`}>
+            <img
+              class="block h-auto w-full object-contain"
+              src={p.src}
+              alt={p.alt}
+            />
+          </div>
+        ))
+      }
+      <p
+        class="absolute top-0 left-8/12 z-10 w-full max-w-[300px]
+		-translate-x-1/2 font-exmouth text-[40.74px] leading-[1.2]
+		text-brown [-webkit-text-stroke:8px_#F7F2E8] [paint-order:stroke_fill]
+		[filter:drop-shadow(0px_4px_4px_rgba(58,32,14,0.5))]"
+      >
+        Darte siempre un poquito más de lo que amas.
+      </p>
+      <img
+        class="absolute bottom-0 left-1/2 z-10 -translate-x-1/2 block w-[160px] h-auto"
+        src="/images/sobre-cookie.png"
+        alt=""
+      />
+      <div
+        class="absolute top-1/2 right-0 z-20 flex size-[71px] -translate-y-1/2 items-center justify-center"
+      >
+        <div class="-rotate-30">
+          <div
+            class="flex items-center rounded-[140.54px] border-[2.11px] border-beige bg-pink p-[7.03px] drop-shadow-[0px_2.81px_1.4px_rgba(58,32,14,0.15)]"
+          >
+            <div
+              class="flex items-center rounded-[22.49px] border-[2px] border-pink-200 p-[7.03px]"
+            >
+              <Icon name="lucide:heart" class="block h-[23.89px] w-[23.89px] text-beige" aria-hidden="true" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-			<p
-				class="absolute top-[220px] left-[115px] w-[238px] font-script text-[40.74px] leading-[0.69] text-brown [text-shadow:0px_4px_4px_rgba(58,32,14,0.15)]"
-			>
-				Darte siempre un poquito más de lo que amas.
-			</p>
-
-			<div class="absolute top-[389px] left-[-39px] flex size-[200.91px] items-center justify-center">
-				<div class="-rotate-[43.82deg]">
-					<div class="relative size-[142.1px] shadow-[0px_4px_3.9px_rgba(58,32,14,0.25)]">
-						<img
-							class="absolute inset-0 h-full w-full object-cover"
-							src="/images/sobre-cookie.png"
-							alt="Galleta partida de Dimonca"
-						/>
-					</div>
-				</div>
-			</div>
-
-			<div class="absolute top-[564px] left-[calc(41.67%+88px)] flex size-[71.03px] items-center justify-center">
-				<div class="-rotate-30">
-					<div
-						class="flex items-center rounded-[140.54px] border-[2.11px] border-beige bg-pink p-[7.03px] drop-shadow-[0px_2.81px_1.4px_rgba(58,32,14,0.15)]"
-					>
-						<div
-							class="flex items-center rounded-[22.49px] border-[2px] border-pink-200 p-[7.03px]"
-						>
-							<Icon name="lucide:heart" class="h-[23.89px] w-[23.89px] text-beige" aria-hidden="true" />
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<div class="absolute top-[156px] left-[calc(50%+10px)] flex w-[522px] flex-col gap-[9px]">
-				<div class="relative h-[158px]">
-					<p class="w-[521px] font-sans text-[59px] leading-[1.2] font-bold text-brown">
-						Bienvenido al universo
-					</p>
-					<span
-						class="absolute top-[62px] left-[273px] font-script text-[81.14px] leading-[1.2] text-pink"
-						>Dimonca</span
-					>
-				</div>
-				<p class="min-w-full text-[19px] leading-[1.2] whitespace-pre-wrap text-brown">
-					Bienvenidos a Dimonca deliciosos momentos dulces te esperan en nuestro{' '}
-					<strong>rincón de tentaciones</strong>
-					{', donde cada bocado es una experiencia única! Desde clásicos tradicionales hasta '}
-					<strong>creaciones innovadoras</strong>
-					{' Nuestra pasión por la pastelería se refleja en cada pastel que preparamos con mucho amor! '}
-				</p>
-				<a
-					class="mt-1 flex h-[46px] w-[196px] items-center justify-center gap-2 whitespace-nowrap rounded-[57px] bg-pink px-4 py-2 font-sans text-[19px] leading-[1.2] font-bold text-beige no-underline hover:brightness-95"
-					href="#contacto"
-				>
-					Contáctanos
-					<span class="flex h-[30px] w-[30px] shrink-0 items-center justify-center rounded-[21.25px] bg-beige p-[6.25px]">
-						<Icon name="lucide:phone-call" class="block h-[15px] w-[15px]" aria-hidden="true" />
-					</span>
-				</a>
-			</div>
-		</div>
-	</div>
+    <div class="flex w-[522px] max-w-full flex-col gap-[9px]">
+      <div class="relative h-[158px]">
+        <p
+          class="w-[521px] font-sans text-[59px] leading-[1.2] font-bold text-brown"
+        >
+          Bienvenido al universo
+        </p>
+        <span
+          class="absolute top-[62px] left-[273px] font-exmouth text-[81.14px] leading-[1.2] text-pink"
+          >Dimonca</span
+        >
+      </div>
+      <p
+        class="min-w-full text-[19px] leading-[1.2] whitespace-pre-wrap text-brown"
+      >
+        Bienvenidos a Dimonca deliciosos momentos dulces te esperan en nuestro{
+          " "
+        }
+        <strong>rincón de tentaciones</strong>
+        {
+          ", donde cada bocado es una experiencia única! Desde clásicos tradicionales hasta "
+        }
+        <strong>creaciones innovadoras</strong>
+        {
+          " Nuestra pasión por la pastelería se refleja en cada pastel que preparamos con mucho amor! "
+        }
+      </p>
+      <a
+        class="mt-1 flex h-[46px] w-[196px] items-center justify-center gap-2 whitespace-nowrap rounded-[57px] bg-pink px-4 py-2 font-sans text-[19px] leading-[1.2] font-bold text-beige no-underline hover:brightness-95"
+        href="#contacto"
+      >
+        Contáctanos
+        <span
+          class="flex h-[30px] w-[30px] shrink-0 items-center justify-center rounded-[21.25px] bg-beige p-[6.25px]"
+        >
+          <Icon
+            name="lucide:phone-call"
+            class="block h-[15px] w-[15px]"
+            aria-hidden="true"
+          />
+        </span>
+      </a>
+    </div>
+  </div>
 </section>

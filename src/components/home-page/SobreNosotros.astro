@@ -2,10 +2,34 @@
 import { Icon } from "astro-icon/components";
 
 const photos = [
-  { id: "sobre-1", src: "/images/sobre-1.png", alt: "", justify: "justify-start" },
-  { id: "sobre-2", src: "/images/sobre-2.png", alt: "", justify: "justify-end" },
-  { src: "/images/sobre-4.png", alt: "", justify: "justify-start" },
-  { src: "/images/sobre-3.png", alt: "", justify: "justify-start" },
+  {
+    id: "sobre-1",
+    src: "/images/sobre-1.png",
+    alt: "",
+    justify: "justify-start",
+    initialStyle: "transform: translate(-200px, -100px) rotate(-9deg);",
+  },
+  {
+    id: "sobre-2",
+    src: "/images/sobre-2.png",
+    alt: "",
+    justify: "justify-end",
+    initialStyle: "transform: translate(200px, -100px) rotate(9deg);",
+  },
+  {
+    id: "sobre-4",
+    src: "/images/sobre-4.png",
+    alt: "",
+    justify: "justify-start",
+    initialStyle: "transform: translate(-200px, 100px) rotate(-9deg);",
+  },
+  {
+    id: "sobre-3",
+    src: "/images/sobre-3.png",
+    alt: "",
+    justify: "justify-start",
+    initialStyle: "transform: translate(200px, 100px) rotate(9deg);",
+  },
 ];
 ---
 
@@ -20,6 +44,7 @@ const photos = [
             <img
               id={p.id}
               class="block h-auto w-full object-contain"
+              style={p.initialStyle}
               src={p.src}
               alt={p.alt}
             />
@@ -109,8 +134,10 @@ const photos = [
     const grid = document.getElementById("sobre-grid");
     const sobre1 = document.getElementById("sobre-1");
     const sobre2 = document.getElementById("sobre-2");
+    const sobre3 = document.getElementById("sobre-3");
+    const sobre4 = document.getElementById("sobre-4");
 
-    if (grid && sobre1 && sobre2) {
+    if (grid && sobre1 && sobre2 && sobre3 && sobre4) {
       inView(
         grid,
         function () {
@@ -153,6 +180,52 @@ const photos = [
             sobre2,
             {
               y: [-100, 0],
+            },
+            {
+              duration: 1.4,
+              ease: [0.35, -0.3, 0.1, 1.45],
+            }
+          );
+
+          animate(
+            sobre4,
+            {
+              x: [-200, 0],
+              rotate: [-9, 0],
+            },
+            {
+              duration: 1.4,
+              ease: [0.7, -0.4, 0.25, 1.35],
+            }
+          );
+
+          animate(
+            sobre4,
+            {
+              y: [100, 0],
+            },
+            {
+              duration: 1.4,
+              ease: [0.35, -0.3, 0.1, 1.45],
+            }
+          );
+
+          animate(
+            sobre3,
+            {
+              x: [200, 0],
+              rotate: [9, 0],
+            },
+            {
+              duration: 1.4,
+              ease: [0.7, -0.4, 0.25, 1.35],
+            }
+          );
+
+          animate(
+            sobre3,
+            {
+              y: [100, 0],
             },
             {
               duration: 1.4,

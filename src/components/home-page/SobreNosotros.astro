@@ -67,14 +67,20 @@ const photos = [
       <div
         class="absolute top-1/2 right-0 z-20 flex size-[71px] -translate-y-1/2 items-center justify-center"
       >
-        <div class="-rotate-30">
-          <div
-            class="flex items-center rounded-[140.54px] border-[2.11px] border-beige bg-pink p-[7.03px] drop-shadow-[0px_2.81px_1.4px_rgba(58,32,14,0.15)]"
-          >
+        <div
+          id="sobre-heart"
+          class="flex items-center justify-center"
+          style="transform: translate(200px, 100px);"
+        >
+          <div class="-rotate-30">
             <div
-              class="flex items-center rounded-[22.49px] border-[2px] border-pink-200 p-[7.03px]"
+              class="flex items-center rounded-[140.54px] border-[2.11px] border-beige bg-pink p-[7.03px] drop-shadow-[0px_2.81px_1.4px_rgba(58,32,14,0.15)]"
             >
-              <Icon name="lucide:heart" class="block h-[23.89px] w-[23.89px] text-beige" aria-hidden="true" />
+              <div
+                class="flex items-center rounded-[22.49px] border-[2px] border-pink-200 p-[7.03px]"
+              >
+                <Icon name="lucide:heart" class="block h-[23.89px] w-[23.89px] text-beige" aria-hidden="true" />
+              </div>
             </div>
           </div>
         </div>
@@ -136,8 +142,9 @@ const photos = [
     const sobre2 = document.getElementById("sobre-2");
     const sobre3 = document.getElementById("sobre-3");
     const sobre4 = document.getElementById("sobre-4");
+    const sobreHeart = document.getElementById("sobre-heart");
 
-    if (grid && sobre1 && sobre2 && sobre3 && sobre4) {
+    if (grid && sobre1 && sobre2 && sobre3 && sobre4 && sobreHeart) {
       inView(
         grid,
         function () {
@@ -230,6 +237,18 @@ const photos = [
             {
               duration: 1.4,
               ease: [0.35, -0.3, 0.1, 1.45],
+            }
+          );
+
+          animate(
+            sobreHeart,
+            {
+              x: [200, 0],
+              y: [100, 0],
+            },
+            {
+              duration: 1.4,
+              ease: [0.7, -0.4, 0.25, 1.35],
             }
           );
         },

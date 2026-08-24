@@ -7,28 +7,28 @@ const photos = [
     src: "/images/sobre-1.png",
     alt: "",
     justify: "justify-start",
-    initialStyle: "transform: translate(-200px, -100px) rotate(-9deg);",
+    initialStyle: "transform: translate(-50px, -100px) rotate(-9deg);",
   },
   {
     id: "sobre-2",
     src: "/images/sobre-2.png",
     alt: "",
     justify: "justify-end",
-    initialStyle: "transform: translate(200px, -100px) rotate(9deg);",
+    initialStyle: "transform: translate(50px, -100px) rotate(9deg);",
   },
   {
     id: "sobre-4",
     src: "/images/sobre-4.png",
     alt: "",
     justify: "justify-start",
-    initialStyle: "transform: translate(-200px, 100px) rotate(-9deg);",
+    initialStyle: "transform: translate(-50px, 100px) rotate(-9deg);",
   },
   {
     id: "sobre-3",
     src: "/images/sobre-3.png",
     alt: "",
     justify: "justify-start",
-    initialStyle: "transform: translate(200px, 100px) rotate(9deg);",
+    initialStyle: "transform: translate(50px, 100px) rotate(9deg);",
   },
 ];
 ---
@@ -51,14 +51,19 @@ const photos = [
           </div>
         ))
       }
-      <p
-        class="absolute top-0 left-8/12 z-10 w-full max-w-[300px]
-		-translate-x-1/2 font-exmouth text-[40.74px] leading-[1.2]
+      <div
+        class="absolute top-0 left-8/12 z-10 w-full max-w-[300px] -translate-x-1/2"
+      >
+        <p
+          id="sobre-texto"
+          class="font-exmouth text-[40.74px] leading-[1.2]
 		text-brown [-webkit-text-stroke:8px_#F7F2E8] [paint-order:stroke_fill]
 		[filter:drop-shadow(0px_4px_4px_rgba(58,32,14,0.5))]"
-      >
-        Darte siempre un poquito más de lo que amas.
-      </p>
+          style="transform: translate(-50px, 100px);"
+        >
+          Darte siempre un poquito más de lo que amas.
+        </p>
+      </div>
       <img
         class="absolute bottom-0 left-1/2 z-10 -translate-x-1/2 block w-[160px] h-auto"
         src="/images/sobre-cookie.png"
@@ -70,7 +75,7 @@ const photos = [
         <div
           id="sobre-heart"
           class="flex items-center justify-center"
-          style="transform: translate(200px, 100px);"
+          style="transform: translate(50px, 100px);"
         >
           <div class="-rotate-30">
             <div
@@ -143,8 +148,9 @@ const photos = [
     const sobre3 = document.getElementById("sobre-3");
     const sobre4 = document.getElementById("sobre-4");
     const sobreHeart = document.getElementById("sobre-heart");
+    const sobreTexto = document.getElementById("sobre-texto");
 
-    if (grid && sobre1 && sobre2 && sobre3 && sobre4 && sobreHeart) {
+    if (grid && sobre1 && sobre2 && sobre3 && sobre4 && sobreHeart && sobreTexto) {
       inView(
         grid,
         function () {
@@ -244,6 +250,18 @@ const photos = [
             sobreHeart,
             {
               x: [50, 0],
+              y: [100, 0],
+            },
+            {
+              duration: 1.4,
+              ease: [0.7, -0.4, 0.25, 1.35],
+            }
+          );
+
+          animate(
+            sobreTexto,
+            {
+              x: [-50, 0],
               y: [100, 0],
             },
             {

@@ -64,11 +64,15 @@ const photos = [
           Darte siempre un poquito más de lo que amas.
         </p>
       </div>
-      <img
-        class="absolute bottom-0 left-1/2 z-10 -translate-x-1/2 block w-[160px] h-auto"
-        src="/images/sobre-cookie.png"
-        alt=""
-      />
+      <div class="absolute bottom-0 left-1/2 z-10 -translate-x-1/2">
+        <img
+          id="sobre-cookie"
+          class="block w-[160px] h-auto scale-125"
+          style="transform: translate(-100px, -100px);"
+          src="/images/sobre-cookie.png"
+          alt=""
+        />
+      </div>
       <div
         class="absolute top-1/2 right-0 z-20 flex size-[71px] -translate-y-1/2 items-center justify-center"
       >
@@ -149,8 +153,18 @@ const photos = [
     const sobre4 = document.getElementById("sobre-4");
     const sobreHeart = document.getElementById("sobre-heart");
     const sobreTexto = document.getElementById("sobre-texto");
+    const sobreCookie = document.getElementById("sobre-cookie");
 
-    if (grid && sobre1 && sobre2 && sobre3 && sobre4 && sobreHeart && sobreTexto) {
+    if (
+      grid &&
+      sobre1 &&
+      sobre2 &&
+      sobre3 &&
+      sobre4 &&
+      sobreHeart &&
+      sobreTexto &&
+      sobreCookie
+    ) {
       inView(
         grid,
         function () {
@@ -263,6 +277,18 @@ const photos = [
             {
               x: [-200, 0],
               y: [200, 0],
+            },
+            {
+              duration: 1.4,
+              ease: [0.7, -0.4, 0.25, 1.35],
+            }
+          );
+
+          animate(
+            sobreCookie,
+            {
+              x: [-200, 0],
+              y: [-200, 0],
             },
             {
               duration: 1.4,

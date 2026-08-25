@@ -54,7 +54,7 @@ const imgStripes = Array.from({ length: numStripes }, (_, i) => ({
     {imgStripes.map((s) => (
       <div
         class="cookie-img-stripe absolute top-0 bottom-0 bg-white"
-        style={`left: ${s.left}; width: ${s.width};`}
+        style={`left: ${s.left}; width: ${s.width}; transform: translateY(${s.up ? '-100%' : '100%'});`}
         data-dir={s.up ? 'up' : 'down'}
       ></div>
     ))}

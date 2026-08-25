@@ -1,0 +1,33 @@
+---
+import { Icon } from 'astro-icon/components';
+---
+
+<section class="relative h-[690px] w-full overflow-hidden bg-brown">
+	<div class="absolute inset-0 left-1/2 w-[1440px] max-w-full -translate-x-1/2">
+		<div class="absolute top-[144px] left-[951px] flex w-[408px] flex-col items-start gap-[23px]">
+			<div class="relative w-full">
+				<p class="m-0 w-[400px] font-sans text-[59px] leading-[1.2] font-bold text-beige">
+					Lleva tus
+				</p>
+				<span
+					class="absolute top-[45px] left-[33.57%] font-exmouth text-[108.73px] leading-[1.2] text-blue-500 whitespace-nowrap"
+					aria-hidden="true"
+					>Combos</span
+				>
+			</div>
+			<p class="m-0 min-w-full text-[19px] leading-[1.2] text-beige">
+				Reúne tus productos favoritos del menú en nuestros combos de 3 o 9 unidades. Mezcla
+				sabores, descubre nuevas opciones y crea la combinación ideal para cualquier ocasión.
+			</p>
+			<a
+				class="flex h-[54px] w-[214px] items-center justify-center gap-2 whitespace-nowrap rounded-[57px] bg-blue-600 px-4 py-2 font-sans text-[19px] leading-[1.2] font-bold text-beige no-underline hover:brightness-95"
+				href="#pedido"
+			>
+				Haz tu pedido
+				<span class="flex h-[30px] w-[30px] shrink-0 items-center justify-center rounded-[21.25px] bg-beige p-[6.25px]">
+					<Icon name="lucide:map" class="block h-[15px] w-[15px] text-blue-600" aria-hidden="true" />
+				</span>
+			</a>
+		</div>
+	</div>
+</section>

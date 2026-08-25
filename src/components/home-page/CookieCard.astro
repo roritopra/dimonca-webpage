@@ -10,6 +10,8 @@ interface Props {
   price?: string;
   description?: string;
   color?: string;
+  hoverBg?: string;
+  hoverPrice?: string;
 }
 
 const {
@@ -21,6 +23,8 @@ const {
   price = '$ 13.000',
   description = 'Galleta premium de pistacho con trozos reales de pistacho y chips ...',
   color = '#6ca7d5',
+  hoverBg,
+  hoverPrice,
 } = Astro.props;
 
 const uid = Math.random().toString(36).slice(2, 8);
@@ -31,6 +35,8 @@ const uid = Math.random().toString(36).slice(2, 8);
   style={`border-color: ${color};`}
   data-uid={uid}
   data-color={color}
+  data-hover-bg={hoverBg}
+  data-hover-price={hoverPrice}
 >
   <div class="relative h-[319px] w-full shrink-0 overflow-clip rounded-[20px]">
     <p
@@ -147,7 +153,9 @@ const uid = Math.random().toString(36).slice(2, 8);
     const beige = '#f7f2e8';
     const beige0 = hexToRgba(beige, 0);
     const isDark = getLuminance(color) < 0.05;
-    const priceHoverColor = isDark ? '#C2E0F8' : '#ffffff';
+    const bgHoverColor = card.dataset.hoverBg ?? color;
+    const bgHoverColor0 = hexToRgba(bgHoverColor, 0);
+    const priceHoverColor = card.dataset.hoverPrice ?? (isDark ? '#C2E0F8' : '#ffffff');
     const titleOrigColor = title ? getComputedStyle(title).color : '';
     const descOrigColor = desc ? getComputedStyle(desc).color : '';
 
@@ -160,7 +168,7 @@ const uid = Math.random().toString(36).slice(2, 8);
       card.style.zIndex = '10';
 
       animate(card, { scale: 1.1 }, { type: 'spring', stiffness: 280, damping: 14, mass: 1 });
-      animate(info, { backgroundColor: [color0, color] }, { duration: DUR, ease: EASE });
+      animate(info, { backgroundColor: [bgHoverColor0, bgHoverColor] }, { duration: DUR, ease: EASE });
       animate(price, { color: ['', priceHoverColor] }, { duration: DUR, ease: EASE });
       if (isDark && title) animate(title, { color: [titleOrigColor, '#F7F2E8'] }, { duration: DUR, ease: EASE });
       if (isDark && desc) animate(desc, { color: [descOrigColor, '#ffffff'] }, { duration: DUR, ease: EASE });
@@ -186,7 +194,7 @@ const uid = Math.random().toString(36).slice(2, 8);
       card.style.zIndex = '';
 
       animate(card, { scale: 1 }, { type: 'spring', stiffness: 280, damping: 18, mass: 1 });
-      animate(info, { backgroundColor: [color, color0] }, { duration: DUR, ease: EASE });
+      animate(info, { backgroundColor: [bgHoverColor, bgHoverColor0] }, { duration: DUR, ease: EASE });
       animate(price, { color: [priceHoverColor, color] }, { duration: DUR, ease: EASE });
       if (isDark && title) animate(title, { color: ['#F7F2E8', titleOrigColor] }, { duration: DUR, ease: EASE });
       if (isDark && desc) animate(desc, { color: ['#ffffff', descOrigColor] }, { duration: DUR, ease: EASE });

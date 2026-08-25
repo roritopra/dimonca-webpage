@@ -1,0 +1,29 @@
+---
+import { Icon } from 'astro-icon/components';
+---
+
+<div class="relative flex w-[413px] max-w-full flex-col items-start gap-6">
+	<div>
+		<p class="m-0 font-sans text-[47px] leading-[1.15] font-bold text-brown">
+			Mucho más<br />
+			<span>que </span><span class="font-exmouth text-[81px] leading-[0.9] text-[#F67DA3]">Galletas</span>
+		</p>
+	</div>
+	<p class="m-0 min-w-full text-[19px] leading-[1.2] whitespace-pre-wrap text-brown">
+		Aunque nuestras galletas son las protagonistas, en Dimonca encontrarás una amplia variedad de
+		postres y bebidas para disfrutar. Desde <strong>cuchareables</strong> y <strong>brownies</strong>{' '}
+		hasta <strong>pasteles</strong> para celebrar, cada producto está preparado con dedicación,
+		ingredientes de calidad y el toque especial que nos caracteriza.{' '}
+	</p>
+	<a
+		class="group flex h-[52px] w-[210px] items-center justify-center gap-3 whitespace-nowrap rounded-[57px] bg-pink px-6 py-3 font-sans text-[19px] leading-[1.2] font-bold text-beige no-underline shadow-[0_4px_14px_rgba(244,93,140,0.4)] transition-all duration-300 hover:shadow-[0_6px_20px_rgba(244,93,140,0.6)] hover:brightness-95"
+		href="#menu"
+	>
+		Ver menú
+		<span
+			class="flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-full bg-beige p-[7px] transition-transform duration-300 group-hover:scale-110"
+		>
+			<img class="block h-[16px] w-[16px]" src="/images/chef-hat.svg" alt="" aria-hidden="true" />
+		</span>
+	</a>
+</div>

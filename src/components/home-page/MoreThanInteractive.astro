@@ -1,21 +1,18 @@
-﻿---
+---
 import { Icon } from "astro-icon/components";
 
 const products = [
   {
-    name: "Cuchareable de Red Velvet",
     normalImg: "/images/cuchareable-more-than.png",
     hoverImg: "/images/cuchareable-more-than-hover.png",
     alt: "Cuchareable de Red Velvet",
   },
   {
-    name: "Cuchareable de Red Velvet",
     normalImg: "/images/mini-cake-more-than.png",
     hoverImg: "/images/mini-cake-more-than-hover.png",
     alt: "Mini Cake",
   },
   {
-    name: "Cuchareable de Red Velvet",
     normalImg: "/images/cake-more-than.png",
     hoverImg: "/images/cake-more-than-hover.png",
     alt: "Pastel",
@@ -57,17 +54,18 @@ const gridImages = [
             class="product-img-hover absolute inset-0 m-auto block h-full w-auto object-contain opacity-0 drop-shadow-[0px_14px_24px_rgba(58,32,14,0.18)]"
           />
 
-          <!-- Texto flotante en estilo script superpuesto hacia la derecha -->
-          <div class="product-title-badge pointer-events-none absolute top-[55px] right-[-80px] z-20 max-w-[210px]">
-            <p
-              class="font-exmouth text-[44px] leading-[1.05] text-brown [-webkit-text-stroke:8px_#ffffff] [filter:drop-shadow(0px_4px_4px_rgba(58,32,14,0.5))]"
-              style="paint-order: stroke fill;"
-            >
-              {item.name}
-            </p>
-          </div>
         </div>
       ))}
+
+      <!-- Texto flotante estático en estilo script superpuesto permanentemente con z-30 -->
+      <div class="product-title-badge pointer-events-none absolute top-[55px] right-[-80px] z-30 max-w-[210px]">
+        <p
+          class="font-exmouth text-[44px] leading-[1.05] text-brown [-webkit-text-stroke:8px_#ffffff] [filter:drop-shadow(0px_4px_4px_rgba(58,32,14,0.5))]"
+          style="paint-order: stroke fill;"
+        >
+          Cuchareable de Red Velvet
+        </p>
+      </div>
 
       <!-- Botón flotante inferior izquierdo con corazón -->
       <button

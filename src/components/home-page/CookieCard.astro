@@ -27,7 +27,7 @@ const uid = Math.random().toString(36).slice(2, 8);
 ---
 
 <article
-  class="cookie-card flex w-[305px] flex-col items-start gap-[13px] overflow-clip rounded-[24px] border-2 bg-beige"
+  class="cookie-card relative flex w-[305px] flex-col items-start gap-[13px] overflow-clip rounded-[24px] border-2 bg-beige"
   style={`border-color: ${color};`}
   data-uid={uid}
 >
@@ -113,9 +113,15 @@ const uid = Math.random().toString(36).slice(2, 8);
     if (!wrap || !left || !right || !cracked) return;
 
     let splitTimeout: ReturnType<typeof setTimeout> | null = null;
+    let active = false;
 
     const start = () => {
-      if (splitTimeout) return;
+      if (active) return;
+      active = true;
+      card.style.zIndex = '10';
+
+      animate(card, { scale: 1.1 }, { type: 'spring', stiffness: 280, damping: 14, mass: 1 });
+
       const slide = wrap.offsetWidth / 522.26 * 2;
       animate(wrap, { rotate: -15 }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
       animate(left, { x: -slide }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
@@ -130,6 +136,11 @@ const uid = Math.random().toString(36).slice(2, 8);
     };
 
     const reset = () => {
+      active = false;
+      card.style.zIndex = '';
+
+      animate(card, { scale: 1 }, { type: 'spring', stiffness: 280, damping: 18, mass: 1 });
+
       if (splitTimeout) {
         clearTimeout(splitTimeout);
         splitTimeout = null;

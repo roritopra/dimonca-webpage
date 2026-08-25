@@ -59,14 +59,14 @@ const imgStripes = Array.from({ length: numStripes }, (_, i) => ({
       ></div>
     ))}
     <p
-      class="absolute top-[-27px] left-[-40px] z-10 font-exmouth text-[120.34px] leading-[1.05] whitespace-nowrap"
+      class="cookie-script absolute top-[-27px] left-[-40px] z-10 font-exmouth text-[120.34px] leading-[1.05] whitespace-nowrap"
       style={`color: ${color};`}
       aria-hidden="true"
     >
       {scriptTop}
     </p>
     <p
-      class="absolute top-[206px] left-[86px] z-10 font-exmouth text-[120.34px] leading-[1.05] whitespace-nowrap"
+      class="cookie-script absolute top-[206px] left-[86px] z-10 font-exmouth text-[120.34px] leading-[1.05] whitespace-nowrap"
       style={`color: ${color};`}
       aria-hidden="true"
     >
@@ -153,6 +153,7 @@ const imgStripes = Array.from({ length: numStripes }, (_, i) => ({
     const imgBg = card.querySelector<HTMLElement>('.cookie-img-bg');
     const imgStripes = Array.from(card.querySelectorAll<HTMLElement>('.cookie-img-stripe'));
     const imgArea = card.querySelector<HTMLElement>('.cookie-img-area');
+    const scripts = Array.from(card.querySelectorAll<HTMLElement>('.cookie-script'));
     const TRAVEL = imgArea ? imgArea.offsetHeight : 319;
 
     const wrap = card.querySelector<HTMLElement>('.cookie-img-wrap');
@@ -182,6 +183,7 @@ const imgStripes = Array.from({ length: numStripes }, (_, i) => ({
     const priceHoverColor = card.dataset.hoverPrice ?? (isDark ? '#C2E0F8' : '#ffffff');
     const titleOrigColor = title ? getComputedStyle(title).color : '';
     const descOrigColor = desc ? getComputedStyle(desc).color : '';
+    const scriptHoverColor = isDark ? '#C2E0F8' : titleOrigColor;
 
     let splitTimeout: ReturnType<typeof setTimeout> | null = null;
     let active = false;
@@ -197,6 +199,7 @@ const imgStripes = Array.from({ length: numStripes }, (_, i) => ({
         const dir = stripe.dataset.dir === 'up' ? -1 : 1;
         animate(stripe, { y: [dir * TRAVEL, 0] }, { duration: DUR, ease: EASE });
       });
+      scripts.forEach((s) => animate(s, { color: [color, scriptHoverColor] }, { duration: DUR, ease: EASE }));
       animate(info, { backgroundColor: [bgHoverColor0, bgHoverColor] }, { duration: DUR, ease: EASE });
       animate(price, { color: ['', priceHoverColor] }, { duration: DUR, ease: EASE });
       if (isDark && title) animate(title, { color: [titleOrigColor, '#F7F2E8'] }, { duration: DUR, ease: EASE });
@@ -228,6 +231,7 @@ const imgStripes = Array.from({ length: numStripes }, (_, i) => ({
         const dir = stripe.dataset.dir === 'up' ? -1 : 1;
         animate(stripe, { y: [0, dir * TRAVEL] }, { duration: DUR, ease: EASE });
       });
+      scripts.forEach((s) => animate(s, { color: [scriptHoverColor, color] }, { duration: DUR, ease: EASE }));
       animate(info, { backgroundColor: [bgHoverColor, bgHoverColor0] }, { duration: DUR, ease: EASE });
       animate(price, { color: [priceHoverColor, color] }, { duration: DUR, ease: EASE });
       if (isDark && title) animate(title, { color: ['#F7F2E8', titleOrigColor] }, { duration: DUR, ease: EASE });

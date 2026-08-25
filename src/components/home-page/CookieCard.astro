@@ -28,6 +28,12 @@ const {
 } = Astro.props;
 
 const uid = Math.random().toString(36).slice(2, 8);
+const numStripes = 7;
+const imgStripes = Array.from({ length: numStripes }, (_, i) => ({
+  left: `${(i / numStripes) * 100}%`,
+  width: `${(100 / numStripes) * 0.58}%`,
+  up: i % 2 === 0,
+}));
 ---
 
 <article
@@ -38,16 +44,29 @@ const uid = Math.random().toString(36).slice(2, 8);
   data-hover-bg={hoverBg}
   data-hover-price={hoverPrice}
 >
-  <div class="relative h-[319px] w-full shrink-0 overflow-clip rounded-[20px]">
+  <div class="cookie-img-area relative h-[319px] w-full shrink-0 overflow-clip rounded-[20px]">
+    <!-- Fondo de color -->
+    <div
+      class="cookie-img-bg absolute inset-0"
+      style={`background-color: ${color}; opacity: 0;`}
+    ></div>
+    <!-- Rayas blancas -->
+    {imgStripes.map((s) => (
+      <div
+        class="cookie-img-stripe absolute top-0 bottom-0 bg-white"
+        style={`left: ${s.left}; width: ${s.width};`}
+        data-dir={s.up ? 'up' : 'down'}
+      ></div>
+    ))}
     <p
-      class="absolute top-[-27px] left-[-40px] font-exmouth text-[120.34px] leading-[1.05] whitespace-nowrap"
+      class="absolute top-[-27px] left-[-40px] z-10 font-exmouth text-[120.34px] leading-[1.05] whitespace-nowrap"
       style={`color: ${color};`}
       aria-hidden="true"
     >
       {scriptTop}
     </p>
     <p
-      class="absolute top-[206px] left-[86px] font-exmouth text-[120.34px] leading-[1.05] whitespace-nowrap"
+      class="absolute top-[206px] left-[86px] z-10 font-exmouth text-[120.34px] leading-[1.05] whitespace-nowrap"
       style={`color: ${color};`}
       aria-hidden="true"
     >
@@ -55,7 +74,7 @@ const uid = Math.random().toString(36).slice(2, 8);
     </p>
 
     <!-- Contenedor de la galleta (gira y escala) -->
-    <div class="cookie-img-wrap absolute top-[31px] left-[25px] h-[257.29px] w-[280.35px]">
+    <div class="cookie-img-wrap absolute top-[31px] left-[25px] z-20 h-[257.29px] w-[280.35px]">
       <!-- Mitad izquierda -->
       <div class="cookie-half-left absolute inset-y-0 left-0 w-1/2 overflow-hidden">
         <img
@@ -131,6 +150,11 @@ const uid = Math.random().toString(36).slice(2, 8);
   }
 
   document.querySelectorAll<HTMLElement>('.cookie-card').forEach((card) => {
+    const imgBg = card.querySelector<HTMLElement>('.cookie-img-bg');
+    const imgStripes = Array.from(card.querySelectorAll<HTMLElement>('.cookie-img-stripe'));
+    const imgArea = card.querySelector<HTMLElement>('.cookie-img-area');
+    const TRAVEL = imgArea ? imgArea.offsetHeight : 319;
+
     const wrap = card.querySelector<HTMLElement>('.cookie-img-wrap');
     const left = card.querySelector<HTMLElement>('.cookie-half-left');
     const right = card.querySelector<HTMLElement>('.cookie-half-right');
@@ -168,6 +192,11 @@ const uid = Math.random().toString(36).slice(2, 8);
       card.style.zIndex = '10';
 
       animate(card, { scale: 1.1 }, { type: 'spring', stiffness: 280, damping: 14, mass: 1 });
+      if (imgBg) animate(imgBg, { opacity: [0, 1] }, { duration: DUR, ease: EASE });
+      imgStripes.forEach((stripe) => {
+        const dir = stripe.dataset.dir === 'up' ? -1 : 1;
+        animate(stripe, { y: [dir * TRAVEL, 0] }, { duration: DUR, ease: EASE });
+      });
       animate(info, { backgroundColor: [bgHoverColor0, bgHoverColor] }, { duration: DUR, ease: EASE });
       animate(price, { color: ['', priceHoverColor] }, { duration: DUR, ease: EASE });
       if (isDark && title) animate(title, { color: [titleOrigColor, '#F7F2E8'] }, { duration: DUR, ease: EASE });
@@ -194,6 +223,11 @@ const uid = Math.random().toString(36).slice(2, 8);
       card.style.zIndex = '';
 
       animate(card, { scale: 1 }, { type: 'spring', stiffness: 280, damping: 18, mass: 1 });
+      if (imgBg) animate(imgBg, { opacity: [1, 0] }, { duration: DUR, ease: EASE });
+      imgStripes.forEach((stripe) => {
+        const dir = stripe.dataset.dir === 'up' ? -1 : 1;
+        animate(stripe, { y: [0, dir * TRAVEL] }, { duration: DUR, ease: EASE });
+      });
       animate(info, { backgroundColor: [bgHoverColor, bgHoverColor0] }, { duration: DUR, ease: EASE });
       animate(price, { color: [priceHoverColor, color] }, { duration: DUR, ease: EASE });
       if (isDark && title) animate(title, { color: ['#F7F2E8', titleOrigColor] }, { duration: DUR, ease: EASE });

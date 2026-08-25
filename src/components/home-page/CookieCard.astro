@@ -37,14 +37,14 @@ const imgStripes = Array.from({ length: numStripes }, (_, i) => ({
 ---
 
 <article
-  class="cookie-card relative flex w-[305px] flex-col items-start gap-[13px] overflow-clip rounded-[24px] border-2 bg-beige"
+  class="cookie-card relative flex w-[305px] flex-col items-start overflow-clip rounded-[24px] border-2 bg-beige"
   style={`border-color: ${color};`}
   data-uid={uid}
   data-color={color}
   data-hover-bg={hoverBg}
   data-hover-price={hoverPrice}
 >
-  <div class="cookie-img-area relative h-[319px] w-full shrink-0 overflow-clip rounded-[20px]">
+  <div class="cookie-img-area relative h-[319px] w-full shrink-0 overflow-clip rounded-t-[20px]">
     <!-- Fondo de color -->
     <div
       class="cookie-img-bg absolute inset-0"
@@ -101,7 +101,7 @@ const imgStripes = Array.from({ length: numStripes }, (_, i) => ({
     </div>
   </div>
 
-  <div class="cookie-info flex w-full shrink-0 flex-1 flex-col items-start gap-2 px-3 py-[14px]">
+  <div class="cookie-info flex w-full shrink-0 flex-1 flex-col items-start gap-2 px-3 pt-[27px] pb-[14px]">
     <p class="cookie-title m-0 w-full font-sans text-[24px] leading-[1.2] font-bold text-brown">{title}</p>
     <p class="cookie-price m-0 w-full font-sans text-[24px] leading-[1.2] font-bold" style={`color: ${color};`}>
       {price}

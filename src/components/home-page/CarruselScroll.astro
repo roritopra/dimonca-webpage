@@ -1,0 +1,67 @@
+---
+const items = [
+  { year: "2021" },
+  { year: "2021" },
+  { year: "2021" },
+  { year: "2021" },
+  { year: "2021" },
+  { year: "2022" },
+];
+
+const repeats = 3;
+---
+
+<section class="w-full overflow-hidden border-y-2 border-blue-500 bg-beige">
+  <div id="scroll-carousel" class="w-full py-[14px]">
+    <div id="scroll-carousel-track" class="flex w-max items-center will-change-transform">
+      {Array.from({ length: repeats }).map((_, r) =>
+        items.map((item, i) => (
+          <div key={`${r}-${i}`} class="flex shrink-0 items-center gap-[22px] pr-[92px]">
+            <p class="m-0 font-sans text-[19px] leading-[1.2] text-blue-500">EST</p>
+            <img
+              class="block h-8 w-[30px] object-cover"
+              src="/images/est-icon.png"
+              alt=""
+              aria-hidden="true"
+            />
+            <p class="m-0 text-right font-sans text-[19px] leading-[1.2] text-blue-500">
+              {item.year}
+            </p>
+          </div>
+        ))
+      )}
+    </div>
+  </div>
+</section>
+
+<script>
+  const track = document.getElementById("scroll-carousel-track");
+  if (track) {
+    const speed = 0.6;
+    let target = 0;
+    let current = 0;
+    let lastY = window.scrollY;
+    let rafId: number | null = null;
+
+    const tick = () => {
+      current += (target - current) * 0.08;
+      track.style.transform = `translate3d(${current}px, 0, 0)`;
+      if (Math.abs(target - current) > 0.1) {
+        rafId = requestAnimationFrame(tick);
+      } else {
+        rafId = null;
+      }
+    };
+
+    const onScroll = () => {
+      const delta = window.scrollY - lastY;
+      lastY = window.scrollY;
+      target -= delta * speed;
+      if (rafId === null) {
+        rafId = requestAnimationFrame(tick);
+      }
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+  }
+</script>

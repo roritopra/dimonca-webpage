@@ -22,6 +22,11 @@ const stripes = Array.from({ length: 24 }, (_, i) => ({
         />
       ))
     }
+    <!-- Capa de degradado sobre las rayas -->
+    <div
+      class="absolute inset-0"
+      style="background: linear-gradient(89deg, rgba(58, 32, 14, 0.00) -15.94%, #3A200E 102.05%);"
+    ></div>
   </div>
 
   <div
@@ -38,7 +43,7 @@ const stripes = Array.from({ length: 24 }, (_, i) => ({
 
     <!-- Lado derecho: Información -->
     <div
-      class="relative z-10 flex w-full max-w-[440px] flex-col items-start gap-20"
+      class="relative z-10 flex w-full max-w-[440px] flex-col items-start gap-10"
     >
       <div class="relative w-full pb-8">
         <h2

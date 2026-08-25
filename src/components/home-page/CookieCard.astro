@@ -77,22 +77,22 @@ const uid = Math.random().toString(36).slice(2, 8);
   </div>
 
   <div class="cookie-info flex w-full shrink-0 flex-1 flex-col items-start gap-2 px-3 py-[14px]">
-    <p class="m-0 w-full font-sans text-[24px] leading-[1.2] font-bold text-brown">{title}</p>
-    <p class="m-0 w-full font-sans text-[24px] leading-[1.2] font-bold" style={`color: ${color};`}>
+    <p class="cookie-title m-0 w-full font-sans text-[24px] leading-[1.2] font-bold text-brown">{title}</p>
+    <p class="cookie-price m-0 w-full font-sans text-[24px] leading-[1.2] font-bold" style={`color: ${color};`}>
       {price}
     </p>
     <p class="m-0 w-full font-sans text-[15px] leading-[1.2] text-brown">{description}</p>
     <div class="mt-auto flex w-full items-start">
       <a
-        class="flex h-[40.13px] flex-1 items-center justify-center gap-2 rounded-[57px] px-4 py-2 font-sans text-[15px] leading-[1.2] font-bold text-beige no-underline hover:brightness-95"
+        class="cookie-btn flex h-[40.13px] flex-1 items-center justify-center gap-2 rounded-[57px] px-4 py-2 font-sans text-[15px] leading-[1.2] font-bold text-beige no-underline"
         style={`background-color: ${color};`}
         href="#"
       >
         Ver más
-        <span class="flex h-[24px] w-[24px] shrink-0 items-center justify-center rounded-[18.38px] bg-beige p-[5.4px]">
+        <span class="cookie-btn-icon flex h-[24px] w-[24px] shrink-0 items-center justify-center rounded-[18.38px] bg-beige p-[5.4px]">
           <Icon
             name="lucide:arrow-up-right"
-            class="block h-[12.98px] w-[12.98px]"
+            class="cookie-btn-svg block h-[12.98px] w-[12.98px]"
             style={`color: ${color};`}
             aria-hidden="true"
           />
@@ -105,6 +105,25 @@ const uid = Math.random().toString(36).slice(2, 8);
 <script>
   import { animate } from 'motion';
 
+  function hexToRgba(hex: string, alpha: number) {
+    const h = hex.replace('#', '');
+    const r = parseInt(h.slice(0, 2), 16);
+    const g = parseInt(h.slice(2, 4), 16);
+    const b = parseInt(h.slice(4, 6), 16);
+    return `rgba(${r},${g},${b},${alpha})`;
+  }
+
+  function getLuminance(hex: string) {
+    const h = hex.replace('#', '');
+    const toLinear = (c: number) => {
+      const s = c / 255;
+      return s <= 0.04045 ? s / 12.92 : Math.pow((s + 0.055) / 1.055, 2.4);
+    };
+    return 0.2126 * toLinear(parseInt(h.slice(0, 2), 16))
+         + 0.7152 * toLinear(parseInt(h.slice(2, 4), 16))
+         + 0.0722 * toLinear(parseInt(h.slice(4, 6), 16));
+  }
+
   document.querySelectorAll<HTMLElement>('.cookie-card').forEach((card) => {
     const wrap = card.querySelector<HTMLElement>('.cookie-img-wrap');
     const left = card.querySelector<HTMLElement>('.cookie-half-left');
@@ -112,9 +131,23 @@ const uid = Math.random().toString(36).slice(2, 8);
     const cracked = card.querySelector<HTMLElement>('.cookie-cracked');
 
     const info = card.querySelector<HTMLElement>('.cookie-info');
+    const title = card.querySelector<HTMLElement>('.cookie-title');
+    const price = card.querySelector<HTMLElement>('.cookie-price');
+    const btn = card.querySelector<HTMLElement>('.cookie-btn');
+    const btnIcon = card.querySelector<HTMLElement>('.cookie-btn-icon');
+    const btnSvg = card.querySelector<HTMLElement>('.cookie-btn-svg');
     const color = card.dataset.color ?? '#6ca7d5';
 
-    if (!wrap || !left || !right || !cracked || !info) return;
+    if (!wrap || !left || !right || !cracked || !info || !price || !btn || !btnIcon) return;
+
+    const EASE: [number, number, number, number] = [0.4, 0, 0.2, 1];
+    const DUR = 0.38;
+    const color0 = hexToRgba(color, 0);
+    const beige = '#f7f2e8';
+    const beige0 = hexToRgba(beige, 0);
+    const isDark = getLuminance(color) < 0.05;
+    const priceHoverColor = isDark ? '#C2E0F8' : '#ffffff';
+    const titleOrigColor = title ? getComputedStyle(title).color : '';
 
     let splitTimeout: ReturnType<typeof setTimeout> | null = null;
     let active = false;
@@ -125,7 +158,12 @@ const uid = Math.random().toString(36).slice(2, 8);
       card.style.zIndex = '10';
 
       animate(card, { scale: 1.1 }, { type: 'spring', stiffness: 280, damping: 14, mass: 1 });
-      animate(info, { backgroundColor: color }, { duration: 0.25, ease: 'easeOut' });
+      animate(info, { backgroundColor: [color0, color] }, { duration: DUR, ease: EASE });
+      animate(price, { color: ['', priceHoverColor] }, { duration: DUR, ease: EASE });
+      if (isDark && title) animate(title, { color: [titleOrigColor, '#F7F2E8'] }, { duration: DUR, ease: EASE });
+      animate(btn, { backgroundColor: [color, '#ffffff'], color: [beige, color] }, { duration: DUR, ease: EASE });
+      animate(btnIcon, { backgroundColor: [beige, color] }, { duration: DUR, ease: EASE });
+      if (btnSvg) animate(btnSvg, { color: [color, '#ffffff'] }, { duration: DUR, ease: EASE });
 
       const slide = wrap.offsetWidth / 522.26 * 2;
       animate(wrap, { rotate: -15 }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
@@ -145,7 +183,12 @@ const uid = Math.random().toString(36).slice(2, 8);
       card.style.zIndex = '';
 
       animate(card, { scale: 1 }, { type: 'spring', stiffness: 280, damping: 18, mass: 1 });
-      animate(info, { backgroundColor: 'transparent' }, { duration: 0.3, ease: 'easeInOut' });
+      animate(info, { backgroundColor: [color, color0] }, { duration: DUR, ease: EASE });
+      animate(price, { color: [priceHoverColor, color] }, { duration: DUR, ease: EASE });
+      if (isDark && title) animate(title, { color: ['#F7F2E8', titleOrigColor] }, { duration: DUR, ease: EASE });
+      animate(btn, { backgroundColor: ['#ffffff', color], color: [color, beige] }, { duration: DUR, ease: EASE });
+      animate(btnIcon, { backgroundColor: [color, beige] }, { duration: DUR, ease: EASE });
+      if (btnSvg) animate(btnSvg, { color: ['#ffffff', color] }, { duration: DUR, ease: EASE });
 
       if (splitTimeout) {
         clearTimeout(splitTimeout);
@@ -154,7 +197,7 @@ const uid = Math.random().toString(36).slice(2, 8);
       animate(wrap, { rotate: 0, scale: 1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
       animate(left, { x: 0, opacity: 1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
       animate(right, { x: 0, opacity: 1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
-      animate(cracked, { opacity: 0 }, { duration: 0.3, ease: 'easeInOut' });
+      animate(cracked, { opacity: 0 }, { duration: DUR, ease: EASE });
     };
 
     card.addEventListener('mouseenter', start);

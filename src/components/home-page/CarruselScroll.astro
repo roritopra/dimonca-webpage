@@ -38,24 +38,31 @@ const repeats = 3;
   const track = document.getElementById("scroll-carousel-track");
   if (track) {
     const speed = 0.6;
+    const autoSpeed = 0.35;
     let target = 0;
     let current = 0;
     let lastY = window.scrollY;
+    let direction = -1;
+    let lastScrollAt = Date.now();
     let rafId: number | null = null;
 
     const tick = () => {
+      const idle = Date.now() - lastScrollAt > 150;
+      if (idle) {
+        target += direction * autoSpeed;
+      }
       current += (target - current) * 0.08;
       track.style.transform = `translate3d(${current}px, 0, 0)`;
-      if (Math.abs(target - current) > 0.1) {
-        rafId = requestAnimationFrame(tick);
-      } else {
-        rafId = null;
-      }
+      rafId = requestAnimationFrame(tick);
     };
 
     const onScroll = () => {
       const delta = window.scrollY - lastY;
       lastY = window.scrollY;
+      if (Math.abs(delta) > 0.1) {
+        direction = delta > 0 ? -1 : 1;
+        lastScrollAt = Date.now();
+      }
       target -= delta * speed;
       if (rafId === null) {
         rafId = requestAnimationFrame(tick);
@@ -63,5 +70,6 @@ const repeats = 3;
     };
 
     window.addEventListener("scroll", onScroll, { passive: true });
+    rafId = requestAnimationFrame(tick);
   }
 </script>

@@ -1,38 +1,77 @@
 ---
-
+import CookieCard from './CookieCard.astro';
 ---
 
-<section class="relative h-[606px] w-full overflow-hidden bg-blue-500">
-  <div class="absolute inset-0 left-1/2 w-[1440px] max-w-full -translate-x-1/2">
-    <div
-      class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -rotate-35"
-      style={{
-        width: "2000px",
-        height: "2000px",
-        backgroundImage:
-          "radial-gradient(circle, #f7f2e8 2.8px, transparent 2px)",
-        backgroundSize: "20px 20px",
-        backgroundPosition: "8px 8px",
-      }}
-      aria-hidden="true"
-    >
+<section class="relative w-full overflow-hidden bg-beige">
+  <div class="absolute inset-x-0 top-0 h-[606px] bg-blue-500">
+    <div class="absolute inset-0 left-1/2 w-[1440px] max-w-full -translate-x-1/2">
+      <div
+        class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -rotate-35"
+        style={{
+          width: "2000px",
+          height: "2000px",
+          backgroundImage:
+            "radial-gradient(circle, #f7f2e8 2.8px, transparent 2px)",
+          backgroundSize: "20px 20px",
+          backgroundPosition: "8px 8px",
+        }}
+        aria-hidden="true"
+      >
+      </div>
+
+      <div class="absolute inset-x-0 top-[51px] text-center">
+        <p
+          style="paint-order: stroke;"
+          class="m-0 font-sans text-[38px] leading-[1.2] text-brown [-webkit-text-stroke:15px_#F7F2E8] [filter:drop-shadow(0px_4px_4px_rgba(58,32,14,0.5))]"
+        >
+          Conoce Nuestras
+        </p>
+      </div>
+      <div class="absolute inset-x-0 top-[81px] text-center">
+        <p
+          style="paint-order: stroke;"
+          class="m-0 font-exmouth text-[154.71px] leading-[1.2] text-brown [-webkit-text-stroke:15px_#F7F2E8] [filter:drop-shadow(0px_4px_4px_rgba(58,32,14,0.5))]"
+        >
+          Galletas
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="relative mx-auto flex max-w-[1440px] flex-col items-center px-20 pt-[350px] pb-16">
+    <div class="grid grid-cols-4 gap-[30px]">
+      <CookieCard />
+      <CookieCard
+        color="#F45D8C"
+        scriptTop="Choco"
+        scriptBottom="Chip"
+        title="Choco Chip"
+        price="$ 12.000"
+        description="Galleta clásica con trozos generosos de chocolate oscuro y un toque de sal marina ..."
+      />
+      <CookieCard
+        color="#3A200E"
+        scriptTop="Avena"
+        scriptBottom="Pasa"
+        title="Avena y Pasa"
+        price="$ 11.500"
+        description="Galleta suave de avena con pasas jugosas, canela y un toque de miel ..."
+      />
+      <CookieCard
+        color="#979255"
+        scriptTop="Red"
+        scriptBottom="Velvet"
+        title="Red Velvet"
+        price="$ 13.500"
+        description="Galleta de red velvet con chips de chocolate blanco y corazón cremoso ..."
+      />
     </div>
 
-    <div class="absolute inset-x-0 top-[51px] text-center">
-      <p
-        style="paint-order: stroke;"
-        class="m-0 font-sans text-[38px] leading-[1.2] text-brown [-webkit-text-stroke:15px_#F7F2E8] [filter:drop-shadow(0px_4px_4px_rgba(58,32,14,0.5))]"
-      >
-        Conoce Nuestras
-      </p>
-    </div>
-    <div class="absolute inset-x-0 top-[81px] text-center">
-      <p
-        style="paint-order: stroke;"
-        class="m-0 font-exmouth text-[154.71px] leading-[1.2] text-brown [-webkit-text-stroke:15px_#F7F2E8] [filter:drop-shadow(0px_4px_4px_rgba(58,32,14,0.5))]"
-      >
-        Galletas
-      </p>
-    </div>
+    <a
+      class="mt-10 flex h-[52px] w-[210px] items-center justify-center gap-3 whitespace-nowrap rounded-[57px] bg-pink px-6 py-3 font-sans text-[19px] leading-[1.2] font-bold text-beige no-underline shadow-[0_4px_14px_rgba(244,93,140,0.4)] transition-all duration-300 hover:shadow-[0_6px_20px_rgba(244,93,140,0.6)] hover:brightness-95"
+      href="#galletas"
+    >
+      Ver más
+    </a>
   </div>
 </section>

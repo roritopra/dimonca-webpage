@@ -1,0 +1,79 @@
+---
+import { Icon } from 'astro-icon/components';
+
+interface Props {
+  img?: string;
+  scriptTop?: string;
+  scriptBottom?: string;
+  title?: string;
+  price?: string;
+  description?: string;
+  color?: string;
+}
+
+const {
+  img = '/images/cookie-card.png',
+  scriptTop = 'Pistacho',
+  scriptBottom = 'Queen',
+  title = 'Pistacho Queen',
+  price = '$ 13.000',
+  description = 'Galleta premium de pistacho con trozos reales de pistacho y chips ...',
+  color = '#6ca7d5',
+} = Astro.props;
+---
+
+<article
+  class="flex w-[305px] flex-col items-start gap-[13px] overflow-clip rounded-[24px] border-2 bg-beige"
+  style={`border-color: ${color};`}
+>
+  <div class="relative h-[319px] w-full shrink-0 overflow-clip rounded-[20px]">
+    <p
+      class="absolute top-[-27px] left-[-40px] font-exmouth text-[120.34px] leading-[1.05] whitespace-nowrap"
+      style={`color: ${color};`}
+      aria-hidden="true"
+    >
+      {scriptTop}
+    </p>
+    <p
+      class="absolute top-[206px] left-[86px] font-exmouth text-[120.34px] leading-[1.05] whitespace-nowrap"
+      style={`color: ${color};`}
+      aria-hidden="true"
+    >
+      {scriptBottom}
+    </p>
+    <img
+      class="absolute top-[31px] left-[25px] h-[257.29px] w-[130.52px] max-w-none object-cover drop-shadow-[0px_8.45px_19.16px_rgba(58,32,14,0.31)]"
+      src={img}
+      alt=""
+    />
+    <img
+      class="absolute top-[31px] left-[155px] h-[257.29px] w-[125.83px] max-w-none object-cover drop-shadow-[0px_8.45px_19.16px_rgba(58,32,14,0.31)]"
+      src={img}
+      alt=""
+    />
+  </div>
+  <div class="flex w-full shrink-0 flex-col items-start gap-2 px-3 py-[14px]">
+    <p class="m-0 w-full font-sans text-[24px] leading-[1.2] font-bold text-brown">{title}</p>
+    <p class="m-0 w-full font-sans text-[24px] leading-[1.2] font-bold" style={`color: ${color};`}>
+      {price}
+    </p>
+    <p class="m-0 w-full font-sans text-[15px] leading-[1.2] text-brown">{description}</p>
+    <div class="flex w-full items-start">
+      <a
+        class="flex h-[40.13px] flex-1 items-center justify-center gap-2 rounded-[57px] px-4 py-2 font-sans text-[15px] leading-[1.2] font-bold text-beige no-underline hover:brightness-95"
+        style={`background-color: ${color};`}
+        href="#"
+      >
+        Ver más
+        <span class="flex h-[24px] w-[24px] shrink-0 items-center justify-center rounded-[18.38px] bg-beige p-[5.4px]">
+          <Icon
+            name="lucide:arrow-up-right"
+            class="block h-[12.98px] w-[12.98px]"
+            style={`color: ${color};`}
+            aria-hidden="true"
+          />
+        </span>
+      </a>
+    </div>
+  </div>
+</article>

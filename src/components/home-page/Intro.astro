@@ -1,0 +1,66 @@
+---
+---
+
+<div id="intro-overlay" aria-hidden="true">
+  <img id="intro-logo" src="/images/logo.png" alt="Dimonca" />
+</div>
+
+<style>
+  #intro-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    clip-path: circle(150% at 0% 100%);
+  }
+
+  #intro-logo {
+    width: clamp(200px, 30vw, 360px);
+    height: auto;
+    opacity: 0;
+    transform: scale(0.7);
+    filter: brightness(0) invert(1);
+  }
+</style>
+
+<script>
+  import { animate } from 'motion';
+
+  const COLORS = ['#6ca7d5', '#F45D8C', '#3A200E', '#979255'];
+  const color = COLORS[Math.floor(Math.random() * COLORS.length)];
+
+  const overlay = document.getElementById('intro-overlay') as HTMLElement;
+  const logo = document.getElementById('intro-logo') as HTMLElement;
+
+  if (overlay && logo) {
+    overlay.style.backgroundColor = color;
+    document.body.style.overflow = 'hidden';
+
+    animate(
+      logo,
+      { opacity: [0, 1], scale: [0.7, 1] },
+      { type: 'spring', stiffness: 200, damping: 20, mass: 1 }
+    );
+
+    setTimeout(() => {
+      animate(
+        logo,
+        { opacity: [1, 0], scale: [1, 0.85] },
+        { duration: 0.35, ease: [0.4, 0, 1, 1] }
+      );
+
+      setTimeout(() => {
+        animate(
+          overlay,
+          { clipPath: ['circle(150% at 0% 100%)', 'circle(0% at 0% 100%)'] },
+          { duration: 0.9, ease: [0.76, 0, 0.24, 1] }
+        ).then(() => {
+          overlay.style.display = 'none';
+          document.body.style.overflow = '';
+        });
+      }, 300);
+    }, 1000);
+  }
+</script>

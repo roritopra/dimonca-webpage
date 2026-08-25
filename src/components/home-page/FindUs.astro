@@ -83,7 +83,7 @@ const stripes = Array.from({ length: 12 }, (_, i) => ({
 						class="pointer-events-none absolute top-1/2 -left-12 -translate-y-1/2 z-20 w-[120px] md:w-[140px] drop-shadow-lg"
 					/>
 
-					<!-- map2: Galleta en empaque kraft (abajo a la derecha) -->
+					<!-- map2: Galleta en empaque kraft (arriba a la derecha) -->
 					<img
 						src="/images/map3.png"
 						alt=""
@@ -91,7 +91,7 @@ const stripes = Array.from({ length: 12 }, (_, i) => ({
 						class="pointer-events-none absolute -top-6 -right-6 z-20 w-[90px] md:w-[105px] drop-shadow-lg"
 					/>
 
-					<!-- map3: Galleta en empaque kraft (abajo a la derecha) -->
+					<!-- map3: Logo Dimonca (abajo a la derecha) -->
 					<img
 						src="/images/map2.png"
 						alt=""
@@ -99,6 +99,47 @@ const stripes = Array.from({ length: 12 }, (_, i) => ({
 						class="pointer-events-none absolute bottom-10 scale-150 -right-20 z-20 w-[140px] md:w-[165px] drop-shadow-xl"
 					/>
 				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Mini Call To Action inferior -->
+	<div class="mx-auto max-w-[1440px] px-10 md:px-24 py-16 md:py-36">
+		<div class="grid grid-cols-1 md:grid-cols-2 items-center gap-10 md:gap-16">
+			<!-- Lado Izquierdo CTA: Título con caligrafía -->
+			<div class="relative">
+				<h3 class="m-0 font-sans text-[42px] md:text-[48px] font-extrabold leading-[1.15] text-brown">
+					El mejor momento para<br />
+					un postre <span class="relative inline-block">es
+						<span
+							style="paint-order: stroke;"
+							class="pointer-events-none absolute -top-8 left-full ml-3 font-exmouth text-[100px] 
+							md:text-[120px] font-normal leading-none text-pink 
+							[-webkit-text-stroke:6px_#F7F2E8]"
+							aria-hidden="true"
+						>
+							Ahora
+						</span>
+					</span>
+				</h3>
+			</div>
+
+			<!-- Lado Derecho CTA: Descripción + Botón -->
+			<div class="flex flex-col items-start gap-5 max-w-[420px]">
+				<p class="m-0 font-sans text-[17px] leading-relaxed text-brown">
+					No esperes a que el antojo pase. Explora nuestro menú, elige tus favoritos y déjanos endulzar tu día con cada bocado.
+				</p>
+				<a
+					class="group flex h-[48px] items-center justify-center gap-3 whitespace-nowrap rounded-[57px] bg-pink px-6 py-2 font-sans text-[17px] font-bold text-beige no-underline shadow-[0_4px_14px_rgba(244,93,140,0.4)] transition-all duration-300 hover:shadow-[0_6px_20px_rgba(244,93,140,0.6)] hover:brightness-95"
+					href="#pedido"
+				>
+					Haz tu pedido
+					<span
+						class="flex h-[28px] w-[28px] shrink-0 items-center justify-center rounded-full bg-beige transition-transform duration-300 group-hover:scale-110"
+					>
+						<Icon name="lucide:map" class="block h-[14px] w-[14px] text-pink" aria-hidden="true" />
+					</span>
+				</a>
 			</div>
 		</div>
 	</div>

@@ -21,55 +21,80 @@ const products = [
     alt: "Pastel",
   },
 ];
+
+const gridImages = [
+  { src: "/images/more-than-1.png", alt: "Variedad de cuchareables Dimonca", borderColor: "#6ca7d5" },
+  { src: "/images/more-than-2.png", alt: "Torre de brownies Dimonca", borderColor: "#3A200E" },
+  { src: "/images/more-than-3.png", alt: "Caja de galletas y helados Dimonca", borderColor: "#F45D8C" },
+  { src: "/images/more-than-4.png", alt: "Cuchareable personal Dimonca", borderColor: "#979255" },
+];
 ---
 
-<div
-  id="more-than-interactive"
-  class="relative flex w-[380px] max-w-full flex-col items-center justify-center select-none cursor-pointer"
->
-  <!-- Contenedor del producto -->
-  <div class="product-container relative flex h-[420px] w-full items-center justify-center">
-    {products.map((item, idx) => (
-      <div
-        class={`product-slide absolute inset-0 flex items-center justify-center ${
-          idx === 0 ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
-        }`}
-        data-index={idx}
-      >
-        <!-- Imagen Normal -->
-        <img
-          src={item.normalImg}
-          alt={item.alt}
-          class="product-img-normal block h-full w-auto object-contain drop-shadow-[0px_14px_24px_rgba(58,32,14,0.18)]"
-        />
-        <!-- Imagen Hover -->
-        <img
-          src={item.hoverImg}
-          alt={`${item.alt} variante`}
-          class="product-img-hover absolute inset-0 m-auto block h-full w-auto object-contain opacity-0 drop-shadow-[0px_14px_24px_rgba(58,32,14,0.18)]"
-        />
+<div class="relative flex items-center gap-6 select-none">
+  <!-- Sección Interactiva del Producto Central -->
+  <div
+    id="more-than-interactive"
+    class="relative flex w-[370px] max-w-full flex-col items-center justify-center cursor-pointer"
+  >
+    <div class="product-container relative flex h-[430px] w-full items-center justify-center">
+      {products.map((item, idx) => (
+        <div
+          class={`product-slide absolute inset-0 flex items-center justify-center ${
+            idx === 0 ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+          }`}
+          data-index={idx}
+        >
+          <!-- Imagen Normal -->
+          <img
+            src={item.normalImg}
+            alt={item.alt}
+            class="product-img-normal block h-full w-auto object-contain drop-shadow-[0px_14px_24px_rgba(58,32,14,0.18)]"
+          />
+          <!-- Imagen Hover -->
+          <img
+            src={item.hoverImg}
+            alt={`${item.alt} variante`}
+            class="product-img-hover absolute inset-0 m-auto block h-full w-auto object-contain opacity-0 drop-shadow-[0px_14px_24px_rgba(58,32,14,0.18)]"
+          />
 
-        <!-- Texto flotante en estilo script -->
-        <div class="product-title-badge pointer-events-none absolute top-[70px] right-[-10px] z-10 max-w-[210px]">
-          <p
-            class="font-exmouth text-[44px] leading-[1.05] text-brown [-webkit-text-stroke:8px_#ffffff]"
-            style="paint-order: stroke fill;"
-          >
-            {item.name}
-          </p>
+          <!-- Texto flotante en estilo script superpuesto hacia la derecha -->
+          <div class="product-title-badge pointer-events-none absolute top-[55px] right-[-80px] z-20 max-w-[210px]">
+            <p
+              class="font-exmouth text-[44px] leading-[1.05] text-brown [-webkit-text-stroke:8px_#ffffff] [filter:drop-shadow(0px_4px_4px_rgba(58,32,14,0.5))]"
+              style="paint-order: stroke fill;"
+            >
+              {item.name}
+            </p>
+          </div>
         </div>
+      ))}
+
+      <!-- Botón flotante inferior izquierdo con corazón -->
+      <button
+        id="more-than-next-btn"
+        type="button"
+        class="group absolute bottom-[35px] left-[15px] z-20 flex h-[58px] w-[58px] items-center justify-center rounded-full border-[3px] border-white bg-[#6ca7d5] text-white shadow-[0px_8px_16px_rgba(108,167,213,0.4)] transition-transform duration-200 hover:scale-105 hover:bg-[#5b96c4]"
+        aria-label="Siguiente postre"
+      >
+        <Icon name="lucide:heart" class="h-7 w-7 transition-transform duration-200 group-hover:scale-110" />
+      </button>
+    </div>
+  </div>
+
+  <!-- Grid de 4 imágenes a la derecha -->
+  <div class="grid grid-cols-2 gap-3.5 w-[390px] shrink-0">
+    {gridImages.map((img) => (
+      <div
+        class="group relative w-full overflow-hidden transition-all duration-300 hover:scale-[1.03]"
+      >
+        <img
+          src={img.src}
+          alt={img.alt}
+          class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+          loading="lazy"
+        />
       </div>
     ))}
-
-    <!-- Botón flotante inferior izquierdo con corazón -->
-    <button
-      id="more-than-next-btn"
-      type="button"
-      class="group absolute bottom-[35px] left-[15px] z-20 flex h-[58px] w-[58px] items-center justify-center rounded-full border-[3px] border-white bg-[#6ca7d5] text-white shadow-[0px_8px_16px_rgba(108,167,213,0.4)] transition-transform duration-200 hover:scale-105 hover:bg-[#5b96c4]"
-      aria-label="Siguiente postre"
-    >
-      <Icon name="lucide:heart" class="h-7 w-7 transition-transform duration-200 group-hover:scale-110" />
-    </button>
   </div>
 </div>
 
@@ -103,7 +128,7 @@ const products = [
       }
     });
 
-    // Cambio suave y directo de producto al hacer click (estilo hover / crossfade limpio)
+    // Cambio de producto al hacer click (crossfade limpio)
     const nextProduct = () => {
       if (slides.length <= 1) return;
 
@@ -117,7 +142,6 @@ const products = [
         const nextNormal = nextSlide.querySelector<HTMLElement>(".product-img-normal");
         const nextHover = nextSlide.querySelector<HTMLElement>(".product-img-hover");
 
-        // Mantener el estado de hover si el cursor está encima al hacer clic
         if (nextNormal && nextHover) {
           if (isHovered) {
             nextNormal.style.opacity = "0";
@@ -128,7 +152,6 @@ const products = [
           }
         }
 
-        // Transición de cambio directo estilo hover (crossfade de 0.2s)
         animate(prevSlide, { opacity: 0 }, { duration: 0.2, ease: "easeInOut" }).then(() => {
           prevSlide.style.pointerEvents = "none";
         });

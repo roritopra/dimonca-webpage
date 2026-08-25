@@ -1,38 +1,105 @@
 ---
 import { Icon } from 'astro-icon/components';
+
+const stripes = Array.from({ length: 12 }, (_, i) => ({
+	left: (i * (62.1 / 720)) * 100,
+	width: (31 / 720) * 100,
+}));
 ---
 
-<section class="w-full bg-beige">
-	<div class="mx-auto flex min-h-[400px] max-w-[1440px] items-center justify-between gap-12 px-20 py-16">
-		<div class="flex w-full max-w-[450px] flex-col items-start gap-6">
-			<div class="relative w-full">
-				<p class="m-0 ml-1 font-sans text-[47px] leading-[1.2] font-bold text-brown">
+<section class="relative w-full bg-beige overflow-hidden">
+	<div class="mx-auto grid min-h-[600px] max-w-[1440px] grid-cols-1 md:grid-cols-2 items-center">
+		<!-- Columna Izquierda (50%) -->
+		<div class="flex flex-col items-start justify-center px-10 md:pl-24 md:pr-12 py-16">
+			<!-- Título -->
+			<div class="relative mb-6">
+				<h2 class="m-0 font-sans text-[44px] md:text-[48px] font-bold leading-tight text-brown">
 					Encuentranos en:
-				</p>
+				</h2>
 				<span
-					class="absolute top-[46px] left-0 font-exmouth text-[81px] leading-[1.2] text-pink whitespace-nowrap"
+					class="block font-exmouth text-[72px] md:text-[84px] leading-none text-pink -mt-2 tracking-wide"
 					aria-hidden="true"
-					>Valle del Lili</span
 				>
+					Valle del Lili
+				</span>
 			</div>
-			<div class="flex items-center gap-[9px]">
-				<img class="block size-10 shrink-0" src="/images/marker-pin.svg" alt="" aria-hidden="true" />
-				<p class="m-0 font-sans text-[30px] leading-[1.2] text-brown">Cra 90 #42-28</p>
+
+			<!-- Dirección con Pin -->
+			<div class="mb-5 flex items-center gap-3">
+				<img class="block size-8 shrink-0 object-contain" src="/images/marker-pin.svg" alt="" aria-hidden="true" />
+				<p class="m-0 font-sans text-[26px] md:text-[28px] font-medium text-brown">
+					Cra 90 #42-28
+				</p>
 			</div>
-			<p class="m-0 max-w-[410px] text-[19px] leading-[1.2] text-brown">
+
+			<!-- Descripción -->
+			<p class="mb-8 max-w-[420px] font-sans text-[17px] md:text-[18px] leading-relaxed text-brown">
 				Te esperamos con el aroma de galletas recién horneadas y muchas delicias para compartir.
 			</p>
+
+			<!-- Botón Como llegar -->
 			<a
-				class="group flex h-[52px] w-[210px] items-center justify-center gap-3 whitespace-nowrap rounded-[57px] bg-pink px-6 py-3 font-sans text-[19px] leading-[1.2] font-bold text-beige no-underline shadow-[0_4px_14px_rgba(244,93,140,0.4)] transition-all duration-300 hover:shadow-[0_6px_20px_rgba(244,93,140,0.6)] hover:brightness-95"
+				class="group flex h-[52px] items-center justify-center gap-3 whitespace-nowrap rounded-[57px] bg-pink px-7 py-3 font-sans text-[18px] font-bold text-beige no-underline shadow-[0_4px_14px_rgba(244,93,140,0.4)] transition-all duration-300 hover:shadow-[0_6px_20px_rgba(244,93,140,0.6)] hover:brightness-95"
 				href="#como-llegar"
 			>
 				Como llegar
 				<span
-					class="flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-full bg-beige p-[7px] transition-transform duration-300 group-hover:scale-110"
+					class="flex h-[32px] w-[32px] shrink-0 items-center justify-center rounded-full bg-beige transition-transform duration-300 group-hover:scale-110"
 				>
 					<Icon name="lucide:map" class="block h-[16px] w-[16px] text-pink" aria-hidden="true" />
 				</span>
 			</a>
+		</div>
+
+		<!-- Columna Derecha (50%) -->
+		<div class="relative flex h-full min-h-[620px] w-full items-center justify-center overflow-hidden bg-beige">
+			<!-- Rayas verticales rosadas de fondo -->
+			<div class="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+				{
+					stripes.map((s) => (
+						<div
+							class="absolute top-0 bottom-0 bg-pink"
+							style={`left: ${s.left}%; width: ${s.width}%;`}
+						/>
+					))
+				}
+			</div>
+
+			<!-- Contenedor del Mapa e Ilustraciones decorativas -->
+			<div class="relative z-10 flex items-center justify-center p-8">
+				<div class="relative">
+					<!-- Imagen principal del Mapa -->
+					<img
+						src="/images/map.png"
+						alt="Mapa de ubicación Dimonca en Valle del Lili"
+						class="block h-auto max-h-[500px] w-auto max-w-full object-contain drop-shadow-xl"
+					/>
+
+					<!-- map1: Persona/chica abrazando galleta (centrado verticalmente, borde izquierdo) -->
+					<img
+						src="/images/map1.png"
+						alt=""
+						aria-hidden="true"
+						class="pointer-events-none absolute top-1/2 -left-12 -translate-y-1/2 z-20 w-[120px] md:w-[140px] drop-shadow-lg"
+					/>
+
+					<!-- map2: Galleta en empaque kraft (abajo a la derecha) -->
+					<img
+						src="/images/map3.png"
+						alt=""
+						aria-hidden="true"
+						class="pointer-events-none absolute -top-6 -right-6 z-20 w-[90px] md:w-[105px] drop-shadow-lg"
+					/>
+
+					<!-- map3: Galleta en empaque kraft (abajo a la derecha) -->
+					<img
+						src="/images/map2.png"
+						alt=""
+						aria-hidden="true"
+						class="pointer-events-none absolute bottom-10 scale-150 -right-20 z-20 w-[140px] md:w-[165px] drop-shadow-xl"
+					/>
+				</div>
+			</div>
 		</div>
 	</div>
 </section>

@@ -15,8 +15,8 @@ const repeats = 3;
   <div id="scroll-carousel" class="w-full py-[14px]">
     <div id="scroll-carousel-track" class="flex w-max items-center will-change-transform">
       {Array.from({ length: repeats }).map((_, r) =>
-        items.map((item, i) => (
-          <div key={`${r}-${i}`} class="flex shrink-0 items-center gap-[22px] pr-[92px]">
+        items.map((item) => (
+          <div class="flex shrink-0 items-center gap-[22px] pr-[92px]">
             <p class="m-0 font-sans text-[19px] leading-[1.2] text-blue-500">EST</p>
             <img
               class="block h-8 w-[30px] object-cover"

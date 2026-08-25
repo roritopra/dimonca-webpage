@@ -1,4 +1,10 @@
 ---
+interface Props {
+  variant?: 'blue' | 'brown';
+}
+
+const { variant = 'blue' } = Astro.props;
+
 const items = [
   { year: "2021" },
   { year: "2021" },
@@ -9,26 +15,32 @@ const items = [
 ];
 
 const repeats = 4;
+
+const isBrown = variant === 'brown';
+const borderClass = isBrown ? 'border-brown' : 'border-blue-500';
+const textClass = isBrown ? 'text-brown' : 'text-blue-500';
+const icon = isBrown ? '/images/est-icon-brown.png' : '/images/est-icon.png';
 ---
 
-<section class="relative z-10 w-full overflow-hidden border-y-2 border-blue-500 bg-beige">
-  <div id="scroll-carousel" class="w-full py-[14px]">
+<section
+  class={`relative z-10 w-full overflow-hidden border-y-2 bg-beige ${borderClass}`}
+>
+  <div class="scroll-carousel w-full py-[14px]">
     <div
-      id="scroll-carousel-track"
-      class="flex w-max items-center will-change-transform"
+      class="scroll-carousel-track flex w-max items-center will-change-transform"
       data-repeats={repeats}
     >
       {Array.from({ length: repeats }).map(() =>
         items.map((item) => (
           <div class="flex shrink-0 items-center gap-[22px] pr-[92px]">
-            <p class="m-0 font-sans text-[19px] leading-[1.2] text-blue-500">EST</p>
+            <p class={`m-0 font-sans text-[19px] leading-[1.2] ${textClass}`}>EST</p>
             <img
               class="block h-8 w-[30px] object-cover"
-              src="/images/est-icon.png"
+              src={icon}
               alt=""
               aria-hidden="true"
             />
-            <p class="m-0 text-right font-sans text-[19px] leading-[1.2] text-blue-500">
+            <p class={`m-0 text-right font-sans text-[19px] leading-[1.2] ${textClass}`}>
               {item.year}
             </p>
           </div>
@@ -39,8 +51,9 @@ const repeats = 4;
 </section>
 
 <script>
-  const track = document.getElementById("scroll-carousel-track");
-  if (track) {
+  const tracks = document.querySelectorAll<HTMLElement>(".scroll-carousel-track");
+
+  tracks.forEach((track) => {
     const repeats = parseInt(track.dataset.repeats ?? "4", 10);
     const oneSetWidth = track.scrollWidth / repeats;
 
@@ -89,5 +102,5 @@ const repeats = 4;
 
     window.addEventListener("scroll", onScroll, { passive: true });
     rafId = requestAnimationFrame(tick);
-  }
+  });
 </script>

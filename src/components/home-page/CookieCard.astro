@@ -3,6 +3,7 @@ import { Icon } from 'astro-icon/components';
 
 interface Props {
   img?: string;
+  imgCracked?: string;
   scriptTop?: string;
   scriptBottom?: string;
   title?: string;
@@ -13,6 +14,7 @@ interface Props {
 
 const {
   img = '/images/cookie-card.png',
+  imgCracked = '/images/cookie-card-animate.png',
   scriptTop = 'Pistacho',
   scriptBottom = 'Queen',
   title = 'Pistacho Queen',
@@ -20,11 +22,14 @@ const {
   description = 'Galleta premium de pistacho con trozos reales de pistacho y chips ...',
   color = '#6ca7d5',
 } = Astro.props;
+
+const uid = Math.random().toString(36).slice(2, 8);
 ---
 
 <article
-  class="flex w-[305px] flex-col items-start gap-[13px] overflow-clip rounded-[24px] border-2 bg-beige"
+  class="cookie-card flex w-[305px] flex-col items-start gap-[13px] overflow-clip rounded-[24px] border-2 bg-beige"
   style={`border-color: ${color};`}
+  data-uid={uid}
 >
   <div class="relative h-[319px] w-full shrink-0 overflow-clip rounded-[20px]">
     <p
@@ -41,17 +46,35 @@ const {
     >
       {scriptBottom}
     </p>
-    <img
-      class="absolute top-[31px] left-[25px] h-[257.29px] w-[130.52px] max-w-none object-cover drop-shadow-[0px_8.45px_19.16px_rgba(58,32,14,0.31)]"
-      src={img}
-      alt=""
-    />
-    <img
-      class="absolute top-[31px] left-[155px] h-[257.29px] w-[125.83px] max-w-none object-cover drop-shadow-[0px_8.45px_19.16px_rgba(58,32,14,0.31)]"
-      src={img}
-      alt=""
-    />
+
+    <!-- Contenedor de la galleta (gira y escala) -->
+    <div class="cookie-img-wrap absolute top-[31px] left-[25px] h-[257.29px] w-[280.35px]">
+      <!-- Mitad izquierda -->
+      <div class="cookie-half-left absolute inset-y-0 left-0 w-1/2 overflow-hidden">
+        <img
+          class="absolute top-0 left-0 h-full w-[280.35px] max-w-none object-cover drop-shadow-[0px_8.45px_19.16px_rgba(58,32,14,0.31)]"
+          src={img}
+          alt=""
+        />
+      </div>
+      <!-- Mitad derecha -->
+      <div class="cookie-half-right absolute inset-y-0 right-0 w-1/2 overflow-hidden">
+        <img
+          class="absolute top-0 right-0 h-full w-[280.35px] max-w-none object-cover drop-shadow-[0px_8.45px_19.16px_rgba(58,32,14,0.31)]"
+          src={img}
+          alt=""
+        />
+      </div>
+      <!-- Imagen partida (oculta por defecto) -->
+      <img
+        class="cookie-cracked pointer-events-none absolute inset-0 h-full w-full object-cover drop-shadow-[0px_8.45px_19.16px_rgba(58,32,14,0.31)]"
+        style="opacity: 0;"
+        src={imgCracked}
+        alt=""
+      />
+    </div>
   </div>
+
   <div class="flex w-full shrink-0 flex-1 flex-col items-start gap-2 px-3 py-[14px]">
     <p class="m-0 w-full font-sans text-[24px] leading-[1.2] font-bold text-brown">{title}</p>
     <p class="m-0 w-full font-sans text-[24px] leading-[1.2] font-bold" style={`color: ${color};`}>
@@ -77,3 +100,47 @@ const {
     </div>
   </div>
 </article>
+
+<script>
+  import { animate } from 'motion';
+
+  document.querySelectorAll<HTMLElement>('.cookie-card').forEach((card) => {
+    const wrap = card.querySelector<HTMLElement>('.cookie-img-wrap');
+    const left = card.querySelector<HTMLElement>('.cookie-half-left');
+    const right = card.querySelector<HTMLElement>('.cookie-half-right');
+    const cracked = card.querySelector<HTMLElement>('.cookie-cracked');
+
+    if (!wrap || !left || !right || !cracked) return;
+
+    let splitTimeout: ReturnType<typeof setTimeout> | null = null;
+
+    const start = () => {
+      if (splitTimeout) return;
+      const slide = wrap.offsetWidth / 522.26 * 2;
+      animate(wrap, { rotate: -15 }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
+      animate(left, { x: -slide }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
+      animate(right, { x: slide }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
+
+      splitTimeout = setTimeout(() => {
+        animate(cracked, { opacity: 1 }, { duration: 0.1, ease: 'easeOut' });
+        animate(left, { opacity: 0 }, { duration: 0.1, ease: 'easeOut' });
+        animate(right, { opacity: 0 }, { duration: 0.1, ease: 'easeOut' });
+        animate(wrap, { scale: 1.1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
+      }, 50);
+    };
+
+    const reset = () => {
+      if (splitTimeout) {
+        clearTimeout(splitTimeout);
+        splitTimeout = null;
+      }
+      animate(wrap, { rotate: 0, scale: 1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
+      animate(left, { x: 0, opacity: 1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
+      animate(right, { x: 0, opacity: 1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
+      animate(cracked, { opacity: 0 }, { duration: 0.3, ease: 'easeInOut' });
+    };
+
+    card.addEventListener('mouseenter', start);
+    card.addEventListener('mouseleave', reset);
+  });
+</script>

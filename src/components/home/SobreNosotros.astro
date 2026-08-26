@@ -33,7 +33,7 @@ const photos = [
 ];
 ---
 
-<section class="relative z-10 w-full overflow-hidden bg-beige shadow-[0_-12px_24px_rgba(58,32,14,0.12)]">
+<section id="sobre-nosotros-section" class="relative z-10 w-full overflow-hidden bg-beige shadow-[0_-12px_24px_rgba(58,32,14,0.12)]">
   <div
     class="mx-auto flex max-w-[1440px] flex-wrap items-center justify-center gap-16 px-20 py-16"
   >
@@ -150,10 +150,8 @@ const photos = [
 </section>
 
 <script>
-  import { animate, inView } from "motion";
-
   function setupSobreAnimation() {
-    const grid = document.getElementById("sobre-grid");
+    const section = document.getElementById("sobre-nosotros-section");
     const sobre1 = document.getElementById("sobre-1");
     const sobre2 = document.getElementById("sobre-2");
     const sobre3 = document.getElementById("sobre-3");
@@ -163,151 +161,69 @@ const photos = [
     const sobreCookie = document.getElementById("sobre-cookie");
 
     if (
-      grid &&
-      sobre1 &&
-      sobre2 &&
-      sobre3 &&
-      sobre4 &&
-      sobreHeart &&
-      sobreTexto &&
-      sobreCookie
+      !section ||
+      !sobre1 ||
+      !sobre2 ||
+      !sobre3 ||
+      !sobre4 ||
+      !sobreHeart ||
+      !sobreTexto ||
+      !sobreCookie
     ) {
-      inView(
-        grid,
-        function () {
-          animate(
-            sobre1,
-            {
-              x: [-80, 0],
-              rotate: [-9, 0],
-              y: [30, 0],
-            },
-            {
-              duration: 1.2,
-              ease: [0.35, -0.3, 0.1, 1.45],
-            },
-          );
-
-          animate(
-            sobre2,
-            {
-              x: [80, 0],
-              rotate: [9, 0],
-              y: [30, 0],
-            },
-            {
-              duration: 1.2,
-              ease: [0.35, -0.3, 0.1, 1.45],
-            },
-          );
-
-          animate(
-            sobre4,
-            {
-              x: [-50, 0],
-              rotate: [9, 0],
-              y: [100, 0],
-            },
-            {
-              duration: 1.2,
-              ease: [0.35, -0.3, 0.1, 1.45],
-            },
-          );
-
-          animate(
-            sobre3,
-            {
-              x: [50, 0],
-              rotate: [-9, 0],
-              y: [100, 0],
-            },
-            {
-              duration: 1.2,
-              ease: [0.35, -0.3, 0.1, 1.45],
-            },
-          );
-
-          animate(
-            sobreHeart,
-            {
-              x: [50, 0],
-              y: [100, 0],
-            },
-            {
-              duration: 1.2,
-              ease: [0.7, -0.4, 0.25, 1.35],
-            },
-          );
-
-          animate(
-            sobreTexto,
-            {
-              x: [-200, 0],
-              y: [200, 0],
-            },
-            {
-              duration: 1.2,
-              ease: [0.7, -0.4, 0.25, 1.35],
-            },
-          );
-
-          animate(
-            sobreCookie,
-            {
-              x: [-200, 0],
-              y: [-200, 0],
-            },
-            {
-              duration: 1.2,
-              ease: [0.7, -0.4, 0.25, 1.35],
-            },
-          );
-
-          // Función de salida: se ejecuta cuando la sección sale del viewport al scrollear
-          return function () {
-            animate(
-              sobre1,
-              { x: -80, y: 30, rotate: -9 },
-              { duration: 0.8, ease: "easeInOut" }
-            );
-            animate(
-              sobre2,
-              { x: 80, y: 30, rotate: 9 },
-              { duration: 0.8, ease: "easeInOut" }
-            );
-            animate(
-              sobre4,
-              { x: -50, y: 100, rotate: 9 },
-              { duration: 0.8, ease: "easeInOut" }
-            );
-            animate(
-              sobre3,
-              { x: 50, y: 100, rotate: -9 },
-              { duration: 0.8, ease: "easeInOut" }
-            );
-            animate(
-              sobreHeart,
-              { x: 50, y: 100 },
-              { duration: 0.8, ease: "easeInOut" }
-            );
-            animate(
-              sobreTexto,
-              { x: -50, y: 100 },
-              { duration: 0.8, ease: "easeInOut" }
-            );
-            animate(
-              sobreCookie,
-              { x: -100, y: -100 },
-              { duration: 0.8, ease: "easeInOut" }
-            );
-          };
-        },
-        {
-          amount: 0.2,
-          margin: "0px 0px -50px 0px",
-        },
-      );
+      return;
     }
+
+    const handleScroll = () => {
+      const rect = section.getBoundingClientRect();
+      const windowHeight = window.innerHeight;
+
+      // El progreso va de 0 (cuando entra en pantalla por abajo) a 1 (cuando llega a su punto óptimo de visualización)
+      const start = windowHeight;
+      const end = windowHeight * 0.25;
+      const progress = Math.min(Math.max((start - rect.top) / (start - end), 0), 1);
+
+      // Interpolación de sobre-1 (arriba izquierda)
+      const s1X = -80 * (1 - progress);
+      const s1Y = 30 * (1 - progress);
+      const s1Rot = -9 * (1 - progress);
+      sobre1.style.transform = `translate(${s1X}px, ${s1Y}px) rotate(${s1Rot}deg)`;
+
+      // Interpolación de sobre-2 (arriba derecha)
+      const s2X = 80 * (1 - progress);
+      const s2Y = 30 * (1 - progress);
+      const s2Rot = 9 * (1 - progress);
+      sobre2.style.transform = `translate(${s2X}px, ${s2Y}px) rotate(${s2Rot}deg)`;
+
+      // Interpolación de sobre-4 (abajo izquierda)
+      const s4X = -50 * (1 - progress);
+      const s4Y = 100 * (1 - progress);
+      const s4Rot = 9 * (1 - progress);
+      sobre4.style.transform = `translate(${s4X}px, ${s4Y}px) rotate(${s4Rot}deg)`;
+
+      // Interpolación de sobre-3 (abajo derecha)
+      const s3X = 50 * (1 - progress);
+      const s3Y = 100 * (1 - progress);
+      const s3Rot = -9 * (1 - progress);
+      sobre3.style.transform = `translate(${s3X}px, ${s3Y}px) rotate(${s3Rot}deg)`;
+
+      // Interpolación del corazón
+      const hX = 50 * (1 - progress);
+      const hY = 100 * (1 - progress);
+      sobreHeart.style.transform = `translate(${hX}px, ${hY}px)`;
+
+      // Interpolación del texto caligráfico
+      const tX = -120 * (1 - progress);
+      const tY = 120 * (1 - progress);
+      sobreTexto.style.transform = `translate(${tX}px, ${tY}px)`;
+
+      // Interpolación de la galleta
+      const cX = -120 * (1 - progress);
+      const cY = -120 * (1 - progress);
+      sobreCookie.style.transform = `translate(${cX}px, ${cY}px)`;
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
   }
 
   setupSobreAnimation();

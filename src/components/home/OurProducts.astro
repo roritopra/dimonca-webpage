@@ -1,9 +1,16 @@
 ---
 import { Icon } from "astro-icon/components";
 import CookieCard from "./CookieCard.astro";
+
+import oreoImg from "../../assets/images/cookie-card-oreo.png";
+import oreoCrackedImg from "../../assets/images/cookie-card-oreo-cracked.png";
+import redVelvetImg from "../../assets/images/cookie-card-red-velvet.png";
+import redVelvetCrackedImg from "../../assets/images/cookie-card-red-velvet-cracked.png";
+import rocheImg from "../../assets/images/cookie-card-roche.png";
+import rocheCrackedImg from "../../assets/images/cookie-card-roche-cracked.png";
 ---
 
-<section class="relative z-10 w-full overflow-hidden bg-beige">
+<section id="galletas" class="relative z-10 w-full overflow-hidden bg-beige">
   <div class="absolute inset-x-0 top-0 h-[606px] bg-blue-500">
     <div
       class="absolute inset-0 left-1/2 w-[1440px] max-w-full -translate-x-1/2"
@@ -23,14 +30,14 @@ import CookieCard from "./CookieCard.astro";
       </div>
 
       <div class="absolute inset-x-0 top-[51px] text-center">
-        <p
+        <h2
           style="paint-order: stroke;"
           class="m-0 font-sans text-[38px] leading-[1.2] text-brown [-webkit-text-stroke:15px_#F7F2E8] [filter:drop-shadow(0px_4px_4px_rgba(58,32,14,0.5))]"
         >
           Conoce Nuestras
-        </p>
+        </h2>
       </div>
-      <div class="absolute inset-x-0 top-[81px] text-center">
+      <div class="absolute inset-x-0 top-[81px] text-center" aria-hidden="true">
         <p
           style="paint-order: stroke;"
           class="m-0 font-exmouth text-[154.71px] leading-[1.2] text-brown [-webkit-text-stroke:15px_#F7F2E8] [filter:drop-shadow(0px_4px_4px_rgba(58,32,14,0.5))]"
@@ -47,28 +54,28 @@ import CookieCard from "./CookieCard.astro";
     <div class="grid grid-cols-4 gap-[30px]">
       <CookieCard />
       <CookieCard
-        img="/images/cookie-card-oreo.png"
-        imgCracked="/images/cookie-card-oreo-cracked.png"
+        img={oreoImg}
+        imgCracked={oreoCrackedImg}
         color="#F45D8C"
         scriptTop="Cookies"
         scriptBottom="Cream"
         title="Cookies & Cream"
         price="$ 13.000"
-        description="Galleta premium de pistacho con trozos reales de pistacho y chips ..."
+        description="Galleta premium de oreo con trozos reales y relleno suave ..."
       />
       <CookieCard
-        img="/images/cookie-card-red-velvet.png"
-        imgCracked="/images/cookie-card-red-velvet-cracked.png"
+        img={redVelvetImg}
+        imgCracked={redVelvetCrackedImg}
         color="#3A200E"
         scriptTop="Red"
         scriptBottom="Velvet"
         title="Red Velvet"
         price="$ 13.000"
-        description="Galleta premium de pistacho con trozos reales de pistacho y chips ..."
+        description="Galleta premium de red velvet con centro cremoso y chips de chocolate blanco ..."
       />
       <CookieCard
-        img="/images/cookie-card-roche.png"
-        imgCracked="/images/cookie-card-roche-cracked.png"
+        img={rocheImg}
+        imgCracked={rocheCrackedImg}
         color="#979255"
         hoverBg="#FCF48D"
         hoverPrice="#32311C"
@@ -76,7 +83,7 @@ import CookieCard from "./CookieCard.astro";
         scriptBottom="Roche"
         title="Galleta Roche"
         price="$ 13.000"
-        description="Galleta premium de pistacho con trozos reales de pistacho y chips ..."
+        description="Galleta premium estilo bombón roche con avellanas y chocolate ..."
       />
     </div>
 

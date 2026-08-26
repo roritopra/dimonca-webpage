@@ -1,5 +1,11 @@
 ---
 import { Icon } from 'astro-icon/components';
+import { Image } from 'astro:assets';
+
+import creamHero from '../../assets/images/cream-hero.png';
+import cookieHero from '../../assets/images/cookie-hero.png';
+import crookieHero from '../../assets/images/crookie-hero.png';
+import crookieHeroSplit from '../../assets/images/crookie-hero-split.png';
 
 const stripes = Array.from({ length: 24 }, (_, i) => ({
 	left: (i * (62.1 / 1440)) * 100,
@@ -18,10 +24,10 @@ const slidesData = [
 		titleTextColor: 'text-pink-200',
 		titleStroke: '[-webkit-text-stroke:15px_#614d3e]',
 		cookieWrapClass: 'top-[52.08px] left-[382.25px] h-[650px] w-[650px]',
-		cookieNormalImg: '/images/cream-hero.png',
-		cookieHoverImg: '/images/cookie-hero.png',
-		cookieAlt: 'Galleta Habibi',
-		cookieHoverAlt: 'Galleta Habibi partida con crema de pistacho',
+		cookieNormalImg: creamHero,
+		cookieHoverImg: cookieHero,
+		cookieAlt: 'Galleta Habibi con crema de pistacho',
+		cookieHoverAlt: 'Galleta Habibi partida mostrando relleno artesanal de pistacho',
 		starWrapClass: 'top-[186.68px] left-200 h-[279.66px] w-[282.03px]',
 		starImg: '/images/star-hero.svg',
 		starTextClass: 'text-[27px] text-brown [-webkit-text-stroke:5px_#F7F2E8]',
@@ -41,10 +47,10 @@ const slidesData = [
 		titleTextColor: 'text-pink',
 		titleStroke: '[-webkit-text-stroke:15px_#f7f2e8]',
 		cookieWrapClass: 'top-[17.08px] left-[347.25px] h-[720px] w-[720px]',
-		cookieNormalImg: '/images/crookie-hero.png',
-		cookieHoverImg: '/images/crookie-hero-split.png',
-		cookieAlt: 'Crookie Chips',
-		cookieHoverAlt: 'Crookie partido con crema de nutella',
+		cookieNormalImg: crookieHero,
+		cookieHoverImg: crookieHeroSplit,
+		cookieAlt: 'Crookie Chips con relleno de nutella',
+		cookieHoverAlt: 'Crookie partido con centro cremoso de nutella',
 		starWrapClass: 'top-[186.68px] left-200 h-[311px] w-[314px]',
 		starImg: '/images/star-hero-2.svg',
 		starTextClass: 'text-[30px] text-white',
@@ -110,26 +116,32 @@ const slidesData = [
 
 							<div class={`hero-cookie-interactive absolute z-2 ${slide.cookieWrapClass}`}>
 								<div class="hero-cookie-left absolute inset-y-0 left-0 w-1/2 overflow-hidden">
-									<img
+									<Image
 										class="absolute top-0 left-0 h-full max-w-none object-cover"
 										style={`width: ${idx === 0 ? '650px' : '720px'};`}
 										src={slide.cookieNormalImg}
 										alt={slide.cookieAlt}
+										loading="eager"
+										decoding="sync"
 									/>
 								</div>
 								<div class="hero-cookie-right absolute inset-y-0 right-0 w-1/2 overflow-hidden">
-									<img
+									<Image
 										class="absolute top-0 right-0 h-full max-w-none object-cover"
 										style={`width: ${idx === 0 ? '650px' : '720px'};`}
 										src={slide.cookieNormalImg}
 										alt={slide.cookieAlt}
+										loading="eager"
+										decoding="sync"
 									/>
 								</div>
-								<img
+								<Image
 									class="hero-cookie-cracked pointer-events-none absolute inset-0 h-full w-full object-cover"
 									style="opacity: 0;"
 									src={slide.cookieHoverImg}
 									alt={slide.cookieHoverAlt}
+									loading="eager"
+									decoding="sync"
 								/>
 							</div>
 

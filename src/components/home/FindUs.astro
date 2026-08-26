@@ -1,5 +1,11 @@
 ---
 import { Icon } from 'astro-icon/components';
+import { Image } from 'astro:assets';
+
+import mapImg from '../../assets/images/map.png';
+import map1Img from '../../assets/images/map1.png';
+import map2Img from '../../assets/images/map2.png';
+import map3Img from '../../assets/images/map3.png';
 
 const stripes = Array.from({ length: 12 }, (_, i) => ({
 	left: (i * (62.1 / 720)) * 100,
@@ -21,7 +27,7 @@ const findusImages = [
 ];
 ---
 
-<section id="findus-section" class="relative w-full bg-beige overflow-hidden select-none">
+<section id="encuentranos" class="relative w-full bg-beige overflow-hidden select-none">
 	<!-- Malla interactiva de fondo: ubicada desde el botón 'Como llegar' hacia abajo -->
 	<div
 		id="findus-grid-container"
@@ -96,34 +102,38 @@ const findusImages = [
 			<div class="relative z-10 flex items-center justify-center p-8">
 				<div class="relative">
 					<!-- Imagen principal del Mapa -->
-					<img
-						src="/images/map.png"
+					<Image
+						src={mapImg}
 						alt="Mapa de ubicación Dimonca en Valle del Lili"
 						class="block h-auto max-h-[500px] w-auto max-w-full object-contain drop-shadow-xl"
+						loading="lazy"
 					/>
 
 					<!-- map1: Persona/chica abrazando galleta (centrado verticalmente, borde izquierdo) -->
-					<img
-						src="/images/map1.png"
+					<Image
+						src={map1Img}
 						alt=""
 						aria-hidden="true"
 						class="pointer-events-none absolute top-1/2 -left-12 -translate-y-1/2 z-20 w-[120px] md:w-[140px] drop-shadow-lg"
+						loading="lazy"
 					/>
 
 					<!-- map2: Galleta en empaque kraft (arriba a la derecha) -->
-					<img
-						src="/images/map3.png"
+					<Image
+						src={map3Img}
 						alt=""
 						aria-hidden="true"
 						class="pointer-events-none absolute -top-6 -right-6 z-20 w-[90px] md:w-[105px] drop-shadow-lg"
+						loading="lazy"
 					/>
 
 					<!-- map3: Logo Dimonca (abajo a la derecha) -->
-					<img
-						src="/images/map2.png"
+					<Image
+						src={map2Img}
 						alt=""
 						aria-hidden="true"
 						class="pointer-events-none absolute bottom-10 scale-150 -right-20 z-20 w-[140px] md:w-[165px] drop-shadow-xl"
+						loading="lazy"
 					/>
 				</div>
 			</div>
@@ -192,7 +202,7 @@ const findusImages = [
 	];
 
 	function setupFindUsGrid() {
-		const section = document.getElementById('findus-section');
+		const section = document.getElementById('encuentranos');
 		const gridContainer = document.getElementById('findus-grid-container');
 		const grid = document.getElementById('findus-grid');
 		const btnLlegar = section?.querySelector('a[href="#como-llegar"]');

@@ -1,39 +1,46 @@
 ---
 import { Icon } from "astro-icon/components";
+import { Image } from "astro:assets";
+
+import sobre1Img from "../../assets/images/sobre-1.png";
+import sobre2Img from "../../assets/images/sobre-2.png";
+import sobre3Img from "../../assets/images/sobre-3.png";
+import sobre4Img from "../../assets/images/sobre-4.png";
+import sobreCookieImg from "../../assets/images/sobre-cookie.png";
 
 const photos = [
   {
     id: "sobre-1",
-    src: "/images/sobre-1.png",
-    alt: "",
+    src: sobre1Img,
+    alt: "Postres artesanales Dimonca",
     justify: "justify-start",
     initialStyle: "transform: translate(-80px, 30px) rotate(-9deg);",
   },
   {
     id: "sobre-2",
-    src: "/images/sobre-2.png",
-    alt: "",
+    src: sobre2Img,
+    alt: "Variedad de galletas y pasteles Dimonca",
     justify: "justify-end",
     initialStyle: "transform: translate(80px, 30px) rotate(9deg);",
   },
   {
     id: "sobre-4",
-    src: "/images/sobre-4.png",
-    alt: "",
+    src: sobre4Img,
+    alt: "Detalle de repostería fresca",
     justify: "justify-start",
     initialStyle: "transform: translate(-50px, 100px) rotate(-9deg);",
   },
   {
     id: "sobre-3",
-    src: "/images/sobre-3.png",
-    alt: "",
+    src: sobre3Img,
+    alt: "Momentos dulces con postres Dimonca",
     justify: "justify-start",
     initialStyle: "transform: translate(50px, 100px) rotate(9deg);",
   },
 ];
 ---
 
-<section id="sobre-nosotros-section" class="relative z-10 w-full overflow-hidden bg-beige shadow-[0_-12px_24px_rgba(58,32,14,0.12)]">
+<section id="sobre-nosotros" class="relative z-10 w-full overflow-hidden bg-beige shadow-[0_-12px_24px_rgba(58,32,14,0.12)]">
   <div
     class="mx-auto flex max-w-[1440px] flex-wrap items-center justify-center gap-16 px-20 py-16"
   >
@@ -44,12 +51,13 @@ const photos = [
       {
         photos.map((p) => (
           <div class={`flex flex-col ${p.justify}`}>
-            <img
+            <Image
               id={p.id}
               class="block h-auto w-full object-contain"
               style={p.initialStyle}
               src={p.src}
               alt={p.alt}
+              loading="lazy"
             />
           </div>
         ))
@@ -63,17 +71,20 @@ const photos = [
 		text-brown [-webkit-text-stroke:8px_#F7F2E8] [paint-order:stroke_fill]
 		[filter:drop-shadow(0px_4px_4px_rgba(58,32,14,0.5))]"
           style="transform: translate(-50px, 100px);"
+          aria-hidden="true"
         >
           Darte siempre un poquito más de lo que amas.
         </p>
       </div>
       <div class="absolute bottom-0 left-1/2 z-10 -translate-x-1/2">
-        <img
+        <Image
           id="sobre-cookie"
           class="block w-[160px] h-auto scale-125"
           style="transform: translate(-100px, -100px);"
-          src="/images/sobre-cookie.png"
+          src={sobreCookieImg}
           alt=""
+          aria-hidden="true"
+          loading="lazy"
         />
       </div>
       <div
@@ -105,13 +116,14 @@ const photos = [
 
     <div class="flex w-[522px] max-w-full flex-col gap-[9px]">
       <div class="relative h-[158px]">
-        <p
-          class="w-[521px] font-sans text-[59px] leading-[1.2] font-bold text-brown"
+        <h2
+          class="w-[521px] font-sans text-[59px] leading-[1.2] font-bold text-brown m-0"
         >
           Bienvenido al universo
-        </p>
+        </h2>
         <span
           class="absolute top-[62px] left-[273px] font-exmouth text-[81.14px] leading-[1.2] text-pink"
+          aria-hidden="true"
           >Dimonca</span
         >
       </div>
@@ -151,7 +163,7 @@ const photos = [
 
 <script>
   function setupSobreAnimation() {
-    const section = document.getElementById("sobre-nosotros-section");
+    const section = document.getElementById("sobre-nosotros");
     const sobre1 = document.getElementById("sobre-1");
     const sobre2 = document.getElementById("sobre-2");
     const sobre3 = document.getElementById("sobre-3");

@@ -1,9 +1,14 @@
 ---
 import { Icon } from 'astro-icon/components';
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+import defaultCookieImg from '../../assets/images/cookie-card.png';
+import defaultCookieCrackedImg from '../../assets/images/cookie-card-animate.png';
 
 interface Props {
-  img?: string;
-  imgCracked?: string;
+  img?: ImageMetadata | string;
+  imgCracked?: ImageMetadata | string;
   scriptTop?: string;
   scriptBottom?: string;
   title?: string;
@@ -15,8 +20,8 @@ interface Props {
 }
 
 const {
-  img = '/images/cookie-card.png',
-  imgCracked = '/images/cookie-card-animate.png',
+  img = defaultCookieImg,
+  imgCracked = defaultCookieCrackedImg,
   scriptTop = 'Pistacho',
   scriptBottom = 'Queen',
   title = 'Pistacho Queen',
@@ -77,32 +82,65 @@ const imgStripes = Array.from({ length: numStripes }, (_, i) => ({
     <div class="cookie-img-wrap absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 h-[257.29px] w-[280.35px]">
       <!-- Mitad izquierda -->
       <div class="cookie-half-left absolute inset-y-0 left-0 w-1/2 overflow-hidden">
-        <img
-          class="absolute top-0 left-0 h-full w-[280.35px] max-w-none object-cover drop-shadow-[0px_8.45px_19.16px_rgba(58,32,14,0.31)]"
-          src={img}
-          alt=""
-        />
+        {typeof img === 'string' ? (
+          <img
+            class="absolute top-0 left-0 h-full w-[280.35px] max-w-none object-cover drop-shadow-[0px_8.45px_19.16px_rgba(58,32,14,0.31)]"
+            src={img}
+            alt={title}
+            loading="lazy"
+          />
+        ) : (
+          <Image
+            class="absolute top-0 left-0 h-full w-[280.35px] max-w-none object-cover drop-shadow-[0px_8.45px_19.16px_rgba(58,32,14,0.31)]"
+            src={img}
+            alt={title}
+            loading="lazy"
+          />
+        )}
       </div>
       <!-- Mitad derecha -->
       <div class="cookie-half-right absolute inset-y-0 right-0 w-1/2 overflow-hidden">
-        <img
-          class="absolute top-0 right-0 h-full w-[280.35px] max-w-none object-cover drop-shadow-[0px_8.45px_19.16px_rgba(58,32,14,0.31)]"
-          src={img}
-          alt=""
-        />
+        {typeof img === 'string' ? (
+          <img
+            class="absolute top-0 right-0 h-full w-[280.35px] max-w-none object-cover drop-shadow-[0px_8.45px_19.16px_rgba(58,32,14,0.31)]"
+            src={img}
+            alt=""
+            aria-hidden="true"
+            loading="lazy"
+          />
+        ) : (
+          <Image
+            class="absolute top-0 right-0 h-full w-[280.35px] max-w-none object-cover drop-shadow-[0px_8.45px_19.16px_rgba(58,32,14,0.31)]"
+            src={img}
+            alt=""
+            aria-hidden="true"
+            loading="lazy"
+          />
+        )}
       </div>
       <!-- Imagen partida (oculta por defecto) -->
-      <img
-        class="cookie-cracked pointer-events-none absolute inset-0 h-full w-full object-cover drop-shadow-[0px_8.45px_19.16px_rgba(58,32,14,0.31)]"
-        style="opacity: 0;"
-        src={imgCracked}
-        alt=""
-      />
+      {typeof imgCracked === 'string' ? (
+        <img
+          class="cookie-cracked pointer-events-none absolute inset-0 h-full w-full object-cover drop-shadow-[0px_8.45px_19.16px_rgba(58,32,14,0.31)]"
+          style="opacity: 0;"
+          src={imgCracked}
+          alt={`${title} partida`}
+          loading="lazy"
+        />
+      ) : (
+        <Image
+          class="cookie-cracked pointer-events-none absolute inset-0 h-full w-full object-cover drop-shadow-[0px_8.45px_19.16px_rgba(58,32,14,0.31)]"
+          style="opacity: 0;"
+          src={imgCracked}
+          alt={`${title} partida`}
+          loading="lazy"
+        />
+      )}
     </div>
   </div>
 
   <div class="cookie-info flex w-full shrink-0 flex-1 flex-col items-start gap-2 px-3 pt-[27px] pb-[14px]">
-    <p class="cookie-title m-0 w-full font-sans text-[24px] leading-[1.2] font-bold text-brown">{title}</p>
+    <h3 class="cookie-title m-0 w-full font-sans text-[24px] leading-[1.2] font-bold text-brown">{title}</h3>
     <p class="cookie-price m-0 w-full font-sans text-[24px] leading-[1.2] font-bold" style={`color: ${color};`}>
       {price}
     </p>
@@ -111,7 +149,8 @@ const imgStripes = Array.from({ length: numStripes }, (_, i) => ({
       <a
         class="cookie-btn flex h-[40.13px] flex-1 items-center justify-center gap-2 rounded-[57px] px-4 py-2 font-sans text-[15px] leading-[1.2] font-bold text-beige no-underline"
         style={`background-color: ${color};`}
-        href="#"
+        href="#pedido"
+        aria-label={`Ver más detalles de ${title}`}
       >
         Ver más
         <span class="cookie-btn-icon flex h-[24px] w-[24px] shrink-0 items-center justify-center rounded-[18.38px] bg-beige p-[5.4px]">

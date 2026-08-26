@@ -1,5 +1,8 @@
 ---
 import { Icon } from "astro-icon/components";
+import { Image } from "astro:assets";
+
+import combosCajaImg from "../../assets/images/combos-caja.png";
 
 const stripes = Array.from({ length: 24 }, (_, i) => ({
   left: i * (62.1 / 1440) * 100,
@@ -8,7 +11,7 @@ const stripes = Array.from({ length: 24 }, (_, i) => ({
 }));
 ---
 
-<section class="relative z-10 h-[690px] w-full overflow-hidden bg-[#3A200E]">
+<section id="combos" class="relative z-10 h-[690px] w-full overflow-hidden bg-[#3A200E]">
   <!-- Rayas verticales en el fondo -->
   <div
     class="absolute inset-0 overflow-hidden pointer-events-none"
@@ -40,10 +43,11 @@ const stripes = Array.from({ length: 24 }, (_, i) => ({
         aria-hidden="true"
       ></div>
 
-      <img
-        src="/images/combos-caja.png"
-        alt="Combos de galletas en caja"
+      <Image
+        src={combosCajaImg}
+        alt="Combos de galletas en caja personalizada Dimonca"
         class="relative z-10 h-auto max-h-[580px] w-auto max-w-full object-contain"
+        loading="lazy"
       />
     </div>
 

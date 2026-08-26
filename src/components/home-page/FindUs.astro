@@ -5,10 +5,33 @@ const stripes = Array.from({ length: 12 }, (_, i) => ({
 	left: (i * (62.1 / 720)) * 100,
 	width: (31 / 720) * 100,
 }));
+
+const findusImages = [
+	'/images/findus/brookie.png',
+	'/images/findus/brownie.png',
+	'/images/findus/cooki.png',
+	'/images/findus/cookie.png',
+	'/images/findus/hovered.png',
+	'/images/findus/milo.png',
+	'/images/findus/oreo.png',
+	'/images/findus/r-bronwnie.png',
+	'/images/findus/r-cookie.png',
+	'/images/findus/red.png',
+	'/images/findus/velvet.png',
+];
 ---
 
-<section class="relative w-full bg-beige overflow-hidden">
-	<div class="mx-auto grid min-h-[600px] max-w-[1440px] grid-cols-1 md:grid-cols-2 items-center">
+<section id="findus-section" class="relative w-full bg-beige overflow-hidden select-none">
+	<!-- Malla interactiva de fondo con celdas cuadradas en grid -->
+	<div
+		id="findus-grid"
+		class="pointer-events-none absolute inset-0 z-0 grid w-full h-full"
+		style="grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); grid-auto-rows: 120px;"
+		aria-hidden="true"
+	>
+	</div>
+
+	<div class="relative z-10 mx-auto grid min-h-[600px] max-w-[1440px] grid-cols-1 md:grid-cols-2 items-center">
 		<!-- Columna Izquierda (50%) -->
 		<div class="flex flex-col items-start justify-center px-10 md:pl-24 md:pr-12 py-16">
 			<!-- Título -->
@@ -104,7 +127,7 @@ const stripes = Array.from({ length: 12 }, (_, i) => ({
 	</div>
 
 	<!-- Mini Call To Action inferior -->
-	<div class="mx-auto max-w-[1440px] px-10 md:px-24 py-16 md:py-36">
+	<div class="relative z-10 mx-auto max-w-[1440px] px-10 md:px-24 py-16 md:py-36">
 		<div class="grid grid-cols-1 md:grid-cols-2 items-center gap-10 md:gap-16">
 			<!-- Lado Izquierdo CTA: Título con caligrafía -->
 			<div class="relative">
@@ -130,7 +153,7 @@ const stripes = Array.from({ length: 12 }, (_, i) => ({
 					No esperes a que el antojo pase. Explora nuestro menú, elige tus favoritos y déjanos endulzar tu día con cada bocado.
 				</p>
 				<a
-					class="group flex h-[48px] items-center justify-center gap-3 whitespace-nowrap rounded-[57px] bg-pink px-6 py-2 font-sans text-[17px] font-bold text-beige no-underline shadow-[0_4px_14px_rgba(244,93,140,0.4)] transition-all duration-300 hover:shadow-[0_6px_20px_rgba(244,93,140,0.6)] hover:brightness-95"
+					class="group flex h-[48px] items-center justify-center gap-3 whitespace-nowrap rounded-[57px] bg-pink px-6 py-2 font-sans text-[17px] font-bold text-beige no-underline shadow-[0_4px_14px_rgba(244,93,140,0.4)] transition-all duration-300 hover:shadow-[0_6px_20px_rgba(244,93_140,0.6)] hover:brightness-95"
 					href="#pedido"
 				>
 					Haz tu pedido
@@ -144,3 +167,102 @@ const stripes = Array.from({ length: 12 }, (_, i) => ({
 		</div>
 	</div>
 </section>
+
+<script>
+	import { animate } from 'motion';
+
+	const images = [
+		'/images/findus/brookie.png',
+		'/images/findus/brownie.png',
+		'/images/findus/cooki.png',
+		'/images/findus/cookie.png',
+		'/images/findus/hovered.png',
+		'/images/findus/milo.png',
+		'/images/findus/oreo.png',
+		'/images/findus/r-bronwnie.png',
+		'/images/findus/r-cookie.png',
+		'/images/findus/red.png',
+		'/images/findus/velvet.png',
+	];
+
+	function setupFindUsGrid() {
+		const section = document.getElementById('findus-section');
+		const grid = document.getElementById('findus-grid');
+		if (!section || !grid) return;
+
+		const cellSize = 130;
+		let lastCellIndex = -1;
+		let imgIndex = 0;
+
+		function fillGrid() {
+			grid.innerHTML = '';
+			const cols = Math.ceil(section.offsetWidth / cellSize);
+			const rows = Math.ceil(section.offsetHeight / cellSize);
+			const totalCells = cols * rows;
+
+			grid.style.gridTemplateColumns = `repeat(${cols}, ${cellSize}px)`;
+			grid.style.gridTemplateRows = `repeat(${rows}, ${cellSize}px)`;
+
+			for (let i = 0; i < totalCells; i++) {
+				const cell = document.createElement('div');
+				cell.className = 'relative flex items-center justify-center w-full h-full overflow-visible';
+				cell.dataset.index = i.toString();
+
+				const img = document.createElement('img');
+				img.className = 'pointer-events-none absolute w-[100px] h-[100px] object-contain opacity-0 select-none';
+				img.style.transform = 'scale(0.3) rotate(-15deg)';
+				cell.appendChild(img);
+
+				grid.appendChild(cell);
+			}
+		}
+
+		fillGrid();
+
+		window.addEventListener('resize', fillGrid);
+
+		section.addEventListener('mousemove', (e) => {
+			const rect = section.getBoundingClientRect();
+			const x = e.clientX - rect.left;
+			const y = e.clientY - rect.top;
+
+			const cols = Math.ceil(section.offsetWidth / cellSize);
+			const rows = Math.ceil(section.offsetHeight / cellSize);
+
+			const col = Math.floor(x / cellSize);
+			const row = Math.floor(y / cellSize);
+
+			if (col < 0 || col >= cols || row < 0 || row >= rows) return;
+
+			const cellIndex = row * cols + col;
+			if (cellIndex === lastCellIndex) return;
+			lastCellIndex = cellIndex;
+
+			const cell = grid.children[cellIndex] as HTMLElement | undefined;
+			if (!cell) return;
+
+			const img = cell.querySelector('img');
+			if (!img) return;
+
+			img.src = images[imgIndex % images.length];
+			imgIndex++;
+
+			const randomRotation = (Math.random() - 0.5) * 35;
+
+			animate(
+				img,
+				{
+					opacity: [0, 1, 1, 0],
+					scale: [0.4, 1.15, 1, 0.3],
+					rotate: [-randomRotation, 0, randomRotation * 0.5],
+				},
+				{
+					duration: 1.2,
+					ease: 'easeOut',
+				}
+			);
+		});
+	}
+
+	setupFindUsGrid();
+</script>

@@ -232,7 +232,12 @@ const findusImages = [
 				cell.dataset.index = i.toString();
 
 				const img = document.createElement('img');
-				img.className = 'pointer-events-none absolute w-[125px] h-[125px] object-contain opacity-0 select-none drop-shadow-md';
+				img.className = 'pointer-events-none absolute object-contain select-none drop-shadow-xl';
+				img.style.width = '130px';
+				img.style.height = '130px';
+				img.style.maxWidth = 'none';
+				img.style.maxHeight = 'none';
+				img.style.opacity = '0';
 				img.style.transform = 'scale(0.3)';
 				cell.appendChild(img);
 

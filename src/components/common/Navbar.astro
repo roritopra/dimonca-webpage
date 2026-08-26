@@ -55,9 +55,8 @@ const categories = [
 				<img class="block h-[11.5px] w-[11.5px]" src="/images/map.svg" alt="" />
 			</span>
 		</a>
-	</div>
 	<nav
-		class="invisible absolute top-full left-0 z-50 flex w-full items-start justify-center gap-[93px] bg-beige py-[18px] opacity-0 pointer-events-none drop-shadow-[0px_11px_19.05px_rgba(58,32,14,0.14)]"
+		class="pointer-events-none invisible absolute top-[calc(100%+8px)] inset-x-0 z-50 flex items-start justify-center gap-[93px] bg-beige py-[18px] opacity-0 drop-shadow-[0px_11px_19.05px_rgba(58,32,14,0.14)]"
 		id="dropdown"
 		aria-label="Categorías del menú"
 	>
@@ -103,6 +102,7 @@ const categories = [
 			})
 		}
 	</nav>
+	</div>
 </header>
 
 <script>
@@ -165,6 +165,11 @@ const categories = [
 			// Redondeo de esquinas: de 9999px a 0px
 			const borderRadius = (1 - progress) * 40;
 			navbarContainer.style.borderRadius = `${borderRadius}px`;
+
+			// Sincronizar el redondeo del dropdown con el navbar
+			if (dropdown) {
+				dropdown.style.borderRadius = `${Math.min(borderRadius, 32)}px`;
+			}
 
 			// Padding lateral: de 40px (2.5rem) a 80px (5rem)
 			const paddingX = 40 + progress * 40;

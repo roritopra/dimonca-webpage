@@ -6,7 +6,7 @@
 
 ## Architecture
 
-- `src/pages/index.astro` composes the homepage: `<Navbar />`, then sections imported from `src/components/home-page/` (`Hero.astro`, `SobreNosotros.astro`). Add new homepage sections there, not in `src/components/` root.
+- `src/pages/index.astro` composes the homepage: `<Navbar />` (from `src/components/common/`), then sections imported from `src/components/home/` (`Hero.astro`, `SobreNosotros.astro`, etc.). Add new homepage sections in `src/components/home/` and shared components in `src/components/common/`.
 - Styling is Tailwind v4 via the `@tailwindcss/vite` plugin in `astro.config.mjs` — there is NO `tailwind.config` file. All design tokens live in the `@theme` block of `src/styles/global.css` (beige/brown/pink/blue palette, `--font-sans` Poppins, `--font-script` Sacramento, `--font-exmouth`).
 - Fonts: Poppins + Sacramento load from Google Fonts in `src/layouts/Layout.astro`; Exmouth is self-hosted at `public/fonts/exmouth_.woff` with `@font-face` in `global.css`. The Figma design uses Exmouth for script, but the hero uses `font-script` (Sacramento) — match what's already in the component, not the Figma font name.
 - Icons use `astro-icon` with the lucide set: `<Icon name="lucide:...">`.

@@ -12,19 +12,20 @@ const categories = [
 
 <header
 	id="navbar"
-	class="group sticky top-0 z-50 w-full font-sans drop-shadow-[0px_11px_19.05px_rgba(58,32,14,0.14)]"
+	class="group fixed top-0 left-0 z-50 w-full font-sans transition-all duration-400 ease-out pointer-events-none"
 >
 	<div
-		class="flex flex-wrap items-center justify-center gap-x-[60px] gap-y-6 bg-beige px-20 py-4 max-[900px]:gap-x-8 max-[900px]:px-6"
+		id="navbar-container"
+		class="pointer-events-auto mx-auto flex flex-wrap items-center justify-center gap-x-[60px] gap-y-6 bg-beige px-10 py-3.5 transition-all duration-400 ease-out max-[900px]:gap-x-8 max-[900px]:px-6 mt-4 max-w-[1240px] rounded-full drop-shadow-[0px_10px_25px_rgba(58,32,14,0.18)]"
 	>
 		<a
-			class="flex flex-1 min-w-0 items-center justify-center whitespace-nowrap p-2.5 text-[15px] leading-[1.2] text-brown no-underline hover:opacity-75 max-[900px]:flex-none"
+			class="flex flex-1 min-w-0 items-center justify-center whitespace-nowrap p-2 text-[15px] leading-[1.2] text-brown no-underline hover:opacity-75 max-[900px]:flex-none"
 			href="#encuentranos"
 			>Encuéntranos</a
 		>
 		<button
 			id="menu-btn"
-			class="group/btn relative flex h-[30px] flex-1 min-w-0 cursor-pointer items-center justify-center gap-2 whitespace-nowrap border-0 bg-transparent p-2.5 text-[15px] leading-[1.2] text-brown transition-colors duration-200 group-data-[open]:text-pink group-data-[open]:font-bold hover:opacity-75 max-[900px]:flex-none"
+			class="group/btn relative flex h-[30px] flex-1 min-w-0 cursor-pointer items-center justify-center gap-2 whitespace-nowrap border-0 bg-transparent p-2 text-[15px] leading-[1.2] text-brown transition-colors duration-200 group-data-[open]:text-pink group-data-[open]:font-bold hover:opacity-75 max-[900px]:flex-none"
 			type="button"
 			aria-haspopup="true"
 			aria-expanded="false"
@@ -38,25 +39,25 @@ const categories = [
 			/>
 		</button>
 		<a class="shrink-0" href="/" aria-label="Dimonca, inicio">
-			<img class="block h-[46px] w-[159px]" src="/images/logo.png" alt="Dimonca" />
+			<img class="block h-[42px] w-[145px] transition-all duration-300" src="/images/logo.png" alt="Dimonca" />
 		</a>
 		<a
-			class="flex flex-1 min-w-0 items-center justify-center whitespace-nowrap p-2.5 text-[15px] leading-[1.2] text-brown no-underline hover:opacity-75 max-[900px]:flex-none"
+			class="flex flex-1 min-w-0 items-center justify-center whitespace-nowrap p-2 text-[15px] leading-[1.2] text-brown no-underline hover:opacity-75 max-[900px]:flex-none"
 			href="#sobre-nosotros"
 			>Sobre Nosotros</a
 		>
 		<a
-			class="flex h-[46px] flex-1 min-w-0 items-center justify-center gap-2 whitespace-nowrap rounded-[57px] bg-pink px-4 py-2 text-[15px] font-bold leading-[1.2] text-beige no-underline hover:brightness-95 max-[900px]:flex-none"
+			class="flex h-[42px] flex-1 min-w-0 items-center justify-center gap-2 whitespace-nowrap rounded-[57px] bg-pink px-4 py-2 text-[15px] font-bold leading-[1.2] text-beige no-underline hover:brightness-95 max-[900px]:flex-none"
 			href="#pedido"
 		>
 			Haz tu pedido
-			<span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-[18.38px] bg-beige p-[5.4px]">
-				<img class="block h-[12.98px] w-[12.98px]" src="/images/map.svg" alt="" />
+			<span class="flex h-6.5 w-6.5 shrink-0 items-center justify-center rounded-[18.38px] bg-beige p-[5px]">
+				<img class="block h-[11.5px] w-[11.5px]" src="/images/map.svg" alt="" />
 			</span>
 		</a>
 	</div>
 	<nav
-		class="invisible absolute top-full left-0 z-50 flex w-full items-start justify-center gap-[93px] bg-beige py-[18px] opacity-0 pointer-events-none"
+		class="invisible absolute top-full left-0 z-50 flex w-full items-start justify-center gap-[93px] bg-beige py-[18px] opacity-0 pointer-events-none drop-shadow-[0px_11px_19.05px_rgba(58,32,14,0.14)]"
 		id="dropdown"
 		aria-label="Categorías del menú"
 	>
@@ -135,6 +136,51 @@ const categories = [
 				{ duration: 0.2, ease: 'easeIn' }
 			);
 		};
+
+		const navbarContainer = document.getElementById('navbar-container');
+
+		const handleScroll = () => {
+			const scrollY = window.scrollY;
+			const maxScroll = 420;
+			const progress = Math.min(Math.max(scrollY / maxScroll, 0), 1);
+
+			if (!navbarContainer) return;
+
+			// Margen superior: de 16px (1rem) a 0px
+			const marginTop = (1 - progress) * 16;
+			navbarContainer.style.marginTop = `${marginTop}px`;
+
+			// Ancho: de 1240px a 100%
+			if (progress === 0) {
+				navbarContainer.style.maxWidth = '1240px';
+				navbarContainer.style.width = 'calc(100% - 32px)';
+			} else if (progress >= 1) {
+				navbarContainer.style.maxWidth = '100%';
+				navbarContainer.style.width = '100%';
+			} else {
+				navbarContainer.style.maxWidth = `calc(1240px + (100% - 1240px) * ${progress})`;
+				navbarContainer.style.width = `calc(100% - ${(1 - progress) * 32}px)`;
+			}
+
+			// Redondeo de esquinas: de 9999px a 0px
+			const borderRadius = (1 - progress) * 40;
+			navbarContainer.style.borderRadius = `${borderRadius}px`;
+
+			// Padding lateral: de 40px (2.5rem) a 80px (5rem)
+			const paddingX = 40 + progress * 40;
+			navbarContainer.style.paddingLeft = `${paddingX}px`;
+			navbarContainer.style.paddingRight = `${paddingX}px`;
+
+			// Sombra
+			if (progress >= 1) {
+				navbarContainer.style.filter = 'drop-shadow(0px 11px 19.05px rgba(58,32,14,0.14))';
+			} else {
+				navbarContainer.style.filter = 'drop-shadow(0px 10px 25px rgba(58,32,14,0.18))';
+			}
+		};
+
+		window.addEventListener('scroll', handleScroll, { passive: true });
+		handleScroll();
 
 		menuBtn.addEventListener('click', () => {
 			isOpen ? close() : open();

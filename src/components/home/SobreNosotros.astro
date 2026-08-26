@@ -180,20 +180,10 @@ const photos = [
             {
               x: [-50, 0],
               rotate: [-9, 0],
-            },
-            {
-              duration: 1.4,
-              ease: [0.7, -0.4, 0.25, 1.35],
-            },
-          );
-
-          animate(
-            sobre1,
-            {
               y: [-100, 0],
             },
             {
-              duration: 1.4,
+              duration: 1.2,
               ease: [0.35, -0.3, 0.1, 1.45],
             },
           );
@@ -203,20 +193,10 @@ const photos = [
             {
               x: [50, 0],
               rotate: [9, 0],
-            },
-            {
-              duration: 1.4,
-              ease: [0.7, -0.4, 0.25, 1.35],
-            },
-          );
-
-          animate(
-            sobre2,
-            {
               y: [-100, 0],
             },
             {
-              duration: 1.4,
+              duration: 1.2,
               ease: [0.35, -0.3, 0.1, 1.45],
             },
           );
@@ -226,20 +206,10 @@ const photos = [
             {
               x: [-50, 0],
               rotate: [9, 0],
-            },
-            {
-              duration: 1.4,
-              ease: [0.7, -0.4, 0.25, 1.35],
-            },
-          );
-
-          animate(
-            sobre4,
-            {
               y: [100, 0],
             },
             {
-              duration: 1.4,
+              duration: 1.2,
               ease: [0.35, -0.3, 0.1, 1.45],
             },
           );
@@ -249,20 +219,10 @@ const photos = [
             {
               x: [50, 0],
               rotate: [-9, 0],
-            },
-            {
-              duration: 1.4,
-              ease: [0.7, -0.4, 0.25, 1.35],
-            },
-          );
-
-          animate(
-            sobre3,
-            {
               y: [100, 0],
             },
             {
-              duration: 1.4,
+              duration: 1.2,
               ease: [0.35, -0.3, 0.1, 1.45],
             },
           );
@@ -274,7 +234,7 @@ const photos = [
               y: [100, 0],
             },
             {
-              duration: 1.4,
+              duration: 1.2,
               ease: [0.7, -0.4, 0.25, 1.35],
             },
           );
@@ -286,7 +246,7 @@ const photos = [
               y: [200, 0],
             },
             {
-              duration: 1.4,
+              duration: 1.2,
               ease: [0.7, -0.4, 0.25, 1.35],
             },
           );
@@ -298,14 +258,53 @@ const photos = [
               y: [-200, 0],
             },
             {
-              duration: 1.4,
+              duration: 1.2,
               ease: [0.7, -0.4, 0.25, 1.35],
             },
           );
+
+          // Función de salida: se ejecuta cuando la sección sale del viewport al scrollear
+          return function () {
+            animate(
+              sobre1,
+              { x: -50, y: -100, rotate: -9 },
+              { duration: 0.8, ease: "easeInOut" }
+            );
+            animate(
+              sobre2,
+              { x: 50, y: -100, rotate: 9 },
+              { duration: 0.8, ease: "easeInOut" }
+            );
+            animate(
+              sobre4,
+              { x: -50, y: 100, rotate: 9 },
+              { duration: 0.8, ease: "easeInOut" }
+            );
+            animate(
+              sobre3,
+              { x: 50, y: 100, rotate: -9 },
+              { duration: 0.8, ease: "easeInOut" }
+            );
+            animate(
+              sobreHeart,
+              { x: 50, y: 100 },
+              { duration: 0.8, ease: "easeInOut" }
+            );
+            animate(
+              sobreTexto,
+              { x: -50, y: 100 },
+              { duration: 0.8, ease: "easeInOut" }
+            );
+            animate(
+              sobreCookie,
+              { x: -100, y: -100 },
+              { duration: 0.8, ease: "easeInOut" }
+            );
+          };
         },
         {
-          amount: 0.3,
-          margin: "0px 0px -100px 0px",
+          amount: 0.2,
+          margin: "0px 0px -50px 0px",
         },
       );
     }

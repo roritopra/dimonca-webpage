@@ -386,7 +386,7 @@ const stripes = Array.from({ length: 24 }, (_, i) => ({
 	let cookieTimeout: ReturnType<typeof setTimeout> | null = null;
 
 	const startCookie = () => {
-		if (cookieTimeout || !cookie || !leftHalf || !rightHalf || !cracked) return;
+		if (window.scrollY > 5 || cookieTimeout || !cookie || !leftHalf || !rightHalf || !cracked) return;
 		const slide = cookie.offsetWidth / 522.26 * 2;
 		animate(cookie, { rotate: -15 }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
 		if (star) animate(star, { rotate: 18, scale: 1.08 }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
@@ -394,6 +394,10 @@ const stripes = Array.from({ length: 24 }, (_, i) => ({
 		animate(rightHalf, { x: slide }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
 
 		cookieTimeout = setTimeout(() => {
+			if (window.scrollY > 5) {
+				resetCookie();
+				return;
+			}
 			animate(cracked, { opacity: 1 }, { duration: 0.1, ease: 'easeOut' });
 			animate(leftHalf, { opacity: 0 }, { duration: 0.1, ease: 'easeOut' });
 			animate(rightHalf, { opacity: 0 }, { duration: 0.1, ease: 'easeOut' });
@@ -407,11 +411,13 @@ const stripes = Array.from({ length: 24 }, (_, i) => ({
 			clearTimeout(cookieTimeout);
 			cookieTimeout = null;
 		}
-		animate(cookie, { rotate: 0, scale: 1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
-		if (star) animate(star, { rotate: 0, scale: 1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
+		if (window.scrollY <= 5) {
+			animate(cookie, { rotate: 0, scale: 1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
+			if (star) animate(star, { rotate: 0, scale: 1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
+		}
 		animate(leftHalf, { x: 0, opacity: 1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
 		animate(rightHalf, { x: 0, opacity: 1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
-		animate(cracked, { opacity: 0 }, { duration: 0.3, ease: 'easeInOut' });
+		animate(cracked, { opacity: 0 }, { duration: 0.2, ease: 'easeInOut' });
 	};
 
 	cookie?.addEventListener('mouseenter', startCookie);
@@ -428,7 +434,7 @@ const stripes = Array.from({ length: 24 }, (_, i) => ({
 	let crookieTimeout: ReturnType<typeof setTimeout> | null = null;
 
 	const startCrookie = () => {
-		if (crookieTimeout || !crookie || !crookieLeft || !crookieRight || !crookieSplit) return;
+		if (window.scrollY > 5 || crookieTimeout || !crookie || !crookieLeft || !crookieRight || !crookieSplit) return;
 		const slide = crookie.offsetWidth / 720 * 3;
 		animate(crookie, { rotate: -3.64 }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
 		if (star2) animate(star2, { rotate: 18, scale: 1.08 }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
@@ -436,6 +442,10 @@ const stripes = Array.from({ length: 24 }, (_, i) => ({
 		animate(crookieRight, { x: slide }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
 
 		crookieTimeout = setTimeout(() => {
+			if (window.scrollY > 5) {
+				resetCrookie();
+				return;
+			}
 			animate(crookieSplit, { opacity: 1 }, { duration: 0.1, ease: 'easeOut' });
 			animate(crookieLeft, { opacity: 0 }, { duration: 0.1, ease: 'easeOut' });
 			animate(crookieRight, { opacity: 0 }, { duration: 0.1, ease: 'easeOut' });
@@ -449,11 +459,13 @@ const stripes = Array.from({ length: 24 }, (_, i) => ({
 			clearTimeout(crookieTimeout);
 			crookieTimeout = null;
 		}
-		animate(crookie, { rotate: 0, scale: 1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
-		if (star2) animate(star2, { rotate: 0, scale: 1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
+		if (window.scrollY <= 5) {
+			animate(crookie, { rotate: 0, scale: 1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
+			if (star2) animate(star2, { rotate: 0, scale: 1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
+		}
 		animate(crookieLeft, { x: 0, opacity: 1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
 		animate(crookieRight, { x: 0, opacity: 1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
-		animate(crookieSplit, { opacity: 0 }, { duration: 0.3, ease: 'easeInOut' });
+		animate(crookieSplit, { opacity: 0 }, { duration: 0.2, ease: 'easeInOut' });
 	};
 
 	crookie?.addEventListener('mouseenter', startCrookie);
@@ -468,6 +480,24 @@ const stripes = Array.from({ length: 24 }, (_, i) => ({
 			const scrollY = window.scrollY;
 			const maxScroll = 450;
 			const progress = Math.min(Math.max(scrollY / maxScroll, 0), 1);
+
+			// Si hay scroll, cancelar y resetear cualquier animación de hover de inmediato
+			if (scrollY > 5) {
+				if (cookieTimeout) {
+					clearTimeout(cookieTimeout);
+					cookieTimeout = null;
+				}
+				if (crookieTimeout) {
+					clearTimeout(crookieTimeout);
+					crookieTimeout = null;
+				}
+				if (cracked) cracked.style.opacity = '0';
+				if (leftHalf) { leftHalf.style.opacity = '1'; leftHalf.style.transform = 'none'; }
+				if (rightHalf) { rightHalf.style.opacity = '1'; rightHalf.style.transform = 'none'; }
+				if (crookieSplit) crookieSplit.style.opacity = '0';
+				if (crookieLeft) { crookieLeft.style.opacity = '1'; crookieLeft.style.transform = 'none'; }
+				if (crookieRight) { crookieRight.style.opacity = '1'; crookieRight.style.transform = 'none'; }
+			}
 
 			const currentSlideEl = slides[current];
 			if (!currentSlideEl) return;

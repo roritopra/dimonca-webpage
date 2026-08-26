@@ -22,13 +22,17 @@ const findusImages = [
 ---
 
 <section id="findus-section" class="relative w-full bg-beige overflow-hidden select-none">
-	<!-- Malla interactiva de fondo con celdas cuadradas en grid -->
+	<!-- Malla interactiva de fondo: ubicada desde el botón 'Como llegar' hacia abajo -->
 	<div
-		id="findus-grid"
-		class="pointer-events-none absolute inset-0 z-0 grid w-full h-full"
-		style="grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); grid-auto-rows: 120px;"
+		id="findus-grid-container"
+		class="pointer-events-none absolute inset-x-0 bottom-0 top-[480px] z-0 overflow-hidden"
 		aria-hidden="true"
 	>
+		<div
+			id="findus-grid"
+			class="relative grid w-full h-full"
+		>
+		</div>
 	</div>
 
 	<div class="relative z-10 mx-auto grid min-h-[600px] max-w-[1440px] grid-cols-1 md:grid-cols-2 items-center">
@@ -131,7 +135,9 @@ const findusImages = [
 		<div class="grid grid-cols-1 md:grid-cols-2 items-center gap-10 md:gap-16">
 			<!-- Lado Izquierdo CTA: Título con caligrafía -->
 			<div class="relative">
-				<h3 class="m-0 font-sans text-[42px] md:text-[48px] font-extrabold leading-[1.15] text-brown">
+				<h3
+					style="paint-order: stroke;"
+					class="m-0 font-sans text-[42px] md:text-[48px] font-extrabold leading-[1.15] text-brown [-webkit-text-stroke:10px_#F7F2E8]">
 					El mejor momento para<br />
 					un postre <span class="relative inline-block">es
 						<span
@@ -187,19 +193,34 @@ const findusImages = [
 
 	function setupFindUsGrid() {
 		const section = document.getElementById('findus-section');
+		const gridContainer = document.getElementById('findus-grid-container');
 		const grid = document.getElementById('findus-grid');
-		if (!section || !grid) return;
+		const btnLlegar = section?.querySelector('a[href="#como-llegar"]');
+		if (!section || !grid || !gridContainer) return;
 
 		const cellSize = 85;
 		let lastCellIndex = -1;
 		let lastActiveImg: HTMLImageElement | null = null;
 		let imgIndex = 0;
 
+		function updateContainerBounds() {
+			if (!btnLlegar || !section || !gridContainer) return;
+			const sectionRect = section.getBoundingClientRect();
+			const btnRect = btnLlegar.getBoundingClientRect();
+			const topOffset = btnRect.bottom - sectionRect.top + 10;
+			gridContainer.style.top = `${Math.max(0, topOffset)}px`;
+		}
+
 		function fillGrid() {
-			if (!grid || !section) return;
+			if (!grid || !gridContainer) return;
+			updateContainerBounds();
+
 			grid.innerHTML = '';
-			const cols = Math.ceil(section.offsetWidth / cellSize);
-			const rows = Math.ceil(section.offsetHeight / cellSize);
+			const width = gridContainer.offsetWidth;
+			const height = gridContainer.offsetHeight;
+
+			const cols = Math.ceil(width / cellSize);
+			const rows = Math.ceil(height / cellSize);
 			const totalCells = cols * rows;
 
 			grid.style.gridTemplateColumns = `repeat(${cols}, ${cellSize}px)`;
@@ -239,12 +260,23 @@ const findusImages = [
 		}
 
 		section.addEventListener('mousemove', (e) => {
-			const rect = section.getBoundingClientRect();
-			const x = e.clientX - rect.left;
-			const y = e.clientY - rect.top;
+			if (!gridContainer) return;
+			const containerRect = gridContainer.getBoundingClientRect();
+			const x = e.clientX - containerRect.left;
+			const y = e.clientY - containerRect.top;
 
-			const cols = Math.ceil(section.offsetWidth / cellSize);
-			const rows = Math.ceil(section.offsetHeight / cellSize);
+			// Si el cursor está arriba de la zona del grid (por encima del botón), no activar
+			if (y < 0) {
+				if (lastActiveImg) {
+					hideImage(lastActiveImg);
+					lastActiveImg = null;
+					lastCellIndex = -1;
+				}
+				return;
+			}
+
+			const cols = Math.ceil(gridContainer.offsetWidth / cellSize);
+			const rows = Math.ceil(gridContainer.offsetHeight / cellSize);
 
 			const col = Math.floor(x / cellSize);
 			const row = Math.floor(y / cellSize);
@@ -285,7 +317,7 @@ const findusImages = [
 
 			const randomRotation = (Math.random() - 0.5) * 25;
 
-			// Entrada rápida y se queda fija en escala 1 y opacidad 1 mientras el cursor esté aquí
+			// Entrada rápida y fija mientras el cursor esté aquí
 			animate(
 				img,
 				{

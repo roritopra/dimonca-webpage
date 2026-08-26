@@ -80,8 +80,8 @@ const stripes = Array.from({ length: 24 }, (_, i) => ({
 					<div id="hero-star" class="absolute top-[186.68px] left-200 z-3 h-[279.66px] w-[282.03px]">
 						<img class="block h-full w-full" src="/images/star-hero.svg" alt="" />
 						<span
-							class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-sans text-[27px] leading-[1.2] font-bold whitespace-nowrap text-center text-brown"
-							style="margin-left: 14.4px; margin-top: -12.6px"
+							class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-sans text-[27px] leading-[1.2] font-bold whitespace-nowrap text-center text-brown [-webkit-text-stroke:5px_#F7F2E8]"
+							style="margin-left: 14.4px; margin-top: -12.6px; paint-order: stroke;"
 							>Nueva</span
 						>
 					</div>
@@ -389,6 +389,7 @@ const stripes = Array.from({ length: 24 }, (_, i) => ({
 		if (cookieTimeout || !cookie || !leftHalf || !rightHalf || !cracked) return;
 		const slide = cookie.offsetWidth / 522.26 * 2;
 		animate(cookie, { rotate: -15 }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
+		if (star) animate(star, { rotate: 18, scale: 1.08 }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
 		animate(leftHalf, { x: -slide }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
 		animate(rightHalf, { x: slide }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
 
@@ -407,6 +408,7 @@ const stripes = Array.from({ length: 24 }, (_, i) => ({
 			cookieTimeout = null;
 		}
 		animate(cookie, { rotate: 0, scale: 1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
+		if (star) animate(star, { rotate: 0, scale: 1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
 		animate(leftHalf, { x: 0, opacity: 1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
 		animate(rightHalf, { x: 0, opacity: 1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
 		animate(cracked, { opacity: 0 }, { duration: 0.3, ease: 'easeInOut' });
@@ -429,6 +431,7 @@ const stripes = Array.from({ length: 24 }, (_, i) => ({
 		if (crookieTimeout || !crookie || !crookieLeft || !crookieRight || !crookieSplit) return;
 		const slide = crookie.offsetWidth / 720 * 3;
 		animate(crookie, { rotate: -3.64 }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
+		if (star2) animate(star2, { rotate: 18, scale: 1.08 }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
 		animate(crookieLeft, { x: -slide }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
 		animate(crookieRight, { x: slide }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
 
@@ -447,6 +450,7 @@ const stripes = Array.from({ length: 24 }, (_, i) => ({
 			crookieTimeout = null;
 		}
 		animate(crookie, { rotate: 0, scale: 1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
+		if (star2) animate(star2, { rotate: 0, scale: 1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
 		animate(crookieLeft, { x: 0, opacity: 1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
 		animate(crookieRight, { x: 0, opacity: 1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
 		animate(crookieSplit, { opacity: 0 }, { duration: 0.3, ease: 'easeInOut' });

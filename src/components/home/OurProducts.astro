@@ -1,4 +1,5 @@
 ---
+import { Icon } from "astro-icon/components";
 import CookieCard from "./CookieCard.astro";
 ---
 
@@ -80,13 +81,22 @@ import CookieCard from "./CookieCard.astro";
     </div>
 
     <a
-      class="mt-10 flex h-[52px] w-[210px] items-center justify-center gap-3 
+      class="group mt-10 flex h-[52px] w-[210px] items-center justify-center gap-3 
       whitespace-nowrap rounded-[57px] bg-[#6CA7D5] px-6 py-3 font-sans text-[19px] 
       leading-[1.2] font-bold text-beige no-underline 
       transition-all duration-300 hover:brightness-95"
       href="#galletas"
     >
       Ver más
+      <span
+        class="flex h-[32px] w-[32px] shrink-0 items-center justify-center rounded-full bg-beige transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+      >
+        <Icon
+          name="lucide:arrow-up-right"
+          class="h-[18px] w-[18px] text-[#6CA7D5]"
+          aria-hidden="true"
+        />
+      </span>
     </a>
   </div>
 </section>

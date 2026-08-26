@@ -192,6 +192,7 @@ const findusImages = [
 
 		const cellSize = 130;
 		let lastCellIndex = -1;
+		let lastActiveImg: HTMLImageElement | null = null;
 		let imgIndex = 0;
 
 		function fillGrid() {
@@ -209,8 +210,8 @@ const findusImages = [
 				cell.dataset.index = i.toString();
 
 				const img = document.createElement('img');
-				img.className = 'pointer-events-none absolute w-[100px] h-[100px] object-contain opacity-0 select-none';
-				img.style.transform = 'scale(0.3) rotate(-15deg)';
+				img.className = 'pointer-events-none absolute w-[105px] h-[105px] object-contain opacity-0 select-none';
+				img.style.transform = 'scale(0.3)';
 				cell.appendChild(img);
 
 				grid.appendChild(cell);
@@ -220,6 +221,21 @@ const findusImages = [
 		fillGrid();
 
 		window.addEventListener('resize', fillGrid);
+
+		function hideImage(img: HTMLImageElement | null) {
+			if (!img) return;
+			animate(
+				img,
+				{
+					opacity: [1, 0],
+					scale: [1, 0.4],
+				},
+				{
+					duration: 0.22,
+					ease: 'easeIn',
+				}
+			);
+		}
 
 		section.addEventListener('mousemove', (e) => {
 			const rect = section.getBoundingClientRect();
@@ -232,35 +248,65 @@ const findusImages = [
 			const col = Math.floor(x / cellSize);
 			const row = Math.floor(y / cellSize);
 
-			if (col < 0 || col >= cols || row < 0 || row >= rows) return;
+			if (col < 0 || col >= cols || row < 0 || row >= rows) {
+				if (lastActiveImg) {
+					hideImage(lastActiveImg);
+					lastActiveImg = null;
+					lastCellIndex = -1;
+				}
+				return;
+			}
 
 			const cellIndex = row * cols + col;
 			if (cellIndex === lastCellIndex) return;
+
+			// Ocultar rápidamente la imagen anterior que estaba activa
+			if (lastActiveImg) {
+				hideImage(lastActiveImg);
+			}
+
 			lastCellIndex = cellIndex;
 
 			const cell = grid.children[cellIndex] as HTMLElement | undefined;
-			if (!cell) return;
+			if (!cell) {
+				lastActiveImg = null;
+				return;
+			}
 
 			const img = cell.querySelector('img');
-			if (!img) return;
+			if (!img) {
+				lastActiveImg = null;
+				return;
+			}
 
 			img.src = images[imgIndex % images.length];
 			imgIndex++;
 
-			const randomRotation = (Math.random() - 0.5) * 35;
+			const randomRotation = (Math.random() - 0.5) * 25;
 
+			// Entrada rápida y se queda fija en escala 1 y opacidad 1 mientras el cursor esté aquí
 			animate(
 				img,
 				{
-					opacity: [0, 1, 1, 0],
-					scale: [0.4, 1.15, 1, 0.3],
-					rotate: [-randomRotation, 0, randomRotation * 0.5],
+					opacity: [0, 1],
+					scale: [0.3, 1.12, 1],
+					rotate: [-randomRotation, randomRotation * 0.3, 0],
 				},
 				{
-					duration: 1.2,
-					ease: 'easeOut',
+					duration: 0.25,
+					ease: 'backOut',
 				}
 			);
+
+			lastActiveImg = img;
+		});
+
+		section.addEventListener('mouseleave', () => {
+			if (lastActiveImg) {
+				hideImage(lastActiveImg);
+				lastActiveImg = null;
+				lastCellIndex = -1;
+			}
 		});
 	}
 

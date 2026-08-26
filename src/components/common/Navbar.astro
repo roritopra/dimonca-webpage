@@ -166,9 +166,11 @@ const categories = [
 			const borderRadius = (1 - progress) * 40;
 			navbarContainer.style.borderRadius = `${borderRadius}px`;
 
-			// Sincronizar el redondeo del dropdown con el navbar
+			// Sincronizar el redondeo y la distancia superior del dropdown con el navbar
 			if (dropdown) {
 				dropdown.style.borderRadius = `${Math.min(borderRadius, 32)}px`;
+				const dropdownGap = (1 - progress) * 8;
+				dropdown.style.top = `calc(100% + ${dropdownGap}px)`;
 			}
 
 			// Padding lateral: de 40px (2.5rem) a 80px (5rem)

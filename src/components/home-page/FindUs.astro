@@ -190,7 +190,7 @@ const findusImages = [
 		const grid = document.getElementById('findus-grid');
 		if (!section || !grid) return;
 
-		const cellSize = 130;
+		const cellSize = 85;
 		let lastCellIndex = -1;
 		let lastActiveImg: HTMLImageElement | null = null;
 		let imgIndex = 0;
@@ -210,7 +210,7 @@ const findusImages = [
 				cell.dataset.index = i.toString();
 
 				const img = document.createElement('img');
-				img.className = 'pointer-events-none absolute w-[105px] h-[105px] object-contain opacity-0 select-none';
+				img.className = 'pointer-events-none absolute w-[95px] h-[95px] object-contain opacity-0 select-none';
 				img.style.transform = 'scale(0.3)';
 				cell.appendChild(img);
 

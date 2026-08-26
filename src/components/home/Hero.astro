@@ -460,4 +460,54 @@ const stripes = Array.from({ length: 24 }, (_, i) => ({
 	crookie?.addEventListener('mouseleave', resetCrookie);
 	star2?.addEventListener('mouseenter', startCrookie);
 	star2?.addEventListener('mouseleave', resetCrookie);
+
+	// Animación de scroll: zoom en el título y fade out limpio de elementos y botones
+	const heroSection = document.querySelector('section.sticky');
+	if (heroSection) {
+		const handleScrollAnimation = () => {
+			const scrollY = window.scrollY;
+			const maxScroll = 450;
+			const progress = Math.min(Math.max(scrollY / maxScroll, 0), 1);
+
+			const currentSlideEl = slides[current];
+			if (!currentSlideEl) return;
+
+			const titles = currentSlideEl.querySelectorAll<HTMLElement>('.hero-title-word');
+			const cookieEl = currentSlideEl.querySelector<HTMLElement>('#hero-cookie, #hero-crookie');
+			const starEl = currentSlideEl.querySelector<HTMLElement>('#hero-star, #hero-star-2');
+			const infoEl = currentSlideEl.querySelector<HTMLElement>('.hero-left-info');
+
+			const scaleTitle = 1 + progress * 0.45;
+			titles.forEach((title) => {
+				title.style.transform = `scale(${scaleTitle})`;
+				title.style.transformOrigin = 'center center';
+			});
+
+			const opacityElements = Math.max(1 - progress * 1.8, 0);
+
+			if (cookieEl) {
+				cookieEl.style.opacity = `${opacityElements}`;
+			}
+
+			if (starEl) {
+				starEl.style.opacity = `${opacityElements}`;
+			}
+
+			if (infoEl) {
+				infoEl.style.opacity = `${opacityElements}`;
+			}
+
+			if (prevBtn) {
+				prevBtn.style.opacity = `${opacityElements}`;
+				prevBtn.style.pointerEvents = opacityElements === 0 ? 'none' : 'auto';
+			}
+
+			if (nextBtn) {
+				nextBtn.style.opacity = `${opacityElements}`;
+				nextBtn.style.pointerEvents = opacityElements === 0 ? 'none' : 'auto';
+			}
+		};
+
+		window.addEventListener('scroll', handleScrollAnimation, { passive: true });
+	}
 </script>

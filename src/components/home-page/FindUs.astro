@@ -196,6 +196,7 @@ const findusImages = [
 		let imgIndex = 0;
 
 		function fillGrid() {
+			if (!grid || !section) return;
 			grid.innerHTML = '';
 			const cols = Math.ceil(section.offsetWidth / cellSize);
 			const rows = Math.ceil(section.offsetHeight / cellSize);

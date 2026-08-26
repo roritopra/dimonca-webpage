@@ -24,7 +24,7 @@ const categories = [
 		>
 		<button
 			id="menu-btn"
-			class="relative flex h-[30px] flex-1 min-w-0 cursor-pointer items-center justify-center gap-2 whitespace-nowrap border-0 bg-transparent p-2.5 text-[15px] leading-[1.2] text-brown hover:opacity-75 max-[900px]:flex-none"
+			class="group/btn relative flex h-[30px] flex-1 min-w-0 cursor-pointer items-center justify-center gap-2 whitespace-nowrap border-0 bg-transparent p-2.5 text-[15px] leading-[1.2] text-brown transition-colors duration-200 group-data-[open]:text-pink group-data-[open]:font-bold hover:opacity-75 max-[900px]:flex-none"
 			type="button"
 			aria-haspopup="true"
 			aria-expanded="false"
@@ -33,7 +33,7 @@ const categories = [
 			Menú
 			<Icon
 				name="lucide:chevron-down"
-				class="h-6 w-6 shrink-0 transition-transform duration-200 group-data-[open]:rotate-180"
+				class="h-6 w-6 shrink-0 transition-transform duration-200 group-data-[open]:rotate-180 group-data-[open]:text-pink"
 				aria-hidden="true"
 			/>
 		</button>

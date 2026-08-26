@@ -7,14 +7,14 @@ const photos = [
     src: "/images/sobre-1.png",
     alt: "",
     justify: "justify-start",
-    initialStyle: "transform: translate(-50px, -100px) rotate(-9deg);",
+    initialStyle: "transform: translate(-80px, 30px) rotate(-9deg);",
   },
   {
     id: "sobre-2",
     src: "/images/sobre-2.png",
     alt: "",
     justify: "justify-end",
-    initialStyle: "transform: translate(50px, -100px) rotate(9deg);",
+    initialStyle: "transform: translate(80px, 30px) rotate(9deg);",
   },
   {
     id: "sobre-4",
@@ -33,7 +33,7 @@ const photos = [
 ];
 ---
 
-<section class="relative z-10 w-full bg-beige shadow-[0_-12px_24px_rgba(58,32,14,0.12)]">
+<section class="relative z-10 w-full overflow-hidden bg-beige shadow-[0_-12px_24px_rgba(58,32,14,0.12)]">
   <div
     class="mx-auto flex max-w-[1440px] flex-wrap items-center justify-center gap-16 px-20 py-16"
   >
@@ -178,9 +178,9 @@ const photos = [
           animate(
             sobre1,
             {
-              x: [-50, 0],
+              x: [-80, 0],
               rotate: [-9, 0],
-              y: [-100, 0],
+              y: [30, 0],
             },
             {
               duration: 1.2,
@@ -191,9 +191,9 @@ const photos = [
           animate(
             sobre2,
             {
-              x: [50, 0],
+              x: [80, 0],
               rotate: [9, 0],
-              y: [-100, 0],
+              y: [30, 0],
             },
             {
               duration: 1.2,
@@ -267,12 +267,12 @@ const photos = [
           return function () {
             animate(
               sobre1,
-              { x: -50, y: -100, rotate: -9 },
+              { x: -80, y: 30, rotate: -9 },
               { duration: 0.8, ease: "easeInOut" }
             );
             animate(
               sobre2,
-              { x: 50, y: -100, rotate: 9 },
+              { x: 80, y: 30, rotate: 9 },
               { duration: 0.8, ease: "easeInOut" }
             );
             animate(

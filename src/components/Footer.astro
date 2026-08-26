@@ -1,113 +1,157 @@
 ---
-import { Icon } from 'astro-icon/components';
+import { Icon } from "astro-icon/components";
 ---
 
 <footer class="relative w-full overflow-hidden bg-pink text-beige">
-	<!-- Contenido principal del footer -->
-	<div class="relative z-10 mx-auto flex max-w-[1440px] flex-col justify-between px-10 pt-16 pb-36 md:px-20 lg:pt-20">
-		<div class="grid grid-cols-1 gap-12 sm:grid-cols-2 md:grid-cols-4 lg:gap-16">
-			<!-- Columna 1: Logo y Redes Sociales -->
-			<div class="flex flex-col items-start gap-6">
-				<div>
-					<img class="h-[46px] w-auto object-contain brightness-0 invert" src="/images/logo.png" alt="Dimonca Repostería" />
-					<p class="mt-1 font-sans text-[15px] font-medium text-beige/90">Repostería</p>
-				</div>
+  <!-- Contenido principal del footer -->
+  <div
+    class="relative z-10 mx-auto flex max-w-[1440px] flex-col justify-between px-10 pt-16 pb-36 md:px-20 lg:pt-20"
+  >
+    <div
+      class="grid grid-cols-1 gap-12 sm:grid-cols-2 md:grid-cols-4 lg:gap-16"
+    >
+      <!-- Columna 1: Logo y Redes Sociales -->
+      <div class="flex flex-col items-start gap-6">
+        <div>
+          <img
+            class="h-[126px] w-auto object-contain brightness-0 invert"
+            src="/images/logo.png"
+            alt="Dimonca Repostería"
+          />
+        </div>
 
-				<div class="flex items-center gap-3">
-					<a
-						href="https://instagram.com"
-						target="_blank"
-						rel="noopener noreferrer"
-						aria-label="Instagram"
-						class="flex size-10 items-center justify-center rounded-full bg-beige text-pink shadow-sm transition-transform duration-200 hover:scale-110 hover:brightness-95"
-					>
-						<Icon name="lucide:instagram" class="size-5" />
-					</a>
-					<a
-						href="https://facebook.com"
-						target="_blank"
-						rel="noopener noreferrer"
-						aria-label="Facebook"
-						class="flex size-10 items-center justify-center rounded-full bg-beige text-pink shadow-sm transition-transform duration-200 hover:scale-110 hover:brightness-95"
-					>
-						<Icon name="lucide:facebook" class="size-5" />
-					</a>
-					<a
-						href="https://tiktok.com"
-						target="_blank"
-						rel="noopener noreferrer"
-						aria-label="TikTok"
-						class="flex size-10 items-center justify-center rounded-full bg-beige text-pink shadow-sm transition-transform duration-200 hover:scale-110 hover:brightness-95"
-					>
-						<Icon name="lucide:video" class="size-5" />
-					</a>
-					<a
-						href="https://wa.me"
-						target="_blank"
-						rel="noopener noreferrer"
-						aria-label="WhatsApp"
-						class="flex size-10 items-center justify-center rounded-full bg-beige text-pink shadow-sm transition-transform duration-200 hover:scale-110 hover:brightness-95"
-					>
-						<Icon name="lucide:phone" class="size-5" />
-					</a>
-				</div>
-			</div>
+        <div class="flex items-center gap-3">
+          <a
+            href="https://instagram.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Instagram"
+            class="flex size-10 items-center justify-center rounded-full bg-beige text-pink shadow-sm transition-transform duration-200 hover:scale-110 hover:brightness-95"
+          >
+            <Icon name="lucide:instagram" class="size-5" />
+          </a>
+          <a
+            href="https://facebook.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Facebook"
+            class="flex size-10 items-center justify-center rounded-full bg-beige text-pink shadow-sm transition-transform duration-200 hover:scale-110 hover:brightness-95"
+          >
+            <Icon name="lucide:facebook" class="size-5" />
+          </a>
+          <a
+            href="https://tiktok.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="TikTok"
+            class="flex size-10 items-center justify-center rounded-full bg-beige text-pink shadow-sm transition-transform duration-200 hover:scale-110 hover:brightness-95"
+          >
+            <Icon name="lucide:video" class="size-5" />
+          </a>
+          <a
+            href="https://wa.me"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="WhatsApp"
+            class="flex size-10 items-center justify-center rounded-full bg-beige text-pink shadow-sm transition-transform duration-200 hover:scale-110 hover:brightness-95"
+          >
+            <Icon name="lucide:phone" class="size-5" />
+          </a>
+        </div>
+      </div>
 
-			<!-- Columna 2: Visítanos -->
-			<div class="flex flex-col items-start gap-2">
-				<h3 class="font-sans text-[18px] font-bold text-beige">Visítanos:</h3>
-				<p class="m-0 font-sans text-[16px] leading-relaxed text-beige/90">
-					Cra 90 #42-28<br />
-					Valle del Lili
-				</p>
-			</div>
+      <!-- Columna 2: Visítanos -->
+      <div class="flex flex-col items-start gap-2">
+        <h3 class="font-sans text-[18px] font-bold text-beige">Visítanos:</h3>
+        <p class="m-0 font-sans text-[16px] leading-relaxed text-beige/90">
+          Cra 90 #42-28<br />
+          Valle del Lili
+        </p>
+      </div>
 
-			<!-- Columna 3: Menú -->
-			<div class="flex flex-col items-start gap-2">
-				<h3 class="font-sans text-[18px] font-bold text-beige">Menú</h3>
-				<ul class="m-0 flex flex-col gap-2 p-0 list-none font-sans text-[16px] text-beige/90">
-					<li><a href="#galletas" class="text-beige/90 no-underline transition-colors hover:text-white">Galletas</a></li>
-					<li><a href="#cuchareables" class="text-beige/90 no-underline transition-colors hover:text-white">Cuchareables</a></li>
-					<li><a href="#brownies" class="text-beige/90 no-underline transition-colors hover:text-white">Brownies</a></li>
-					<li><a href="#tortas" class="text-beige/90 no-underline transition-colors hover:text-white">Tortas</a></li>
-				</ul>
-			</div>
+      <!-- Columna 3: Menú -->
+      <div class="flex flex-col items-start gap-2">
+        <h3 class="font-sans text-[18px] font-bold text-beige">Menú</h3>
+        <ul
+          class="m-0 flex flex-col gap-2 p-0 list-none font-sans text-[16px] text-beige/90"
+        >
+          <li>
+            <a
+              href="#galletas"
+              class="text-beige/90 no-underline transition-colors hover:text-white"
+              >Galletas</a>
+          </li>
+          <li>
+            <a
+              href="#cuchareables"
+              class="text-beige/90 no-underline transition-colors hover:text-white"
+              >Cuchareables</a>
+          </li>
+          <li>
+            <a
+              href="#brownies"
+              class="text-beige/90 no-underline transition-colors hover:text-white"
+              >Brownies</a>
+          </li>
+          <li>
+            <a
+              href="#tortas"
+              class="text-beige/90 no-underline transition-colors hover:text-white"
+              >Tortas</a>
+          </li>
+        </ul>
+      </div>
 
-			<!-- Columna 4: Sobre nosotros -->
-			<div class="flex flex-col items-start gap-2">
-				<h3 class="font-sans text-[18px] font-bold text-beige">Sobre nosotros</h3>
-				<ul class="m-0 flex flex-col gap-2 p-0 list-none font-sans text-[16px] text-beige/90">
-					<li><a href="#sobre-nosotros" class="text-beige/90 no-underline transition-colors hover:text-white">Nuestra historia</a></li>
-					<li><a href="#encuentranos" class="text-beige/90 no-underline transition-colors hover:text-white">Sede</a></li>
-				</ul>
-			</div>
-		</div>
-	</div>
+      <!-- Columna 4: Sobre nosotros -->
+      <div class="flex flex-col items-start gap-2">
+        <h3 class="font-sans text-[18px] font-bold text-beige">
+          Sobre nosotros
+        </h3>
+        <ul
+          class="m-0 flex flex-col gap-2 p-0 list-none font-sans text-[16px] text-beige/90"
+        >
+          <li>
+            <a
+              href="#sobre-nosotros"
+              class="text-beige/90 no-underline transition-colors hover:text-white"
+              >Nuestra historia</a>
+          </li>
+          <li>
+            <a
+              href="#encuentranos"
+              class="text-beige/90 no-underline transition-colors hover:text-white"
+              >Sede</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
 
-	<!-- Galleta en la esquina inferior izquierda: cookie-footer2 -->
-	<img
-		src="/images/cookie-footer2.png"
-		alt=""
-		aria-hidden="true"
-		class="pointer-events-none absolute -bottom-10 -left-6 z-20 w-[180px] sm:w-[220px] md:w-[270px] drop-shadow-2xl select-none"
-	/>
+  <!-- Galleta en la esquina inferior izquierda: cookie-footer2 -->
+  <img
+    src="/images/cookie-footer2.png"
+    alt=""
+    aria-hidden="true"
+    class="pointer-events-none absolute bottom-0 left-0 z-20 w-[180px] sm:w-[220px] md:w-[270px] drop-shadow-2xl select-none"
+  />
 
-	<!-- Galleta en la esquina inferior derecha: cookie-footer -->
-	<img
-		src="/images/cookie-footer.png"
-		alt=""
-		aria-hidden="true"
-		class="pointer-events-none absolute -bottom-8 -right-4 z-20 w-[200px] sm:w-[260px] md:w-[320px] drop-shadow-2xl select-none"
-	/>
+  <!-- Galleta en la esquina inferior derecha: cookie-footer -->
+  <img
+    src="/images/cookie-footer.png"
+    alt=""
+    aria-hidden="true"
+    class="pointer-events-none absolute -bottom-8 -right-4 z-20 w-[200px] sm:w-[260px] md:w-[320px] drop-shadow-2xl select-none"
+  />
 
-	<!-- Nombre Dimonca grande centrado en el fondo inferior, parcialmente recortado -->
-	<div class="pointer-events-none absolute bottom-0 left-1/2 z-0 w-full max-w-[1440px] -translate-x-1/2 overflow-hidden flex justify-center">
-		<img
-			src="/images/dimonca-footer-name.png"
-			alt=""
-			aria-hidden="true"
-			class="w-[95%] max-w-[1300px] h-auto object-contain translate-y-[32%] select-none opacity-95"
-		/>
-	</div>
+  <!-- Nombre Dimonca grande centrado en el fondo inferior, parcialmente recortado -->
+  <div
+    class="pointer-events-none absolute bottom-0 left-1/2 z-0 w-full max-w-[1440px] -translate-x-1/2 overflow-hidden flex justify-center"
+  >
+    <img
+      src="/images/dimonca-footer-name.png"
+      alt=""
+      aria-hidden="true"
+      class="w-[95%] max-w-[1300px] h-auto object-contain translate-y-[32%] select-none opacity-95"
+    />
+  </div>
 </footer>
-

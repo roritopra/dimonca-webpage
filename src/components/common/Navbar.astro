@@ -197,6 +197,13 @@ const categories = [
 			isOpen ? close() : open();
 		});
 
+		document.addEventListener('keydown', (e) => {
+			if (e.key === 'Escape' && isOpen) {
+				close();
+				menuBtn.focus();
+			}
+		});
+
 		document.addEventListener('click', (e) => {
 			if (isOpen && !navbar.contains(e.target as Node)) {
 				close();

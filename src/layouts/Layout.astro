@@ -3,22 +3,32 @@ import '../styles/global.css';
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="es">
 	<head>
 		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="icon" href="/favicon.ico" />
 		<meta name="generator" content={Astro.generator} />
+		<meta
+			name="description"
+			content="Dimonca Repostería - Deliciosas galletas artesanales, cuchareables, brownies y pasteles preparados con amor y los mejores ingredientes."
+		/>
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 		<link
 			href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&family=Sacramento&display=swap"
 			rel="stylesheet"
 		/>
-		<title>Dimonca</title>
+		<title>Dimonca | Repostería y Galletas Artesanales</title>
 	</head>
 	<body>
+		<a
+			href="#main-content"
+			class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:rounded-full focus:bg-pink focus:px-6 focus:py-3 focus:font-sans focus:font-bold focus:text-beige focus:shadow-lg focus:outline-none focus:ring-4 focus:ring-beige"
+		>
+			Saltar al contenido principal
+		</a>
 		<slot />
 		<script>
 			import Lenis from 'lenis';

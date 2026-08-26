@@ -477,36 +477,67 @@ const stripes = Array.from({ length: 24 }, (_, i) => ({
 			const starEl = currentSlideEl.querySelector<HTMLElement>('#hero-star, #hero-star-2');
 			const infoEl = currentSlideEl.querySelector<HTMLElement>('.hero-left-info');
 
+			// Zoom en el título principal
 			const scaleTitle = 1 + progress * (current === 0 ? 0.16 : 0.22);
 			titles.forEach((title) => {
 				const isLeft = title.dataset.dir === 'left';
-				const separateX = isLeft ? -progress * 25 : progress * 25;
+				const separateX = isLeft ? -progress * 35 : progress * 35;
 				title.style.transform = `translateX(${separateX}px) scale(${scaleTitle})`;
 				title.style.transformOrigin = isLeft ? 'left center' : 'right center';
 			});
 
-			const opacityElements = Math.max(1 - progress * 1.8, 0);
-
+			// Galleta: rotación continua dinámica vinculada al scroll y crecimiento orgánico
 			if (cookieEl) {
-				cookieEl.style.opacity = `${opacityElements}`;
+				const cookieScale = 1 + progress * 0.22;
+				const cookieRotate = scrollY * 0.12 * (current === 0 ? -1 : 1);
+				cookieEl.style.transform = `scale(${cookieScale}) rotate(${cookieRotate}deg)`;
+				cookieEl.style.filter = `drop-shadow(0px ${15 + progress * 25}px ${25 + progress * 20}px rgba(58,32,14,${0.25 + progress * 0.2}))`;
+				cookieEl.style.opacity = '1';
 			}
 
+			// Estrella "Nueva": rotación continua en órbita dinámica vinculada al scroll
 			if (starEl) {
-				starEl.style.opacity = `${opacityElements}`;
+				const starRotate = scrollY * 0.35;
+				const starScale = 1 + progress * 0.28;
+				const starX = progress * 25;
+				const starY = -progress * 20;
+				starEl.style.transform = `translate(${starX}px, ${starY}px) rotate(${starRotate}deg) scale(${starScale})`;
+				starEl.style.opacity = `${Math.max(1 - progress * 0.3, 0.7)}`;
 			}
+
+			// Elipse de brillo detrás de la galleta: pulsa y se expande
+			const ellipseGlow = currentSlideEl.querySelector<HTMLElement>('div[class*="mix-blend-overlay"]');
+			if (ellipseGlow) {
+				ellipseGlow.style.transform = `scale(${1 + progress * 0.4}) rotate(${scrollY * 0.05}deg)`;
+				ellipseGlow.style.opacity = `${0.6 + progress * 0.4}`;
+			}
+
+			// Rayas verticales de fondo: sutil efecto parallax / apertura
+			const heroStripes = currentSlideEl.querySelectorAll<HTMLElement>('.hero-stripe');
+			heroStripes.forEach((stripe, i) => {
+				const dir = (stripe.dataset.dir === 'up' ? -1 : 1);
+				stripe.style.transform = `translateY(${dir * progress * 30}px) scaleY(${1 + progress * 0.05})`;
+				stripe.style.opacity = `${1 - progress * 0.25}`;
+			});
+
+			// Botones y descripción secundaria: desvanecimiento suave para limpiar la escena
+			const opacityUi = Math.max(1 - progress * 2.2, 0);
 
 			if (infoEl) {
-				infoEl.style.opacity = `${opacityElements}`;
+				infoEl.style.opacity = `${opacityUi}`;
+				infoEl.style.transform = `translateX(${-progress * 30}px)`;
 			}
 
 			if (prevBtn) {
-				prevBtn.style.opacity = `${opacityElements}`;
-				prevBtn.style.pointerEvents = opacityElements === 0 ? 'none' : 'auto';
+				prevBtn.style.opacity = `${opacityUi}`;
+				prevBtn.style.transform = `translateX(${-progress * 25}px)`;
+				prevBtn.style.pointerEvents = opacityUi === 0 ? 'none' : 'auto';
 			}
 
 			if (nextBtn) {
-				nextBtn.style.opacity = `${opacityElements}`;
-				nextBtn.style.pointerEvents = opacityElements === 0 ? 'none' : 'auto';
+				nextBtn.style.opacity = `${opacityUi}`;
+				nextBtn.style.transform = `translateX(${progress * 25}px)`;
+				nextBtn.style.pointerEvents = opacityUi === 0 ? 'none' : 'auto';
 			}
 		};
 

@@ -6,7 +6,6 @@
   <svg class="absolute h-0 w-0 pointer-events-none" aria-hidden="true" focusable="false">
     <defs>
       <clipPath id="intro-d-clip" clipPathUnits="objectBoundingBox">
-        <!-- Path scaled down by 1/800 so it works with objectBoundingBox (0..1) -->
         <path
           transform="scale(0.00125, 0.00125)"
           d="M397.28,554.41c-11.97,22.97-21.45,45.15-34.34,65.12-34.4,53.29-83.29,82.13-147.68,83.66-41.78.99-84.02-25.75-100.96-66.44-15.98-38.39-16.57-77.04,1.74-114.96,11.21-23.23,29.57-38.55,54.55-45.5,6.84-1.9,13.51-2.29,16.11,6.63,11.5,39.52,62.3,46.44,95.8,31.3,43.86-19.82,67.98-57.23,80.51-101.1,10.81-37.83,16.01-77.27,23.62-116.01,2.48-12.64,4.23-25.45,7.24-37.96,6.17-25.57,29.48-34.53,51.13-33.71,12.63.48,21.66,8.57,21.06,21.47-1.13,24.27-3.48,48.55-6.72,72.64-5.15,38.26-12.13,76.28-16.96,114.57-2.09,16.51-.75,33.9,16.45,43.39,17.1,9.44,33.12,2.95,47.4-7.09,21.35-15.01,32.91-37.22,40.1-61.45,15.58-52.49,16.98-105.27-2.98-156.9-14.95-38.68-45.25-59.1-86.17-60.94-49.07-2.2-94.73,9.41-131.79,43.68-25.23,23.33-35.24,53.09-28.71,87.14,3.35,17.49,11.28,31.97,32.39,33.43,2.59.18,6.54,4.53,6.96,7.37.81,5.53.24,11.51-.93,17.06-11.14,53.04-57.12,89.58-105.62,84.18-34.4-3.83-64.89-34.22-74.8-70.99-27.23-101.03,24.64-186.38,95.18-234.8,74.91-51.42,158.38-71.21,248.41-56.92,64.48,10.23,111.6,47.01,137.34,106.38,50.53,116.54,41.11,230.89-22.25,340.09-19.89,34.28-49.07,60.61-88.72,72.81-50.21,15.45-98.06.4-120.25-51.62-2.04-4.77-4.56-9.34-7.14-14.56Z"
@@ -16,24 +15,24 @@
   </svg>
 
   <!-- Central D element -->
-  <div id="intro-d-container" class="relative flex items-center justify-center">
+  <div id="intro-d-container" class="relative flex items-center justify-center pointer-events-none">
     <!-- Solid white initial D icon -->
     <img
       id="intro-d-solid"
       src="/images/logo-simple.svg"
-      alt="Dimonca D"
+      alt="Dimonca"
       class="absolute inset-0 h-full w-full object-contain"
     />
 
     <!-- Slideshow container masked with the shape of D -->
     <div id="intro-d-masked" class="absolute inset-0 h-full w-full opacity-0">
       <div id="intro-slides-wrapper" class="relative h-full w-full bg-beige">
-        <img class="intro-slide active" src="/images/cookie.png" alt="" />
-        <img class="intro-slide" src="/images/brownie.png" alt="" />
-        <img class="intro-slide" src="/images/crookie.png" alt="" />
-        <img class="intro-slide" src="/images/cake.png" alt="" />
-        <img class="intro-slide" src="/images/cuchareable.png" alt="" />
-        <img class="intro-slide" src="/images/combos-caja.png" alt="" />
+        <img class="intro-slide active" src="/images/sobre-1.png" alt="" />
+        <img class="intro-slide" src="/images/sobre-2.png" alt="" />
+        <img class="intro-slide" src="/images/sobre-3.png" alt="" />
+        <img class="intro-slide" src="/images/sobre-4.png" alt="" />
+        <img class="intro-slide" src="/images/sobre-1.png" alt="" />
+        <img class="intro-slide" src="/images/sobre-2.png" alt="" />
       </div>
     </div>
   </div>
@@ -52,8 +51,8 @@
   }
 
   #intro-d-container {
-    width: clamp(240px, 35vw, 380px);
-    height: clamp(240px, 35vw, 380px);
+    width: clamp(240px, 35vw, 360px);
+    height: clamp(240px, 35vw, 360px);
     transform-origin: center center;
     will-change: transform, opacity;
   }
@@ -94,14 +93,14 @@
 
     document.body.style.overflow = 'hidden';
 
-    // 1. D aparece de pequeño a grande
+    // 1. D blanca aparece de pequeño a grande
     animate(
       dContainer,
       { opacity: [0, 1], scale: [0.3, 1] },
       { type: 'spring', stiffness: 260, damping: 20, mass: 1 }
     );
 
-    // 2. Tras aparecer, se activa la máscara con las fotos
+    // 2. Transición fluida a fotos de Sobre Nosotros (6 pases de fotos)
     setTimeout(() => {
       dMasked.style.opacity = '1';
       dSolid.style.opacity = '0';
@@ -116,11 +115,11 @@
         slides[currentSlide]?.classList.add('active');
       }, slideDuration);
 
-      // 3. Después de pasar todas las fotos rápidamente, agrandar ultra grande
+      // 3. Al terminar las 6 fotos, zoom continuo ultra grande y fade out que devela la web
       setTimeout(() => {
         clearInterval(slideInterval);
 
-        // Zoom ultra grande y desvanecimiento para revelar la web completa
+        // Zoom ultra grande lineal y fluido
         animate(
           dContainer,
           { scale: [1, 28], opacity: [1, 0] },
@@ -135,7 +134,7 @@
           overlay.style.display = 'none';
           document.body.style.overflow = '';
         });
-      }, slideDuration * slides.length + 150);
+      }, slideDuration * slides.length + 80);
     }, 700);
   }
 

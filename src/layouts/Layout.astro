@@ -63,7 +63,24 @@ import Intro from '../components/home/Intro.astro';
 				rafId = requestAnimationFrame(raf);
 			}
 
-			document.addEventListener('astro:page-load', initSmoothScroll);
+			const CURTAIN_COLORS = [
+				'#6ca7d5', // Azul Pistacho Queen / Our Products
+				'#f45d8c', // Rosa Cookies & Cream
+				'#3a200e', // Café Red Velvet
+				'#979255', // Oliva Galleta Roche
+				'#f7f2e8', // Beige base
+			];
+
+			function setRandomCurtainColor() {
+				const randomColor = CURTAIN_COLORS[Math.floor(Math.random() * CURTAIN_COLORS.length)];
+				document.documentElement.style.setProperty('--curtain-color', randomColor);
+			}
+
+			document.addEventListener('astro:before-preparation', setRandomCurtainColor);
+			document.addEventListener('astro:page-load', () => {
+				initSmoothScroll();
+				setRandomCurtainColor();
+			});
 		</script>
 	</body>
 </html>

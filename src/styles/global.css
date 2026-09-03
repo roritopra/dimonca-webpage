@@ -44,31 +44,43 @@
 	}
 }
 
-/* View Transitions: Animación de Cortina (Clip Wipe) */
-@keyframes curtain-wipe-in {
+/* View Transitions: Animación de Cortina en 2 Fases (Clip Wipe Izquierda -> Derecha) */
+:root {
+	--curtain-color: #6ca7d5;
+}
+
+::view-transition {
+	background-color: var(--curtain-color, #6ca7d5);
+}
+
+@keyframes curtain-wipe-close {
 	from {
-		clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
+		clip-path: inset(0 0 0 0);
 	}
 	to {
-		clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+		clip-path: inset(0 0 0 100%);
 	}
 }
 
-@keyframes curtain-wipe-out {
+@keyframes curtain-wipe-open {
 	from {
-		clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+		clip-path: inset(0 100% 0 0);
 	}
 	to {
-		clip-path: polygon(100% 0, 100% 0, 100% 100%, 100% 100%);
+		clip-path: inset(0 0 0 0);
 	}
+}
+
+::view-transition-group(root) {
+	animation-duration: 900ms;
 }
 
 ::view-transition-old(root) {
-	animation: 600ms cubic-bezier(0.76, 0, 0.24, 1) both curtain-wipe-out;
+	animation: 450ms cubic-bezier(0.7, 0, 0.3, 1) 0ms both curtain-wipe-close;
 	z-index: 1;
 }
 
 ::view-transition-new(root) {
-	animation: 600ms cubic-bezier(0.76, 0, 0.24, 1) both curtain-wipe-in;
+	animation: 450ms cubic-bezier(0.7, 0, 0.3, 1) 450ms both curtain-wipe-open;
 	z-index: 2;
 }

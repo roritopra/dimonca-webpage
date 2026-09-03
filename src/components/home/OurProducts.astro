@@ -141,10 +141,9 @@ import rocheCrackedImg from "../../assets/images/cookie-card-roche-cracked.png";
 
 <script>
   function initCookieCarousel() {
-    const wrapperEl = document.querySelector<HTMLElement>('.cookie-cards-wrapper');
+    const wrapper = document.querySelector<HTMLElement>('.cookie-cards-wrapper');
     const dots = Array.from(document.querySelectorAll<HTMLElement>('.cookie-dot'));
-    if (!wrapperEl || dots.length === 0) return;
-    const wrapper = wrapperEl;
+    if (!wrapper || dots.length === 0) return;
 
     function updateDots(activeIndex: number) {
       dots.forEach((dot, i) => {
@@ -158,73 +157,70 @@ import rocheCrackedImg from "../../assets/images/cookie-card-roche-cracked.png";
       });
     }
 
-    let isScrollingFromClick = false;
-    let scrollTimeout: number | undefined;
+    const cards = Array.from(wrapper.querySelectorAll<HTMLElement>('.cookie-card'));
+    if (cards.length === 0) return;
 
-    function getActiveIndex() {
-      const cards = Array.from(wrapper.querySelectorAll<HTMLElement>('.cookie-card'));
-      if (cards.length === 0) return 0;
+    let observer: IntersectionObserver | null = null;
+    let isClicking = false;
+    let clickTimeout: number | undefined;
 
-      const wrapperRect = wrapper.getBoundingClientRect();
-      const targetCenter = wrapperRect.left + wrapperRect.width / 2;
+    function setupObserver() {
+      if (observer) {
+        observer.disconnect();
+      }
 
-      let closest = 0;
-      let minDiff = Infinity;
-
-      cards.forEach((card, i) => {
-        const r = card.getBoundingClientRect();
-        const cardCenter = r.left + r.width / 2;
-        const diff = Math.abs(targetCenter - cardCenter);
-        if (diff < minDiff) {
-          minDiff = diff;
-          closest = i;
+      observer = new IntersectionObserver(
+        (entries) => {
+          if (isClicking) return;
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const idx = cards.indexOf(entry.target as HTMLElement);
+              if (idx !== -1) {
+                updateDots(idx);
+              }
+            }
+          });
+        },
+        {
+          root: wrapper,
+          threshold: 0.55,
         }
-      });
+      );
 
-      return closest;
+      cards.forEach((card) => observer?.observe(card));
     }
-
-    function onScroll() {
-      if (window.innerWidth >= 1024 || isScrollingFromClick) return;
-      const activeIdx = getActiveIndex();
-      updateDots(activeIdx);
-    }
-
-    wrapper.addEventListener('scroll', onScroll, { passive: true });
 
     dots.forEach((dot) => {
       dot.addEventListener('click', () => {
-        if (window.innerWidth >= 1024) return;
         const index = parseInt(dot.dataset.index ?? '0', 10);
-        const cards = Array.from(wrapper.querySelectorAll<HTMLElement>('.cookie-card'));
         const targetCard = cards[index];
 
         if (targetCard) {
-          isScrollingFromClick = true;
+          isClicking = true;
           updateDots(index);
 
-          const cardOffsetLeft = targetCard.offsetLeft;
-          const cardWidth = targetCard.offsetWidth;
-          const wrapperWidth = wrapper.clientWidth;
-          const scrollTarget = cardOffsetLeft - (wrapperWidth / 2) + (cardWidth / 2);
-
-          wrapper.scrollTo({
-            left: scrollTarget,
-            behavior: 'smooth'
+          targetCard.scrollIntoView({
+            behavior: 'smooth',
+            inline: 'center',
+            block: 'nearest'
           });
 
-          window.clearTimeout(scrollTimeout);
-          scrollTimeout = window.setTimeout(() => {
-            isScrollingFromClick = false;
-            updateDots(getActiveIndex());
-          }, 450);
+          window.clearTimeout(clickTimeout);
+          clickTimeout = window.setTimeout(() => {
+            isClicking = false;
+          }, 500);
         }
       });
     });
 
-    updateDots(getActiveIndex());
+    setupObserver();
+    updateDots(0);
   }
 
-  initCookieCarousel();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCookieCarousel);
+  } else {
+    initCookieCarousel();
+  }
   document.addEventListener('astro:page-load', initCookieCarousel);
 </script>

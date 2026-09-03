@@ -1,0 +1,210 @@
+---
+import { Icon } from 'astro-icon/components';
+---
+
+<section id="cta-postre" class="relative flex min-h-screen w-full items-center justify-center bg-beige overflow-hidden select-none px-6 py-20">
+	<!-- Malla interactiva de imágenes al hacer hover (cubre todo el componente) -->
+	<div
+		id="cta-grid-container"
+		class="pointer-events-none absolute inset-0 z-0 overflow-hidden"
+		aria-hidden="true"
+	>
+		<div
+			id="cta-grid"
+			class="relative grid w-full h-full"
+		>
+		</div>
+	</div>
+
+	<!-- Contenido Central del Call to Action -->
+	<div class="relative z-10 mx-auto flex max-w-[860px] flex-col items-center text-center">
+		<!-- Título principal con caligrafía -->
+		<h2
+			style="paint-order: stroke;"
+			class="m-0 font-sans text-[44px] sm:text-[54px] md:text-[64px] font-extrabold leading-[1.15] text-brown [-webkit-text-stroke:8px_#F7F2E8] md:[-webkit-text-stroke:12px_#F7F2E8]"
+		>
+			El mejor momento para<br class="hidden sm:inline" />
+			un postre es <span class="relative inline-block ml-1 sm:ml-2">
+				<span
+					style="paint-order: stroke;"
+					class="font-exmouth text-[75px] sm:text-[95px] md:text-[115px] font-normal leading-none text-pink [-webkit-text-stroke:4px_#F7F2E8] md:[-webkit-text-stroke:6px_#F7F2E8] align-middle inline-block"
+				>
+					Ahora
+				</span>
+			</span>
+		</h2>
+
+		<!-- Descripción -->
+		<p class="mt-4 sm:mt-6 max-w-[560px] font-sans text-[16px] sm:text-[18px] md:text-[19px] leading-relaxed text-brown font-normal">
+			No esperes a que el antojo pase. Explora nuestro menú, elige tus favoritos y déjanos endulzar tu día con cada bocado.
+		</p>
+
+		<!-- Botón de acción -->
+		<a
+			class="group mt-8 sm:mt-10 flex h-[50px] sm:h-[54px] items-center justify-center gap-3 whitespace-nowrap rounded-[57px] bg-pink px-7 sm:px-8 py-3 font-sans text-[16px] sm:text-[18px] font-bold text-beige no-underline shadow-[0_4px_18px_rgba(244,93,140,0.4)] transition-all duration-300 hover:shadow-[0_6px_24px_rgba(244,93,140,0.6)] hover:brightness-95 hover:scale-105"
+			href="#pedido"
+		>
+			Haz tu pedido
+			<span
+				class="flex h-[30px] w-[30px] shrink-0 items-center justify-center rounded-full bg-beige transition-transform duration-300 group-hover:scale-110"
+			>
+				<Icon name="lucide:map" class="block h-[15px] w-[15px] text-pink" aria-hidden="true" />
+			</span>
+		</a>
+	</div>
+</section>
+
+<script>
+	import { animate } from 'motion';
+
+	const ctaImages = [
+		'/images/findus/brookie.png',
+		'/images/findus/brownie.png',
+		'/images/findus/cooki.png',
+		'/images/findus/cookie.png',
+		'/images/findus/hovered.png',
+		'/images/findus/milo.png',
+		'/images/findus/oreo.png',
+		'/images/findus/r-bronwnie.png',
+		'/images/findus/r-cookie.png',
+		'/images/findus/red.png',
+		'/images/findus/velvet.png',
+	];
+
+	function setupCtaGrid() {
+		const section = document.getElementById('cta-postre');
+		const gridContainer = document.getElementById('cta-grid-container');
+		const grid = document.getElementById('cta-grid');
+		if (!section || !grid || !gridContainer) return;
+
+		const cellSize = 120;
+		let lastCellIndex = -1;
+		let lastActiveImg: HTMLImageElement | null = null;
+		let imgIndex = 0;
+
+		function fillGrid() {
+			if (!grid || !gridContainer) return;
+
+			grid.innerHTML = '';
+			const width = gridContainer.offsetWidth;
+			const height = gridContainer.offsetHeight;
+
+			const cols = Math.ceil(width / cellSize);
+			const rows = Math.ceil(height / cellSize);
+			const totalCells = cols * rows;
+
+			grid.style.gridTemplateColumns = `repeat(${cols}, ${cellSize}px)`;
+			grid.style.gridTemplateRows = `repeat(${rows}, ${cellSize}px)`;
+
+			for (let i = 0; i < totalCells; i++) {
+				const cell = document.createElement('div');
+				cell.className = 'relative flex items-center justify-center w-full h-full overflow-visible';
+				cell.dataset.index = i.toString();
+
+				const img = document.createElement('img');
+				img.className = 'pointer-events-none absolute object-contain select-none drop-shadow-xl';
+				img.style.width = '130px';
+				img.style.height = '130px';
+				img.style.maxWidth = 'none';
+				img.style.maxHeight = 'none';
+				img.style.opacity = '0';
+				img.style.transform = 'scale(0.3)';
+				cell.appendChild(img);
+
+				grid.appendChild(cell);
+			}
+		}
+
+		fillGrid();
+
+		window.addEventListener('resize', fillGrid);
+
+		function hideImage(img: HTMLImageElement | null) {
+			if (!img) return;
+			animate(
+				img,
+				{
+					opacity: [1, 0],
+					scale: [1, 0.4],
+				},
+				{
+					duration: 0.22,
+					ease: 'easeIn',
+				}
+			);
+		}
+
+		section.addEventListener('mousemove', (e) => {
+			if (!gridContainer) return;
+			const containerRect = gridContainer.getBoundingClientRect();
+			const x = e.clientX - containerRect.left;
+			const y = e.clientY - containerRect.top;
+
+			const cols = Math.ceil(gridContainer.offsetWidth / cellSize);
+			const rows = Math.ceil(gridContainer.offsetHeight / cellSize);
+
+			const col = Math.floor(x / cellSize);
+			const row = Math.floor(y / cellSize);
+
+			if (col < 0 || col >= cols || row < 0 || row >= rows) {
+				if (lastActiveImg) {
+					hideImage(lastActiveImg);
+					lastActiveImg = null;
+					lastCellIndex = -1;
+				}
+				return;
+			}
+
+			const cellIndex = row * cols + col;
+			if (cellIndex === lastCellIndex) return;
+
+			if (lastActiveImg) {
+				hideImage(lastActiveImg);
+			}
+
+			lastCellIndex = cellIndex;
+
+			const cell = grid.children[cellIndex] as HTMLElement | undefined;
+			if (!cell) {
+				lastActiveImg = null;
+				return;
+			}
+
+			const img = cell.querySelector('img');
+			if (!img) {
+				lastActiveImg = null;
+				return;
+			}
+
+			img.src = ctaImages[imgIndex % ctaImages.length];
+			imgIndex++;
+
+			const randomRotation = (Math.random() - 0.5) * 25;
+
+			animate(
+				img,
+				{
+					opacity: [0, 1],
+					scale: [0.3, 1.12, 1],
+					rotate: [-randomRotation, randomRotation * 0.3, 0],
+				},
+				{
+					duration: 0.25,
+					ease: 'backOut',
+				}
+			);
+
+			lastActiveImg = img;
+		});
+
+		section.addEventListener('mouseleave', () => {
+			if (lastActiveImg) {
+				hideImage(lastActiveImg);
+				lastActiveImg = null;
+				lastCellIndex = -1;
+			}
+		});
+	}
+
+	document.addEventListener('astro:page-load', setupCtaGrid);
+</script>

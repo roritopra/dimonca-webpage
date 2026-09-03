@@ -11,7 +11,7 @@ import rocheCrackedImg from "../../assets/images/cookie-card-roche-cracked.png";
 ---
 
 <section id="galletas" class="relative z-10 w-full overflow-hidden bg-beige">
-  <div class="absolute inset-x-0 top-0 h-[606px] bg-blue-500">
+  <div class="absolute inset-x-0 top-0 h-[380px] sm:h-[480px] lg:h-[606px] bg-blue-500">
     <div
       class="absolute inset-0 left-1/2 w-[1440px] max-w-full -translate-x-1/2"
     >
@@ -29,18 +29,18 @@ import rocheCrackedImg from "../../assets/images/cookie-card-roche-cracked.png";
       >
       </div>
 
-      <div class="absolute inset-x-0 top-[51px] text-center">
+      <div class="absolute inset-x-0 top-[28px] sm:top-[40px] lg:top-[51px] text-center px-4">
         <h2
           style="paint-order: stroke;"
-          class="m-0 font-sans text-[38px] leading-[1.2] text-brown [-webkit-text-stroke:15px_#F7F2E8] [filter:drop-shadow(0px_4px_4px_rgba(58,32,14,0.5))]"
+          class="m-0 font-sans text-[22px] sm:text-[30px] lg:text-[38px] leading-[1.2] text-brown [-webkit-text-stroke:8px_#F7F2E8] sm:[-webkit-text-stroke:12px_#F7F2E8] lg:[-webkit-text-stroke:15px_#F7F2E8] [filter:drop-shadow(0px_4px_4px_rgba(58,32,14,0.5))]"
         >
           Conoce Nuestras
         </h2>
       </div>
-      <div class="absolute inset-x-0 top-[81px] text-center" aria-hidden="true">
+      <div class="absolute inset-x-0 top-[50px] sm:top-[64px] lg:top-[81px] text-center" aria-hidden="true">
         <p
           style="paint-order: stroke;"
-          class="m-0 font-exmouth text-[154.71px] leading-[1.2] text-brown [-webkit-text-stroke:15px_#F7F2E8] [filter:drop-shadow(0px_4px_4px_rgba(58,32,14,0.5))]"
+          class="m-0 font-exmouth text-[80px] sm:text-[115px] lg:text-[154.71px] leading-[1.2] text-brown [-webkit-text-stroke:8px_#F7F2E8] sm:[-webkit-text-stroke:12px_#F7F2E8] lg:[-webkit-text-stroke:15px_#F7F2E8] [filter:drop-shadow(0px_4px_4px_rgba(58,32,14,0.5))]"
         >
           Galletas
         </p>
@@ -49,9 +49,13 @@ import rocheCrackedImg from "../../assets/images/cookie-card-roche-cracked.png";
   </div>
 
   <div
-    class="relative mx-auto flex max-w-[1440px] flex-col items-center px-20 pt-[350px] pb-16"
+    class="relative mx-auto flex max-w-[1440px] flex-col items-center px-0 lg:px-20 pt-[210px] sm:pt-[270px] lg:pt-[350px] pb-12 lg:pb-16"
   >
-    <div class="grid grid-cols-4 gap-[30px]">
+    <!-- Carrusel en móvil/tablet, grid en desktop -->
+    <div
+      class="cookie-cards-wrapper w-full lg:w-auto overflow-x-auto scroll-smooth snap-x snap-mandatory lg:overflow-visible flex lg:grid lg:grid-cols-4 gap-[20px] sm:gap-[24px] lg:gap-[30px] px-6 sm:px-10 lg:px-0 pb-4 lg:pb-0"
+      style="-webkit-overflow-scrolling: touch; scrollbar-width: none;"
+    >
       <CookieCard />
       <CookieCard
         img={oreoImg}
@@ -87,23 +91,140 @@ import rocheCrackedImg from "../../assets/images/cookie-card-roche-cracked.png";
       />
     </div>
 
+    <!-- Indicadores de puntos (solo visibles en móvil/tablet) -->
+    <div class="flex lg:hidden items-center justify-center gap-2 mt-5 py-2" aria-hidden="true" id="cookie-dots">
+      <button class="cookie-dot transition-all duration-300 rounded-full h-2.5 w-6 bg-blue-500" data-index="0" data-active="true" aria-label="Ir a galleta 1"></button>
+      <button class="cookie-dot transition-all duration-300 rounded-full h-2.5 w-2.5 bg-blue-500/30" data-index="1" data-active="false" aria-label="Ir a galleta 2"></button>
+      <button class="cookie-dot transition-all duration-300 rounded-full h-2.5 w-2.5 bg-blue-500/30" data-index="2" data-active="false" aria-label="Ir a galleta 3"></button>
+      <button class="cookie-dot transition-all duration-300 rounded-full h-2.5 w-2.5 bg-blue-500/30" data-index="3" data-active="false" aria-label="Ir a galleta 4"></button>
+    </div>
+
     <a
-      class="group mt-10 flex h-[52px] w-[210px] items-center justify-center gap-3 
-      whitespace-nowrap rounded-[57px] bg-[#6CA7D5] px-6 py-3 font-sans text-[19px] 
-      leading-[1.2] font-bold text-beige no-underline 
+      class="group mt-8 lg:mt-10 flex h-[48px] sm:h-[52px] w-[190px] sm:w-[210px] items-center justify-center gap-3
+      whitespace-nowrap rounded-[57px] bg-[#6CA7D5] px-6 py-3 font-sans text-[17px] sm:text-[19px]
+      leading-[1.2] font-bold text-beige no-underline
       transition-all duration-300 hover:brightness-95"
       href="#galletas"
     >
       Ver más
       <span
-        class="flex h-[32px] w-[32px] shrink-0 items-center justify-center rounded-full bg-beige transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+        class="flex h-[30px] w-[30px] sm:h-[32px] sm:w-[32px] shrink-0 items-center justify-center rounded-full bg-beige transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
       >
         <Icon
           name="lucide:arrow-up-right"
-          class="h-[18px] w-[18px] text-[#6CA7D5]"
+          class="h-4 w-4 sm:h-[18px] sm:w-[18px] text-[#6CA7D5]"
           aria-hidden="true"
         />
       </span>
     </a>
   </div>
 </section>
+
+<style>
+  .cookie-cards-wrapper::-webkit-scrollbar {
+    display: none;
+  }
+  @media (max-width: 1023px) {
+    .cookie-cards-wrapper > :global(.cookie-card) {
+      snap-align: center;
+      flex-shrink: 0;
+      scroll-snap-align: center;
+      width: 270px;
+    }
+  }
+  @media (max-width: 479px) {
+    .cookie-cards-wrapper > :global(.cookie-card) {
+      width: 250px;
+    }
+  }
+</style>
+
+<script>
+  function initCookieCarousel() {
+    const wrapperEl = document.querySelector<HTMLElement>('.cookie-cards-wrapper');
+    const dots = Array.from(document.querySelectorAll<HTMLElement>('.cookie-dot'));
+    if (!wrapperEl || dots.length === 0) return;
+    const wrapper = wrapperEl;
+
+    function updateDots(activeIndex: number) {
+      dots.forEach((dot, i) => {
+        const isActive = i === activeIndex;
+        dot.setAttribute('data-active', isActive ? 'true' : 'false');
+        if (isActive) {
+          dot.className = 'cookie-dot transition-all duration-300 rounded-full h-2.5 w-6 bg-blue-500';
+        } else {
+          dot.className = 'cookie-dot transition-all duration-300 rounded-full h-2.5 w-2.5 bg-blue-500/30';
+        }
+      });
+    }
+
+    let isScrollingFromClick = false;
+    let scrollTimeout: number | undefined;
+
+    function getActiveIndex() {
+      const cards = Array.from(wrapper.querySelectorAll<HTMLElement>('.cookie-card'));
+      if (cards.length === 0) return 0;
+
+      const wrapperRect = wrapper.getBoundingClientRect();
+      const targetCenter = wrapperRect.left + wrapperRect.width / 2;
+
+      let closest = 0;
+      let minDiff = Infinity;
+
+      cards.forEach((card, i) => {
+        const r = card.getBoundingClientRect();
+        const cardCenter = r.left + r.width / 2;
+        const diff = Math.abs(targetCenter - cardCenter);
+        if (diff < minDiff) {
+          minDiff = diff;
+          closest = i;
+        }
+      });
+
+      return closest;
+    }
+
+    function onScroll() {
+      if (window.innerWidth >= 1024 || isScrollingFromClick) return;
+      const activeIdx = getActiveIndex();
+      updateDots(activeIdx);
+    }
+
+    wrapper.addEventListener('scroll', onScroll, { passive: true });
+
+    dots.forEach((dot) => {
+      dot.addEventListener('click', () => {
+        if (window.innerWidth >= 1024) return;
+        const index = parseInt(dot.dataset.index ?? '0', 10);
+        const cards = Array.from(wrapper.querySelectorAll<HTMLElement>('.cookie-card'));
+        const targetCard = cards[index];
+
+        if (targetCard) {
+          isScrollingFromClick = true;
+          updateDots(index);
+
+          const cardOffsetLeft = targetCard.offsetLeft;
+          const cardWidth = targetCard.offsetWidth;
+          const wrapperWidth = wrapper.clientWidth;
+          const scrollTarget = cardOffsetLeft - (wrapperWidth / 2) + (cardWidth / 2);
+
+          wrapper.scrollTo({
+            left: scrollTarget,
+            behavior: 'smooth'
+          });
+
+          window.clearTimeout(scrollTimeout);
+          scrollTimeout = window.setTimeout(() => {
+            isScrollingFromClick = false;
+            updateDots(getActiveIndex());
+          }, 450);
+        }
+      });
+    });
+
+    updateDots(getActiveIndex());
+  }
+
+  initCookieCarousel();
+  document.addEventListener('astro:page-load', initCookieCarousel);
+</script>

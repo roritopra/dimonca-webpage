@@ -22,16 +22,17 @@ const slidesData = [
 		titleWord1: 'Galleta',
 		titleWord2: 'Habibi',
 		titleTextColor: 'text-pink-200',
-		titleStroke: '[-webkit-text-stroke:15px_#614d3e]',
-		cookieWrapClass: 'top-[52.08px] left-[382.25px] h-[650px] w-[650px]',
+		titleStroke: '[-webkit-text-stroke:6px_#614d3e] sm:[-webkit-text-stroke:10px_#614d3e] xl:[-webkit-text-stroke:15px_#614d3e]',
+		cookieWrapClass: 'top-[95px] sm:top-[80px] xl:top-[52.08px] left-1/2 -translate-x-1/2 xl:left-[382.25px] xl:translate-x-0 h-[340px] w-[340px] sm:h-[460px] sm:w-[460px] md:h-[520px] md:w-[520px] xl:h-[650px] xl:w-[650px]',
+		cookieWidthClass: 'w-[340px] sm:w-[460px] md:w-[520px] xl:w-[650px]',
 		cookieNormalImg: creamHero,
 		cookieHoverImg: cookieHero,
 		cookieAlt: 'Galleta Habibi con crema de pistacho',
 		cookieHoverAlt: 'Galleta Habibi partida mostrando relleno artesanal de pistacho',
-		starWrapClass: 'top-[186.68px] left-200 h-[279.66px] w-[282.03px]',
+		starWrapClass: 'top-[115px] right-2 sm:right-6 md:right-10 xl:right-auto xl:top-[186.68px] xl:left-200 h-[145px] w-[145px] sm:h-[195px] sm:w-[195px] md:h-[220px] md:w-[220px] xl:h-[279.66px] xl:w-[282.03px]',
 		starImg: '/images/star-hero.svg',
-		starTextClass: 'text-[27px] text-brown [-webkit-text-stroke:5px_#F7F2E8]',
-		starTextMargin: 'margin-left: 14.4px; margin-top: -12.6px;',
+		starTextClass: 'text-[15px] sm:text-[20px] xl:text-[27px] text-brown [-webkit-text-stroke:3px_#F7F2E8] xl:[-webkit-text-stroke:5px_#F7F2E8]',
+		starTextMargin: 'margin-left: 7px; margin-top: -6px; sm:margin-left: 10px; sm:margin-top: -9px; xl:margin-left: 14.4px; xl:margin-top: -12.6px;',
 		infoTitle: 'Galleta Habibi',
 		infoTitleStroke: 'text-beige [-webkit-text-stroke:8px_#614d3e]',
 		infoDesc: 'Galleta de chocolate tipo brownie, rellena con una exquisita crema de pistacho artesanal. Un postre al mejor estilo Dubai.',
@@ -45,16 +46,17 @@ const slidesData = [
 		titleWord1: 'Crookie',
 		titleWord2: 'Chips',
 		titleTextColor: 'text-pink',
-		titleStroke: '[-webkit-text-stroke:15px_#f7f2e8]',
-		cookieWrapClass: 'top-[17.08px] left-[347.25px] h-[720px] w-[720px]',
+		titleStroke: '[-webkit-text-stroke:6px_#f7f2e8] sm:[-webkit-text-stroke:10px_#f7f2e8] xl:[-webkit-text-stroke:15px_#f7f2e8]',
+		cookieWrapClass: 'top-[75px] sm:top-[60px] xl:top-[17.08px] left-1/2 -translate-x-1/2 xl:left-[347.25px] xl:translate-x-0 h-[360px] w-[360px] sm:h-[490px] sm:w-[490px] md:h-[560px] md:w-[560px] xl:h-[720px] xl:w-[720px]',
+		cookieWidthClass: 'w-[360px] sm:w-[490px] md:w-[560px] xl:w-[720px]',
 		cookieNormalImg: crookieHero,
 		cookieHoverImg: crookieHeroSplit,
 		cookieAlt: 'Crookie Chips con relleno de nutella',
 		cookieHoverAlt: 'Crookie partido con centro cremoso de nutella',
-		starWrapClass: 'top-[186.68px] left-200 h-[311px] w-[314px]',
+		starWrapClass: 'top-[115px] right-2 sm:right-6 md:right-10 xl:right-auto xl:top-[186.68px] xl:left-200 h-[155px] w-[155px] sm:h-[210px] sm:w-[210px] md:h-[240px] md:w-[240px] xl:h-[311px] xl:w-[314px]',
 		starImg: '/images/star-hero-2.svg',
-		starTextClass: 'text-[30px] text-white',
-		starTextMargin: 'margin-left: 14.5px; margin-top: -14.4px;',
+		starTextClass: 'text-[16px] sm:text-[22px] xl:text-[30px] text-white',
+		starTextMargin: 'margin-left: 7px; margin-top: -7px; sm:margin-left: 10px; sm:margin-top: -10px; xl:margin-left: 14.5px; xl:margin-top: -14.4px;',
 		infoTitle: 'Crookie Chips',
 		infoTitleStroke: 'text-brown [-webkit-text-stroke:8px_#9ACCF4]',
 		infoDesc: 'Croissant + galleta de chips de chocolate + relleno de nutella. Hojaldrado, super crocante y con un centro cremoso de chocolate.',
@@ -63,7 +65,7 @@ const slidesData = [
 ];
 ---
 
-<section class="sticky top-0 z-0 h-screen min-h-[600px] max-h-[920px] w-full overflow-hidden bg-brown-400">
+<section class="sticky top-0 z-0 h-screen min-h-[580px] max-h-[920px] w-full overflow-hidden bg-brown-400">
 	<div id="hero-carousel" class="absolute inset-0">
 		{
 			slidesData.map((slide, idx) => (
@@ -83,17 +85,17 @@ const slidesData = [
 						))}
 					</div>
 
-					<div class="absolute top-0 bottom-0 left-1/2 flex min-w-360 -translate-x-1/2 items-center justify-center">
+					<div class="hero-stage-wrapper absolute inset-0 flex items-center justify-center">
 						<div
-							class="hero-content relative h-[775px] w-[1440px]"
-							style="transform: scale(min(1, calc((100vh - 40px) / 775))); transform-origin: center center;"
+							class="hero-content relative h-[600px] w-full max-w-[420px] sm:h-[700px] sm:max-w-[600px] xl:h-[775px] xl:w-[1440px] xl:max-w-none"
 						>
-							<div class="pointer-events-none absolute top-29.5 left-111.5 h-131 w-131 mix-blend-overlay" aria-hidden="true">
-								<img class="block h-full w-full" src={slide.ellipseImg} alt="" />
+							<div class="pointer-events-none absolute top-10 sm:top-16 xl:top-29.5 left-1/2 -translate-x-1/2 xl:left-111.5 xl:translate-x-0 h-72 w-72 sm:h-96 sm:w-96 xl:h-131 xl:w-131 mix-blend-overlay" aria-hidden="true">
+								<img class="block h-full w-full object-contain" src={slide.ellipseImg} alt="" />
 							</div>
 
+							<!-- Palabra 1: Arriba a la izquierda (en móvil y desktop) -->
 							<p
-								class={`pointer-events-none absolute top-[33.68px] left-[157.8px] z-1 font-script text-[203.79px] leading-none whitespace-nowrap ${slide.titleTextColor}`}
+								class={`pointer-events-none absolute top-4 sm:top-8 xl:top-[33.68px] left-4 sm:left-8 xl:left-[157.8px] z-1 font-script text-[80px] sm:text-[120px] md:text-[150px] xl:text-[203.79px] leading-none whitespace-nowrap ${slide.titleTextColor}`}
 								aria-hidden="true"
 							>
 								<span
@@ -104,8 +106,10 @@ const slidesData = [
 									{slide.titleWord1}
 								</span>
 							</p>
+
+							<!-- Palabra 2: Abajo a la derecha (en móvil y desktop) -->
 							<p
-								class={`pointer-events-none absolute top-[33.68px] left-[1252.2px] z-1 w-[502.2px] -translate-x-full text-right font-script text-[203.79px] leading-none whitespace-nowrap ${slide.titleTextColor}`}
+								class={`pointer-events-none absolute bottom-[85px] sm:bottom-[90px] xl:bottom-auto xl:top-[33.68px] right-4 sm:right-8 xl:right-auto xl:left-[1252.2px] z-1 xl:w-[502.2px] xl:-translate-x-full text-right font-script text-[80px] sm:text-[120px] md:text-[150px] xl:text-[203.79px] leading-none whitespace-nowrap ${slide.titleTextColor}`}
 								aria-hidden="true"
 							>
 								<span
@@ -117,11 +121,11 @@ const slidesData = [
 								</span>
 							</p>
 
+							<!-- Galleta interactiva -->
 							<div class={`hero-cookie-interactive absolute z-2 ${slide.cookieWrapClass}`}>
 								<div class="hero-cookie-left absolute inset-y-0 left-0 w-1/2 overflow-hidden">
 									<Image
-										class="absolute top-0 left-0 h-full max-w-none object-cover"
-										style={`width: ${idx === 0 ? '650px' : '720px'};`}
+										class={`absolute top-0 left-0 h-full max-w-none object-cover ${slide.cookieWidthClass}`}
 										src={slide.cookieNormalImg}
 										alt={slide.cookieAlt}
 										loading="eager"
@@ -130,8 +134,7 @@ const slidesData = [
 								</div>
 								<div class="hero-cookie-right absolute inset-y-0 right-0 w-1/2 overflow-hidden">
 									<Image
-										class="absolute top-0 right-0 h-full max-w-none object-cover"
-										style={`width: ${idx === 0 ? '650px' : '720px'};`}
+										class={`absolute top-0 right-0 h-full max-w-none object-cover ${slide.cookieWidthClass}`}
 										src={slide.cookieNormalImg}
 										alt={slide.cookieAlt}
 										loading="eager"
@@ -148,8 +151,9 @@ const slidesData = [
 								/>
 							</div>
 
+							<!-- Estrella Nueva -->
 							<div class={`hero-star-interactive absolute z-3 ${slide.starWrapClass}`}>
-								<img class="block h-full w-full" src={slide.starImg} alt="" aria-hidden="true" />
+								<img class="block h-full w-full object-contain" src={slide.starImg} alt="" aria-hidden="true" />
 								<span
 									class={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-sans font-bold whitespace-nowrap text-center leading-[1.2] ${slide.starTextClass}`}
 									style={`${slide.starTextMargin} paint-order: stroke;`}
@@ -158,7 +162,8 @@ const slidesData = [
 								</span>
 							</div>
 
-							<div class="hero-left-info absolute top-[310.9px] left-53.5 z-3 w-60.75">
+							<!-- Info lateral (solo visible en desktop xl+) -->
+							<div class="hero-left-info hidden xl:block absolute top-[310.9px] left-53.5 z-3 w-60.75">
 								<h1
 									class={`mb-3 font-sans text-[38px] leading-[1.2] font-bold ${slide.infoTitleStroke}`}
 									style="paint-order: stroke"
@@ -180,37 +185,36 @@ const slidesData = [
 	</div>
 
 	<!-- Capa compartida: botones del carrusel y Ver menú -->
-	<div class="pointer-events-none absolute top-0 bottom-0 left-1/2 z-10 flex min-w-360 -translate-x-1/2 items-center justify-center">
+	<div class="hero-stage-wrapper pointer-events-none absolute inset-0 z-10 flex items-center justify-center">
 		<div
-			class="relative h-[775px] w-[1440px]"
-			style="transform: scale(min(1, calc((100vh - 40px) / 775))); transform-origin: center center;"
+			class="relative h-[600px] w-full max-w-[420px] sm:h-[700px] sm:max-w-[600px] xl:h-[775px] xl:w-[1440px] xl:max-w-none"
 		>
 			<a
 				id="hero-menu-btn"
-				class="pointer-events-auto absolute top-164.5 left-148.75 z-3 flex h-12.25 w-[218.1px] items-center justify-center gap-2 whitespace-nowrap rounded-[57px] bg-pink px-4 py-2 font-sans text-[19px] leading-[1.2] font-bold text-beige no-underline hover:brightness-95"
+				class="pointer-events-auto absolute bottom-4 sm:bottom-6 xl:bottom-auto xl:top-164.5 left-1/2 -translate-x-1/2 xl:translate-x-0 xl:left-148.75 z-3 flex h-11 sm:h-12 xl:h-12.25 w-[180px] sm:w-[200px] xl:w-[218.1px] items-center justify-center gap-2 whitespace-nowrap rounded-[57px] bg-pink px-4 py-2 font-sans text-[16px] sm:text-[18px] xl:text-[19px] leading-[1.2] font-bold text-beige no-underline shadow-lg hover:brightness-95"
 				href="#menu"
 			>
 				Ver menú
-				<span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-[22.68px] bg-beige p-[6.67px]">
-					<img class="block h-[16.01px] w-[16.01px]" src="/images/chef-hat.svg" alt="" aria-hidden="true" />
+				<span class="flex h-7 w-7 sm:h-8 sm:w-8 shrink-0 items-center justify-center rounded-[22.68px] bg-beige p-1 sm:p-[6.67px]">
+					<img class="block h-3.5 w-3.5 sm:h-[16.01px] sm:w-[16.01px]" src="/images/chef-hat.svg" alt="" aria-hidden="true" />
 				</span>
 			</a>
 
 			<button
 				id="hero-prev"
-				class="pointer-events-auto absolute top-83 left-23.75 z-4 flex h-20 w-20 cursor-pointer items-center justify-center rounded-full border-[3px] border-white bg-pink text-beige hover:brightness-95"
+				class="pointer-events-auto absolute top-1/2 -translate-y-1/2 left-3 sm:left-6 xl:translate-y-0 xl:top-83 xl:left-23.75 z-4 flex h-12 w-12 sm:h-16 sm:w-16 xl:h-20 xl:w-20 cursor-pointer items-center justify-center rounded-full border-2 sm:border-[3px] border-white bg-pink text-beige shadow-md hover:brightness-95"
 				type="button"
 				aria-label="Ver postre anterior"
 			>
-				<Icon name="lucide:chevron-left" class="h-10 w-10 shrink-0" aria-hidden="true" />
+				<Icon name="lucide:chevron-left" class="h-6 w-6 sm:h-8 sm:w-8 xl:h-10 xl:w-10 shrink-0" aria-hidden="true" />
 			</button>
 			<button
 				id="hero-next"
-				class="pointer-events-auto absolute top-[268.13px] left-[1219.13px] z-4 flex h-20 w-20 cursor-pointer items-center justify-center rounded-full border-[3px] border-white bg-pink text-beige hover:brightness-95"
+				class="pointer-events-auto absolute top-1/2 -translate-y-1/2 right-3 sm:right-6 xl:translate-y-0 xl:right-auto xl:top-[268.13px] xl:left-[1219.13px] z-4 flex h-12 w-12 sm:h-16 sm:w-16 xl:h-20 xl:w-20 cursor-pointer items-center justify-center rounded-full border-2 sm:border-[3px] border-white bg-pink text-beige shadow-md hover:brightness-95"
 				type="button"
 				aria-label="Ver postre siguiente"
 			>
-				<Icon name="lucide:chevron-right" class="h-10 w-10 shrink-0" aria-hidden="true" />
+				<Icon name="lucide:chevron-right" class="h-6 w-6 sm:h-8 sm:w-8 xl:h-10 xl:w-10 shrink-0" aria-hidden="true" />
 			</button>
 		</div>
 	</div>

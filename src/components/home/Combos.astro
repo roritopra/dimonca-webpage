@@ -11,7 +11,7 @@ const stripes = Array.from({ length: 24 }, (_, i) => ({
 }));
 ---
 
-<section id="combos" class="relative z-10 h-[690px] w-full overflow-hidden bg-[#3A200E]">
+<section id="combos" class="relative z-10 min-h-[600px] h-auto lg:h-[690px] w-full overflow-hidden bg-[#3A200E] py-16 sm:py-20 lg:py-0">
   <!-- Rayas verticales en el fondo -->
   <div
     class="absolute inset-0 overflow-hidden pointer-events-none"
@@ -33,38 +33,38 @@ const stripes = Array.from({ length: 24 }, (_, i) => ({
   </div>
 
   <div
-    class="relative mx-auto flex h-full max-w-[1440px] items-center justify-between px-10 md:px-20"
+    class="relative mx-auto flex h-full max-w-[1440px] flex-col-reverse lg:flex-row items-center justify-between gap-12 lg:gap-8 px-6 sm:px-12 md:px-20"
   >
-    <!-- Lado izquierdo: Imagen combos-caja -->
-    <div class="relative z-10 flex flex-1 items-center justify-center">
+    <!-- Imagen combos-caja (abajo en móvil, izquierda en desktop) -->
+    <div class="relative z-10 flex flex-1 items-center justify-center w-full max-w-[340px] sm:max-w-[460px] lg:max-w-none">
       <!-- Elipse de brillo detrás de la caja -->
       <div
-        class="pointer-events-none absolute h-[566px] w-[566px] rounded-[566px] bg-white/30 mix-blend-overlay blur-[100px]"
+        class="pointer-events-none absolute h-[280px] w-[280px] sm:h-[400px] sm:w-[400px] lg:h-[566px] lg:w-[566px] rounded-full bg-white/30 mix-blend-overlay blur-[60px] sm:blur-[100px]"
         aria-hidden="true"
       ></div>
 
       <Image
         src={combosCajaImg}
         alt="Combos de galletas en caja personalizada Dimonca"
-        class="relative z-10 h-auto max-h-[580px] w-auto max-w-full object-contain"
+        class="relative z-10 h-auto max-h-[360px] sm:max-h-[460px] lg:max-h-[580px] w-auto max-w-full object-contain drop-shadow-[0px_16px_32px_rgba(0,0,0,0.35)]"
         loading="lazy"
       />
     </div>
 
-    <!-- Lado derecho: Información -->
+    <!-- Información (arriba en móvil, derecha en desktop) -->
     <div
-      class="relative z-10 flex w-full max-w-[440px] flex-col items-start gap-10"
+      class="relative z-10 flex w-full max-w-[500px] lg:max-w-[440px] flex-col items-center lg:items-start text-center lg:text-left gap-6 sm:gap-8 lg:gap-10"
     >
-      <div class="relative w-full pb-20">
+      <div class="relative w-full flex flex-col items-center lg:items-start">
         <h2
           style="paint-order: stroke;"
-          class="m-0 font-sans text-[54px] font-bold leading-none text-beige [-webkit-text-stroke:10px_#3A200E] [filter:drop-shadow(0px_4px_4px_rgba(58,32,14,0.5))]"
+          class="m-0 font-sans text-[36px] sm:text-[46px] lg:text-[54px] font-bold leading-none text-beige [-webkit-text-stroke:6px_#3A200E] sm:[-webkit-text-stroke:8px_#3A200E] lg:[-webkit-text-stroke:10px_#3A200E] [filter:drop-shadow(0px_4px_4px_rgba(58,32,14,0.5))]"
         >
           Lleva tus
         </h2>
         <span
           style="paint-order: stroke;"
-          class="absolute top-[50px] left-[130px] font-exmouth text-[100px] leading-none text-blue-500 whitespace-nowrap [-webkit-text-stroke:10px_#3A200E] [filter:drop-shadow(0px_4px_4px_rgba(58,32,14,0.5))]"
+          class="font-exmouth text-[68px] sm:text-[84px] lg:text-[100px] leading-none text-blue-500 whitespace-nowrap -mt-3 sm:-mt-4 lg:mt-0 lg:absolute lg:top-[50px] lg:left-[130px] [-webkit-text-stroke:6px_#3A200E] sm:[-webkit-text-stroke:8px_#3A200E] lg:[-webkit-text-stroke:10px_#3A200E] [filter:drop-shadow(0px_4px_4px_rgba(58,32,14,0.5))]"
           aria-hidden="true"
         >
           Combos
@@ -72,24 +72,23 @@ const stripes = Array.from({ length: 24 }, (_, i) => ({
       </div>
       <p
         style="paint-order: stroke;"
-        class="m-0 text-[18px] leading-relaxed text-beige [-webkit-text-stroke:5px_#3A200E]
-	  [filter:drop-shadow(0px_4px_4px_rgba(58,32,14,0.5))]"
+        class="m-0 font-sans text-[16px] sm:text-[17px] lg:text-[18px] leading-relaxed text-beige [-webkit-text-stroke:3px_#3A200E] sm:[-webkit-text-stroke:4px_#3A200E] lg:[-webkit-text-stroke:5px_#3A200E] [filter:drop-shadow(0px_4px_4px_rgba(58,32,14,0.5))]"
       >
         Reúne tus productos favoritos del menú en nuestros combos de 3 o 9
         unidades. Mezcla sabores, descubre nuevas opciones y crea la combinación
         ideal para cualquier ocasión.
       </p>
       <a
-        class="flex h-[52px] items-center justify-center gap-3 whitespace-nowrap rounded-[57px] bg-blue-600 px-6 py-2 font-sans text-[18px] font-bold text-beige no-underline shadow-md transition-all hover:brightness-95"
+        class="flex h-[48px] sm:h-[52px] items-center justify-center gap-3 whitespace-nowrap rounded-[57px] bg-blue-600 px-6 py-2 font-sans text-[16px] sm:text-[18px] font-bold text-beige no-underline shadow-md transition-all hover:brightness-95"
         href="#pedido"
       >
         Haz tu pedido
         <span
-          class="flex h-[32px] w-[32px] shrink-0 items-center justify-center rounded-full bg-beige"
+          class="flex h-7 w-7 sm:h-[32px] sm:w-[32px] shrink-0 items-center justify-center rounded-full bg-beige"
         >
           <Icon
             name="lucide:map"
-            class="h-[16px] w-[16px] text-blue-600"
+            class="h-3.5 w-3.5 sm:h-[16px] sm:w-[16px] text-blue-600"
             aria-hidden="true"
           />
         </span>

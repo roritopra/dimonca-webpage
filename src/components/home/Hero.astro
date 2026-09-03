@@ -219,306 +219,300 @@ const slidesData = [
 <script>
 	import { animate } from 'motion';
 
-	function initHero() {
-		const carousel = document.getElementById('hero-carousel');
-		if (!carousel) return;
+	const carousel = document.getElementById('hero-carousel');
+	const slides = carousel ? Array.from(carousel.querySelectorAll<HTMLElement>('[data-slide]')) : [];
+	const prevBtn = document.getElementById('hero-prev');
+	const nextBtn = document.getElementById('hero-next');
 
-		const slides = Array.from(carousel.querySelectorAll<HTMLElement>('[data-slide]'));
-		const prevBtn = document.getElementById('hero-prev');
-		const nextBtn = document.getElementById('hero-next');
+	const EXIT_MS = 600;
+	const PAUSE_MS = 200;
+	const ENTER_MS = 600;
 
-		const EXIT_MS = 600;
-		const PAUSE_MS = 200;
-		const ENTER_MS = 600;
+	let current = 0;
+	let transitioning = false;
 
-		let current = 0;
-		let transitioning = false;
-		let hoverTimeout: ReturnType<typeof setTimeout> | null = null;
+	let hoverTimeout: ReturnType<typeof setTimeout> | null = null;
 
-		function resetHoverState(slideEl: HTMLElement) {
-			if (hoverTimeout) {
-				clearTimeout(hoverTimeout);
-				hoverTimeout = null;
-			}
-			const cookie = slideEl.querySelector<HTMLElement>('.hero-cookie-interactive');
-			const star = slideEl.querySelector<HTMLElement>('.hero-star-interactive');
-			const leftHalf = slideEl.querySelector<HTMLElement>('.hero-cookie-left');
-			const rightHalf = slideEl.querySelector<HTMLElement>('.hero-cookie-right');
-			const cracked = slideEl.querySelector<HTMLElement>('.hero-cookie-cracked');
-
-			if (window.scrollY <= 5 && cookie) {
-				animate(cookie, { rotate: 0, scale: 1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
-				if (star) animate(star, { rotate: 0, scale: 1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
-			}
-			if (leftHalf) {
-				animate(leftHalf, { x: 0, opacity: 1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
-			}
-			if (rightHalf) {
-				animate(rightHalf, { x: 0, opacity: 1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
-			}
-			if (cracked) {
-				animate(cracked, { opacity: 0 }, { duration: 0.2, ease: 'easeInOut' });
-			}
+	function resetHoverState(slideEl: HTMLElement) {
+		if (hoverTimeout) {
+			clearTimeout(hoverTimeout);
+			hoverTimeout = null;
 		}
+		const cookie = slideEl.querySelector<HTMLElement>('.hero-cookie-interactive');
+		const star = slideEl.querySelector<HTMLElement>('.hero-star-interactive');
+		const leftHalf = slideEl.querySelector<HTMLElement>('.hero-cookie-left');
+		const rightHalf = slideEl.querySelector<HTMLElement>('.hero-cookie-right');
+		const cracked = slideEl.querySelector<HTMLElement>('.hero-cookie-cracked');
 
-		function startHoverState(slideEl: HTMLElement) {
-			if (window.scrollY > 5 || hoverTimeout) return;
-			const cookie = slideEl.querySelector<HTMLElement>('.hero-cookie-interactive');
-			const star = slideEl.querySelector<HTMLElement>('.hero-star-interactive');
-			const leftHalf = slideEl.querySelector<HTMLElement>('.hero-cookie-left');
-			const rightHalf = slideEl.querySelector<HTMLElement>('.hero-cookie-right');
-			const cracked = slideEl.querySelector<HTMLElement>('.hero-cookie-cracked');
-
-			if (!cookie || !leftHalf || !rightHalf || !cracked) return;
-
-			const slide = (cookie.offsetWidth / 600) * 2.5;
-			animate(cookie, { rotate: -10 }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
-			if (star) animate(star, { rotate: 18, scale: 1.08 }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
-			animate(leftHalf, { x: -slide }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
-			animate(rightHalf, { x: slide }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
-
-			hoverTimeout = setTimeout(() => {
-				if (window.scrollY > 5) {
-					resetHoverState(slideEl);
-					return;
-				}
-				animate(cracked, { opacity: 1 }, { duration: 0.1, ease: 'easeOut' });
-				animate(leftHalf, { opacity: 0 }, { duration: 0.1, ease: 'easeOut' });
-				animate(rightHalf, { opacity: 0 }, { duration: 0.1, ease: 'easeOut' });
-				animate(cookie, { scale: 1.08 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
-			}, 50);
+		if (window.scrollY <= 5 && cookie) {
+			animate(cookie, { rotate: 0, scale: 1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
+			if (star) animate(star, { rotate: 0, scale: 1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
 		}
-
-		// Vincular hover a cada slide
-		slides.forEach((slideEl) => {
-			const cookie = slideEl.querySelector<HTMLElement>('.hero-cookie-interactive');
-			const star = slideEl.querySelector<HTMLElement>('.hero-star-interactive');
-
-			cookie?.addEventListener('mouseenter', () => startHoverState(slideEl));
-			cookie?.addEventListener('mouseleave', () => resetHoverState(slideEl));
-			star?.addEventListener('mouseenter', () => startHoverState(slideEl));
-			star?.addEventListener('mouseleave', () => resetHoverState(slideEl));
-		});
-
-		function goTo(index: number) {
-			if (transitioning || index === current || !slides[index]) return;
-			transitioning = true;
-
-			const from = slides[current];
-			const to = slides[index];
-
-			resetHoverState(from);
-
-			const fromLeftInfo = from.querySelector<HTMLElement>('.hero-left-info');
-			const toLeftInfo = to.querySelector<HTMLElement>('.hero-left-info');
-			const fromCookieImg = from.querySelector<HTMLElement>('.hero-cookie-interactive');
-			const toCookieImg = to.querySelector<HTMLElement>('.hero-cookie-interactive');
-			const fromStar = from.querySelector<HTMLElement>('.hero-star-interactive');
-			const toStar = to.querySelector<HTMLElement>('.hero-star-interactive');
-			const fromStripes = Array.from(from.querySelectorAll<HTMLElement>('.hero-stripe'));
-			const toStripes = Array.from(to.querySelectorAll<HTMLElement>('.hero-stripe'));
-			const fromTitles = Array.from(from.querySelectorAll<HTMLElement>('.hero-title-word'));
-			const toTitles = Array.from(to.querySelectorAll<HTMLElement>('.hero-title-word'));
-			const travel = from.offsetHeight;
-
-			fromStripes.forEach((stripe) => {
-				const dir = stripe.dataset.dir === 'up' ? -1 : 1;
-				animate(
-					stripe,
-					{ y: dir * travel, opacity: 0 },
-					{ duration: EXIT_MS / 1000, ease: 'easeInOut' }
-				);
-			});
-
-			fromTitles.forEach((word) => {
-				const isLeft = word.dataset.dir === 'left';
-				const targetX = isLeft ? -150 : 150;
-				animate(
-					word,
-					{ x: targetX, opacity: 0 },
-					{ duration: EXIT_MS / 1000, ease: 'easeInOut' }
-				);
-			});
-
-			if (fromLeftInfo) {
-				animate(
-					fromLeftInfo,
-					{ x: -120, opacity: 0 },
-					{ duration: EXIT_MS / 1000, ease: 'easeInOut' }
-				);
-			}
-
-			if (fromCookieImg) {
-				animate(
-					fromCookieImg,
-					{ opacity: 0, scale: 0.8, rotate: -25 },
-					{ duration: EXIT_MS / 1000, ease: 'backIn' }
-				);
-			}
-
-			if (fromStar) {
-				animate(
-					fromStar,
-					{ opacity: 0, scale: 0.85, y: 24, rotate: -45 },
-					{ duration: EXIT_MS / 1000, ease: 'backIn' }
-				);
-			}
-
-			setTimeout(() => {
-				animate(from, { opacity: 0 }, { duration: 0.3, ease: 'easeInOut' }).then(() => {
-					from.style.visibility = 'hidden';
-					from.style.pointerEvents = 'none';
-				});
-
-				to.style.visibility = 'visible';
-				to.style.pointerEvents = 'auto';
-				animate(to, { opacity: [0, 1] }, { duration: 0.4, ease: 'easeInOut' });
-
-				toStripes.forEach((stripe) => {
-					const dir = stripe.dataset.dir === 'up' ? -1 : 1;
-					animate(
-						stripe,
-						{ y: [dir * travel, 0], opacity: [0, 1] },
-						{ duration: ENTER_MS / 1000, ease: 'easeInOut' }
-					);
-				});
-				toTitles.forEach((word) => {
-					const isLeft = word.dataset.dir === 'left';
-					const startX = isLeft ? -150 : 150;
-					animate(
-						word,
-						{ x: [startX, 0], opacity: [0, 1] },
-						{ duration: ENTER_MS / 1000, ease: 'easeOut' }
-					);
-				});
-				if (toLeftInfo) {
-					animate(
-						toLeftInfo,
-						{ x: [-120, 0], opacity: [0, 1] },
-						{ duration: ENTER_MS / 1000, ease: 'easeOut' }
-					);
-				}
-				if (toCookieImg) {
-					animate(
-						toCookieImg,
-						{ opacity: [0, 1], scale: [0.8, 1], rotate: [25, 0] },
-						{ duration: ENTER_MS / 1000, ease: 'backOut' }
-					);
-				}
-				if (toStar) {
-					animate(
-						toStar,
-						{ opacity: [0, 1], scale: [0.9, 1], y: [-16, 0], rotate: [45, 0] },
-						{ duration: ENTER_MS / 1000, ease: 'backOut' }
-					);
-				}
-				transitioning = false;
-			}, EXIT_MS + PAUSE_MS);
-
-			current = index;
+		if (leftHalf) {
+			animate(leftHalf, { x: 0, opacity: 1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
 		}
-
-		prevBtn?.addEventListener('click', () => goTo(current === 0 ? slides.length - 1 : current - 1));
-		nextBtn?.addEventListener('click', () => goTo(current === slides.length - 1 ? 0 : current + 1));
-
-		// Animación de scroll: zoom en el título, rotación continua y fade out de UI
-		const heroSection = document.querySelector('section.sticky');
-		if (heroSection) {
-			function handleScrollAnimation() {
-				const scrollY = window.scrollY;
-				const maxScroll = 450;
-				const progress = Math.min(Math.max(scrollY / maxScroll, 0), 1);
-
-				const currentSlideEl = slides[current];
-				if (!currentSlideEl) return;
-
-				if (scrollY > 5) {
-					if (hoverTimeout) {
-						clearTimeout(hoverTimeout);
-						hoverTimeout = null;
-					}
-					const cracked = currentSlideEl.querySelector<HTMLElement>('.hero-cookie-cracked');
-					const leftHalf = currentSlideEl.querySelector<HTMLElement>('.hero-cookie-left');
-					const rightHalf = currentSlideEl.querySelector<HTMLElement>('.hero-cookie-right');
-					if (cracked) cracked.style.opacity = '0';
-					if (leftHalf) { leftHalf.style.opacity = '1'; leftHalf.style.transform = 'none'; }
-					if (rightHalf) { rightHalf.style.opacity = '1'; rightHalf.style.transform = 'none'; }
-				}
-
-				const titles = currentSlideEl.querySelectorAll<HTMLElement>('.hero-title-word');
-				const cookieEl = currentSlideEl.querySelector<HTMLElement>('.hero-cookie-interactive');
-				const starEl = currentSlideEl.querySelector<HTMLElement>('.hero-star-interactive');
-				const infoEl = currentSlideEl.querySelector<HTMLElement>('.hero-left-info');
-
-				const scaleTitle = 1 + progress * (current === 0 ? 0.16 : 0.22);
-				titles.forEach((title) => {
-					const isLeft = title.dataset.dir === 'left';
-					const separateX = isLeft ? -progress * 35 : progress * 35;
-					title.style.transform = `translateX(${separateX}px) scale(${scaleTitle})`;
-					title.style.transformOrigin = isLeft ? 'left center' : 'right center';
-				});
-
-				if (cookieEl) {
-					const cookieScale = 1 + progress * 0.22;
-					const cookieRotate = scrollY * 0.12 * (current === 0 ? -1 : 1);
-					cookieEl.style.transform = `scale(${cookieScale}) rotate(${cookieRotate}deg)`;
-					cookieEl.style.filter = `drop-shadow(0px ${15 + progress * 25}px ${25 + progress * 20}px rgba(58,32,14,${0.25 + progress * 0.2}))`;
-					cookieEl.style.opacity = '1';
-				}
-
-				if (starEl) {
-					const starRotate = scrollY * 0.35;
-					const starScale = 1 + progress * 0.28;
-					const starX = progress * 25;
-					const starY = -progress * 20;
-					starEl.style.transform = `translate(${starX}px, ${starY}px) rotate(${starRotate}deg) scale(${starScale})`;
-					starEl.style.opacity = `${Math.max(1 - progress * 0.3, 0.7)}`;
-				}
-
-				const ellipseGlow = currentSlideEl.querySelector<HTMLElement>('div[class*="mix-blend-overlay"]');
-				if (ellipseGlow) {
-					ellipseGlow.style.transform = `scale(${1 + progress * 0.4}) rotate(${scrollY * 0.05}deg)`;
-					ellipseGlow.style.opacity = `${0.6 + progress * 0.4}`;
-				}
-
-				const heroStripes = currentSlideEl.querySelectorAll<HTMLElement>('.hero-stripe');
-				heroStripes.forEach((stripe) => {
-					const dir = (stripe.dataset.dir === 'up' ? -1 : 1);
-					stripe.style.transform = `translateY(${dir * progress * 30}px) scaleY(${1 + progress * 0.05})`;
-					stripe.style.opacity = `${1 - progress * 0.25}`;
-				});
-
-				const opacityUi = Math.max(1 - progress * 2.2, 0);
-
-				if (infoEl) {
-					infoEl.style.opacity = `${opacityUi}`;
-					infoEl.style.transform = `translateX(${-progress * 30}px)`;
-				}
-
-				const menuBtnHero = document.getElementById('hero-menu-btn');
-				if (menuBtnHero) {
-					menuBtnHero.style.opacity = `${opacityUi}`;
-					menuBtnHero.style.transform = `translateX(${progress * 25}px)`;
-					menuBtnHero.style.pointerEvents = opacityUi === 0 ? 'none' : 'auto';
-				}
-
-				if (prevBtn) {
-					prevBtn.style.opacity = `${opacityUi}`;
-					prevBtn.style.transform = `translateX(${-progress * 25}px)`;
-					prevBtn.style.pointerEvents = opacityUi === 0 ? 'none' : 'auto';
-				}
-
-				if (nextBtn) {
-					nextBtn.style.opacity = `${opacityUi}`;
-					nextBtn.style.transform = `translateX(${progress * 25}px)`;
-					nextBtn.style.pointerEvents = opacityUi === 0 ? 'none' : 'auto';
-				}
-			}
-
-			window.addEventListener('scroll', handleScrollAnimation, { passive: true });
-			handleScrollAnimation();
+		if (rightHalf) {
+			animate(rightHalf, { x: 0, opacity: 1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
+		}
+		if (cracked) {
+			animate(cracked, { opacity: 0 }, { duration: 0.2, ease: 'easeInOut' });
 		}
 	}
 
-	document.addEventListener('astro:page-load', initHero);
+	function startHoverState(slideEl: HTMLElement) {
+		if (window.scrollY > 5 || hoverTimeout) return;
+		const cookie = slideEl.querySelector<HTMLElement>('.hero-cookie-interactive');
+		const star = slideEl.querySelector<HTMLElement>('.hero-star-interactive');
+		const leftHalf = slideEl.querySelector<HTMLElement>('.hero-cookie-left');
+		const rightHalf = slideEl.querySelector<HTMLElement>('.hero-cookie-right');
+		const cracked = slideEl.querySelector<HTMLElement>('.hero-cookie-cracked');
+
+		if (!cookie || !leftHalf || !rightHalf || !cracked) return;
+
+		const slide = (cookie.offsetWidth / 600) * 2.5;
+		animate(cookie, { rotate: -10 }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
+		if (star) animate(star, { rotate: 18, scale: 1.08 }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
+		animate(leftHalf, { x: -slide }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
+		animate(rightHalf, { x: slide }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
+
+		hoverTimeout = setTimeout(() => {
+			if (window.scrollY > 5) {
+				resetHoverState(slideEl);
+				return;
+			}
+			animate(cracked, { opacity: 1 }, { duration: 0.1, ease: 'easeOut' });
+			animate(leftHalf, { opacity: 0 }, { duration: 0.1, ease: 'easeOut' });
+			animate(rightHalf, { opacity: 0 }, { duration: 0.1, ease: 'easeOut' });
+			animate(cookie, { scale: 1.08 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
+		}, 50);
+	}
+
+	// Vincular hover a cada slide
+	slides.forEach((slideEl) => {
+		const cookie = slideEl.querySelector<HTMLElement>('.hero-cookie-interactive');
+		const star = slideEl.querySelector<HTMLElement>('.hero-star-interactive');
+
+		cookie?.addEventListener('mouseenter', () => startHoverState(slideEl));
+		cookie?.addEventListener('mouseleave', () => resetHoverState(slideEl));
+		star?.addEventListener('mouseenter', () => startHoverState(slideEl));
+		star?.addEventListener('mouseleave', () => resetHoverState(slideEl));
+	});
+
+	function goTo(index: number) {
+		if (transitioning || index === current || !slides[index]) return;
+		transitioning = true;
+
+		const from = slides[current];
+		const to = slides[index];
+
+		resetHoverState(from);
+
+		const fromLeftInfo = from.querySelector<HTMLElement>('.hero-left-info');
+		const toLeftInfo = to.querySelector<HTMLElement>('.hero-left-info');
+		const fromCookieImg = from.querySelector<HTMLElement>('.hero-cookie-interactive');
+		const toCookieImg = to.querySelector<HTMLElement>('.hero-cookie-interactive');
+		const fromStar = from.querySelector<HTMLElement>('.hero-star-interactive');
+		const toStar = to.querySelector<HTMLElement>('.hero-star-interactive');
+		const fromStripes = Array.from(from.querySelectorAll<HTMLElement>('.hero-stripe'));
+		const toStripes = Array.from(to.querySelectorAll<HTMLElement>('.hero-stripe'));
+		const fromTitles = Array.from(from.querySelectorAll<HTMLElement>('.hero-title-word'));
+		const toTitles = Array.from(to.querySelectorAll<HTMLElement>('.hero-title-word'));
+		const travel = from.offsetHeight;
+
+		fromStripes.forEach((stripe) => {
+			const dir = stripe.dataset.dir === 'up' ? -1 : 1;
+			animate(
+				stripe,
+				{ y: dir * travel, opacity: 0 },
+				{ duration: EXIT_MS / 1000, ease: 'easeInOut' }
+			);
+		});
+
+		fromTitles.forEach((word) => {
+			const isLeft = word.dataset.dir === 'left';
+			const targetX = isLeft ? -150 : 150;
+			animate(
+				word,
+				{ x: targetX, opacity: 0 },
+				{ duration: EXIT_MS / 1000, ease: 'easeInOut' }
+			);
+		});
+
+		if (fromLeftInfo) {
+			animate(
+				fromLeftInfo,
+				{ x: -120, opacity: 0 },
+				{ duration: EXIT_MS / 1000, ease: 'easeInOut' }
+			);
+		}
+
+		if (fromCookieImg) {
+			animate(
+				fromCookieImg,
+				{ opacity: 0, scale: 0.8, rotate: -25 },
+				{ duration: EXIT_MS / 1000, ease: 'backIn' }
+			);
+		}
+
+		if (fromStar) {
+			animate(
+				fromStar,
+				{ opacity: 0, scale: 0.85, y: 24, rotate: -45 },
+				{ duration: EXIT_MS / 1000, ease: 'backIn' }
+			);
+		}
+
+		setTimeout(() => {
+			animate(from, { opacity: 0 }, { duration: 0.3, ease: 'easeInOut' }).then(() => {
+				from.style.visibility = 'hidden';
+				from.style.pointerEvents = 'none';
+			});
+
+			to.style.visibility = 'visible';
+			to.style.pointerEvents = 'auto';
+			animate(to, { opacity: [0, 1] }, { duration: 0.4, ease: 'easeInOut' });
+
+			toStripes.forEach((stripe) => {
+				const dir = stripe.dataset.dir === 'up' ? -1 : 1;
+				animate(
+					stripe,
+					{ y: [dir * travel, 0], opacity: [0, 1] },
+					{ duration: ENTER_MS / 1000, ease: 'easeInOut' }
+				);
+			});
+			toTitles.forEach((word) => {
+				const isLeft = word.dataset.dir === 'left';
+				const startX = isLeft ? -150 : 150;
+				animate(
+					word,
+					{ x: [startX, 0], opacity: [0, 1] },
+					{ duration: ENTER_MS / 1000, ease: 'easeOut' }
+				);
+			});
+			if (toLeftInfo) {
+				animate(
+					toLeftInfo,
+					{ x: [-120, 0], opacity: [0, 1] },
+					{ duration: ENTER_MS / 1000, ease: 'easeOut' }
+				);
+			}
+			if (toCookieImg) {
+				animate(
+					toCookieImg,
+					{ opacity: [0, 1], scale: [0.8, 1], rotate: [25, 0] },
+					{ duration: ENTER_MS / 1000, ease: 'backOut' }
+				);
+			}
+			if (toStar) {
+				animate(
+					toStar,
+					{ opacity: [0, 1], scale: [0.9, 1], y: [-16, 0], rotate: [45, 0] },
+					{ duration: ENTER_MS / 1000, ease: 'backOut' }
+				);
+			}
+			transitioning = false;
+		}, EXIT_MS + PAUSE_MS);
+
+		current = index;
+	}
+
+	prevBtn?.addEventListener('click', () => goTo(current === 0 ? slides.length - 1 : current - 1));
+	nextBtn?.addEventListener('click', () => goTo(current === slides.length - 1 ? 0 : current + 1));
+
+	// Animación de scroll: zoom en el título, rotación continua y fade out de UI
+	const heroSection = document.querySelector('section.sticky');
+	if (heroSection) {
+		function handleScrollAnimation() {
+			const scrollY = window.scrollY;
+			const maxScroll = 450;
+			const progress = Math.min(Math.max(scrollY / maxScroll, 0), 1);
+
+			const currentSlideEl = slides[current];
+			if (!currentSlideEl) return;
+
+			if (scrollY > 5) {
+				if (hoverTimeout) {
+					clearTimeout(hoverTimeout);
+					hoverTimeout = null;
+				}
+				const cracked = currentSlideEl.querySelector<HTMLElement>('.hero-cookie-cracked');
+				const leftHalf = currentSlideEl.querySelector<HTMLElement>('.hero-cookie-left');
+				const rightHalf = currentSlideEl.querySelector<HTMLElement>('.hero-cookie-right');
+				if (cracked) cracked.style.opacity = '0';
+				if (leftHalf) { leftHalf.style.opacity = '1'; leftHalf.style.transform = 'none'; }
+				if (rightHalf) { rightHalf.style.opacity = '1'; rightHalf.style.transform = 'none'; }
+			}
+
+			const titles = currentSlideEl.querySelectorAll<HTMLElement>('.hero-title-word');
+			const cookieEl = currentSlideEl.querySelector<HTMLElement>('.hero-cookie-interactive');
+			const starEl = currentSlideEl.querySelector<HTMLElement>('.hero-star-interactive');
+			const infoEl = currentSlideEl.querySelector<HTMLElement>('.hero-left-info');
+
+			const scaleTitle = 1 + progress * (current === 0 ? 0.16 : 0.22);
+			titles.forEach((title) => {
+				const isLeft = title.dataset.dir === 'left';
+				const separateX = isLeft ? -progress * 35 : progress * 35;
+				title.style.transform = `translateX(${separateX}px) scale(${scaleTitle})`;
+				title.style.transformOrigin = isLeft ? 'left center' : 'right center';
+			});
+
+			if (cookieEl) {
+				const cookieScale = 1 + progress * 0.22;
+				const cookieRotate = scrollY * 0.12 * (current === 0 ? -1 : 1);
+				cookieEl.style.transform = `scale(${cookieScale}) rotate(${cookieRotate}deg)`;
+				cookieEl.style.filter = `drop-shadow(0px ${15 + progress * 25}px ${25 + progress * 20}px rgba(58,32,14,${0.25 + progress * 0.2}))`;
+				cookieEl.style.opacity = '1';
+			}
+
+			if (starEl) {
+				const starRotate = scrollY * 0.35;
+				const starScale = 1 + progress * 0.28;
+				const starX = progress * 25;
+				const starY = -progress * 20;
+				starEl.style.transform = `translate(${starX}px, ${starY}px) rotate(${starRotate}deg) scale(${starScale})`;
+				starEl.style.opacity = `${Math.max(1 - progress * 0.3, 0.7)}`;
+			}
+
+			const ellipseGlow = currentSlideEl.querySelector<HTMLElement>('div[class*="mix-blend-overlay"]');
+			if (ellipseGlow) {
+				ellipseGlow.style.transform = `scale(${1 + progress * 0.4}) rotate(${scrollY * 0.05}deg)`;
+				ellipseGlow.style.opacity = `${0.6 + progress * 0.4}`;
+			}
+
+			const heroStripes = currentSlideEl.querySelectorAll<HTMLElement>('.hero-stripe');
+			heroStripes.forEach((stripe) => {
+				const dir = (stripe.dataset.dir === 'up' ? -1 : 1);
+				stripe.style.transform = `translateY(${dir * progress * 30}px) scaleY(${1 + progress * 0.05})`;
+				stripe.style.opacity = `${1 - progress * 0.25}`;
+			});
+
+			const opacityUi = Math.max(1 - progress * 2.2, 0);
+
+			if (infoEl) {
+				infoEl.style.opacity = `${opacityUi}`;
+				infoEl.style.transform = `translateX(${-progress * 30}px)`;
+			}
+
+			const menuBtnHero = document.getElementById('hero-menu-btn');
+			if (menuBtnHero) {
+				menuBtnHero.style.opacity = `${opacityUi}`;
+				menuBtnHero.style.transform = `translateX(${progress * 25}px)`;
+				menuBtnHero.style.pointerEvents = opacityUi === 0 ? 'none' : 'auto';
+			}
+
+			if (prevBtn) {
+				prevBtn.style.opacity = `${opacityUi}`;
+				prevBtn.style.transform = `translateX(${-progress * 25}px)`;
+				prevBtn.style.pointerEvents = opacityUi === 0 ? 'none' : 'auto';
+			}
+
+			if (nextBtn) {
+				nextBtn.style.opacity = `${opacityUi}`;
+				nextBtn.style.transform = `translateX(${progress * 25}px)`;
+				nextBtn.style.pointerEvents = opacityUi === 0 ? 'none' : 'auto';
+			}
+		}
+
+		window.addEventListener('scroll', handleScrollAnimation, { passive: true });
+	}
 </script>

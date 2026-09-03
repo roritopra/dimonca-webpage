@@ -40,13 +40,13 @@ const gridImages = [
 ];
 ---
 
-<div class="relative flex items-center gap-6 select-none">
+<div class="relative flex flex-col md:flex-row items-center justify-center gap-8 xl:gap-6 select-none w-full xl:w-auto shrink-0">
   <!-- Sección Interactiva del Producto Central -->
   <div
     id="more-than-interactive"
-    class="relative flex w-[370px] max-w-full flex-col items-center justify-center cursor-pointer"
+    class="relative flex w-full max-w-[340px] sm:max-w-[370px] xl:w-[370px] flex-col items-center justify-center cursor-pointer shrink-0"
   >
-    <div class="product-container relative flex h-[430px] w-full items-center justify-center">
+    <div class="product-container relative flex h-[340px] sm:h-[400px] xl:h-[430px] w-full items-center justify-center">
       {products.map((item, idx) => (
         <div
           class={`product-slide absolute inset-0 flex items-center justify-center ${
@@ -72,10 +72,10 @@ const gridImages = [
         </div>
       ))}
 
-      <!-- Texto flotante estático en estilo script superpuesto permanentemente con z-30 -->
-      <div class="product-title-badge pointer-events-none absolute top-[55px] right-[-80px] z-30 max-w-[210px]">
+      <!-- Texto flotante estático en estilo script superpuesto permanentemente -->
+      <div class="product-title-badge pointer-events-none absolute top-4 sm:top-[40px] xl:top-[55px] -right-2 sm:-right-8 xl:right-[-80px] z-30 max-w-[170px] sm:max-w-[210px]">
         <p
-          class="font-exmouth text-[44px] leading-[1.05] text-brown [-webkit-text-stroke:8px_#ffffff] [filter:drop-shadow(0px_4px_4px_rgba(58,32,14,0.5))]"
+          class="font-exmouth text-[30px] sm:text-[38px] xl:text-[44px] leading-[1.05] text-brown [-webkit-text-stroke:5px_#ffffff] sm:[-webkit-text-stroke:6px_#ffffff] xl:[-webkit-text-stroke:8px_#ffffff] [filter:drop-shadow(0px_4px_4px_rgba(58,32,14,0.5))]"
           style="paint-order: stroke fill;"
           aria-hidden="true"
         >
@@ -87,19 +87,19 @@ const gridImages = [
       <button
         id="more-than-next-btn"
         type="button"
-        class="group absolute bottom-[35px] left-[15px] z-20 flex h-[58px] w-[58px] items-center justify-center rounded-full border-[3px] border-white bg-[#6ca7d5] text-white shadow-[0px_8px_16px_rgba(108,167,213,0.4)] transition-transform duration-200 hover:scale-105 hover:bg-[#5b96c4]"
+        class="group absolute bottom-4 sm:bottom-[30px] xl:bottom-[35px] left-2 sm:left-[15px] z-20 flex h-[48px] w-[48px] sm:h-[54px] sm:w-[54px] xl:h-[58px] xl:w-[58px] items-center justify-center rounded-full border-[2.5px] sm:border-[3px] border-white bg-[#6ca7d5] text-white shadow-[0px_8px_16px_rgba(108,167,213,0.4)] transition-transform duration-200 hover:scale-105 hover:bg-[#5b96c4]"
         aria-label="Ver siguiente producto"
       >
-        <Icon name="lucide:heart" class="h-7 w-7 transition-transform duration-200 group-hover:scale-110" aria-hidden="true" />
+        <Icon name="lucide:heart" class="h-5 w-5 sm:h-6 sm:w-6 xl:h-7 xl:w-7 transition-transform duration-200 group-hover:scale-110" aria-hidden="true" />
       </button>
     </div>
   </div>
 
-  <!-- Grid de 4 imágenes a la derecha -->
-  <div class="grid grid-cols-2 gap-3.5 w-[390px] shrink-0">
+  <!-- Grid de 4 imágenes a la derecha (o abajo en móvil) -->
+  <div class="grid grid-cols-2 gap-2.5 sm:gap-3.5 w-full max-w-[340px] sm:max-w-[390px] xl:w-[390px] shrink-0">
     {gridImages.map((img) => (
       <div
-        class="group relative w-full overflow-hidden transition-all duration-300 hover:scale-[1.03]"
+        class="group relative w-full overflow-hidden rounded-[16px] sm:rounded-none transition-all duration-300 hover:scale-[1.03]"
       >
         <Image
           src={img.src}

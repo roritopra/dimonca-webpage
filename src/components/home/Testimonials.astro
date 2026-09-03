@@ -57,15 +57,15 @@ const testimonials = [
 		<!-- Botón Prev -->
 		<button
 			id="testimony-prev"
-			class="absolute left-4 sm:left-8 md:left-24 z-20 flex h-14 w-14 sm:h-16 sm:w-16 md:h-20 md:w-20 cursor-pointer items-center justify-center rounded-full border-[3px] border-white bg-pink text-beige shadow-lg transition-transform duration-200 hover:scale-105 hover:brightness-95 active:scale-95"
+			class="absolute left-2 sm:left-6 md:left-12 lg:left-20 z-20 flex h-10 w-10 sm:h-12 sm:w-12 md:h-14 md:w-14 cursor-pointer items-center justify-center rounded-full border-2 sm:border-[3px] border-white bg-pink text-beige shadow-lg transition-transform duration-200 hover:scale-105 hover:brightness-95 active:scale-95"
 			type="button"
 			aria-label="Ver testimonio anterior"
 		>
-			<Icon name="lucide:chevron-left" class="h-7 w-7 sm:h-8 sm:w-8 md:h-10 md:w-10 shrink-0" aria-hidden="true" />
+			<Icon name="lucide:chevron-left" class="h-5 w-5 sm:h-6 sm:w-6 md:h-7 md:w-7 shrink-0" aria-hidden="true" />
 		</button>
 
 		<!-- Card de Testimonio (Toldo / Tienda) -->
-		<div class="relative w-full max-w-[580px] md:max-w-[620px]">
+		<div class="relative w-full max-w-[580px] md:max-w-[620px] mx-10 sm:mx-14 md:mx-0">
 			<!-- Estampa / Stamp Top Right -->
 			<div
 				id="testimony-stamp-wrap"
@@ -99,7 +99,7 @@ const testimonials = [
 			</div>
 
 			<!-- Tarjeta principal blanca (rectángulo recto sin redondez ni sombra) -->
-			<div class="testimony-card-box relative bg-white p-7 sm:p-9 md:p-10">
+			<div class="testimony-card-box relative bg-white p-6 sm:p-9 md:p-10">
 				<!-- Estrellas (SVG de testimony) -->
 				<div class="mb-5 flex items-center justify-center gap-1.5 sm:gap-2">
 					<img src="/images/star-testimony.svg" alt="" class="h-6 w-6 sm:h-7 sm:w-7" />
@@ -144,11 +144,11 @@ const testimonials = [
 		<!-- Botón Next -->
 		<button
 			id="testimony-next"
-			class="absolute right-4 sm:right-8 md:right-24 z-20 flex h-14 w-14 sm:h-16 sm:w-16 md:h-20 md:w-20 cursor-pointer items-center justify-center rounded-full border-[3px] border-white bg-pink text-beige transition-transform duration-200 hover:scale-105 hover:brightness-95 active:scale-95"
+			class="absolute right-2 sm:right-6 md:right-12 lg:right-20 z-20 flex h-10 w-10 sm:h-12 sm:w-12 md:h-14 md:w-14 cursor-pointer items-center justify-center rounded-full border-2 sm:border-[3px] border-white bg-pink text-beige shadow-lg transition-transform duration-200 hover:scale-105 hover:brightness-95 active:scale-95"
 			type="button"
 			aria-label="Ver testimonio siguiente"
 		>
-			<Icon name="lucide:chevron-right" class="h-7 w-7 sm:h-8 sm:w-8 md:h-10 md:w-10 shrink-0" aria-hidden="true" />
+			<Icon name="lucide:chevron-right" class="h-5 w-5 sm:h-6 sm:w-6 md:h-7 md:w-7 shrink-0" aria-hidden="true" />
 		</button>
 	</div>
 </section>

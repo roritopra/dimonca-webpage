@@ -1,8 +1,5 @@
 ---
 import { Icon } from 'astro-icon/components';
-import { Image } from 'astro:assets';
-
-import logoImg from '../../assets/images/logo.png';
 
 const categories = [
 	{ label: 'Galletas', img: '/images/cookie.png', imgHover: '/images/cookie-hover.png' },
@@ -11,56 +8,62 @@ const categories = [
 	{ label: 'Pasteles', img: '/images/cake.png', imgHover: '/images/cake-hover.png' },
 	{ label: 'Más Productos', img: '/images/crookie.png', imgHover: '/images/crookie-hover.png' },
 ];
+
+const currentPath = Astro.url.pathname;
+const isEncuentranos = currentPath === '/encuentranos' || currentPath === '/encuentranos/';
 ---
 
 <header
 	id="navbar"
-	class="group fixed top-0 left-0 z-50 w-full font-sans transition-all duration-400 ease-out pointer-events-none"
+	class="group relative z-10 w-full font-sans drop-shadow-[0px_11px_19.05px_rgba(58,32,14,0.14)]"
 >
 	<div
-		id="navbar-container"
-		class="pointer-events-auto mx-auto flex flex-wrap items-center justify-center gap-x-[60px] gap-y-6 bg-beige px-10 py-3.5 transition-all duration-400 ease-out max-[900px]:gap-x-8 max-[900px]:px-6 mt-4 max-w-[1240px] rounded-full drop-shadow-[0px_10px_25px_rgba(58,32,14,0.18)]"
+		class="flex flex-wrap items-center justify-center gap-x-[60px] gap-y-6 bg-beige px-20 py-4 max-[900px]:gap-x-8 max-[900px]:px-6"
 	>
 		<a
-			class="flex flex-1 min-w-0 items-center justify-center whitespace-nowrap p-2 text-[15px] leading-[1.2] text-brown no-underline hover:opacity-75 max-[900px]:flex-none"
+			id="nav-encuentranos"
+			class:list={[
+				'flex flex-1 min-w-0 items-center justify-center whitespace-nowrap p-2.5 text-[15px] leading-[1.2] no-underline transition-colors hover:opacity-75 max-[900px]:flex-none',
+				isEncuentranos ? 'text-pink font-bold' : 'text-brown'
+			]}
 			href="/encuentranos"
 			>Encuéntranos</a
 		>
 		<button
 			id="menu-btn"
-			class="group/btn relative flex h-[30px] flex-1 min-w-0 cursor-pointer items-center justify-center gap-2 whitespace-nowrap border-0 bg-transparent p-2 text-[15px] leading-[1.2] text-brown transition-colors duration-200 group-data-[open]:text-pink group-data-[open]:font-bold hover:opacity-75 max-[900px]:flex-none"
+			class="relative flex h-[30px] flex-1 min-w-0 cursor-pointer items-center justify-center gap-2 whitespace-nowrap border-0 bg-transparent p-2.5 text-[15px] leading-[1.2] text-brown transition-colors hover:opacity-75 group-data-[open]:text-pink group-data-[open]:font-bold max-[900px]:flex-none"
 			type="button"
 			aria-haspopup="true"
 			aria-expanded="false"
 			aria-controls="dropdown"
-			aria-label="Abrir menú de navegación de postres"
 		>
-			Menú
+			<span>Menú</span>
 			<Icon
 				name="lucide:chevron-down"
-				class="h-6 w-6 shrink-0 transition-transform duration-200 group-data-[open]:rotate-180 group-data-[open]:text-pink"
+				class="h-5 w-5 shrink-0 transition-transform duration-200 group-data-[open]:rotate-180"
 				aria-hidden="true"
 			/>
 		</button>
 		<a class="shrink-0" href="/" aria-label="Dimonca, inicio">
-			<Image class="block h-[42px] w-[145px] object-contain transition-all duration-300" src={logoImg} alt="Dimonca" loading="eager" />
+			<img class="block h-[46px] w-[159px]" src="/images/logo.png" alt="Dimonca" />
 		</a>
 		<a
-			class="flex flex-1 min-w-0 items-center justify-center whitespace-nowrap p-2 text-[15px] leading-[1.2] text-brown no-underline hover:opacity-75 max-[900px]:flex-none"
-			href="#sobre-nosotros"
+			class="flex flex-1 min-w-0 items-center justify-center whitespace-nowrap p-2.5 text-[15px] leading-[1.2] text-brown no-underline hover:opacity-75 max-[900px]:flex-none"
+			href="/#sobre-nosotros"
 			>Sobre Nosotros</a
 		>
 		<a
-			class="flex h-[42px] flex-1 min-w-0 items-center justify-center gap-2 whitespace-nowrap rounded-[57px] bg-pink px-4 py-2 text-[15px] font-bold leading-[1.2] text-beige no-underline hover:brightness-95 max-[900px]:flex-none"
-			href="#pedido"
+			class="flex h-[46px] flex-1 min-w-0 items-center justify-center gap-2 whitespace-nowrap rounded-[57px] bg-pink px-4 py-2 text-[15px] font-bold leading-[1.2] text-beige no-underline hover:brightness-95 max-[900px]:flex-none"
+			href="/#pedido"
 		>
 			Haz tu pedido
-			<span class="flex h-6.5 w-6.5 shrink-0 items-center justify-center rounded-[18.38px] bg-beige p-[5px]">
-				<img class="block h-[11.5px] w-[11.5px]" src="/images/map.svg" alt="" />
+			<span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-[18.38px] bg-beige p-[5.4px]">
+				<img class="block h-[12.98px] w-[12.98px]" src="/images/map.svg" alt="" />
 			</span>
 		</a>
+	</div>
 	<nav
-		class="pointer-events-none invisible absolute top-[calc(100%+8px)] inset-x-0 z-50 flex items-start justify-center gap-[93px] bg-beige py-[18px] opacity-0 drop-shadow-[0px_11px_19.05px_rgba(58,32,14,0.14)]"
+		class="invisible absolute top-full left-0 z-50 flex w-full items-start justify-center gap-[93px] bg-beige py-[18px] opacity-0 pointer-events-none"
 		id="dropdown"
 		aria-label="Categorías del menú"
 	>
@@ -68,7 +71,7 @@ const categories = [
 			categories.map((c) => {
 				if (c.label === 'Galletas' || c.label === 'Más Productos') {
 					return (
-						<a data-category="split" class="flex w-[121px] flex-col items-center justify-center gap-[9px] no-underline" href={`#${c.label.toLowerCase().replace(/\s+/g, '-')}`}>
+						<a data-category="split" class="flex w-[121px] flex-col items-center justify-center gap-[9px] no-underline" href={`/#${c.label.toLowerCase().replace(/\s+/g, '-')}`}>
 							<div class="nav-cookie-wrap relative h-[121px] w-[121px]">
 								<div class="nav-cookie-left absolute inset-y-0 left-0 w-1/2 overflow-hidden">
 									<img class="absolute top-0 left-0 h-full w-[121px] max-w-none object-cover" src={c.img} alt={c.label} />
@@ -83,7 +86,7 @@ const categories = [
 					);
 				} else if (c.label === 'Brownies') {
 					return (
-						<a data-category="brownies" class="flex w-[121px] flex-col items-center justify-center gap-[9px] no-underline" href="#brownies">
+						<a data-category="brownies" class="flex w-[121px] flex-col items-center justify-center gap-[9px] no-underline" href="/#brownies">
 							<div class="relative h-[121px] w-[121px]">
 								<img class="brownie-left absolute inset-0 block h-full w-full object-cover object-center opacity-0" src="/images/brownie-pistacho.png" alt="" aria-hidden="true" />
 								<img class="brownie-right absolute inset-0 block h-full w-full object-cover object-center opacity-0" src="/images/brownie-redvelvet.png" alt="" aria-hidden="true" />
@@ -94,7 +97,7 @@ const categories = [
 					);
 				} else {
 					return (
-						<a class="flex w-[121px] flex-col items-center justify-center gap-[9px] no-underline" href={`#${c.label.toLowerCase().replace(/\s+/g, '-')}`}>
+						<a class="flex w-[121px] flex-col items-center justify-center gap-[9px] no-underline" href={`/#${c.label.toLowerCase().replace(/\s+/g, '-')}`}>
 							<div class="relative h-[121px] w-[121px] overflow-clip">
 								<img class="absolute inset-0 block h-full w-full object-cover object-center" src={c.img} alt={c.label} />
 								<img class="absolute inset-0 block h-full w-full object-cover object-center opacity-0" src={c.imgHover} alt="" aria-hidden="true" />
@@ -106,27 +109,30 @@ const categories = [
 			})
 		}
 	</nav>
-	</div>
 </header>
 
 <script>
 	import { animate } from 'motion';
 
 	function initNavbar() {
-		const navbar = document.getElementById('navbar');
-		const menuBtn = document.getElementById('menu-btn');
-		const dropdown = document.getElementById('dropdown');
+		const navbar = document.getElementById('navbar') as HTMLElement | null;
+		const menuBtn = document.getElementById('menu-btn') as HTMLElement | null;
+		const dropdown = document.getElementById('dropdown') as HTMLElement | null;
 
 		if (!navbar || !menuBtn || !dropdown) return;
+
+		const nav = navbar;
+		const btn = menuBtn;
+		const drop = dropdown;
 
 		let isOpen = false;
 
 		function open() {
 			isOpen = true;
-			navbar.dataset.open = 'true';
-			menuBtn.setAttribute('aria-expanded', 'true');
+			nav.dataset.open = 'true';
+			btn.setAttribute('aria-expanded', 'true');
 			animate(
-				dropdown,
+				drop,
 				{ opacity: 1, y: 0, visibility: 'visible', pointerEvents: 'auto' },
 				{ duration: 0.25, ease: 'easeOut' }
 			);
@@ -134,80 +140,21 @@ const categories = [
 
 		function close() {
 			isOpen = false;
-			delete navbar.dataset.open;
-			menuBtn.setAttribute('aria-expanded', 'false');
+			delete nav.dataset.open;
+			btn.setAttribute('aria-expanded', 'false');
 			animate(
-				dropdown,
+				drop,
 				{ opacity: 0, y: -8, visibility: 'hidden', pointerEvents: 'none' },
 				{ duration: 0.2, ease: 'easeIn' }
 			);
 		}
 
-		const navbarContainer = document.getElementById('navbar-container');
-
-		function handleScroll() {
-			const scrollY = window.scrollY;
-			const maxScroll = 420;
-			const progress = Math.min(Math.max(scrollY / maxScroll, 0), 1);
-
-			if (!navbarContainer) return;
-
-			// Margen superior: de 16px (1rem) a 0px
-			const marginTop = (1 - progress) * 16;
-			navbarContainer.style.marginTop = `${marginTop}px`;
-
-			// Ancho: de 1240px a 100%
-			if (progress === 0) {
-				navbarContainer.style.maxWidth = '1240px';
-				navbarContainer.style.width = 'calc(100% - 32px)';
-			} else if (progress >= 1) {
-				navbarContainer.style.maxWidth = '100%';
-				navbarContainer.style.width = '100%';
-			} else {
-				navbarContainer.style.maxWidth = `calc(1240px + (100% - 1240px) * ${progress})`;
-				navbarContainer.style.width = `calc(100% - ${(1 - progress) * 32}px)`;
-			}
-
-			// Redondeo de esquinas: de 9999px a 0px
-			const borderRadius = (1 - progress) * 40;
-			navbarContainer.style.borderRadius = `${borderRadius}px`;
-
-			// Sincronizar el redondeo y la distancia superior del dropdown con el navbar
-			if (dropdown) {
-				dropdown.style.borderRadius = `${Math.min(borderRadius, 32)}px`;
-				const dropdownGap = (1 - progress) * 8;
-				dropdown.style.top = `calc(100% + ${dropdownGap}px)`;
-			}
-
-			// Padding lateral: de 40px (2.5rem) a 80px (5rem)
-			const paddingX = 40 + progress * 40;
-			navbarContainer.style.paddingLeft = `${paddingX}px`;
-			navbarContainer.style.paddingRight = `${paddingX}px`;
-
-			// Sombra
-			if (progress >= 1) {
-				navbarContainer.style.filter = 'drop-shadow(0px 11px 19.05px rgba(58,32,14,0.14))';
-			} else {
-				navbarContainer.style.filter = 'drop-shadow(0px 10px 25px rgba(58,32,14,0.18))';
-			}
-		}
-
-		window.addEventListener('scroll', handleScroll, { passive: true });
-		handleScroll();
-
-		menuBtn.addEventListener('click', () => {
+		btn.addEventListener('click', () => {
 			isOpen ? close() : open();
 		});
 
-		document.addEventListener('keydown', (e) => {
-			if (e.key === 'Escape' && isOpen) {
-				close();
-				menuBtn.focus();
-			}
-		});
-
 		document.addEventListener('click', (e) => {
-			if (isOpen && !navbar.contains(e.target as Node)) {
+			if (isOpen && !nav.contains(e.target as Node)) {
 				close();
 			}
 		});

@@ -161,38 +161,41 @@
         pinkCutout.style.opacity = '1';
         dContainer.style.display = 'none';
 
-        // Animación de expansión ultra grande y rotación a la izquierda mediante loop suave
-        const duration = 900; // ms
-        const startTime = performance.now();
+        // Mantener la D recortada con la página visible durante 0.7s (700ms) antes de expandir
+        const pauseDuration = 700; // ms
+        setTimeout(() => {
+          const duration = 900; // ms
+          const startTime = performance.now();
 
-        function stepExpansion(now: number) {
-          const elapsed = now - startTime;
-          const progress = Math.min(elapsed / duration, 1);
-          // Curva de aceleración cúbica para salida rápida y contundente
-          const ease = Math.pow(progress, 3);
-          const currentScale = initialScale + ease * 35;
-          const currentRotation = -progress * 25; // Rota 25 grados a la izquierda
+          function stepExpansion(now: number) {
+            const elapsed = now - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            // Curva de aceleración cúbica para salida rápida y contundente
+            const ease = Math.pow(progress, 3);
+            const currentScale = initialScale + ease * 35;
+            const currentRotation = -progress * 25; // Rota 25 grados a la izquierda
 
-          cutoutScaler?.setAttribute(
-            'transform',
-            `scale(${currentScale}) rotate(${currentRotation})`
-          );
+            cutoutScaler?.setAttribute(
+              'transform',
+              `scale(${currentScale}) rotate(${currentRotation})`
+            );
 
-          if (progress > 0.6) {
-            // Desvanecer el fondo rosa en el tramo final
-            const fadeProgress = (progress - 0.6) / 0.4;
-            if (pinkCutout) pinkCutout.style.opacity = String(1 - fadeProgress);
+            if (progress > 0.6) {
+              // Desvanecer el fondo rosa en el tramo final
+              const fadeProgress = (progress - 0.6) / 0.4;
+              if (pinkCutout) pinkCutout.style.opacity = String(1 - fadeProgress);
+            }
+
+            if (progress < 1) {
+              requestAnimationFrame(stepExpansion);
+            } else {
+              if (overlay) overlay.style.display = 'none';
+              document.body.style.overflow = '';
+            }
           }
 
-          if (progress < 1) {
-            requestAnimationFrame(stepExpansion);
-          } else {
-            if (overlay) overlay.style.display = 'none';
-            document.body.style.overflow = '';
-          }
-        }
-
-        requestAnimationFrame(stepExpansion);
+          requestAnimationFrame(stepExpansion);
+        }, pauseDuration);
       }, slideDuration * slides.length);
     }, 700);
   }

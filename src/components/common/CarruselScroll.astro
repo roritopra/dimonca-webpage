@@ -51,56 +51,60 @@ const icon = isBrown ? '/images/est-icon-brown.png' : '/images/est-icon.png';
 </section>
 
 <script>
-  const tracks = document.querySelectorAll<HTMLElement>(".scroll-carousel-track");
+  function initCarruselScroll() {
+    const tracks = document.querySelectorAll<HTMLElement>(".scroll-carousel-track");
 
-  tracks.forEach((track) => {
-    const repeats = parseInt(track.dataset.repeats ?? "4", 10);
-    const oneSetWidth = track.scrollWidth / repeats;
+    tracks.forEach((track) => {
+      const repeats = parseInt(track.dataset.repeats ?? "4", 10);
+      const oneSetWidth = track.scrollWidth / repeats;
 
-    const speed = 0.6;
-    const autoSpeed = 0.35;
-    let target = 0;
-    let current = 0;
-    let lastY = window.scrollY;
-    let direction = -1;
-    let lastScrollAt = Date.now();
-    let rafId: number | null = null;
+      const speed = 0.6;
+      const autoSpeed = 0.35;
+      let target = 0;
+      let current = 0;
+      let lastY = window.scrollY;
+      let direction = -1;
+      let lastScrollAt = Date.now();
+      let rafId: number | null = null;
 
-    const wrap = () => {
-      if (current <= -oneSetWidth) {
-        current += oneSetWidth;
-        target += oneSetWidth;
-      } else if (current >= 0) {
-        current -= oneSetWidth;
-        target -= oneSetWidth;
-      }
-    };
+      const wrap = () => {
+        if (current <= -oneSetWidth) {
+          current += oneSetWidth;
+          target += oneSetWidth;
+        } else if (current >= 0) {
+          current -= oneSetWidth;
+          target -= oneSetWidth;
+        }
+      };
 
-    const tick = () => {
-      const idle = Date.now() - lastScrollAt > 150;
-      if (idle) {
-        target += direction * autoSpeed;
-      }
-      current += (target - current) * 0.08;
-      wrap();
-      track.style.transform = `translate3d(${current}px, 0, 0)`;
-      rafId = requestAnimationFrame(tick);
-    };
-
-    const onScroll = () => {
-      const delta = window.scrollY - lastY;
-      lastY = window.scrollY;
-      if (Math.abs(delta) > 0.1) {
-        direction = delta > 0 ? -1 : 1;
-        lastScrollAt = Date.now();
-      }
-      target -= delta * speed;
-      if (rafId === null) {
+      const tick = () => {
+        const idle = Date.now() - lastScrollAt > 150;
+        if (idle) {
+          target += direction * autoSpeed;
+        }
+        current += (target - current) * 0.08;
+        wrap();
+        track.style.transform = `translate3d(${current}px, 0, 0)`;
         rafId = requestAnimationFrame(tick);
-      }
-    };
+      };
 
-    window.addEventListener("scroll", onScroll, { passive: true });
-    rafId = requestAnimationFrame(tick);
-  });
+      const onScroll = () => {
+        const delta = window.scrollY - lastY;
+        lastY = window.scrollY;
+        if (Math.abs(delta) > 0.1) {
+          direction = delta > 0 ? -1 : 1;
+          lastScrollAt = Date.now();
+        }
+        target -= delta * speed;
+        if (rafId === null) {
+          rafId = requestAnimationFrame(tick);
+        }
+      };
+
+      window.addEventListener("scroll", onScroll, { passive: true });
+      rafId = requestAnimationFrame(tick);
+    });
+  }
+
+  document.addEventListener("astro:page-load", initCarruselScroll);
 </script>

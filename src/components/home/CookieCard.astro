@@ -188,108 +188,112 @@ const imgStripes = Array.from({ length: numStripes }, (_, i) => ({
          + 0.0722 * toLinear(parseInt(h.slice(4, 6), 16));
   }
 
-  document.querySelectorAll<HTMLElement>('.cookie-card').forEach((card) => {
-    const imgBg = card.querySelector<HTMLElement>('.cookie-img-bg');
-    const imgStripes = Array.from(card.querySelectorAll<HTMLElement>('.cookie-img-stripe'));
-    const imgArea = card.querySelector<HTMLElement>('.cookie-img-area');
-    const scripts = Array.from(card.querySelectorAll<HTMLElement>('.cookie-script'));
-    const TRAVEL = imgArea ? imgArea.offsetHeight : 319;
+  function initCookieCards() {
+    document.querySelectorAll<HTMLElement>('.cookie-card').forEach((card) => {
+      const imgBg = card.querySelector<HTMLElement>('.cookie-img-bg');
+      const imgStripes = Array.from(card.querySelectorAll<HTMLElement>('.cookie-img-stripe'));
+      const imgArea = card.querySelector<HTMLElement>('.cookie-img-area');
+      const scripts = Array.from(card.querySelectorAll<HTMLElement>('.cookie-script'));
+      const TRAVEL = imgArea ? imgArea.offsetHeight : 319;
 
-    const wrap = card.querySelector<HTMLElement>('.cookie-img-wrap');
-    const left = card.querySelector<HTMLElement>('.cookie-half-left');
-    const right = card.querySelector<HTMLElement>('.cookie-half-right');
-    const cracked = card.querySelector<HTMLElement>('.cookie-cracked');
+      const wrap = card.querySelector<HTMLElement>('.cookie-img-wrap');
+      const left = card.querySelector<HTMLElement>('.cookie-half-left');
+      const right = card.querySelector<HTMLElement>('.cookie-half-right');
+      const cracked = card.querySelector<HTMLElement>('.cookie-cracked');
 
-    const info = card.querySelector<HTMLElement>('.cookie-info');
-    const title = card.querySelector<HTMLElement>('.cookie-title');
-    const desc = card.querySelector<HTMLElement>('.cookie-desc');
-    const price = card.querySelector<HTMLElement>('.cookie-price');
-    const btn = card.querySelector<HTMLElement>('.cookie-btn');
-    const btnIcon = card.querySelector<HTMLElement>('.cookie-btn-icon');
-    const btnSvg = card.querySelector<HTMLElement>('.cookie-btn-svg');
-    const color = card.dataset.color ?? '#6ca7d5';
+      const info = card.querySelector<HTMLElement>('.cookie-info');
+      const title = card.querySelector<HTMLElement>('.cookie-title');
+      const desc = card.querySelector<HTMLElement>('.cookie-desc');
+      const price = card.querySelector<HTMLElement>('.cookie-price');
+      const btn = card.querySelector<HTMLElement>('.cookie-btn');
+      const btnIcon = card.querySelector<HTMLElement>('.cookie-btn-icon');
+      const btnSvg = card.querySelector<HTMLElement>('.cookie-btn-svg');
+      const color = card.dataset.color ?? '#6ca7d5';
 
-    if (!wrap || !left || !right || !cracked || !info || !price || !btn || !btnIcon) return;
+      if (!wrap || !left || !right || !cracked || !info || !price || !btn || !btnIcon) return;
 
-    const EASE: [number, number, number, number] = [0.4, 0, 0.2, 1];
-    const DUR = 0.38;
-    const color0 = hexToRgba(color, 0);
-    const beige = '#f7f2e8';
-    const beige0 = hexToRgba(beige, 0);
-    const isDark = getLuminance(color) < 0.05;
-    const bgHoverColor = card.dataset.hoverBg ?? color;
-    const bgHoverColor0 = hexToRgba(bgHoverColor, 0);
-    const priceHoverColor = card.dataset.hoverPrice ?? (isDark ? '#C2E0F8' : '#ffffff');
-    const titleOrigColor = title ? getComputedStyle(title).color : '';
-    const descOrigColor = desc ? getComputedStyle(desc).color : '';
-    const scriptHoverColor = isDark ? '#C2E0F8' : titleOrigColor;
+      const EASE: [number, number, number, number] = [0.4, 0, 0.2, 1];
+      const DUR = 0.38;
+      const color0 = hexToRgba(color, 0);
+      const beige = '#f7f2e8';
+      const beige0 = hexToRgba(beige, 0);
+      const isDark = getLuminance(color) < 0.05;
+      const bgHoverColor = card.dataset.hoverBg ?? color;
+      const bgHoverColor0 = hexToRgba(bgHoverColor, 0);
+      const priceHoverColor = card.dataset.hoverPrice ?? (isDark ? '#C2E0F8' : '#ffffff');
+      const titleOrigColor = title ? getComputedStyle(title).color : '';
+      const descOrigColor = desc ? getComputedStyle(desc).color : '';
+      const scriptHoverColor = isDark ? '#C2E0F8' : titleOrigColor;
 
-    let splitTimeout: ReturnType<typeof setTimeout> | null = null;
-    let active = false;
+      let splitTimeout: ReturnType<typeof setTimeout> | null = null;
+      let active = false;
 
-    const start = () => {
-      if (active) return;
-      active = true;
-      card.style.zIndex = '10';
+      const start = () => {
+        if (active) return;
+        active = true;
+        card.style.zIndex = '10';
 
-      animate(card, { scale: 1.1 }, { type: 'spring', stiffness: 280, damping: 14, mass: 1 });
-      if (imgBg) animate(imgBg, { opacity: [0, 1] }, { duration: DUR, ease: EASE });
-      imgStripes.forEach((stripe) => {
-        const dir = stripe.dataset.dir === 'up' ? -1 : 1;
-        animate(stripe, { y: [dir * TRAVEL, 0] }, { duration: DUR, ease: EASE });
-      });
-      scripts.forEach((s) => animate(s, { color: [color, scriptHoverColor] }, { duration: DUR, ease: EASE }));
-      animate(info, { backgroundColor: [bgHoverColor0, bgHoverColor] }, { duration: DUR, ease: EASE });
-      animate(price, { color: ['', priceHoverColor] }, { duration: DUR, ease: EASE });
-      if (isDark && title) animate(title, { color: [titleOrigColor, '#F7F2E8'] }, { duration: DUR, ease: EASE });
-      if (isDark && desc) animate(desc, { color: [descOrigColor, '#ffffff'] }, { duration: DUR, ease: EASE });
-      animate(btn, { backgroundColor: [color, '#ffffff'], color: [beige, color] }, { duration: DUR, ease: EASE });
-      animate(btnIcon, { backgroundColor: [beige, color] }, { duration: DUR, ease: EASE });
-      if (btnSvg) animate(btnSvg, { color: [color, '#ffffff'] }, { duration: DUR, ease: EASE });
+        animate(card, { scale: 1.1 }, { type: 'spring', stiffness: 280, damping: 14, mass: 1 });
+        if (imgBg) animate(imgBg, { opacity: [0, 1] }, { duration: DUR, ease: EASE });
+        imgStripes.forEach((stripe) => {
+          const dir = stripe.dataset.dir === 'up' ? -1 : 1;
+          animate(stripe, { y: [dir * TRAVEL, 0] }, { duration: DUR, ease: EASE });
+        });
+        scripts.forEach((s) => animate(s, { color: [color, scriptHoverColor] }, { duration: DUR, ease: EASE }));
+        animate(info, { backgroundColor: [bgHoverColor0, bgHoverColor] }, { duration: DUR, ease: EASE });
+        animate(price, { color: ['', priceHoverColor] }, { duration: DUR, ease: EASE });
+        if (isDark && title) animate(title, { color: [titleOrigColor, '#F7F2E8'] }, { duration: DUR, ease: EASE });
+        if (isDark && desc) animate(desc, { color: [descOrigColor, '#ffffff'] }, { duration: DUR, ease: EASE });
+        animate(btn, { backgroundColor: [color, '#ffffff'], color: [beige, color] }, { duration: DUR, ease: EASE });
+        animate(btnIcon, { backgroundColor: [beige, color] }, { duration: DUR, ease: EASE });
+        if (btnSvg) animate(btnSvg, { color: [color, '#ffffff'] }, { duration: DUR, ease: EASE });
 
-      const slide = wrap.offsetWidth / 522.26 * 2;
-      animate(wrap, { rotate: -15 }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
-      animate(left, { x: -slide }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
-      animate(right, { x: slide }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
+        const slide = wrap.offsetWidth / 522.26 * 2;
+        animate(wrap, { rotate: -15 }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
+        animate(left, { x: -slide }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
+        animate(right, { x: slide }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
 
-      splitTimeout = setTimeout(() => {
-        animate(cracked, { opacity: 1 }, { duration: 0.1, ease: 'easeOut' });
-        animate(left, { opacity: 0 }, { duration: 0.1, ease: 'easeOut' });
-        animate(right, { opacity: 0 }, { duration: 0.1, ease: 'easeOut' });
-        animate(wrap, { scale: 1.1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
-      }, 50);
-    };
+        splitTimeout = setTimeout(() => {
+          animate(cracked, { opacity: 1 }, { duration: 0.1, ease: 'easeOut' });
+          animate(left, { opacity: 0 }, { duration: 0.1, ease: 'easeOut' });
+          animate(right, { opacity: 0 }, { duration: 0.1, ease: 'easeOut' });
+          animate(wrap, { scale: 1.1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
+        }, 50);
+      };
 
-    const reset = () => {
-      active = false;
-      card.style.zIndex = '';
+      const reset = () => {
+        active = false;
+        card.style.zIndex = '';
 
-      animate(card, { scale: 1 }, { type: 'spring', stiffness: 280, damping: 18, mass: 1 });
-      if (imgBg) animate(imgBg, { opacity: [1, 0] }, { duration: DUR, ease: EASE });
-      imgStripes.forEach((stripe) => {
-        const dir = stripe.dataset.dir === 'up' ? -1 : 1;
-        animate(stripe, { y: [0, dir * TRAVEL] }, { duration: DUR, ease: EASE });
-      });
-      scripts.forEach((s) => animate(s, { color: [scriptHoverColor, color] }, { duration: DUR, ease: EASE }));
-      animate(info, { backgroundColor: [bgHoverColor, bgHoverColor0] }, { duration: DUR, ease: EASE });
-      animate(price, { color: [priceHoverColor, color] }, { duration: DUR, ease: EASE });
-      if (isDark && title) animate(title, { color: ['#F7F2E8', titleOrigColor] }, { duration: DUR, ease: EASE });
-      if (isDark && desc) animate(desc, { color: ['#ffffff', descOrigColor] }, { duration: DUR, ease: EASE });
-      animate(btn, { backgroundColor: ['#ffffff', color], color: [color, beige] }, { duration: DUR, ease: EASE });
-      animate(btnIcon, { backgroundColor: [color, beige] }, { duration: DUR, ease: EASE });
-      if (btnSvg) animate(btnSvg, { color: ['#ffffff', color] }, { duration: DUR, ease: EASE });
+        animate(card, { scale: 1 }, { type: 'spring', stiffness: 280, damping: 18, mass: 1 });
+        if (imgBg) animate(imgBg, { opacity: [1, 0] }, { duration: DUR, ease: EASE });
+        imgStripes.forEach((stripe) => {
+          const dir = stripe.dataset.dir === 'up' ? -1 : 1;
+          animate(stripe, { y: [0, dir * TRAVEL] }, { duration: DUR, ease: EASE });
+        });
+        scripts.forEach((s) => animate(s, { color: [scriptHoverColor, color] }, { duration: DUR, ease: EASE }));
+        animate(info, { backgroundColor: [bgHoverColor, bgHoverColor0] }, { duration: DUR, ease: EASE });
+        animate(price, { color: [priceHoverColor, color] }, { duration: DUR, ease: EASE });
+        if (isDark && title) animate(title, { color: ['#F7F2E8', titleOrigColor] }, { duration: DUR, ease: EASE });
+        if (isDark && desc) animate(desc, { color: ['#ffffff', descOrigColor] }, { duration: DUR, ease: EASE });
+        animate(btn, { backgroundColor: ['#ffffff', color], color: [color, beige] }, { duration: DUR, ease: EASE });
+        animate(btnIcon, { backgroundColor: [color, beige] }, { duration: DUR, ease: EASE });
+        if (btnSvg) animate(btnSvg, { color: ['#ffffff', color] }, { duration: DUR, ease: EASE });
 
-      if (splitTimeout) {
-        clearTimeout(splitTimeout);
-        splitTimeout = null;
-      }
-      animate(wrap, { rotate: 0, scale: 1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
-      animate(left, { x: 0, opacity: 1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
-      animate(right, { x: 0, opacity: 1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
-      animate(cracked, { opacity: 0 }, { duration: DUR, ease: EASE });
-    };
+        if (splitTimeout) {
+          clearTimeout(splitTimeout);
+          splitTimeout = null;
+        }
+        animate(wrap, { rotate: 0, scale: 1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
+        animate(left, { x: 0, opacity: 1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
+        animate(right, { x: 0, opacity: 1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
+        animate(cracked, { opacity: 0 }, { duration: DUR, ease: EASE });
+      };
 
-    card.addEventListener('mouseenter', start);
-    card.addEventListener('mouseleave', reset);
-  });
+      card.addEventListener('mouseenter', start);
+      card.addEventListener('mouseleave', reset);
+    });
+  }
+
+  document.addEventListener('astro:page-load', initCookieCards);
 </script>

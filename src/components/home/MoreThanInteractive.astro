@@ -115,8 +115,10 @@ const gridImages = [
 <script>
   import { animate } from "motion";
 
-  const root = document.getElementById("more-than-interactive");
-  if (root) {
+  function initMoreThanInteractive() {
+    const root = document.getElementById("more-than-interactive");
+    if (!root) return;
+
     const slides = Array.from(root.querySelectorAll<HTMLElement>(".product-slide"));
     const nextBtn = document.getElementById("more-than-next-btn");
     let currentIndex = 0;
@@ -182,4 +184,6 @@ const gridImages = [
 
     root.addEventListener("click", nextProduct);
   }
+
+  document.addEventListener("astro:page-load", initMoreThanInteractive);
 </script>

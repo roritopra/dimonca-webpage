@@ -43,3 +43,32 @@
 		}
 	}
 }
+
+/* View Transitions: Animación de Cortina (Clip Wipe) */
+@keyframes curtain-wipe-in {
+	from {
+		clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
+	}
+	to {
+		clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+	}
+}
+
+@keyframes curtain-wipe-out {
+	from {
+		clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+	}
+	to {
+		clip-path: polygon(100% 0, 100% 0, 100% 100%, 100% 100%);
+	}
+}
+
+::view-transition-old(root) {
+	animation: 600ms cubic-bezier(0.76, 0, 0.24, 1) both curtain-wipe-out;
+	z-index: 1;
+}
+
+::view-transition-new(root) {
+	animation: 600ms cubic-bezier(0.76, 0, 0.24, 1) both curtain-wipe-in;
+	z-index: 2;
+}

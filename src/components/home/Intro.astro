@@ -1,7 +1,7 @@
 ---
 ---
 
-<div id="intro-overlay" aria-hidden="true">
+<div id="intro-overlay" transition:persist aria-hidden="true">
   <img id="intro-logo" src="/images/logo.png" alt="Dimonca" />
 </div>
 
@@ -28,13 +28,15 @@
 <script>
   import { animate } from 'motion';
 
-  const COLORS = ['#6ca7d5', '#F45D8C', '#3A200E', '#979255'];
-  const color = COLORS[Math.floor(Math.random() * COLORS.length)];
+  function playIntroAnimation() {
+    const overlay = document.getElementById('intro-overlay');
+    const logo = document.getElementById('intro-logo');
 
-  const overlay = document.getElementById('intro-overlay') as HTMLElement;
-  const logo = document.getElementById('intro-logo') as HTMLElement;
+    if (!overlay || !logo) return;
 
-  if (overlay && logo) {
+    const COLORS = ['#6ca7d5', '#F45D8C', '#3A200E', '#979255'];
+    const color = COLORS[Math.floor(Math.random() * COLORS.length)];
+
     overlay.style.backgroundColor = color;
     document.body.style.overflow = 'hidden';
 
@@ -63,4 +65,6 @@
       }, 300);
     }, 1000);
   }
+
+  playIntroAnimation();
 </script>

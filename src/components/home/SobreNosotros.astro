@@ -42,11 +42,12 @@ const photos = [
 
 <section id="sobre-nosotros" class="relative z-10 w-full overflow-hidden bg-beige shadow-[0_-12px_24px_rgba(58,32,14,0.12)]">
   <div
-    class="mx-auto flex max-w-[1440px] flex-wrap items-center justify-center gap-16 px-20 py-16"
+    class="mx-auto flex max-w-[1440px] flex-col-reverse lg:flex-row items-center justify-center gap-12 sm:gap-16 px-6 sm:px-12 lg:px-20 py-12 sm:py-16"
   >
+    <!-- Collage interactivo con fotos y animaciones -->
     <div
       id="sobre-grid"
-      class="relative grid w-[540px] max-w-full grid-cols-2 gap-x-5 gap-y-8"
+      class="relative grid w-full max-w-[340px] sm:max-w-[460px] lg:max-w-[540px] grid-cols-2 gap-x-4 sm:gap-x-5 gap-y-6 sm:gap-y-8 mt-4 lg:mt-0"
     >
       {
         photos.map((p) => (
@@ -63,12 +64,12 @@ const photos = [
         ))
       }
       <div
-        class="absolute top-0 left-8/12 z-10 w-full max-w-[300px] -translate-x-1/2"
+        class="absolute top-0 left-8/12 z-10 w-full max-w-[200px] sm:max-w-[260px] lg:max-w-[300px] -translate-x-1/2"
       >
         <p
           id="sobre-texto"
-          class="font-exmouth text-[40.74px] leading-[1.2]
-		text-brown [-webkit-text-stroke:8px_#F7F2E8] [paint-order:stroke_fill]
+          class="font-exmouth text-[26px] sm:text-[34px] lg:text-[40.74px] leading-[1.2]
+		text-brown [-webkit-text-stroke:4px_#F7F2E8] sm:[-webkit-text-stroke:6px_#F7F2E8] lg:[-webkit-text-stroke:8px_#F7F2E8] [paint-order:stroke_fill]
 		[filter:drop-shadow(0px_4px_4px_rgba(58,32,14,0.5))]"
           style="transform: translate(-50px, 100px);"
           aria-hidden="true"
@@ -79,7 +80,7 @@ const photos = [
       <div class="absolute bottom-0 left-1/2 z-10 -translate-x-1/2">
         <Image
           id="sobre-cookie"
-          class="block w-[160px] h-auto scale-125"
+          class="block w-[100px] sm:w-[130px] lg:w-[160px] h-auto scale-125"
           style="transform: translate(-100px, -100px);"
           src={sobreCookieImg}
           alt=""
@@ -88,7 +89,7 @@ const photos = [
         />
       </div>
       <div
-        class="absolute top-1/2 right-0 z-20 flex size-[71px] -translate-y-1/2 items-center justify-center"
+        class="absolute top-1/2 right-0 z-20 flex size-[48px] sm:size-[58px] lg:size-[71px] -translate-y-1/2 items-center justify-center"
       >
         <div
           id="sobre-heart"
@@ -97,14 +98,14 @@ const photos = [
         >
           <div class="-rotate-30">
             <div
-              class="flex items-center rounded-[140.54px] border-[2.11px] border-beige bg-pink p-[7.03px] drop-shadow-[0px_2.81px_1.4px_rgba(58,32,14,0.15)]"
+              class="flex items-center rounded-[140.54px] border-[1.5px] sm:border-[2px] lg:border-[2.11px] border-beige bg-pink p-[4px] sm:p-[5.5px] lg:p-[7.03px] drop-shadow-[0px_2.81px_1.4px_rgba(58,32,14,0.15)]"
             >
               <div
-                class="flex items-center rounded-[22.49px] border-[2px] border-pink-200 p-[7.03px]"
+                class="flex items-center rounded-[22.49px] border-[1.5px] sm:border-[2px] border-pink-200 p-[4px] sm:p-[5.5px] lg:p-[7.03px]"
               >
                 <Icon
                   name="lucide:heart"
-                  class="block h-[23.89px] w-[23.89px] text-beige"
+                  class="block h-4 w-4 sm:h-5 sm:w-5 lg:h-[23.89px] lg:w-[23.89px] text-beige"
                   aria-hidden="true"
                 />
               </div>
@@ -114,45 +115,41 @@ const photos = [
       </div>
     </div>
 
-    <div class="flex w-[522px] max-w-full flex-col gap-[9px]">
-      <div class="relative h-[158px]">
+    <!-- Columna de Información / Texto -->
+    <div class="flex w-full max-w-[522px] flex-col items-center lg:items-start text-center lg:text-left gap-4 sm:gap-6">
+      <div class="relative w-full flex flex-col items-center lg:items-start">
         <h2
-          class="w-[521px] font-sans text-[59px] leading-[1.2] font-bold text-brown m-0"
+          class="font-sans text-[36px] sm:text-[46px] lg:text-[59px] leading-[1.15] font-bold text-brown m-0"
         >
           Bienvenido al universo
         </h2>
         <span
-          class="absolute top-[62px] left-[273px] font-exmouth text-[81.14px] leading-[1.2] text-pink"
+          class="font-exmouth text-[58px] sm:text-[70px] lg:text-[81.14px] leading-none text-pink -mt-2 sm:-mt-3 lg:-mt-4 lg:absolute lg:top-[62px] lg:left-[273px]"
           aria-hidden="true"
-          >Dimonca</span
         >
+          Dimonca
+        </span>
       </div>
       <p
-        class="min-w-full text-[19px] leading-[1.2] whitespace-pre-wrap text-brown"
+        class="w-full font-sans text-[16px] sm:text-[18px] lg:text-[19px] leading-[1.35] text-brown m-0 max-w-[480px] lg:max-w-none"
       >
-        Bienvenidos a Dimonca deliciosos momentos dulces te esperan en nuestro{
-          " "
-        }
+        Bienvenidos a Dimonca deliciosos momentos dulces te esperan en nuestro{' '}
         <strong>rincón de tentaciones</strong>
-        {
-          ", donde cada bocado es una experiencia única! Desde clásicos tradicionales hasta "
-        }
+        {', donde cada bocado es una experiencia única! Desde clásicos tradicionales hasta '}
         <strong>creaciones innovadoras</strong>
-        {
-          " Nuestra pasión por la pastelería se refleja en cada pastel que preparamos con mucho amor! "
-        }
+        {' Nuestra pasión por la pastelería se refleja en cada pastel que preparamos con mucho amor! '}
       </p>
       <a
-        class="group mt-1 flex h-[52px] w-[210px] items-center justify-center gap-3 whitespace-nowrap rounded-[57px] bg-pink px-6 py-3 font-sans text-[19px] leading-[1.2] font-bold text-beige no-underline shadow-[0_4px_14px_rgba(244,93,140,0.4)] transition-all duration-300 hover:shadow-[0_6px_20px_rgba(244,93,140,0.6)] hover:brightness-95"
+        class="group mt-2 flex h-[48px] sm:h-[52px] w-[190px] sm:w-[210px] items-center justify-center gap-3 whitespace-nowrap rounded-[57px] bg-pink px-6 py-3 font-sans text-[17px] sm:text-[19px] leading-[1.2] font-bold text-beige no-underline shadow-[0_4px_14px_rgba(244,93,140,0.4)] transition-all duration-300 hover:shadow-[0_6px_20px_rgba(244,93,140,0.6)] hover:brightness-95"
         href="#contacto"
       >
         Contáctanos
         <span
-          class="flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-full bg-beige p-[7px] transition-transform duration-300 group-hover:scale-110"
+          class="flex h-7 w-7 sm:h-[34px] sm:w-[34px] shrink-0 items-center justify-center rounded-full bg-beige p-1.5 sm:p-[7px] transition-transform duration-300 group-hover:scale-110"
         >
           <Icon
             name="lucide:phone-call"
-            class="block h-[16px] w-[16px] text-pink"
+            class="block h-3.5 w-3.5 sm:h-[16px] sm:w-[16px] text-pink"
             aria-hidden="true"
           />
         </span>

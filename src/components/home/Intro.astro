@@ -143,42 +143,56 @@
         slides[currentSlide]?.classList.add('active');
       }, slideDuration);
 
-      // 3. FASE 7: Corte exacto de la D mostrando la web sin deformar
+      // 3. FASE 7: Corte exacto de la D mostrando la web y expansión fluida hacia la izquierda
       setTimeout(() => {
         clearInterval(slideInterval);
 
-        // Ubicación y tamaño exactos en píxeles del elemento D
+        // Posición y dimensiones exactas del elemento D en pantalla
         const rect = dContainer.getBoundingClientRect();
         const centerX = rect.left + rect.width / 2;
         const centerY = rect.top + rect.height / 2;
-        // Escala inicial exacta (el SVG nativo es de 800x800)
         const initialScale = rect.width / 800;
 
         cutoutCenter.setAttribute('transform', `translate(${centerX}, ${centerY})`);
-        cutoutScaler.setAttribute('transform', `scale(${initialScale})`);
+        cutoutScaler.setAttribute('transform', `scale(${initialScale}) rotate(0)`);
 
-        // Mostrar la capa rosa cortada con la D exactamente en el mismo lugar
+        // Transición instantánea a la máscara rosa
         overlay.style.backgroundColor = 'transparent';
         pinkCutout.style.opacity = '1';
         dContainer.style.display = 'none';
 
-        // Animar la D recortada hacia afuera de forma fluida y perfectamente simétrica
-        animate(
-          (progress: number) => {
-            const currentScale = initialScale + Math.pow(progress, 2.5) * 20;
-            cutoutScaler.setAttribute('transform', `scale(${currentScale})`);
-          },
-          { duration: 0.85, ease: [0.76, 0, 0.24, 1] }
-        );
+        // Animación de expansión ultra grande y rotación a la izquierda mediante loop suave
+        const duration = 900; // ms
+        const startTime = performance.now();
 
-        animate(
-          pinkCutout,
-          { opacity: [1, 0] },
-          { duration: 0.35, delay: 0.55, ease: 'easeOut' }
-        ).then(() => {
-          overlay.style.display = 'none';
-          document.body.style.overflow = '';
-        });
+        function stepExpansion(now: number) {
+          const elapsed = now - startTime;
+          const progress = Math.min(elapsed / duration, 1);
+          // Curva de aceleración cúbica para salida rápida y contundente
+          const ease = Math.pow(progress, 3);
+          const currentScale = initialScale + ease * 35;
+          const currentRotation = -progress * 25; // Rota 25 grados a la izquierda
+
+          cutoutScaler?.setAttribute(
+            'transform',
+            `scale(${currentScale}) rotate(${currentRotation})`
+          );
+
+          if (progress > 0.6) {
+            // Desvanecer el fondo rosa en el tramo final
+            const fadeProgress = (progress - 0.6) / 0.4;
+            if (pinkCutout) pinkCutout.style.opacity = String(1 - fadeProgress);
+          }
+
+          if (progress < 1) {
+            requestAnimationFrame(stepExpansion);
+          } else {
+            if (overlay) overlay.style.display = 'none';
+            document.body.style.overflow = '';
+          }
+        }
+
+        requestAnimationFrame(stepExpansion);
       }, slideDuration * slides.length);
     }, 700);
   }

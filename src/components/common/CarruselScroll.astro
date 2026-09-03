@@ -25,22 +25,22 @@ const icon = isBrown ? '/images/est-icon-brown.png' : '/images/est-icon.png';
 <section
   class={`relative z-10 w-full overflow-hidden border-y-2 bg-beige ${borderClass}`}
 >
-  <div class="scroll-carousel w-full py-[14px]">
+  <div class="scroll-carousel w-full py-[10px] sm:py-[14px]">
     <div
       class="scroll-carousel-track flex w-max items-center will-change-transform"
       data-repeats={repeats}
     >
       {Array.from({ length: repeats }).map(() =>
         items.map((item) => (
-          <div class="flex shrink-0 items-center gap-[22px] pr-[92px]">
-            <p class={`m-0 font-sans text-[19px] leading-[1.2] ${textClass}`}>EST</p>
+          <div class="flex shrink-0 items-center gap-[12px] sm:gap-[18px] lg:gap-[22px] pr-[44px] sm:pr-[68px] lg:pr-[92px]">
+            <p class={`m-0 font-sans text-[13px] sm:text-[16px] lg:text-[19px] leading-[1.2] ${textClass}`}>EST</p>
             <img
-              class="block h-8 w-[30px] object-cover"
+              class="block h-5 w-5 sm:h-6 sm:w-6 lg:h-8 lg:w-[30px] object-cover"
               src={icon}
               alt=""
               aria-hidden="true"
             />
-            <p class={`m-0 text-right font-sans text-[19px] leading-[1.2] ${textClass}`}>
+            <p class={`m-0 text-right font-sans text-[13px] sm:text-[16px] lg:text-[19px] leading-[1.2] ${textClass}`}>
               {item.year}
             </p>
           </div>

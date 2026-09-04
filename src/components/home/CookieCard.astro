@@ -49,7 +49,7 @@ const imgStripes = Array.from({ length: numStripes }, (_, i) => ({
   data-hover-bg={hoverBg}
   data-hover-price={hoverPrice}
 >
-  <div class="cookie-img-area relative h-[319px] w-full shrink-0 overflow-clip rounded-t-[20px]">
+  <div class="cookie-img-area relative h-[260px] w-full shrink-0 overflow-clip rounded-t-[20px]">
     <!-- Fondo de color -->
     <div
       class="cookie-img-bg absolute inset-0"
@@ -64,14 +64,14 @@ const imgStripes = Array.from({ length: numStripes }, (_, i) => ({
       ></div>
     ))}
     <p
-      class="cookie-script absolute top-[-27px] left-[-40px] z-10 font-exmouth text-[120.34px] leading-[1.05] whitespace-nowrap"
+      class="cookie-script absolute top-[-20px] left-[-30px] z-10 font-exmouth text-[96px] leading-[1.05] whitespace-nowrap"
       style={`color: ${color};`}
       aria-hidden="true"
     >
       {scriptTop}
     </p>
     <p
-      class="cookie-script absolute top-[206px] left-[86px] z-10 font-exmouth text-[120.34px] leading-[1.05] whitespace-nowrap"
+      class="cookie-script absolute top-[165px] left-[65px] z-10 font-exmouth text-[96px] leading-[1.05] whitespace-nowrap"
       style={`color: ${color};`}
       aria-hidden="true"
     >
@@ -79,19 +79,19 @@ const imgStripes = Array.from({ length: numStripes }, (_, i) => ({
     </p>
 
     <!-- Contenedor de la galleta (gira y escala) -->
-    <div class="cookie-img-wrap absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 h-[257.29px] w-[280.35px]">
+    <div class="cookie-img-wrap absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 h-[210px] w-[228px]">
       <!-- Mitad izquierda -->
       <div class="cookie-half-left absolute inset-y-0 left-0 w-1/2 overflow-hidden">
         {typeof img === 'string' ? (
           <img
-            class="absolute top-0 left-0 h-full w-[280.35px] max-w-none object-cover drop-shadow-[0px_8.45px_19.16px_rgba(58,32,14,0.31)]"
+            class="absolute top-0 left-0 h-full w-[228px] max-w-none object-cover drop-shadow-[0px_8.45px_19.16px_rgba(58,32,14,0.31)]"
             src={img}
             alt={title}
             loading="lazy"
           />
         ) : (
           <Image
-            class="absolute top-0 left-0 h-full w-[280.35px] max-w-none object-cover drop-shadow-[0px_8.45px_19.16px_rgba(58,32,14,0.31)]"
+            class="absolute top-0 left-0 h-full w-[228px] max-w-none object-cover drop-shadow-[0px_8.45px_19.16px_rgba(58,32,14,0.31)]"
             src={img}
             alt={title}
             loading="lazy"
@@ -102,7 +102,7 @@ const imgStripes = Array.from({ length: numStripes }, (_, i) => ({
       <div class="cookie-half-right absolute inset-y-0 right-0 w-1/2 overflow-hidden">
         {typeof img === 'string' ? (
           <img
-            class="absolute top-0 right-0 h-full w-[280.35px] max-w-none object-cover drop-shadow-[0px_8.45px_19.16px_rgba(58,32,14,0.31)]"
+            class="absolute top-0 right-0 h-full w-[228px] max-w-none object-cover drop-shadow-[0px_8.45px_19.16px_rgba(58,32,14,0.31)]"
             src={img}
             alt=""
             aria-hidden="true"
@@ -110,7 +110,7 @@ const imgStripes = Array.from({ length: numStripes }, (_, i) => ({
           />
         ) : (
           <Image
-            class="absolute top-0 right-0 h-full w-[280.35px] max-w-none object-cover drop-shadow-[0px_8.45px_19.16px_rgba(58,32,14,0.31)]"
+            class="absolute top-0 right-0 h-full w-[228px] max-w-none object-cover drop-shadow-[0px_8.45px_19.16px_rgba(58,32,14,0.31)]"
             src={img}
             alt=""
             aria-hidden="true"

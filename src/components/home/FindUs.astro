@@ -2,10 +2,10 @@
 import { Icon } from 'astro-icon/components';
 import { Image } from 'astro:assets';
 
-import mapImg from '../../assets/images/map.png';
-import map1Img from '../../assets/images/map1.png';
-import map2Img from '../../assets/images/map2.png';
-import map3Img from '../../assets/images/map3.png';
+import mapImg from '../../assets/images/home/find-us/map.png';
+import map1Img from '../../assets/images/home/find-us/sede-1.png';
+import map2Img from '../../assets/images/home/find-us/sede-2.png';
+import map3Img from '../../assets/images/home/find-us/sede-3.png';
 
 const stripes = Array.from({ length: 12 }, (_, i) => ({
 	left: (i * (62.1 / 720)) * 100,
@@ -13,17 +13,17 @@ const stripes = Array.from({ length: 12 }, (_, i) => ({
 }));
 
 const findusImages = [
-	'/images/findus/brookie.png',
-	'/images/findus/brownie.png',
-	'/images/findus/cooki.png',
-	'/images/findus/cookie.png',
-	'/images/findus/hovered.png',
-	'/images/findus/milo.png',
-	'/images/findus/oreo.png',
-	'/images/findus/r-bronwnie.png',
-	'/images/findus/r-cookie.png',
-	'/images/findus/red.png',
-	'/images/findus/velvet.png',
+	'/images/home/find-us/products/brookie.png',
+	'/images/home/find-us/products/brownie.png',
+	'/images/home/find-us/products/cookie-clasica.png',
+	'/images/home/find-us/products/cookie.png',
+	'/images/home/find-us/products/cookie-rellena.png',
+	'/images/home/find-us/products/milo.png',
+	'/images/home/find-us/products/oreo.png',
+	'/images/home/find-us/products/brownie-rojo.png',
+	'/images/home/find-us/products/cookie-roja.png',
+	'/images/home/find-us/products/red.png',
+	'/images/home/find-us/products/velvet.png',
 ];
 ---
 
@@ -59,7 +59,7 @@ const findusImages = [
 
 			<!-- Dirección con Pin -->
 			<div class="mb-5 flex items-center gap-3">
-				<img class="block size-8 shrink-0 object-contain" src="/images/marker-pin.svg" alt="" aria-hidden="true" />
+				<img class="block size-8 shrink-0 object-contain" src="/images/home/find-us/map-pin.svg" alt="" aria-hidden="true" />
 				<p class="m-0 font-sans text-[26px] md:text-[28px] font-medium text-brown">
 					Cra 90 #42-28
 				</p>

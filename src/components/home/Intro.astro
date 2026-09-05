@@ -1,4 +1,8 @@
 ---
+import sobre1Img from "../../assets/images/home/sobre-nosotros/foto-1.png";
+import sobre2Img from "../../assets/images/home/sobre-nosotros/foto-2.png";
+import sobre3Img from "../../assets/images/home/sobre-nosotros/foto-3.png";
+import sobre4Img from "../../assets/images/home/sobre-nosotros/foto-4.png";
 ---
 
 <div id="intro-overlay" transition:persist aria-hidden="true">
@@ -43,7 +47,7 @@
     <!-- 1. D Blanca Inicial -->
     <img
       id="intro-d-solid"
-      src="/images/logo-simple.svg"
+      src="/images/shared/logo-simple.svg"
       alt="Dimonca"
       class="absolute inset-0 h-full w-full object-contain"
     />
@@ -51,12 +55,12 @@
     <!-- 2. Slideshow con máscara de recorte D (6 imágenes) -->
     <div id="intro-d-masked" class="absolute inset-0 h-full w-full opacity-0">
       <div id="intro-slides-wrapper" class="relative h-full w-full bg-beige">
-        <img class="intro-slide active" src="/images/sobre-1.png" alt="" />
-        <img class="intro-slide" src="/images/sobre-2.png" alt="" />
-        <img class="intro-slide" src="/images/sobre-3.png" alt="" />
-        <img class="intro-slide" src="/images/sobre-4.png" alt="" />
-        <img class="intro-slide" src="/images/sobre-1.png" alt="" />
-        <img class="intro-slide" src="/images/sobre-2.png" alt="" />
+        <img class="intro-slide active" src={sobre1Img.src} alt="" />
+        <img class="intro-slide" src={sobre2Img.src} alt="" />
+        <img class="intro-slide" src={sobre3Img.src} alt="" />
+        <img class="intro-slide" src={sobre4Img.src} alt="" />
+        <img class="intro-slide" src={sobre1Img.src} alt="" />
+        <img class="intro-slide" src={sobre2Img.src} alt="" />
       </div>
     </div>
   </div>

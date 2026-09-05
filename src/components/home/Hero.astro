@@ -2,10 +2,10 @@
 import { Icon } from 'astro-icon/components';
 import { Image } from 'astro:assets';
 
-import creamHero from '../../assets/images/cream-hero.png';
-import cookieHero from '../../assets/images/cookie-hero.png';
-import crookieHero from '../../assets/images/crookie-hero.png';
-import crookieHeroSplit from '../../assets/images/crookie-hero-split.png';
+import creamHero from '../../assets/images/home/hero/hero-cream.png';
+import cookieHero from '../../assets/images/home/hero/hero-cookie.png';
+import crookieHero from '../../assets/images/home/hero/hero-crookie.png';
+import crookieHeroSplit from '../../assets/images/home/hero/hero-crookie-split.png';
 
 const stripes = Array.from({ length: 24 }, (_, i) => ({
 	left: (i * (62.1 / 1440)) * 100,
@@ -18,7 +18,7 @@ const slidesData = [
 		id: 'hero-slide-1',
 		bgClass: 'bg-brown-400',
 		stripeBg: 'bg-[#89796e]',
-		ellipseImg: '/images/ellipse-hero.svg',
+		ellipseImg: '/images/home/hero/ellipse.svg',
 		titleWord1: 'Galleta',
 		titleWord2: 'Habibi',
 		titleTextColor: 'text-pink-200',
@@ -30,7 +30,7 @@ const slidesData = [
 		cookieAlt: 'Galleta Habibi con crema de pistacho',
 		cookieHoverAlt: 'Galleta Habibi partida mostrando relleno artesanal de pistacho',
 		starWrapClass: 'top-[115px] right-2 sm:right-6 md:right-10 xl:right-auto xl:top-[186.68px] xl:left-200 h-[145px] w-[145px] sm:h-[195px] sm:w-[195px] md:h-[220px] md:w-[220px] xl:h-[279.66px] xl:w-[282.03px]',
-		starImg: '/images/star-hero.svg',
+		starImg: '/images/home/hero/star.svg',
 		starTextClass: 'text-[15px] sm:text-[20px] xl:text-[27px] text-brown [-webkit-text-stroke:3px_#F7F2E8] xl:[-webkit-text-stroke:5px_#F7F2E8]',
 		starTextMargin: 'margin-left: 7px; margin-top: -6px; sm:margin-left: 10px; sm:margin-top: -9px; xl:margin-left: 14.4px; xl:margin-top: -12.6px;',
 		infoTitle: 'Galleta Habibi',
@@ -42,7 +42,7 @@ const slidesData = [
 		id: 'hero-slide-2',
 		bgClass: 'bg-blue-500',
 		stripeBg: 'bg-[#d7ebfb]',
-		ellipseImg: '/images/ellipse-hero-blue.svg',
+		ellipseImg: '/images/home/hero/ellipse-blue.svg',
 		titleWord1: 'Crookie',
 		titleWord2: 'Chips',
 		titleTextColor: 'text-pink',
@@ -54,7 +54,7 @@ const slidesData = [
 		cookieAlt: 'Crookie Chips con relleno de nutella',
 		cookieHoverAlt: 'Crookie partido con centro cremoso de nutella',
 		starWrapClass: 'top-[115px] right-2 sm:right-6 md:right-10 xl:right-auto xl:top-[186.68px] xl:left-200 h-[155px] w-[155px] sm:h-[210px] sm:w-[210px] md:h-[240px] md:w-[240px] xl:h-[311px] xl:w-[314px]',
-		starImg: '/images/star-hero-2.svg',
+		starImg: '/images/home/hero/star-2.svg',
 		starTextClass: 'text-[16px] sm:text-[22px] xl:text-[30px] text-white',
 		starTextMargin: 'margin-left: 7px; margin-top: -7px; sm:margin-left: 10px; sm:margin-top: -10px; xl:margin-left: 14.5px; xl:margin-top: -14.4px;',
 		infoTitle: 'Crookie Chips',
@@ -203,7 +203,7 @@ const slidesData = [
 			>
 				Ver menú
 				<span class="flex h-7 w-7 sm:h-8 sm:w-8 shrink-0 items-center justify-center rounded-[22.68px] bg-beige p-1 sm:p-[6.67px]">
-					<img class="block h-3.5 w-3.5 sm:h-[16.01px] sm:w-[16.01px]" src="/images/chef-hat.svg" alt="" aria-hidden="true" />
+					<img class="block h-3.5 w-3.5 sm:h-[16.01px] sm:w-[16.01px]" src="/images/shared/chef-hat.svg" alt="" aria-hidden="true" />
 				</span>
 			</a>
 

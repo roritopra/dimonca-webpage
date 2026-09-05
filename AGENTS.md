@@ -20,6 +20,16 @@
 
 ## Figma / assets
 
-- Exported assets go to `public/images/` and are referenced as `/images/...`.
-- Figma MCP exports (`figma_download_assets`, asset URLs) are often dirty: SVGs include the gray canvas rect and purple selection outline, PNG renders can carry a solid canvas background. Clean them before committing (strip the canvas `<rect>` from SVGs; flood-fill the solid background to transparent for PNGs).
-- Remote Figma asset URLs expire in ~7 days — download to `public/images/` promptly rather than inlining URLs.
+- **Estructura y organización de imágenes**:
+  - `src/assets/images/`: Para imágenes que se procesan y optimizan con Astro (`import ... from '../../assets/images/...'` y `<Image />`).
+  - `public/images/`: Para activos estáticos servidos directamente, SVGs consumidos vía `<img>` o imágenes inyectadas dinámicamente en scripts de cliente (`/images/...`).
+  - **Subdirectorios por sección**:
+    - `shared/`: Activos globales o transversales (`logo.png`, `logo-simple.svg`, `chef-hat.svg`, `map-icon.svg`, `est-icon*.png`, `footer-*`).
+    - `home/{seccion}/`: Organizadas por componente (`hero/`, `navbar/`, `sobre-nosotros/`, `our-products/`, `more-than/`, `combos/`, `testimonials/`, `find-us/`).
+    - `home/find-us/products/`: Productos interactivos para animaciones de hover grid.
+- **Convenciones de nombrado**:
+  - Usar kebab-case descriptivo en minúsculas (ej. `card-default.png`, `hero-cream.png`, `cookie-clasica.png`).
+  - Nunca dejar nombres crudos de exportación de Figma (eliminar prefijos como `Property 1=...`, typos como `cooki`, o nombres ambiguos como `hovered.png`).
+- **Limpieza de exports Figma**:
+  - Figma MCP exports (`figma_download_assets`, asset URLs) suelen ser sucios: los SVGs incluyen rectángulos de lienzo y bordes de selección púrpura; los PNGs pueden traer fondo sólido. Limpiarlos antes de añadirlos (quitar `<rect>` de canvas en SVGs; transparentar fondos en PNGs).
+  - Las URLs remotas de assets de Figma expiran en ~7 días: guardarlas en las carpetas correspondientes en vez de usar URLs remotas.

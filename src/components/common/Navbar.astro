@@ -52,15 +52,24 @@ const isEncuentranos = currentPath === '/encuentranos' || currentPath === '/encu
 			href="/#sobre-nosotros"
 			>Sobre Nosotros</a
 		>
-		<a
-			class="flex h-[46px] flex-1 min-w-0 items-center justify-center gap-2 whitespace-nowrap rounded-[57px] bg-pink px-4 py-2 text-[15px] font-bold leading-[1.2] text-beige no-underline hover:brightness-95 max-[900px]:flex-none"
-			href="/#pedido"
-		>
-			Haz tu pedido
-			<span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-[18.38px] bg-beige p-[5.4px]">
-				<img class="block h-[12.98px] w-[12.98px]" src="/images/shared/map-icon.svg" alt="" />
-			</span>
-		</a>
+		<div class="flex flex-1 min-w-0 items-center justify-center gap-5 max-[900px]:flex-none">
+			<a
+				id="nav-login-btn"
+				class="flex h-9 w-9 items-center justify-center rounded-full text-pink transition-transform hover:scale-110 hover:opacity-80 active:scale-95"
+				href="/login"
+				aria-label="Iniciar sesión o ver mi cuenta"
+			>
+				<Icon name="lucide:circle-user-round" class="h-8 w-8 stroke-[1.75]" aria-hidden="true" />
+			</a>
+			<button
+				id="nav-cart-btn"
+				class="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border-0 bg-transparent text-pink transition-transform hover:scale-110 hover:opacity-80 active:scale-95"
+				type="button"
+				aria-label="Ver carrito de compras"
+			>
+				<Icon name="lucide:shopping-cart" class="h-7 w-7 stroke-[1.75]" aria-hidden="true" />
+			</button>
+		</div>
 	</div>
 	<nav
 		class="invisible absolute top-full left-0 z-50 flex w-full items-start justify-center gap-[93px] bg-beige py-[18px] opacity-0 pointer-events-none"

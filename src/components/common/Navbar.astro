@@ -148,16 +148,16 @@ const isEncuentranos = currentPath === '/encuentranos' || currentPath === '/encu
 <!-- Overlay del Menú Móvil a pantalla completa (caída en cascada de arriba a abajo) -->
 <div
 	id="mobile-menu-overlay"
-	class="fixed inset-0 z-[9990] flex flex-col bg-pink text-white pointer-events-none overflow-y-auto xl:hidden pt-20 pb-12 px-8"
+	class="fixed inset-0 z-[9990] flex flex-col bg-pink text-white pointer-events-none overflow-y-auto xl:hidden pt-20 pb-10 px-8"
 	style="transform: translateY(-100%);"
 	aria-label="Menú móvil de navegación"
 >
 	<!-- Destino donde queda ubicado el logo agrandado en el menú desplegado -->
-	<div id="mobile-menu-logo-target" class="h-24 w-full mb-4 flex items-center justify-center pointer-events-none" aria-hidden="true"></div>
+	<div id="mobile-menu-logo-target" class="h-16 w-full mb-2 flex items-center justify-center pointer-events-none" aria-hidden="true"></div>
 
 	<!-- Lista de enlaces de navegación centrados con divisores finos como en la imagen -->
 	<nav class="flex w-full max-w-[340px] mx-auto flex-col items-center text-center font-sans">
-		<div class="mobile-nav-item w-full py-4.5 border-b border-white/40">
+		<div class="mobile-nav-item w-full py-3.5 border-b border-white/40">
 			<a
 				class="block text-[22px] sm:text-[24px] font-normal tracking-wide text-white no-underline transition-opacity hover:opacity-80"
 				href="/"
@@ -166,17 +166,86 @@ const isEncuentranos = currentPath === '/encuentranos' || currentPath === '/encu
 			</a>
 		</div>
 
-		<div class="mobile-nav-item w-full py-4.5 border-b border-white/40">
-			<a
-				class="inline-flex items-center justify-center gap-2 text-[22px] sm:text-[24px] font-normal tracking-wide text-white no-underline transition-opacity hover:opacity-80"
-				href="/#galletas"
+		<!-- Ítem Menú con submenú desplegable acordeón -->
+		<div class="mobile-nav-item w-full py-3.5 border-b border-white/40">
+			<button
+				id="mobile-submenu-toggle"
+				class="inline-flex w-full items-center justify-center gap-2 cursor-pointer border-0 bg-transparent text-[22px] sm:text-[24px] font-normal tracking-wide text-white no-underline transition-opacity hover:opacity-80"
+				type="button"
+				aria-expanded="false"
+				aria-controls="mobile-submenu-content"
 			>
 				<span>Menú</span>
-				<Icon name="lucide:chevron-down" class="h-6 w-6 stroke-[2]" aria-hidden="true" />
-			</a>
+				<Icon id="mobile-submenu-chevron" name="lucide:chevron-down" class="h-6 w-6 stroke-[2.2] transition-transform duration-300" aria-hidden="true" />
+			</button>
+
+			<!-- Cuadrícula de categorías del menú: 2 columnas, la última (quinta) centrada -->
+			<div
+				id="mobile-submenu-content"
+				class="overflow-hidden w-full max-h-0 opacity-0 transition-[max-height,opacity] duration-500 ease-[cubic-bezier(0.25,1,0.5,1)]"
+			>
+				<div id="mobile-submenu-inner" class="w-full pt-6 pb-2 transition-transform duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] -translate-y-4">
+					<div class="flex flex-wrap justify-center gap-3.5 sm:gap-4 w-full max-w-[320px] mx-auto">
+						<!-- 1. Galletas -->
+						<a
+							class="flex flex-col items-center justify-between w-[130px] sm:w-[140px] h-[135px] sm:h-[145px] p-3 rounded-xl border border-white/80 bg-white/10 text-white no-underline transition-transform active:scale-95 hover:bg-white/20"
+							href="/#galletas"
+						>
+							<div class="flex flex-1 items-center justify-center w-full">
+								<img class="h-16 w-16 object-contain drop-shadow-md" src="/images/home/navbar/cookie.png" alt="Galletas" />
+							</div>
+							<span class="text-[14px] sm:text-[15px] font-medium leading-tight">Galletas</span>
+						</a>
+
+						<!-- 2. Cuchareables -->
+						<a
+							class="flex flex-col items-center justify-between w-[130px] sm:w-[140px] h-[135px] sm:h-[145px] p-3 rounded-xl border border-white/80 bg-white/10 text-white no-underline transition-transform active:scale-95 hover:bg-white/20"
+							href="/#cuchareables"
+						>
+							<div class="flex flex-1 items-center justify-center w-full">
+								<img class="h-16 w-16 object-contain drop-shadow-md" src="/images/home/navbar/cuchareable.png" alt="Cuchareables" />
+							</div>
+							<span class="text-[14px] sm:text-[15px] font-medium leading-tight">Cuchareables</span>
+						</a>
+
+						<!-- 3. Brownies -->
+						<a
+							class="flex flex-col items-center justify-between w-[130px] sm:w-[140px] h-[135px] sm:h-[145px] p-3 rounded-xl border border-white/80 bg-white/10 text-white no-underline transition-transform active:scale-95 hover:bg-white/20"
+							href="/#brownies"
+						>
+							<div class="flex flex-1 items-center justify-center w-full">
+								<img class="h-16 w-16 object-contain drop-shadow-md" src="/images/home/navbar/brownie.png" alt="Brownies" />
+							</div>
+							<span class="text-[14px] sm:text-[15px] font-medium leading-tight">Brownies</span>
+						</a>
+
+						<!-- 4. Tortas / Pasteles -->
+						<a
+							class="flex flex-col items-center justify-between w-[130px] sm:w-[140px] h-[135px] sm:h-[145px] p-3 rounded-xl border border-white/80 bg-white/10 text-white no-underline transition-transform active:scale-95 hover:bg-white/20"
+							href="/#pasteles"
+						>
+							<div class="flex flex-1 items-center justify-center w-full">
+								<img class="h-16 w-16 object-contain drop-shadow-md" src="/images/home/navbar/cake.png" alt="Tortas" />
+							</div>
+							<span class="text-[14px] sm:text-[15px] font-medium leading-tight">Tortas</span>
+						</a>
+
+						<!-- 5. Otros Productos (centrado solo abajo) -->
+						<a
+							class="flex flex-col items-center justify-between w-[130px] sm:w-[140px] h-[135px] sm:h-[145px] p-3 rounded-xl border border-white/80 bg-white/10 text-white no-underline transition-transform active:scale-95 hover:bg-white/20"
+							href="/#más-productos"
+						>
+							<div class="flex flex-1 items-center justify-center w-full">
+								<img class="h-16 w-16 object-contain drop-shadow-md" src="/images/home/navbar/crookie.png" alt="Otros Productos" />
+							</div>
+							<span class="text-[13px] sm:text-[14px] font-medium leading-tight text-center">Otros<br />Productos</span>
+						</a>
+					</div>
+				</div>
+			</div>
 		</div>
 
-		<div class="mobile-nav-item w-full py-4.5 border-b border-white/40">
+		<div class="mobile-nav-item w-full py-3.5 border-b border-white/40">
 			<a
 				class="block text-[22px] sm:text-[24px] font-normal tracking-wide text-white no-underline transition-opacity hover:opacity-80"
 				href="/encuentranos"
@@ -185,7 +254,7 @@ const isEncuentranos = currentPath === '/encuentranos' || currentPath === '/encu
 			</a>
 		</div>
 
-		<div class="mobile-nav-item w-full py-4.5 border-b border-white/40">
+		<div class="mobile-nav-item w-full py-3.5 border-b border-white/40">
 			<a
 				class="block text-[22px] sm:text-[24px] font-normal tracking-wide text-white no-underline transition-opacity hover:opacity-80"
 				href="/#sobre-nosotros"
@@ -384,7 +453,7 @@ const isEncuentranos = currentPath === '/encuentranos' || currentPath === '/encu
 			if (centerLogo && centerLogoImg) {
 				animate(
 					centerLogo,
-					{ y: [0, 95], scale: [1, 1.7] },
+					{ y: [0, 70], scale: [1, 1.7] },
 					{ type: 'spring', stiffness: 260, damping: 18, mass: 0.8 }
 				);
 				centerLogoImg.style.filter = 'brightness(0) invert(1)';
@@ -406,6 +475,15 @@ const isEncuentranos = currentPath === '/encuentranos' || currentPath === '/encu
 			mobileMenuBtn?.setAttribute('aria-expanded', 'false');
 			document.body.style.overflow = '';
 
+			// Resetear submenú si estaba abierto
+			isSubmenuOpen = false;
+			submenuToggle?.setAttribute('aria-expanded', 'false');
+			submenuContent?.classList.remove('max-h-[600px]', 'opacity-100');
+			submenuContent?.classList.add('max-h-0', 'opacity-0');
+			submenuInner?.classList.remove('translate-y-0');
+			submenuInner?.classList.add('-translate-y-4');
+			submenuChevron?.classList.remove('rotate-180');
+
 			// 1. Retornar icono del botón a barras y colores a rosado
 			if (menuIconBars && menuIconClose) {
 				menuIconBars.classList.remove('hidden');
@@ -426,7 +504,7 @@ const isEncuentranos = currentPath === '/encuentranos' || currentPath === '/encu
 			if (centerLogo && centerLogoImg) {
 				animate(
 					centerLogo,
-					{ y: [95, 0], scale: [1.7, 1] },
+					{ y: [70, 0], scale: [1.7, 1] },
 					{ duration: 0.28, ease: [0.32, 0, 0.67, 0] }
 				);
 				centerLogoImg.style.filter = 'none';
@@ -442,12 +520,39 @@ const isEncuentranos = currentPath === '/encuentranos' || currentPath === '/encu
 			});
 		}
 
+		// Control del submenú de categorías (acordeón desplegable en móvil con animación suave tipo telón)
+		const submenuToggle = document.getElementById('mobile-submenu-toggle');
+		const submenuContent = document.getElementById('mobile-submenu-content');
+		const submenuInner = document.getElementById('mobile-submenu-inner');
+		const submenuChevron = document.getElementById('mobile-submenu-chevron');
+		let isSubmenuOpen = false;
+
+		function toggleSubmenu() {
+			isSubmenuOpen = !isSubmenuOpen;
+			submenuToggle?.setAttribute('aria-expanded', String(isSubmenuOpen));
+			if (isSubmenuOpen) {
+				submenuContent?.classList.remove('max-h-0', 'opacity-0');
+				submenuContent?.classList.add('max-h-[600px]', 'opacity-100');
+				submenuInner?.classList.remove('-translate-y-4');
+				submenuInner?.classList.add('translate-y-0');
+				submenuChevron?.classList.add('rotate-180');
+			} else {
+				submenuContent?.classList.remove('max-h-[600px]', 'opacity-100');
+				submenuContent?.classList.add('max-h-0', 'opacity-0');
+				submenuInner?.classList.remove('translate-y-0');
+				submenuInner?.classList.add('-translate-y-4');
+				submenuChevron?.classList.remove('rotate-180');
+			}
+		}
+
+		submenuToggle?.addEventListener('click', toggleSubmenu);
+
 		mobileMenuBtn?.addEventListener('click', toggleMobileMenu);
 
 		// Cerrar menú al hacer click en cualquier enlace interno del menú móvil
-		mobileNavItems.forEach((item) => {
-			const link = item.querySelector('a');
-			link?.addEventListener('click', closeMobileMenu);
+		const allMobileLinks = mobileOverlay?.querySelectorAll('a');
+		allMobileLinks?.forEach((link) => {
+			link.addEventListener('click', closeMobileMenu);
 		});
 	}
 

@@ -15,7 +15,7 @@ const isEncuentranos = currentPath === '/encuentranos' || currentPath === '/encu
 
 <header
 	id="navbar"
-	class="group relative z-[10000] w-full font-sans drop-shadow-[0px_11px_19.05px_rgba(58,32,14,0.14)]"
+	class="group fixed top-0 left-0 xl:relative z-[10000] w-full font-sans drop-shadow-[0px_11px_19.05px_rgba(58,32,14,0.14)]"
 >
 	<!-- Barra principal del Navbar -->
 	<div
@@ -150,7 +150,7 @@ const isEncuentranos = currentPath === '/encuentranos' || currentPath === '/encu
 <!-- Overlay del Menú Móvil a pantalla completa (caída en cascada de arriba a abajo) -->
 <div
 	id="mobile-menu-overlay"
-	class="fixed inset-0 z-[9990] flex flex-col bg-pink text-white pointer-events-none overflow-y-auto xl:hidden pt-20 pb-10 px-8"
+	class="fixed inset-0 z-[9990] flex flex-col bg-pink text-white pointer-events-none overflow-y-auto overscroll-contain xl:hidden pt-20 pb-10 px-8"
 	style="transform: translateY(-100%);"
 	aria-label="Menú móvil de navegación"
 >
@@ -443,20 +443,25 @@ const isEncuentranos = currentPath === '/encuentranos' || currentPath === '/encu
 			navBarContainer?.classList.remove('bg-beige');
 			navBarContainer?.classList.add('bg-transparent');
 
+			// Pausar smooth scroll mientras el menú móvil está activo
+			if ((window as any).lenis) {
+				(window as any).lenis.stop();
+			}
+
 			// 2. Caída en cascada del overlay rosado de arriba hacia abajo (rápida y dinámica)
 			mobileOverlay.style.pointerEvents = 'auto';
 			animate(
 				mobileOverlay,
 				{ transform: ['translateY(-100%)', 'translateY(0%)'] },
-				{ duration: 0.38, ease: [0.22, 1, 0.36, 1] }
+				{ duration: 0.36, ease: [0.22, 1, 0.36, 1] }
 			);
 
-			// 3. Traslado del logo de Dimonca hacia abajo: ágil, fluido y sincronizado con el telón
+			// 3. Traslado del logo de Dimonca hacia abajo: continuo, smooth y perfectamente sincronizado con el telón
 			if (centerLogo && centerLogoImg) {
 				animate(
 					centerLogo,
 					{ y: [0, 70], scale: [1, 1.7] },
-					{ type: 'spring', stiffness: 260, damping: 18, mass: 0.8 }
+					{ duration: 0.36, ease: [0.22, 1, 0.36, 1] }
 				);
 				centerLogoImg.style.filter = 'brightness(0) invert(1)';
 			}
@@ -466,7 +471,7 @@ const isEncuentranos = currentPath === '/encuentranos' || currentPath === '/encu
 				animate(
 					item,
 					{ opacity: [0, 1], y: [16, 0] },
-					{ duration: 0.28, delay: 0.14 + index * 0.04, ease: 'easeOut' }
+					{ duration: 0.28, delay: 0.12 + index * 0.03, ease: 'easeOut' }
 				);
 			});
 		}
@@ -476,6 +481,11 @@ const isEncuentranos = currentPath === '/encuentranos' || currentPath === '/encu
 			isMobileOpen = false;
 			mobileMenuBtn?.setAttribute('aria-expanded', 'false');
 			document.body.style.overflow = '';
+
+			// Reanudar smooth scroll
+			if ((window as any).lenis) {
+				(window as any).lenis.start();
+			}
 
 			// Resetear submenú si estaba abierto
 			isSubmenuOpen = false;
@@ -502,21 +512,21 @@ const isEncuentranos = currentPath === '/encuentranos' || currentPath === '/encu
 			navBarContainer?.classList.remove('bg-transparent');
 			navBarContainer?.classList.add('bg-beige');
 
-			// 2. Retornar logo rápidamente a su posición original al compás del telón
+			// 2. Retornar logo suave y continuo a su posición original al compás del telón
 			if (centerLogo && centerLogoImg) {
 				animate(
 					centerLogo,
 					{ y: [70, 0], scale: [1.7, 1] },
-					{ duration: 0.28, ease: [0.32, 0, 0.67, 0] }
+					{ duration: 0.3, ease: [0.32, 0, 0.67, 0] }
 				);
 				centerLogoImg.style.filter = 'none';
 			}
 
-			// 3. Subir el overlay rosado de vuelta rápidamente
+			// 3. Subir el overlay rosado de vuelta sincronizado
 			animate(
 				mobileOverlay,
 				{ transform: ['translateY(0%)', 'translateY(-100%)'] },
-				{ duration: 0.28, ease: [0.32, 0, 0.67, 0] }
+				{ duration: 0.3, ease: [0.32, 0, 0.67, 0] }
 			).then(() => {
 				mobileOverlay.style.pointerEvents = 'none';
 			});

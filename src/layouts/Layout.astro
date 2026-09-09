@@ -54,6 +54,7 @@ import Intro from '../components/home/Intro.astro';
 					smoothWheel: true,
 					touchMultiplier: 1.5,
 				});
+				(window as any).lenis = lenisInstance;
 
 				function raf(time: number) {
 					lenisInstance?.raf(time);

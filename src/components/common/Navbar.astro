@@ -14,6 +14,7 @@ import cakeImg from '../../assets/images/home/navbar/cake.png';
 import cakeHoverImg from '../../assets/images/home/navbar/cake-hover.png';
 import crookieImg from '../../assets/images/home/navbar/crookie.png';
 import crookieHoverImg from '../../assets/images/home/navbar/crookie-hover.png';
+import CartButton from '../menu/CartButton';
 
 const categories = [
 	{ label: 'Galletas', img: cookieImg.src, imgHover: cookieHoverImg.src },
@@ -25,6 +26,7 @@ const categories = [
 
 const currentPath = Astro.url.pathname;
 const isEncuentranos = currentPath === '/encuentranos' || currentPath === '/encuentranos/';
+const isMenu = currentPath.startsWith('/menu');
 ---
 
 <header
@@ -64,21 +66,32 @@ const isEncuentranos = currentPath === '/encuentranos' || currentPath === '/encu
 			href="/encuentranos"
 			>Encuéntranos</a
 		>
-		<button
-			id="menu-btn"
-			class="relative hidden xl:flex h-[30px] flex-1 min-w-0 cursor-pointer items-center justify-center gap-2 whitespace-nowrap border-0 bg-transparent p-2.5 text-[15px] leading-[1.2] text-brown transition-colors hover:opacity-75 group-data-[open]:text-pink group-data-[open]:font-bold"
-			type="button"
-			aria-haspopup="true"
-			aria-expanded="false"
-			aria-controls="dropdown"
-		>
-			<span>Menú</span>
-			<Icon
-				name="lucide:chevron-down"
-				class="h-5 w-5 shrink-0 transition-transform duration-200 group-data-[open]:rotate-180"
-				aria-hidden="true"
-			/>
-		</button>
+		<div class="relative hidden xl:flex flex-1 min-w-0 items-center justify-center">
+			<a
+				href="/menu"
+				class:list={[
+					'p-2.5 text-[15px] leading-[1.2] no-underline transition-colors hover:opacity-75',
+					isMenu ? 'text-pink font-bold' : 'text-brown'
+				]}
+			>
+				Menú
+			</a>
+			<button
+				id="menu-btn"
+				class="flex h-[30px] cursor-pointer items-center justify-center border-0 bg-transparent p-1 text-brown transition-colors hover:opacity-75 group-data-[open]:text-pink"
+				type="button"
+				aria-haspopup="true"
+				aria-expanded="false"
+				aria-controls="dropdown"
+				aria-label="Desplegar categorías de postres"
+			>
+				<Icon
+					name="lucide:chevron-down"
+					class="h-4 w-4 shrink-0 transition-transform duration-200 group-data-[open]:rotate-180"
+					aria-hidden="true"
+				/>
+			</button>
+		</div>
 
 		<!-- Logo central que se traslada y agranda hacia abajo en blanco -->
 		<a id="nav-center-logo" class="shrink-0 transition-transform hover:opacity-90 will-change-transform z-50 pointer-events-auto" href="/" aria-label="Dimonca, inicio">
@@ -101,14 +114,7 @@ const isEncuentranos = currentPath === '/encuentranos' || currentPath === '/encu
 			>
 				<Icon name="lucide:circle-user-round" class="h-7 w-7 sm:h-8 sm:w-8 stroke-[1.75]" aria-hidden="true" />
 			</a>
-			<button
-				id="nav-cart-btn"
-				class="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border-0 bg-transparent transition-transform hover:scale-110 active:scale-95"
-				type="button"
-				aria-label="Ver carrito de compras"
-			>
-				<Icon name="lucide:shopping-cart" class="h-6 w-6 sm:h-7 sm:w-7 stroke-[1.75]" aria-hidden="true" />
-			</button>
+			<CartButton client:load />
 		</div>
 	</div>
 

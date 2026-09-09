@@ -15,21 +15,28 @@ const isEncuentranos = currentPath === '/encuentranos' || currentPath === '/encu
 
 <header
 	id="navbar"
-	class="group relative z-10 w-full font-sans drop-shadow-[0px_11px_19.05px_rgba(58,32,14,0.14)]"
+	class="group relative z-[10000] w-full font-sans drop-shadow-[0px_11px_19.05px_rgba(58,32,14,0.14)]"
 >
+	<!-- Barra principal del Navbar -->
 	<div
-		class="flex items-center justify-between bg-beige px-6 py-4 sm:px-10 xl:justify-center xl:gap-x-[60px] xl:px-20"
+		id="nav-bar-container"
+		class="relative z-50 flex items-center justify-between bg-beige px-6 py-4 sm:px-10 xl:justify-center xl:gap-x-[60px] xl:px-20 transition-colors duration-300"
 	>
-		<!-- Botón hamburguesa (visible en <xl) -->
+		<!-- Botón hamburguesa / X (visible en <xl) -->
 		<button
 			id="mobile-menu-btn"
-			class="flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg border-0 bg-transparent text-pink p-1 transition-transform hover:scale-110 active:scale-95 xl:hidden"
+			class="flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg border-0 bg-transparent text-pink p-1 transition-transform hover:scale-110 active:scale-95 xl:hidden z-50"
 			type="button"
-			aria-label="Abrir menú de navegación"
+			aria-label="Abrir o cerrar menú de navegación"
 			aria-expanded="false"
-			aria-controls="mobile-menu"
+			aria-controls="mobile-menu-overlay"
 		>
-			<Icon name="lucide:menu" class="h-8 w-8 stroke-[2.2]" aria-hidden="true" />
+			<span id="menu-icon-bars" class="block">
+				<Icon name="lucide:menu" class="h-8 w-8 stroke-[2.2]" aria-hidden="true" />
+			</span>
+			<span id="menu-icon-close" class="hidden">
+				<Icon name="lucide:x" class="h-8 w-8 stroke-[2.2]" aria-hidden="true" />
+			</span>
 		</button>
 
 		<a
@@ -57,9 +64,9 @@ const isEncuentranos = currentPath === '/encuentranos' || currentPath === '/encu
 			/>
 		</button>
 
-		<!-- Logo central -->
-		<a class="shrink-0 transition-transform hover:opacity-90" href="/" aria-label="Dimonca, inicio">
-			<img class="block h-9 sm:h-[46px] w-auto object-contain" src="/images/shared/logo.png" alt="Dimonca" />
+		<!-- Logo central que se traslada y agranda hacia abajo en blanco -->
+		<a id="nav-center-logo" class="shrink-0 transition-transform hover:opacity-90 will-change-transform z-50 pointer-events-auto" href="/" aria-label="Dimonca, inicio">
+			<img id="nav-center-logo-img" class="block h-9 sm:h-[46px] w-auto object-contain transition-[filter] duration-300" src="/images/shared/logo.png" alt="Dimonca" />
 		</a>
 
 		<a
@@ -68,11 +75,11 @@ const isEncuentranos = currentPath === '/encuentranos' || currentPath === '/encu
 			>Sobre Nosotros</a
 		>
 
-		<!-- Iconos Login y Carrito (presentes tanto en móvil como en desktop) -->
-		<div class="flex items-center justify-end gap-3 sm:gap-5 xl:flex-1 xl:justify-center">
+		<!-- Iconos Login y Carrito (cambian a blanco en menú móvil abierto) -->
+		<div id="nav-action-icons" class="flex items-center justify-end gap-3 sm:gap-5 xl:flex-1 xl:justify-center z-50 text-pink transition-colors duration-300">
 			<a
 				id="nav-login-btn"
-				class="flex h-9 w-9 items-center justify-center rounded-full text-pink transition-transform hover:scale-110 hover:opacity-80 active:scale-95"
+				class="flex h-9 w-9 items-center justify-center rounded-full transition-transform hover:scale-110 active:scale-95"
 				href="/login"
 				aria-label="Iniciar sesión o ver mi cuenta"
 			>
@@ -80,7 +87,7 @@ const isEncuentranos = currentPath === '/encuentranos' || currentPath === '/encu
 			</a>
 			<button
 				id="nav-cart-btn"
-				class="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border-0 bg-transparent text-pink transition-transform hover:scale-110 hover:opacity-80 active:scale-95"
+				class="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border-0 bg-transparent transition-transform hover:scale-110 active:scale-95"
 				type="button"
 				aria-label="Ver carrito de compras"
 			>
@@ -88,6 +95,7 @@ const isEncuentranos = currentPath === '/encuentranos' || currentPath === '/encu
 			</button>
 		</div>
 	</div>
+
 	<nav
 		class="invisible absolute top-full left-0 z-50 flex w-full items-start justify-center gap-[93px] bg-beige py-[18px] opacity-0 pointer-events-none"
 		id="dropdown"
@@ -136,6 +144,57 @@ const isEncuentranos = currentPath === '/encuentranos' || currentPath === '/encu
 		}
 	</nav>
 </header>
+
+<!-- Overlay del Menú Móvil a pantalla completa (caída en cascada de arriba a abajo) -->
+<div
+	id="mobile-menu-overlay"
+	class="fixed inset-0 z-[9990] flex flex-col bg-pink text-white pointer-events-none overflow-y-auto xl:hidden pt-20 pb-12 px-8"
+	style="transform: translateY(-100%);"
+	aria-label="Menú móvil de navegación"
+>
+	<!-- Destino donde queda ubicado el logo agrandado en el menú desplegado -->
+	<div id="mobile-menu-logo-target" class="h-24 w-full mb-4 flex items-center justify-center pointer-events-none" aria-hidden="true"></div>
+
+	<!-- Lista de enlaces de navegación centrados con divisores finos como en la imagen -->
+	<nav class="flex w-full max-w-[340px] mx-auto flex-col items-center text-center font-sans">
+		<div class="mobile-nav-item w-full py-4.5 border-b border-white/40">
+			<a
+				class="block text-[22px] sm:text-[24px] font-normal tracking-wide text-white no-underline transition-opacity hover:opacity-80"
+				href="/"
+			>
+				Inicio
+			</a>
+		</div>
+
+		<div class="mobile-nav-item w-full py-4.5 border-b border-white/40">
+			<a
+				class="inline-flex items-center justify-center gap-2 text-[22px] sm:text-[24px] font-normal tracking-wide text-white no-underline transition-opacity hover:opacity-80"
+				href="/#galletas"
+			>
+				<span>Menú</span>
+				<Icon name="lucide:chevron-down" class="h-6 w-6 stroke-[2]" aria-hidden="true" />
+			</a>
+		</div>
+
+		<div class="mobile-nav-item w-full py-4.5 border-b border-white/40">
+			<a
+				class="block text-[22px] sm:text-[24px] font-normal tracking-wide text-white no-underline transition-opacity hover:opacity-80"
+				href="/encuentranos"
+			>
+				Encuéntranos
+			</a>
+		</div>
+
+		<div class="mobile-nav-item w-full py-4.5 border-b border-white/40">
+			<a
+				class="block text-[22px] sm:text-[24px] font-normal tracking-wide text-white no-underline transition-opacity hover:opacity-80"
+				href="/#sobre-nosotros"
+			>
+				Sobre Nosotros
+			</a>
+		</div>
+	</nav>
+</div>
 
 <script>
 	import { animate } from 'motion';
@@ -269,7 +328,133 @@ const isEncuentranos = currentPath === '/encuentranos' || currentPath === '/encu
 				if (label) animate(label, { color: '#3a200e' }, { duration: 0.2, ease: 'easeOut' });
 			});
 		});
+
+		// Control del menú móvil (Overlay rosado con caída en cascada, alternancia de icono a X y traslado de logo)
+		const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+		const menuIconBars = document.getElementById('menu-icon-bars');
+		const menuIconClose = document.getElementById('menu-icon-close');
+		const mobileOverlay = document.getElementById('mobile-menu-overlay');
+		const navBarContainer = document.getElementById('nav-bar-container');
+		const navActionIcons = document.getElementById('nav-action-icons');
+		const mobileNavItems = Array.from(document.querySelectorAll<HTMLElement>('.mobile-nav-item'));
+		const centerLogo = document.getElementById('nav-center-logo');
+		const centerLogoImg = document.getElementById('nav-center-logo-img') as HTMLImageElement | null;
+
+		let isMobileOpen = false;
+
+		function toggleMobileMenu() {
+			if (isMobileOpen) {
+				closeMobileMenu();
+			} else {
+				openMobileMenu();
+			}
+		}
+
+		function openMobileMenu() {
+			if (isMobileOpen || !mobileOverlay) return;
+			isMobileOpen = true;
+			mobileMenuBtn?.setAttribute('aria-expanded', 'true');
+			document.body.style.overflow = 'hidden';
+
+			// 1. Alternar icono del botón a X y cambiar colores de la barra superior a blanco
+			if (menuIconBars && menuIconClose) {
+				menuIconBars.classList.add('hidden');
+				menuIconBars.classList.remove('block');
+				menuIconClose.classList.remove('hidden');
+				menuIconClose.classList.add('block');
+			}
+			mobileMenuBtn?.classList.remove('text-pink');
+			mobileMenuBtn?.classList.add('text-white');
+
+			navActionIcons?.classList.remove('text-pink');
+			navActionIcons?.classList.add('text-white');
+
+			navBarContainer?.classList.remove('bg-beige');
+			navBarContainer?.classList.add('bg-transparent');
+
+			// 2. Caída en cascada del overlay rosado de arriba hacia abajo
+			mobileOverlay.style.pointerEvents = 'auto';
+			animate(
+				mobileOverlay,
+				{ transform: ['translateY(-100%)', 'translateY(0%)'] },
+				{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }
+			);
+
+			// 3. Traslado del logo de Dimonca hacia abajo, agrandándolo y volviéndolo blanco
+			if (centerLogo && centerLogoImg) {
+				animate(
+					centerLogo,
+					{ y: [0, 95], scale: [1, 1.7] },
+					{ duration: 0.48, ease: [0.16, 1, 0.3, 1] }
+				);
+				centerLogoImg.style.filter = 'brightness(0) invert(1)';
+			}
+
+			// 4. Entrada secuencial de los enlaces del menú
+			mobileNavItems.forEach((item, index) => {
+				animate(
+					item,
+					{ opacity: [0, 1], y: [20, 0] },
+					{ duration: 0.35, delay: 0.2 + index * 0.06, ease: 'easeOut' }
+				);
+			});
+		}
+
+		function closeMobileMenu() {
+			if (!isMobileOpen || !mobileOverlay) return;
+			isMobileOpen = false;
+			mobileMenuBtn?.setAttribute('aria-expanded', 'false');
+			document.body.style.overflow = '';
+
+			// 1. Retornar icono del botón a barras y colores a rosado
+			if (menuIconBars && menuIconClose) {
+				menuIconBars.classList.remove('hidden');
+				menuIconBars.classList.add('block');
+				menuIconClose.classList.add('hidden');
+				menuIconClose.classList.remove('block');
+			}
+			mobileMenuBtn?.classList.remove('text-white');
+			mobileMenuBtn?.classList.add('text-pink');
+
+			navActionIcons?.classList.remove('text-white');
+			navActionIcons?.classList.add('text-pink');
+
+			navBarContainer?.classList.remove('bg-transparent');
+			navBarContainer?.classList.add('bg-beige');
+
+			// 2. Retornar logo a su posición, tamaño y color original
+			if (centerLogo && centerLogoImg) {
+				animate(
+					centerLogo,
+					{ y: [95, 0], scale: [1.7, 1] },
+					{ duration: 0.38, ease: [0.16, 1, 0.3, 1] }
+				);
+				centerLogoImg.style.filter = 'none';
+			}
+
+			// 3. Subir el overlay rosado hacia arriba
+			animate(
+				mobileOverlay,
+				{ transform: ['translateY(0%)', 'translateY(-100%)'] },
+				{ duration: 0.38, ease: [0.16, 1, 0.3, 1] }
+			).then(() => {
+				mobileOverlay.style.pointerEvents = 'none';
+			});
+		}
+
+		mobileMenuBtn?.addEventListener('click', toggleMobileMenu);
+
+		// Cerrar menú al hacer click en cualquier enlace interno del menú móvil
+		mobileNavItems.forEach((item) => {
+			const link = item.querySelector('a');
+			link?.addEventListener('click', closeMobileMenu);
+		});
 	}
 
+	if (document.readyState === 'loading') {
+		document.addEventListener('DOMContentLoaded', initNavbar);
+	} else {
+		initNavbar();
+	}
 	document.addEventListener('astro:page-load', initNavbar);
 </script>

@@ -1,8 +1,38 @@
 ---
 import { Icon } from 'astro-icon/components';
+
+import pBrookie from '../../assets/images/home/find-us/products/brookie.png';
+import pBrownie from '../../assets/images/home/find-us/products/brownie.png';
+import pBrownieRojo from '../../assets/images/home/find-us/products/brownie-rojo.png';
+import pCookieClasica from '../../assets/images/home/find-us/products/cookie-clasica.png';
+import pCookieRellena from '../../assets/images/home/find-us/products/cookie-rellena.png';
+import pCookieRoja from '../../assets/images/home/find-us/products/cookie-roja.png';
+import pCookie from '../../assets/images/home/find-us/products/cookie.png';
+import pMilo from '../../assets/images/home/find-us/products/milo.png';
+import pOreo from '../../assets/images/home/find-us/products/oreo.png';
+import pRed from '../../assets/images/home/find-us/products/red.png';
+import pVelvet from '../../assets/images/home/find-us/products/velvet.png';
+
+const ctaImages = [
+	pBrookie.src,
+	pBrownie.src,
+	pCookieClasica.src,
+	pCookie.src,
+	pCookieRellena.src,
+	pMilo.src,
+	pOreo.src,
+	pBrownieRojo.src,
+	pCookieRoja.src,
+	pRed.src,
+	pVelvet.src,
+];
 ---
 
-<section id="cta-postre" class="relative flex min-h-screen w-full items-center justify-center bg-beige overflow-hidden select-none px-6 py-20">
+<section
+	id="cta-postre"
+	class="relative flex min-h-screen w-full items-center justify-center bg-beige overflow-hidden select-none px-6 py-20"
+	data-images={JSON.stringify(ctaImages)}
+>
 	<!-- Malla interactiva de imágenes al hacer hover (cubre todo el componente) -->
 	<div
 		id="cta-grid-container"
@@ -57,25 +87,13 @@ import { Icon } from 'astro-icon/components';
 <script>
 	import { animate } from 'motion';
 
-	const ctaImages = [
-		'/images/home/find-us/products/brookie.png',
-		'/images/home/find-us/products/brownie.png',
-		'/images/home/find-us/products/cookie-clasica.png',
-		'/images/home/find-us/products/cookie.png',
-		'/images/home/find-us/products/cookie-rellena.png',
-		'/images/home/find-us/products/milo.png',
-		'/images/home/find-us/products/oreo.png',
-		'/images/home/find-us/products/brownie-rojo.png',
-		'/images/home/find-us/products/cookie-roja.png',
-		'/images/home/find-us/products/red.png',
-		'/images/home/find-us/products/velvet.png',
-	];
-
 	function setupCtaGrid() {
 		const section = document.getElementById('cta-postre');
 		const gridContainer = document.getElementById('cta-grid-container');
 		const grid = document.getElementById('cta-grid');
 		if (!section || !grid || !gridContainer) return;
+
+		const ctaImages: string[] = JSON.parse(section.dataset.images || '[]');
 
 		const cellSize = 120;
 		let lastCellIndex = -1;

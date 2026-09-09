@@ -1,4 +1,7 @@
 ---
+import estIconBrown from '../../assets/images/shared/est-icon-brown.png';
+import estIcon from '../../assets/images/shared/est-icon.png';
+
 interface Props {
   variant?: 'blue' | 'brown';
 }
@@ -19,7 +22,7 @@ const repeats = 4;
 const isBrown = variant === 'brown';
 const borderClass = isBrown ? 'border-brown' : 'border-blue-500';
 const textClass = isBrown ? 'text-brown' : 'text-blue-500';
-const icon = isBrown ? '/images/shared/est-icon-brown.png' : '/images/shared/est-icon.png';
+const icon = isBrown ? estIconBrown : estIcon;
 ---
 
 <section
@@ -36,7 +39,7 @@ const icon = isBrown ? '/images/shared/est-icon-brown.png' : '/images/shared/est
             <p class={`m-0 font-sans text-[13px] sm:text-[16px] lg:text-[19px] leading-[1.2] ${textClass}`}>EST</p>
             <img
               class="block h-5 w-5 sm:h-6 sm:w-6 lg:h-8 lg:w-[30px] object-cover"
-              src={icon}
+              src={icon.src}
               alt=""
               aria-hidden="true"
             />

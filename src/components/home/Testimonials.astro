@@ -1,41 +1,54 @@
 ---
 import { Icon } from 'astro-icon/components';
+import bg1 from '../../assets/images/home/testimonials/bg-1.png';
+import bg2 from '../../assets/images/home/testimonials/bg-2.png';
+import bg3 from '../../assets/images/home/testimonials/bg-3.png';
+import stamp1 from '../../assets/images/home/testimonials/stamp-1.png';
+import stamp2 from '../../assets/images/home/testimonials/stamp-2.png';
+import stamp3 from '../../assets/images/home/testimonials/stamp-3.png';
+import badge1 from '../../assets/images/home/testimonials/badge-1.png';
+import badge2 from '../../assets/images/home/testimonials/badge-2.png';
+import badge3 from '../../assets/images/home/testimonials/badge-3.png';
 
 const testimonials = [
 	{
 		id: 1,
-		background: '/images/home/testimonials/bg-1.png',
+		background: bg1.src,
 		text: 'Todo es delicioso, el espacio es super acogedor. Las galletas y el latte frío son mis favoritos. Me encanta todo del lugar. La torta de chocolate es la mejor que he probado.',
 		author: 'Diana Carolina Roa',
-		stamp: '/images/home/testimonials/stamp-1.png',
-		badge: '/images/home/testimonials/badge-1.png',
+		stamp: stamp1.src,
+		badge: badge1.src,
 		stampClass: 'w-[160px] sm:w-[190px] md:w-[220px] -top-10 -right-8 sm:-top-14 sm:-right-12 md:-top-16 md:-right-16',
 		badgeClass: 'w-[90px] sm:w-[105px] md:w-[120px] -bottom-8 -left-6 sm:-bottom-10 sm:-left-8 md:-bottom-12 md:-left-10',
 	},
 	{
 		id: 2,
-		background: '/images/home/testimonials/bg-2.png',
+		background: bg2.src,
 		text: 'Las mejores galletas artesanales de la ciudad. El crocante por fuera y la suavidad por dentro son de otro nivel. Siempre vuelvo por más.',
 		author: 'Camila Morales',
-		stamp: '/images/home/testimonials/stamp-2.png',
-		badge: '/images/home/testimonials/badge-2.png',
+		stamp: stamp2.src,
+		badge: badge2.src,
 		stampClass: 'w-[165px] sm:w-[195px] md:w-[225px] -top-10 -right-8 sm:-top-14 sm:-right-12 md:-top-16 md:-right-16',
 		badgeClass: 'w-[95px] sm:w-[110px] md:w-[125px] -bottom-8 -left-6 sm:-bottom-10 sm:-left-8 md:-bottom-12 md:-left-10',
 	},
 	{
 		id: 3,
-		background: '/images/home/testimonials/bg-3.png',
+		background: bg3.src,
 		text: 'Una experiencia dulce inigualable. Los brownies y los sabores especiales son una locura. ¡Recomendadísimo para compartir con amigos o familia!',
 		author: 'Sebastián Gómez',
-		stamp: '/images/home/testimonials/stamp-3.png',
-		badge: '/images/home/testimonials/badge-3.png',
+		stamp: stamp3.src,
+		badge: badge3.src,
 		stampClass: 'w-[120px] sm:w-[140px] md:w-[160px] -top-8 -right-6 sm:-top-10 sm:-right-8 md:-top-12 md:-right-10',
 		badgeClass: 'w-[95px] sm:w-[110px] md:w-[125px] -bottom-8 -left-6 sm:-bottom-10 sm:-left-8 md:-bottom-12 md:-left-10',
 	},
 ];
 ---
 
-<section id="testimonials" class="relative w-full h-[620px] md:h-[720px] overflow-hidden select-none">
+<section
+	id="testimonials"
+	class="relative w-full h-[620px] md:h-[720px] overflow-hidden select-none"
+	data-testimonials={JSON.stringify(testimonials)}
+>
 	<!-- Carrusel de fondos -->
 	<div id="testimony-bg-container" class="absolute inset-0 z-0">
 		{
@@ -156,42 +169,20 @@ const testimonials = [
 <script>
 	import { animate } from 'motion';
 
-	const testimonialsData = [
-		{
-			id: 1,
-			background: '/images/home/testimonials/bg-1.png',
-			text: 'Todo es delicioso, el espacio es super acogedor. Las galletas y el latte frío son mis favoritos. Me encanta todo del lugar. La torta de chocolate es la mejor que he probado.',
-			author: 'Diana Carolina Roa',
-			stamp: '/images/home/testimonials/stamp-1.png',
-			badge: '/images/home/testimonials/badge-1.png',
-			stampClass: 'w-[160px] sm:w-[190px] md:w-[220px] -top-10 -right-8 sm:-top-14 sm:-right-12 md:-top-16 md:-right-16',
-			badgeClass: 'w-[90px] sm:w-[105px] md:w-[120px] -bottom-8 -left-6 sm:-bottom-10 sm:-left-8 md:-bottom-12 md:-left-10',
-		},
-		{
-			id: 2,
-			background: '/images/home/testimonials/bg-2.png',
-			text: 'Las mejores galletas artesanales de la ciudad. El crocante por fuera y la suavidad por dentro son de otro nivel. Siempre vuelvo por más.',
-			author: 'Camila Morales',
-			stamp: '/images/home/testimonials/stamp-2.png',
-			badge: '/images/home/testimonials/badge-2.png',
-			stampClass: 'w-[165px] sm:w-[195px] md:w-[225px] -top-10 -right-8 sm:-top-14 sm:-right-12 md:-top-16 md:-right-16',
-			badgeClass: 'w-[95px] sm:w-[110px] md:w-[125px] -bottom-8 -left-6 sm:-bottom-10 sm:-left-8 md:-bottom-12 md:-left-10',
-		},
-		{
-			id: 3,
-			background: '/images/home/testimonials/bg-3.png',
-			text: 'Una experiencia dulce inigualable. Los brownies y los sabores especiales son una locura. ¡Recomendadísimo para compartir con amigos o familia!',
-			author: 'Sebastián Gómez',
-			stamp: '/images/home/testimonials/stamp-3.png',
-			badge: '/images/home/testimonials/badge-3.png',
-			stampClass: 'w-[120px] sm:w-[140px] md:w-[160px] -top-8 -right-6 sm:-top-10 sm:-right-8 md:-top-12 md:-right-10',
-			badgeClass: 'w-[95px] sm:w-[110px] md:w-[125px] -bottom-8 -left-6 sm:-bottom-10 sm:-left-8 md:-bottom-12 md:-left-10',
-		},
-	];
-
 	function initTestimonials() {
 		const section = document.getElementById('testimonials');
 		if (!section) return;
+
+		const testimonialsData: Array<{
+			id: number;
+			background: string;
+			text: string;
+			author: string;
+			stamp: string;
+			badge: string;
+			stampClass: string;
+			badgeClass: string;
+		}> = JSON.parse(section.dataset.testimonials || '[]');
 
 		const prevBtn = document.getElementById('testimony-prev');
 		const nextBtn = document.getElementById('testimony-next');

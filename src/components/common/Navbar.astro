@@ -1,12 +1,26 @@
 ---
 import { Icon } from 'astro-icon/components';
+import logoImg from '../../assets/images/shared/logo.png';
+import cookieImg from '../../assets/images/home/navbar/cookie.png';
+import cookieHoverImg from '../../assets/images/home/navbar/cookie-hover.png';
+import cuchareableImg from '../../assets/images/home/navbar/cuchareable.png';
+import cuchareableHoverImg from '../../assets/images/home/navbar/cuchareable-hover.png';
+import brownieImg from '../../assets/images/home/navbar/brownie.png';
+import brownieHoverImg from '../../assets/images/home/navbar/brownie-hover.png';
+import browniePistachoImg from '../../assets/images/home/navbar/brownie-pistacho.png';
+import brownieRedVelvetImg from '../../assets/images/home/navbar/brownie-redvelvet.png';
+import brownieClasicoImg from '../../assets/images/home/navbar/brownie-clasico.png';
+import cakeImg from '../../assets/images/home/navbar/cake.png';
+import cakeHoverImg from '../../assets/images/home/navbar/cake-hover.png';
+import crookieImg from '../../assets/images/home/navbar/crookie.png';
+import crookieHoverImg from '../../assets/images/home/navbar/crookie-hover.png';
 
 const categories = [
-	{ label: 'Galletas', img: '/images/home/navbar/cookie.png', imgHover: '/images/home/navbar/cookie-hover.png' },
-	{ label: 'Cuchareables', img: '/images/home/navbar/cuchareable.png', imgHover: '/images/home/navbar/cuchareable-hover.png' },
-	{ label: 'Brownies', img: '/images/home/navbar/brownie.png', imgHover: '/images/home/navbar/brownie-hover.png' },
-	{ label: 'Pasteles', img: '/images/home/navbar/cake.png', imgHover: '/images/home/navbar/cake-hover.png' },
-	{ label: 'Más Productos', img: '/images/home/navbar/crookie.png', imgHover: '/images/home/navbar/crookie-hover.png' },
+	{ label: 'Galletas', img: cookieImg.src, imgHover: cookieHoverImg.src },
+	{ label: 'Cuchareables', img: cuchareableImg.src, imgHover: cuchareableHoverImg.src },
+	{ label: 'Brownies', img: brownieImg.src, imgHover: brownieHoverImg.src },
+	{ label: 'Pasteles', img: cakeImg.src, imgHover: cakeHoverImg.src },
+	{ label: 'Más Productos', img: crookieImg.src, imgHover: crookieHoverImg.src },
 ];
 
 const currentPath = Astro.url.pathname;
@@ -68,7 +82,7 @@ const isEncuentranos = currentPath === '/encuentranos' || currentPath === '/encu
 
 		<!-- Logo central que se traslada y agranda hacia abajo en blanco -->
 		<a id="nav-center-logo" class="shrink-0 transition-transform hover:opacity-90 will-change-transform z-50 pointer-events-auto" href="/" aria-label="Dimonca, inicio">
-			<img id="nav-center-logo-img" class="block h-9 sm:h-[46px] w-auto object-contain transition-[filter] duration-300" src="/images/shared/logo.png" alt="Dimonca" />
+			<img id="nav-center-logo-img" class="block h-9 sm:h-[46px] w-auto object-contain transition-[filter] duration-300" src={logoImg.src} alt="Dimonca" />
 		</a>
 
 		<a
@@ -124,9 +138,9 @@ const isEncuentranos = currentPath === '/encuentranos' || currentPath === '/encu
 					return (
 						<a data-category="brownies" class="flex w-[121px] flex-col items-center justify-center gap-[9px] no-underline" href="/#brownies">
 							<div class="relative h-[121px] w-[121px]">
-								<img class="brownie-left absolute inset-0 block h-full w-full object-cover object-center opacity-0" src="/images/home/navbar/brownie-pistacho.png" alt="" aria-hidden="true" />
-								<img class="brownie-right absolute inset-0 block h-full w-full object-cover object-center opacity-0" src="/images/home/navbar/brownie-redvelvet.png" alt="" aria-hidden="true" />
-								<img class="brownie-center absolute inset-0 block h-full w-full object-cover object-center z-10" src="/images/home/navbar/brownie-clasico.png" alt={c.label} />
+								<img class="brownie-left absolute inset-0 block h-full w-full object-cover object-center opacity-0" src={browniePistachoImg.src} alt="" aria-hidden="true" />
+								<img class="brownie-right absolute inset-0 block h-full w-full object-cover object-center opacity-0" src={brownieRedVelvetImg.src} alt="" aria-hidden="true" />
+								<img class="brownie-center absolute inset-0 block h-full w-full object-cover object-center z-10" src={brownieClasicoImg.src} alt={c.label} />
 							</div>
 							<p class="m-0 text-center text-[15px] leading-[1.2] text-brown">{c.label}</p>
 						</a>
@@ -194,7 +208,7 @@ const isEncuentranos = currentPath === '/encuentranos' || currentPath === '/encu
 							href="/#galletas"
 						>
 							<div class="flex flex-1 items-center justify-center w-full">
-								<img class="h-16 w-16 object-contain drop-shadow-md" src="/images/home/navbar/cookie.png" alt="Galletas" />
+								<img class="h-16 w-16 object-contain drop-shadow-md" src={cookieImg.src} alt="Galletas" />
 							</div>
 							<span class="text-[14px] sm:text-[15px] font-medium leading-tight">Galletas</span>
 						</a>
@@ -205,7 +219,7 @@ const isEncuentranos = currentPath === '/encuentranos' || currentPath === '/encu
 							href="/#cuchareables"
 						>
 							<div class="flex flex-1 items-center justify-center w-full">
-								<img class="h-16 w-16 object-contain drop-shadow-md" src="/images/home/navbar/cuchareable.png" alt="Cuchareables" />
+								<img class="h-16 w-16 object-contain drop-shadow-md" src={cuchareableImg.src} alt="Cuchareables" />
 							</div>
 							<span class="text-[14px] sm:text-[15px] font-medium leading-tight">Cuchareables</span>
 						</a>
@@ -216,7 +230,7 @@ const isEncuentranos = currentPath === '/encuentranos' || currentPath === '/encu
 							href="/#brownies"
 						>
 							<div class="flex flex-1 items-center justify-center w-full">
-								<img class="h-16 w-16 object-contain drop-shadow-md" src="/images/home/navbar/brownie.png" alt="Brownies" />
+								<img class="h-16 w-16 object-contain drop-shadow-md" src={brownieImg.src} alt="Brownies" />
 							</div>
 							<span class="text-[14px] sm:text-[15px] font-medium leading-tight">Brownies</span>
 						</a>
@@ -227,7 +241,7 @@ const isEncuentranos = currentPath === '/encuentranos' || currentPath === '/encu
 							href="/#pasteles"
 						>
 							<div class="flex flex-1 items-center justify-center w-full">
-								<img class="h-16 w-16 object-contain drop-shadow-md" src="/images/home/navbar/cake.png" alt="Tortas" />
+								<img class="h-16 w-16 object-contain drop-shadow-md" src={cakeImg.src} alt="Tortas" />
 							</div>
 							<span class="text-[14px] sm:text-[15px] font-medium leading-tight">Tortas</span>
 						</a>
@@ -238,7 +252,7 @@ const isEncuentranos = currentPath === '/encuentranos' || currentPath === '/encu
 							href="/#más-productos"
 						>
 							<div class="flex flex-1 items-center justify-center w-full">
-								<img class="h-16 w-16 object-contain drop-shadow-md" src="/images/home/navbar/crookie.png" alt="Otros Productos" />
+								<img class="h-16 w-16 object-contain drop-shadow-md" src={crookieImg.src} alt="Otros Productos" />
 							</div>
 							<span class="text-[13px] sm:text-[14px] font-medium leading-tight text-center">Otros<br />Productos</span>
 						</a>

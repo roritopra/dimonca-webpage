@@ -21,10 +21,10 @@
 ## Figma / assets
 
 - **Estructura y organización de imágenes**:
-  - `src/assets/images/`: Para imágenes que se procesan y optimizan con Astro (`import ... from '../../assets/images/...'` y `<Image />`).
-  - `public/images/`: Para activos estáticos servidos directamente, SVGs consumidos vía `<img>` o imágenes inyectadas dinámicamente en scripts de cliente (`/images/...`).
+  - `src/assets/images/`: **TODAS las imágenes rasterizadas (PNG, JPG, WebP)** DEBEN residir aquí para ser procesadas y optimizadas automáticamente por Astro mediante `import miImagen from '../../assets/images/...'` y `<Image src={miImagen} />` o `miImagen.src` (convierte automáticamente a WebP ultraligero).
+  - `public/images/`: **ÚNICAMENTE para archivos vectoriales SVG** consumidos vía `<img>` o estáticamente. NUNCA colocar PNGs ni JPGs en `public/images/`.
   - **Subdirectorios por sección**:
-    - `shared/`: Activos globales o transversales (`logo.png`, `logo-simple.svg`, `chef-hat.svg`, `map-icon.svg`, `est-icon*.png`, `footer-*`).
+    - `shared/`: Activos globales o transversales (`logo.png`, `footer-*`, `est-icon*.png`, y en public: `logo-simple.svg`, `chef-hat.svg`, `map-icon.svg`).
     - `home/{seccion}/`: Organizadas por componente (`hero/`, `navbar/`, `sobre-nosotros/`, `our-products/`, `more-than/`, `combos/`, `testimonials/`, `find-us/`).
     - `home/find-us/products/`: Productos interactivos para animaciones de hover grid.
 - **Convenciones de nombrado**:

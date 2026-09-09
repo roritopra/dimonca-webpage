@@ -372,30 +372,30 @@ const isEncuentranos = currentPath === '/encuentranos' || currentPath === '/encu
 			navBarContainer?.classList.remove('bg-beige');
 			navBarContainer?.classList.add('bg-transparent');
 
-			// 2. Caída en cascada del overlay rosado de arriba hacia abajo
+			// 2. Caída en cascada del overlay rosado de arriba hacia abajo (rápida y dinámica)
 			mobileOverlay.style.pointerEvents = 'auto';
 			animate(
 				mobileOverlay,
 				{ transform: ['translateY(-100%)', 'translateY(0%)'] },
-				{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }
+				{ duration: 0.38, ease: [0.22, 1, 0.36, 1] }
 			);
 
-			// 3. Traslado del logo de Dimonca hacia abajo, agrandándolo y volviéndolo blanco de forma orgánica y fluida
+			// 3. Traslado del logo de Dimonca hacia abajo: ágil, fluido y sincronizado con el telón
 			if (centerLogo && centerLogoImg) {
 				animate(
 					centerLogo,
 					{ y: [0, 95], scale: [1, 1.7] },
-					{ type: 'spring', stiffness: 180, damping: 14, mass: 0.9 }
+					{ type: 'spring', stiffness: 260, damping: 18, mass: 0.8 }
 				);
 				centerLogoImg.style.filter = 'brightness(0) invert(1)';
 			}
 
-			// 4. Entrada secuencial de los enlaces del menú
+			// 4. Entrada secuencial rápida de los enlaces del menú
 			mobileNavItems.forEach((item, index) => {
 				animate(
 					item,
-					{ opacity: [0, 1], y: [20, 0] },
-					{ duration: 0.35, delay: 0.2 + index * 0.06, ease: 'easeOut' }
+					{ opacity: [0, 1], y: [16, 0] },
+					{ duration: 0.28, delay: 0.14 + index * 0.04, ease: 'easeOut' }
 				);
 			});
 		}
@@ -422,21 +422,21 @@ const isEncuentranos = currentPath === '/encuentranos' || currentPath === '/encu
 			navBarContainer?.classList.remove('bg-transparent');
 			navBarContainer?.classList.add('bg-beige');
 
-			// 2. Retornar logo a su posición, tamaño y color original con suavidad
+			// 2. Retornar logo rápidamente a su posición original al compás del telón
 			if (centerLogo && centerLogoImg) {
 				animate(
 					centerLogo,
 					{ y: [95, 0], scale: [1.7, 1] },
-					{ duration: 0.36, ease: [0.32, 0, 0.67, 0] }
+					{ duration: 0.28, ease: [0.32, 0, 0.67, 0] }
 				);
 				centerLogoImg.style.filter = 'none';
 			}
 
-			// 3. Subir el overlay rosado hacia arriba
+			// 3. Subir el overlay rosado de vuelta rápidamente
 			animate(
 				mobileOverlay,
 				{ transform: ['translateY(0%)', 'translateY(-100%)'] },
-				{ duration: 0.38, ease: [0.16, 1, 0.3, 1] }
+				{ duration: 0.28, ease: [0.32, 0, 0.67, 0] }
 			).then(() => {
 				mobileOverlay.style.pointerEvents = 'none';
 			});

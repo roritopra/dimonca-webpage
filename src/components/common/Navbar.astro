@@ -380,12 +380,12 @@ const isEncuentranos = currentPath === '/encuentranos' || currentPath === '/encu
 				{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }
 			);
 
-			// 3. Traslado del logo de Dimonca hacia abajo, agrandándolo y volviéndolo blanco
+			// 3. Traslado del logo de Dimonca hacia abajo, agrandándolo y volviéndolo blanco de forma orgánica y fluida
 			if (centerLogo && centerLogoImg) {
 				animate(
 					centerLogo,
 					{ y: [0, 95], scale: [1, 1.7] },
-					{ duration: 0.48, ease: [0.16, 1, 0.3, 1] }
+					{ type: 'spring', stiffness: 180, damping: 14, mass: 0.9 }
 				);
 				centerLogoImg.style.filter = 'brightness(0) invert(1)';
 			}
@@ -422,12 +422,12 @@ const isEncuentranos = currentPath === '/encuentranos' || currentPath === '/encu
 			navBarContainer?.classList.remove('bg-transparent');
 			navBarContainer?.classList.add('bg-beige');
 
-			// 2. Retornar logo a su posición, tamaño y color original
+			// 2. Retornar logo a su posición, tamaño y color original con suavidad
 			if (centerLogo && centerLogoImg) {
 				animate(
 					centerLogo,
 					{ y: [95, 0], scale: [1.7, 1] },
-					{ duration: 0.38, ease: [0.16, 1, 0.3, 1] }
+					{ duration: 0.36, ease: [0.32, 0, 0.67, 0] }
 				);
 				centerLogoImg.style.filter = 'none';
 			}

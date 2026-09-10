@@ -64,18 +64,17 @@ export default function MenuCard({ product }: MenuCardProps) {
 					/>
 				</div>
 			) : (
-				// Tarjeta Estándar (Galleta individual): Imagen cortada hacia arriba asomándose a la mitad
-				<div className="relative flex h-36 sm:h-44 w-full items-end justify-center overflow-hidden rounded-2xl bg-transparent pt-2">
-					<div className="relative h-48 sm:h-56 w-48 sm:w-56 translate-y-6 flex items-center justify-center">
-						<img
-							src={product.imageSrc}
-							alt={product.name}
-							className="h-full w-full object-contain drop-shadow-[0_8px_16px_rgba(58,32,14,0.14)] transition-transform duration-300 hover:scale-105"
-							loading="lazy"
-						/>
-					</div>
+				// Tarjeta Estándar (Galleta individual): Alto fijo con la galleta en absolute al bottom cortada a la mitad
+				<div className="relative h-32 sm:h-36 w-full overflow-hidden bg-transparent">
+					<img
+						src={product.imageSrc}
+						alt={product.name}
+						className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-48 sm:w-56 max-w-none object-contain drop-shadow-[0_8px_16px_rgba(58,32,14,0.14)] transition-transform duration-300 hover:scale-105"
+						loading="lazy"
+					/>
 				</div>
 			)}
+
 
 			{/* Área Inferior: Datos y Acciones */}
 			<div className="mt-3 sm:mt-4 flex flex-col">

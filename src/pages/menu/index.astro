@@ -3,6 +3,8 @@ import Layout from '../../layouts/Layout.astro';
 import Navbar from '../../components/common/Navbar.astro';
 import Footer from '../../components/common/Footer.astro';
 import MenuBanner from '../../components/menu/MenuBanner.astro';
+import MenuCatalog from '../../components/menu/MenuCatalog';
+import { PRODUCTS } from '../../data/products';
 ---
 
 <Layout>
@@ -10,6 +12,7 @@ import MenuBanner from '../../components/menu/MenuBanner.astro';
 
 	<main id="main-content" class="min-h-screen bg-beige pt-20 sm:pt-24 pb-20">
 		<MenuBanner />
+		<MenuCatalog client:load initialProducts={PRODUCTS} />
 	</main>
 
 	<Footer />

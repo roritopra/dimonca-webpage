@@ -1,22 +1,19 @@
 ﻿import type { CategoryInfo, Product } from '../types/products';
 
-import oreoImg from '../assets/images/home/our-products/card-oreo.png';
-import oreoCrackedImg from '../assets/images/home/our-products/card-oreo-cracked.png';
-import redVelvetImg from '../assets/images/home/our-products/card-red-velvet.png';
-import redVelvetCrackedImg from '../assets/images/home/our-products/card-red-velvet-cracked.png';
-import rocheImg from '../assets/images/home/our-products/card-roche.png';
-import rocheCrackedImg from '../assets/images/home/our-products/card-roche-cracked.png';
-import defaultCookieImg from '../assets/images/home/our-products/card-default.png';
-import defaultCookieCrackedImg from '../assets/images/home/our-products/card-default-cracked.png';
+// Importación de las imágenes oficiales de src/assets/images/menu/products/
+import product1 from '../assets/images/menu/products/product-1.png';
+import product2 from '../assets/images/menu/products/product-2.png';
+import product3 from '../assets/images/menu/products/product-3.png';
+import product4 from '../assets/images/menu/products/product-4.png';
+import product5 from '../assets/images/menu/products/product-5.png';
+import product6 from '../assets/images/menu/products/product-6.png';
+import product7 from '../assets/images/menu/products/product-7.png';
+import product8 from '../assets/images/menu/products/product-8.png';
 
-import brownieClasicoImg from '../assets/images/home/navbar/brownie-clasico.png';
-import browniePistachoImg from '../assets/images/home/navbar/brownie-pistacho.png';
-import brownieRedVelvetImg from '../assets/images/home/navbar/brownie-redvelvet.png';
-
-import cuchareableImg from '../assets/images/home/more-than/cuchareable.png';
-import cakeImg from '../assets/images/home/more-than/cake.png';
-import miniCakeImg from '../assets/images/home/more-than/mini-cake.png';
-import crookieImg from '../assets/images/home/navbar/crookie.png';
+// Especiales / Premiums
+import productSpecial1 from '../assets/images/menu/products/product-special-1.png';
+import productSpecial2 from '../assets/images/menu/products/product-special-2.png';
+import productSpecial3 from '../assets/images/menu/products/product-special-3.png';
 
 export const CATEGORIES: CategoryInfo[] = [
 	{
@@ -41,239 +38,196 @@ export const CATEGORIES: CategoryInfo[] = [
 	},
 	{
 		id: 'otros',
-		label: 'Otros Productos',
+		label: 'Otros productos',
 		description: 'Novedades de repostería, combinaciones crujientes y temporadas.',
 	},
 ];
 
+// Productos en modo mock listos para consumir o sustituir por CMS / API
 export const PRODUCTS: Product[] = [
+	// Fila 1
 	{
-		id: 'galleta-clasica-choco-chips',
-		name: 'Clásica Choco Chips',
+		id: 'galleta-caramelo-salado',
+		name: 'Galleta Caramelo Salado',
 		category: 'galletas',
 		categoryLabel: 'Galletas',
-		price: 12000,
-		priceFormatted: '$ 12.000',
-		shortDescription: 'Nuestra galleta insignia con masa dorada y abundantes chips de chocolate semiamargo.',
-		fullDescription: 'Horneada a la perfección con mantequilla de alta calidad, vainilla pura y abundante chocolate semiamargo derretido en su centro. Crujiente en los bordes y con un interior suave que se deshace en tu boca.',
-		ingredients: ['Mantequilla pura', 'Chocolate semiamargo 60%', 'Harina de trigo premium', 'Azúcar morena orgánica', 'Extracto de vainilla'],
+		price: 11000,
+		priceFormatted: '$11.000',
+		shortDescription: 'Galleta con centro fundente y topping de toffee y caramelo salado artesanal.',
+		fullDescription: 'Masa suave de mantequilla horneada al punto perfecto, con un generoso baño de caramelo salado casero y cristales de sal marina que realzan su sabor dulce e intenso.',
+		ingredients: ['Mantequilla pura', 'Caramelo toffee artesanal', 'Sal marina en escamas', 'Vainilla natural'],
 		allergens: ['Gluten', 'Lácteos', 'Huevo'],
-		imageSrc: defaultCookieImg.src,
-		imageHoverSrc: defaultCookieCrackedImg.src,
-		badge: 'Clásica',
-		badgeColor: '#3a200e',
-		rating: 4.9,
+		imageSrc: product1.src,
 		available: true,
-		accentColor: '#d7ebfb',
-	},
-	{
-		id: 'galleta-cookies-and-cream',
-		name: 'Cookies & Cream',
-		category: 'galletas',
-		categoryLabel: 'Galletas',
-		price: 13000,
-		priceFormatted: '$ 13.000',
-		shortDescription: 'Galleta premium de oreo con trozos reales y relleno suave y cremoso.',
-		fullDescription: 'Una combinación irresistible para los amantes de las galletas Oreo. Masa artesanal enriquecida con galletas trituradas, trozos crocantes y un núcleo de crema blanca aterciopelada.',
-		ingredients: ['Masa de galleta artesanal', 'Trozos de galleta Oreo', 'Chocolate blanco belga', 'Relleno de crema suave'],
-		allergens: ['Gluten', 'Lácteos', 'Soya', 'Huevo'],
-		imageSrc: oreoImg.src,
-		imageHoverSrc: oreoCrackedImg.src,
-		badge: 'Top Ventas',
-		badgeColor: '#f45d8c',
-		rating: 5.0,
-		available: true,
-		accentColor: '#fbbed1',
-	},
-	{
-		id: 'galleta-red-velvet',
-		name: 'Red Velvet Cookie',
-		category: 'galletas',
-		categoryLabel: 'Galletas',
-		price: 13000,
-		priceFormatted: '$ 13.000',
-		shortDescription: 'Galleta de red velvet con centro cremoso y chips de chocolate blanco.',
-		fullDescription: 'El balance perfecto entre el cacao fino y la suave acidez tradicional del terciopelo rojo, complementado con un corazón untuoso de queso crema y chips de chocolate blanco fundidos.',
-		ingredients: ['Cacao alcalino', 'Chocolate blanco', 'Relleno de queso crema', 'Mantequilla fresca', 'Vainilla'],
-		allergens: ['Gluten', 'Lácteos', 'Huevo'],
-		imageSrc: redVelvetImg.src,
-		imageHoverSrc: redVelvetCrackedImg.src,
-		badge: 'Favorito',
-		badgeColor: '#c34a70',
-		rating: 4.9,
-		available: true,
-		accentColor: '#f45d8c',
+		variant: 'standard',
 	},
 	{
 		id: 'galleta-roche',
-		name: 'Galleta Roche Avellana',
+		name: 'Galleta Roché',
 		category: 'galletas',
 		categoryLabel: 'Galletas',
-		price: 13000,
-		priceFormatted: '$ 13.000',
-		shortDescription: 'Galleta premium estilo bombón roche con avellanas tostadas y nutella.',
-		fullDescription: 'Inspirada en el clásico bombón italiano: centro volcánico de avellanas y chocolate, cubierta con tropezones de avellanas tostadas crocantes y chocolate con leche.',
-		ingredients: ['Avellanas tostadas', 'Crema de cacao y avellana', 'Chocolate con leche', 'Mantequilla artesanal'],
-		allergens: ['Frutos secos (avellanas)', 'Gluten', 'Lácteos', 'Huevo'],
-		imageSrc: rocheImg.src,
-		imageHoverSrc: rocheCrackedImg.src,
-		badge: 'Especial',
-		badgeColor: '#979255',
-		rating: 4.8,
-		available: true,
-		accentColor: '#FCF48D',
-	},
-	{
-		id: 'cuchareable-kinder-bueno',
-		name: 'Cuchareable Kinder & Avellana',
-		category: 'cuchareables',
-		categoryLabel: 'Cuchareables',
-		price: 18000,
-		priceFormatted: '$ 18.000',
-		shortDescription: 'Capas de bizcocho húmedo, crema de avellanas Kinder y mousse suave.',
-		fullDescription: 'Presentación en tarro individual listo para hundir la cuchara. Capas alternadas de bizcocho esponjoso, crema de avellana estilo Kinder, trozos crujientes de oblea y un baño suave de chocolate con leche.',
-		ingredients: ['Crema de avellanas y leche', 'Bizcocho húmedo de vainilla', 'Obleas crocantes', 'Mousse de chocolate'],
-		allergens: ['Lácteos', 'Gluten', 'Frutos secos', 'Huevo'],
-		imageSrc: cuchareableImg.src,
-		badge: 'Recomendado',
-		badgeColor: '#f45d8c',
-		rating: 4.9,
-		available: true,
-		accentColor: '#fbbed1',
-	},
-	{
-		id: 'cuchareable-tres-leches-arequipe',
-		name: 'Cuchareable Tres Leches & Caramelo',
-		category: 'cuchareables',
-		categoryLabel: 'Cuchareables',
-		price: 17000,
-		priceFormatted: '$ 17.000',
-		shortDescription: 'Bizcochuelo bañado en mezcla tres leches artesanal con corazón de arequipe.',
-		fullDescription: 'Nuestra versión en frasco del clásico postre latinoamericano: bizcocho ultra suave embebido en leche condensada, evaporada y crema de leche, rematado con espirales de arequipe de campo.',
-		ingredients: ['Leche condensada', 'Leche evaporada', 'Crema de leche', 'Arequipe artesanal', 'Bizcochuelo casero'],
-		allergens: ['Lácteos', 'Gluten', 'Huevo'],
-		imageSrc: cuchareableImg.src,
-		badge: 'Tradicional',
-		badgeColor: '#3a200e',
-		rating: 4.8,
-		available: true,
-		accentColor: '#d7ebfb',
-	},
-	{
-		id: 'brownie-fudge-clasico',
-		name: 'Brownie Fudge Clásico',
-		category: 'brownies',
-		categoryLabel: 'Brownies',
-		price: 9000,
-		priceFormatted: '$ 9.000',
-		shortDescription: 'Brownie de textura densa y húmeda, elaborado con chocolate 70% cacao.',
-		fullDescription: 'El brownie soñado: costra brillante y craquelada por fuera, centro espeso y chocolatoso por dentro. Elaborado con puro chocolate amargo y cacao colombiano.',
-		ingredients: ['Chocolate amargo 70%', 'Mantequilla fresca', 'Huevos de campo', 'Cacao en polvo', 'Pizca de sal marina'],
-		allergens: ['Lácteos', 'Huevo', 'Gluten'],
-		imageSrc: brownieClasicoImg.src,
-		badge: 'Favorito',
-		badgeColor: '#3a200e',
-		rating: 4.9,
-		available: true,
-		accentColor: '#d7ebfb',
-	},
-	{
-		id: 'brownie-pistacho-cremoso',
-		name: 'Brownie de Pistacho Artesanal',
-		category: 'brownies',
-		categoryLabel: 'Brownies',
-		price: 12500,
-		priceFormatted: '$ 12.500',
-		shortDescription: 'Brownie fudge bañado con auténtica crema de pistachos sicilianos.',
-		fullDescription: 'Una propuesta elegante e innovadora: base de brownie intenso de chocolate coronado generosamente con crema sedosa de pistachos puros y trocitos de pistacho crocante tostado.',
-		ingredients: ['Base brownie fudge', 'Crema de pistacho 100%', 'Pistachos tostados', 'Chocolate blanco'],
-		allergens: ['Frutos secos (pistacho)', 'Lácteos', 'Huevo', 'Gluten'],
-		imageSrc: browniePistachoImg.src,
-		badge: 'Gourmet',
-		badgeColor: '#979255',
-		rating: 5.0,
-		available: true,
-		accentColor: '#FCF48D',
-	},
-	{
-		id: 'brownie-red-velvet',
-		name: 'Brownie Red Velvet & Cheesecake',
-		category: 'brownies',
-		categoryLabel: 'Brownies',
 		price: 11000,
-		priceFormatted: '$ 11.000',
-		shortDescription: 'Swirl marmoleado de brownie rojo aterciopelado y crema de queso.',
-		fullDescription: 'Fusión irresistible de masa de brownie red velvet con vetas de cheesecake horneado al punto exacto. Suave, aterciopelado y con un contraste visual y de sabor fascinante.',
-		ingredients: ['Cacao fino', 'Queso crema especial', 'Vainilla de Madagascar', 'Mantequilla'],
-		allergens: ['Lácteos', 'Huevo', 'Gluten'],
-		imageSrc: brownieRedVelvetImg.src,
-		badge: 'Nuevo',
-		badgeColor: '#c34a70',
-		rating: 4.8,
+		priceFormatted: '$11.000',
+		shortDescription: 'Galleta premium inspirada en el bombón italiano con avellanas y nutella.',
+		fullDescription: 'Crocante en su corteza con avellanas tostadas picadas y líneas de chocolate semiamargo derretido, rellena con cremosa pasta de avellanas.',
+		ingredients: ['Avellanas tostadas', 'Crema de cacao y avellanas', 'Chocolate de leche', 'Mantequilla fresca'],
+		allergens: ['Frutos secos (avellanas)', 'Gluten', 'Lácteos', 'Huevo'],
+		imageSrc: product2.src,
 		available: true,
-		accentColor: '#fbbed1',
+		variant: 'standard',
 	},
 	{
-		id: 'torta-artesanal-chocolate',
-		name: 'Torta Selva de Chocolate',
-		category: 'tortas',
-		categoryLabel: 'Tortas',
-		price: 24000,
-		priceFormatted: '$ 24.000',
-		shortDescription: 'Porción generosa de torta de chocolate con ganache sedoso y frutos del bosque.',
-		fullDescription: 'Miga húmeda y esponjosa de chocolate negro, intercalada con un ganache brillante y un toque ácido de frutos rojos que equilibra la dulzura a la perfección.',
-		ingredients: ['Harina repostera', 'Chocolate belga', 'Crema fresca', 'Compota casera de frutos rojos'],
-		allergens: ['Gluten', 'Lácteos', 'Huevo'],
-		imageSrc: cakeImg.src,
-		badge: 'Celebración',
-		badgeColor: '#3a200e',
-		rating: 4.9,
+		id: 'combo-arma-tu-caja-x3',
+		name: 'Arma tu caja x3',
+		category: 'galletas',
+		categoryLabel: 'Combos',
+		price: 39000,
+		priceFormatted: '$ 39.000',
+		shortDescription: 'Caja especial de 3 galletas a tu elección con empaque de regalo.',
+		fullDescription: 'Selecciona tus 3 sabores favoritos de nuestra vitrina y llévalos en la clásica caja rosa de Dimonca diseñada para compartir o regalar.',
+		imageSrc: productSpecial1.src,
 		available: true,
-		accentColor: '#d7ebfb',
+		variant: 'premium',
 	},
 	{
-		id: 'mini-cake-vainilla-caramelo',
-		name: 'Mini Cake Vainilla & Caramelo Salado',
-		category: 'tortas',
-		categoryLabel: 'Tortas',
-		price: 19000,
-		priceFormatted: '$ 19.000',
-		shortDescription: 'Mini pastel individual de bizcochuelo tierno con buttercream de caramelo.',
-		fullDescription: 'Ideal para consentirte o regalar. Pastelito individual con capas de suave vainilla, relleno de toffee salado artesanal y cubierto con delicados picos de buttercream.',
-		ingredients: ['Vainilla natural', 'Caramelo salado artesanal', 'Mantequilla sin sal', 'Harina fina'],
-		allergens: ['Gluten', 'Lácteos', 'Huevo'],
-		imageSrc: miniCakeImg.src,
-		badge: 'Individual',
-		badgeColor: '#f45d8c',
-		rating: 4.7,
+		id: 'galleta-klim',
+		name: 'Galleta Klim',
+		category: 'galletas',
+		categoryLabel: 'Galletas',
+		price: 11000,
+		priceFormatted: '$11.000',
+		shortDescription: 'Masa suave con abundante leche en polvo y corazón untuoso.',
+		fullDescription: 'Un homenaje a uno de los sabores más queridos: masa enriquecida con leche en polvo, centro cremoso y una lluvia fina de leche Klim en el exterior.',
+		ingredients: ['Leche en polvo Klim', 'Mantequilla artesanal', 'Chocolate blanco', 'Harina seleccionada'],
+		allergens: ['Lácteos', 'Gluten', 'Huevo'],
+		imageSrc: product3.src,
 		available: true,
-		accentColor: '#fbbed1',
+		variant: 'standard',
 	},
 	{
-		id: 'crookie-croissant-cookie',
-		name: 'El Famoso Crookie Dimonca',
+		id: 'galleta-maracuya',
+		name: 'Galleta Maracuyá',
+		category: 'galletas',
+		categoryLabel: 'Galletas',
+		price: 11000,
+		priceFormatted: '$11.000',
+		shortDescription: 'Cremoso centro de reducción de maracuyá ácido con chocolate blanco.',
+		fullDescription: 'El contraste perfecto entre la dulzura de la masa horneada y la acidez vibrante del curd de maracuyá natural con semillas crujientes.',
+		ingredients: ['Pulpa natural de maracuyá', 'Mantequilla', 'Chocolate blanco belga', 'Vainilla'],
+		allergens: ['Lácteos', 'Gluten', 'Huevo'],
+		imageSrc: product4.src,
+		available: true,
+		variant: 'standard',
+	},
+
+	// Fila 2
+	{
+		id: 'combo-arma-tu-caja-x9',
+		name: 'Arma tu caja x9',
+		category: 'galletas',
+		categoryLabel: 'Combos',
+		price: 39000,
+		priceFormatted: '$ 39.000',
+		shortDescription: 'Nuestra caja más grande y completa para celebraciones especiales.',
+		fullDescription: 'La experiencia Dimonca definitiva: 9 de nuestras mejores galletas recién salidas del horno en nuestra caja coleccionable de fiesta.',
+		imageSrc: productSpecial2.src,
+		available: true,
+		variant: 'premium',
+	},
+	{
+		id: 'galleta-habibi',
+		name: 'Galleta Habibi',
+		category: 'galletas',
+		categoryLabel: 'Galletas',
+		price: 11000,
+		priceFormatted: '$11.000',
+		shortDescription: 'Masa de chocolate brownie con pistachos y centro cremoso estilo Dubai.',
+		fullDescription: 'Inspirada en el sabor del medio oriente: masa densa de cacao oscuro cargada de pistachos tostados y relleno volcánico de auténtica crema de pistacho.',
+		ingredients: ['Cacao oscuro', 'Pistachos tostados', 'Crema de pistacho 100%', 'Mantequilla'],
+		allergens: ['Frutos secos (pistacho)', 'Lácteos', 'Gluten', 'Huevo'],
+		imageSrc: product5.src,
+		available: true,
+		variant: 'standard',
+	},
+	{
+		id: 'crookie',
+		name: 'Crookie',
 		category: 'otros',
-		categoryLabel: 'Otros Productos',
-		price: 15000,
-		priceFormatted: '$ 15.000',
-		shortDescription: 'Croissant francés hojaldrado relleno y coronado con masa de galleta horneada.',
-		fullDescription: 'La sensación viral llevada al siguiente nivel. Croissant mantecoso y hojaldrado relleno por dentro y cubierto por fuera con nuestra masa de galleta con chispas de chocolate, horneado hasta dorar.',
-		ingredients: ['Masa de croissant hojaldrada', 'Masa de galleta artesanal', 'Mantequilla francesa', 'Chips de chocolate'],
+		categoryLabel: 'Otros productos',
+		price: 11000,
+		priceFormatted: '$11.000',
+		shortDescription: 'Croissant hojaldrado relleno y cubierto con masa de galleta horneada.',
+		fullDescription: 'Mantequilloso croissant francés combinado con nuestra masa de galleta con chispas de chocolate derretidas. Crujiente por fuera y suave en el interior.',
+		ingredients: ['Croissant hojaldrado', 'Masa de galleta artesanal', 'Mantequilla francesa', 'Chips de chocolate'],
 		allergens: ['Gluten', 'Lácteos', 'Huevo'],
-		imageSrc: crookieImg.src,
-		badge: 'Tendencia',
-		badgeColor: '#f45d8c',
-		rating: 5.0,
+		imageSrc: product6.src,
 		available: true,
-		accentColor: '#fbbed1',
+		variant: 'standard',
+	},
+	{
+		id: 'combo-arma-tu-caja-x3-helado',
+		name: 'Arma tu caja x3 + Helado',
+		category: 'galletas',
+		categoryLabel: 'Combos',
+		price: 39000,
+		priceFormatted: '$ 39.000',
+		shortDescription: '3 galletas calientitas acompañadas de tarros de helado artesanal.',
+		fullDescription: 'La combinación soñada: combina tus galletas favoritas con nuestros cremosos helados de autor para una experiencia de temperatura irresistible.',
+		imageSrc: productSpecial3.src,
+		available: true,
+		variant: 'premium',
+	},
+
+	// Fila 3
+	{
+		id: 'galleta-red-velvet',
+		name: 'Galleta Red Velvet',
+		category: 'galletas',
+		categoryLabel: 'Galletas',
+		price: 11000,
+		priceFormatted: '$11.000',
+		shortDescription: 'Galleta de red velvet con relleno cremoso de queso y chocolate blanco.',
+		fullDescription: 'Sutil sabor a cacao fino con el toque aterciopelado característico, relleno de crema de queso horneada y decorado con hilos de chocolate blanco.',
+		ingredients: ['Cacao fino', 'Queso crema especial', 'Chocolate blanco', 'Mantequilla fresca'],
+		allergens: ['Lácteos', 'Gluten', 'Huevo'],
+		imageSrc: product7.src,
+		available: true,
+		variant: 'standard',
+	},
+	{
+		id: 'galleta-pistacho',
+		name: 'Galleta Pistacho',
+		category: 'galletas',
+		categoryLabel: 'Galletas',
+		price: 11000,
+		priceFormatted: '$11.000',
+		shortDescription: 'Masa verde de pistachos reales con chocolate blanco y tropezones crocantes.',
+		fullDescription: 'Masa elaborada a base de pasta pura de pistachos, con un balance aromático excepcional y tropezones crujientes en cada mordisco.',
+		ingredients: ['Pasta pura de pistacho', 'Pistachos enteros tostados', 'Mantequilla pura', 'Chocolate blanco'],
+		allergens: ['Frutos secos (pistacho)', 'Lácteos', 'Gluten', 'Huevo'],
+		imageSrc: product8.src,
+		available: true,
+		variant: 'standard',
 	},
 ];
 
-export function getProductById(id: string): Product | undefined {
-	return PRODUCTS.find((p) => p.id === id);
+// Helpers para consultar productos (listos para conectar con CMS o Supabase API en el futuro)
+export async function getProducts(options?: { category?: string; query?: string }): Promise<Product[]> {
+	// Simulación asíncrona de llamada a API
+	let result = [...PRODUCTS];
+
+	if (options?.category && options.category !== 'todas') {
+		result = result.filter((p) => p.category === options.category);
+	}
+
+	if (options?.query && options.query.trim() !== '') {
+		const q = options.query.toLowerCase().trim();
+		result = result.filter((p) => p.name.toLowerCase().includes(q) || p.shortDescription.toLowerCase().includes(q));
+	}
+
+	return result;
 }
 
-export function getProductsByCategory(category: string): Product[] {
-	if (category === 'todas') return PRODUCTS;
-	return PRODUCTS.filter((p) => p.category === category);
+export function getProductById(id: string): Product | undefined {
+	return PRODUCTS.find((p) => p.id === id);
 }

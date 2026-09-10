@@ -1,4 +1,4 @@
-﻿export type ProductCategory = 'galletas' | 'cuchareables' | 'brownies' | 'tortas' | 'otros';
+export type ProductCategory = 'galletas' | 'cuchareables' | 'brownies' | 'tortas' | 'otros';
 
 export interface CategoryInfo {
 	id: ProductCategory;
@@ -24,7 +24,9 @@ export interface Product {
 	rating?: number;
 	available: boolean;
 	accentColor?: string;
+	variant?: 'standard' | 'premium';
 }
+
 
 export interface CartItem {
 	productId: string;

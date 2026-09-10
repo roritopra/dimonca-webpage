@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { addToCart } from '../../stores/cartStore';
 
 export interface ProductItem {
@@ -48,14 +48,14 @@ export default function MenuCard({ product }: MenuCardProps) {
 
 	return (
 		<article
-			className={`flex flex-col justify-between rounded-[28px] sm:rounded-[34px] border border-pink/60 bg-beige backdrop-blur-xs p-4 sm:p-5 shadow-[0_4px_16px_rgba(58,32,14,0.04)] hover:shadow-[0_12px_28px_rgba(58,32,14,0.09)] transition-all duration-300 ${
+			className={`flex flex-col justify-between rounded-[28px] sm:rounded-[34px] border border-pink/60 bg-beige backdrop-blur-xs overflow-hidden pb-4 sm:pb-5 shadow-[0_4px_16px_rgba(58,32,14,0.04)] hover:shadow-[0_12px_28px_rgba(58,32,14,0.09)] transition-all duration-300 ${
 				isPremium ? 'col-span-1 md:col-span-2' : 'col-span-1'
 			}`}
 		>
-			{/* Área Superior: Imagen */}
+			{/* Área Superior: Imagen (Sin padding, ocupa todo el ancho y alto asignado de la card) */}
 			{isPremium ? (
 				// Tarjeta Premium (Caja / Combo): Imagen completa centrada
-				<div className="relative flex h-48 sm:h-56 w-full items-center justify-center overflow-hidden rounded-2xl bg-transparent py-2">
+				<div className="relative flex h-48 sm:h-56 w-full items-center justify-center overflow-hidden bg-transparent px-4 pt-4 py-2">
 					<img
 						src={product.imageSrc}
 						alt={product.name}
@@ -64,7 +64,7 @@ export default function MenuCard({ product }: MenuCardProps) {
 					/>
 				</div>
 			) : (
-				// Tarjeta Estándar (Galleta individual): Alto fijo con la galleta en absolute al bottom cortada a la mitad
+				// Tarjeta Estándar (Galleta individual): Sin padding, abarca todo el ancho de borde a borde
 				<div className="relative h-32 sm:h-36 w-full overflow-hidden bg-transparent">
 					<img
 						src={product.imageSrc}
@@ -76,12 +76,13 @@ export default function MenuCard({ product }: MenuCardProps) {
 			)}
 
 
-			{/* Área Inferior: Datos y Acciones */}
-			<div className="mt-3 sm:mt-4 flex flex-col">
+			{/* Área Inferior: Datos y Acciones (Con el padding original) */}
+			<div className="mt-3 sm:mt-4 flex flex-col px-4 sm:px-5">
 				{/* Título */}
 				<h3 className="font-sans text-base sm:text-lg font-extrabold text-brown leading-tight line-clamp-1">
 					{product.name}
 				</h3>
+
 
 				{/* Contenido según tipo de card */}
 				{isPremium ? (

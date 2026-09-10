@@ -17,7 +17,7 @@ const bottomCookies = [item1, item2, item3, item4, item5, item6, item7, item1, i
 <section class="relative w-full max-w-[1400px] mx-auto px-4 sm:px-6 pt-4 pb-6">
 	<!-- Contenedor del Banner con bordes redondeados y fondo gingham/picnic -->
 	<div
-		class="relative w-full overflow-hidden rounded-[28px] sm:rounded-[36px] shadow-sm min-h-[300px] sm:min-h-[340px] md:min-h-[380px] flex flex-col justify-between"
+		class="relative w-full overflow-hidden rounded-[28px] sm:rounded-[36px] shadow-sm min-h-[320px] sm:min-h-[360px] md:min-h-[420px] lg:min-h-[460px] flex flex-col justify-between"
 		style="background-color: #f77ca4;"
 	>
 		<!-- Cuadricula Gingham Picnic (Lineas blancas semitransparentes en horizontal y vertical) -->
@@ -36,7 +36,7 @@ const bottomCookies = [item1, item2, item3, item4, item5, item6, item7, item1, i
 		<!-- Boton Carrusel Anterior (Izquierda) -->
 		<button
 			type="button"
-			class="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 z-20 flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-[#f45d8c] text-white shadow-md border-2 border-white/80 transition-transform hover:scale-110 active:scale-95 cursor-pointer"
+			class="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 z-40 flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-[#f45d8c] text-white shadow-md border-2 border-white/80 transition-transform hover:scale-110 active:scale-95 cursor-pointer"
 			aria-label="Anterior slide"
 		>
 			<Icon name="lucide:chevron-left" class="h-6 w-6 stroke-[2.5]" />
@@ -45,50 +45,82 @@ const bottomCookies = [item1, item2, item3, item4, item5, item6, item7, item1, i
 		<!-- Boton Carrusel Siguiente (Derecha) -->
 		<button
 			type="button"
-			class="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 z-20 flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-[#f45d8c] text-white shadow-md border-2 border-white/80 transition-transform hover:scale-110 active:scale-95 cursor-pointer"
+			class="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 z-40 flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-[#f45d8c] text-white shadow-md border-2 border-white/80 transition-transform hover:scale-110 active:scale-95 cursor-pointer"
 			aria-label="Siguiente slide"
 		>
 			<Icon name="lucide:chevron-right" class="h-6 w-6 stroke-[2.5]" />
 		</button>
 
-		<!-- Escenario Central: Texto 'Nuestras Galletas' + Galleta Principal -->
-		<div class="relative z-10 flex-1 flex items-center justify-center px-8 sm:px-16 pt-6 pb-2 min-h-[220px] sm:min-h-[260px]">
-			<div class="relative flex items-center justify-center w-full max-w-[900px]">
-				<!-- 'Nuestras' (Arriba izquierda, en script con stroke/relieve) -->
+		<!-- Escenario Central: Texto y Galleta Principal -->
+		<div class="relative z-10 flex-1 flex items-center justify-center px-8 sm:px-16 pt-8 pb-4 min-h-[240px] sm:min-h-[290px] md:min-h-[340px]">
+			<!-- Contenedor Maestro: todo texto y máscara se ancla al mismo ancho y alto relativo -->
+			<div class="relative flex items-center justify-center w-full max-w-[960px]">
+
+				<!-- ============================================================== -->
+				<!-- CAPA 1 (BASE EXTERIOR): Azul con borde blanco grueso           -->
+				<!-- ============================================================== -->
 				<span
 					style="paint-order: stroke fill;"
-					class="absolute -top-4 sm:-top-8 md:-top-10 left-4 sm:left-12 md:left-16 font-exmouth text-[55px] sm:text-[85px] md:text-[115px] lg:text-[135px] leading-none text-[#d7ebfb] [-webkit-text-stroke:5px_#ffffff] sm:[-webkit-text-stroke:8px_#ffffff] md:[-webkit-text-stroke:10px_#ffffff] select-none pointer-events-none z-10"
+					class="absolute top-0 sm:top-2 md:top-4 lg:top-6 left-2 sm:left-8 md:left-12 lg:left-14 font-exmouth text-[60px] sm:text-[90px] md:text-[120px] lg:text-[145px] xl:text-[160px] leading-none text-[#d7ebfb] [-webkit-text-stroke:5px_#ffffff] sm:[-webkit-text-stroke:8px_#ffffff] md:[-webkit-text-stroke:10px_#ffffff] lg:[-webkit-text-stroke:12px_#ffffff] select-none pointer-events-none z-10"
 				>
 					Nuestras
 				</span>
 
-				<!-- Galleta Principal Centrada -->
-				<div class="relative z-20 flex items-center justify-center">
-					<div class="relative h-32 w-32 sm:h-44 sm:w-44 md:h-52 md:w-52 lg:h-56 lg:w-56 transition-transform duration-300 hover:scale-105">
-						<Image
-							src={galletaBanner1}
-							alt="Galleta artesanal de Maracuya"
-							class="h-full w-full object-contain drop-shadow-[0_12px_24px_rgba(58,32,14,0.35)]"
-							loading="eager"
-						/>
-					</div>
-				</div>
-
-				<!-- 'Galletas' (Abajo derecha, en script con stroke/relieve) -->
 				<span
 					style="paint-order: stroke fill;"
-					class="absolute -bottom-6 sm:-bottom-8 md:-bottom-10 right-4 sm:right-12 md:right-16 font-exmouth text-[55px] sm:text-[85px] md:text-[115px] lg:text-[135px] leading-none text-[#d7ebfb] [-webkit-text-stroke:5px_#ffffff] sm:[-webkit-text-stroke:8px_#ffffff] md:[-webkit-text-stroke:10px_#ffffff] select-none pointer-events-none z-10"
+					class="absolute bottom-0 sm:bottom-2 md:bottom-4 lg:bottom-6 right-2 sm:right-8 md:right-12 lg:right-14 font-exmouth text-[60px] sm:text-[90px] md:text-[120px] lg:text-[145px] xl:text-[160px] leading-none text-[#d7ebfb] [-webkit-text-stroke:5px_#ffffff] sm:[-webkit-text-stroke:8px_#ffffff] md:[-webkit-text-stroke:10px_#ffffff] lg:[-webkit-text-stroke:12px_#ffffff] select-none pointer-events-none z-10"
 				>
 					Galletas
 				</span>
+
+				<!-- ============================================================== -->
+				<!-- CAPA 2 & 3: CONTENEDOR DE LA GALLETA Y SU MÁSCARA CIRCULAR       -->
+				<!-- ============================================================== -->
+				<div class="relative z-20 flex items-center justify-center">
+					<!-- Wrapper con el tamaño exacto de la galleta -->
+					<div class="relative h-36 w-36 sm:h-48 sm:w-48 md:h-64 md:w-64 lg:h-76 lg:w-76 xl:h-84 xl:w-84 transition-transform duration-300 hover:scale-105">
+						
+						<!-- Galleta Principal con su sombra -->
+						<Image
+							src={galletaBanner1}
+							alt="Galleta artesanal de Maracuya"
+							class="h-full w-full object-contain drop-shadow-[0_16px_32px_rgba(58,32,14,0.38)]"
+							loading="eager"
+						/>
+
+						<!-- MÁSCARA CIRCULAR EXACTA (Idéntica al círculo de Figma):                               -->
+						<!-- Contenedor circular con overflow-hidden ajustado a la silueta real de la galleta (inset-[4%]) -->
+						<div class="absolute inset-[4%] rounded-full overflow-hidden pointer-events-none z-30">
+							<!-- Sub-lienzo posicionado inversamente para empatar con la escala del contenedor maestro de 960px -->
+							<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[960px] h-[340px] flex items-center justify-center pointer-events-none">
+								
+								<!-- 'Nuestras' en blanco sin stroke, recortado exclusivamente dentro del círculo de la galleta -->
+								<span
+									class="absolute top-0 sm:top-2 md:top-4 lg:top-5 left-2 sm:left-8 md:left-12 lg:left-14 font-exmouth text-[60px] sm:text-[90px] md:text-[120px] lg:text-[145px] xl:text-[160px] leading-none text-white select-none pointer-events-none"
+								>
+									Nuestras
+								</span>
+
+								<!-- 'Galletas' en blanco sin stroke, recortado exclusivamente dentro del círculo de la galleta -->
+								<span
+									class="absolute bottom-0 sm:bottom-2 md:bottom-4 lg:bottom-[26px] right-2 sm:right-8 md:right-12 lg:right-[56px] font-exmouth text-[60px] sm:text-[90px] md:text-[120px] lg:text-[145px] xl:text-[160px] leading-none text-white select-none pointer-events-none"
+								>
+									Galletas
+								</span>
+							</div>
+						</div>
+
+					</div>
+				</div>
+
 			</div>
 		</div>
 
 		<!-- Franja Inferior: Galletas asomandose en la base (mitad tapadas) -->
 		<div class="relative z-10 w-full overflow-hidden flex items-end justify-center pointer-events-none">
-			<div class="flex items-end justify-around sm:justify-center gap-2 sm:gap-6 md:gap-8 w-full max-w-[1280px] px-4 ">
+			<div class="flex items-end justify-around sm:justify-center gap-2 sm:gap-6 md:gap-8 w-full max-w-[1280px] px-4">
 				{bottomCookies.map((cookie) => (
-					<div class="relative shrink-0 w-12 sm:w-16 md:w-20 lg:w-24">
+					<div class="relative shrink-0 w-12 sm:w-16 md:w-20 lg:w-32">
 						<Image
 							src={cookie}
 							alt=""

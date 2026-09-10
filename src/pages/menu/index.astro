@@ -2,34 +2,14 @@
 import Layout from '../../layouts/Layout.astro';
 import Navbar from '../../components/common/Navbar.astro';
 import Footer from '../../components/common/Footer.astro';
-import MenuTabsCatalog from '../../components/menu/MenuTabsCatalog';
-import { PRODUCTS } from '../../data/products';
+import MenuBanner from '../../components/menu/MenuBanner.astro';
 ---
 
 <Layout>
 	<Navbar />
 
-	<main id="main-content" class="min-h-screen bg-beige pt-24 sm:pt-28">
-		<section class="relative overflow-hidden px-4 pt-10 pb-8 text-center sm:px-6 lg:px-8">
-			<div class="mx-auto max-w-3xl">
-				<span class="inline-block rounded-full bg-pink/15 px-4 py-1.5 font-sans text-xs sm:text-sm font-bold uppercase tracking-wider text-pink mb-3">
-					Hecho con amor artesanal
-				</span>
-				<h1 class="font-sans text-3xl sm:text-5xl font-extrabold text-brown tracking-tight">
-					Nuestro Menú de Postres
-				</h1>
-				<p class="font-script text-3xl sm:text-4xl text-pink mt-1 mb-3">
-					dulzura en cada bocado
-				</p>
-				<p class="text-sm sm:text-base text-brown/80 max-w-xl mx-auto leading-relaxed">
-					Explora nuestra selección de galletas con centros cremosos, postres cuchareables, brownies fudge y tortas para tus mejores momentos.
-				</p>
-			</div>
-		</section>
-
-		<section>
-			<MenuTabsCatalog client:load products={PRODUCTS} />
-		</section>
+	<main id="main-content" class="min-h-screen bg-beige pt-20 sm:pt-24 pb-20">
+		<MenuBanner />
 	</main>
 
 	<Footer />

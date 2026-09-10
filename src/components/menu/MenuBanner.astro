@@ -1,0 +1,102 @@
+﻿---
+import { Image } from 'astro:assets';
+import { Icon } from 'astro-icon/components';
+
+import galletaBanner1 from '../../assets/images/menu/home/galleta-banner-1.png';
+import item1 from '../../assets/images/menu/home/galleta-item-banner-1.png';
+import item2 from '../../assets/images/menu/home/galleta-item-banner-2.png';
+import item3 from '../../assets/images/menu/home/galleta-item-banner-3.png';
+import item4 from '../../assets/images/menu/home/galleta-item-banner-4.png';
+import item5 from '../../assets/images/menu/home/galleta-item-banner-5.png';
+import item6 from '../../assets/images/menu/home/galleta-item-banner-6.png';
+import item7 from '../../assets/images/menu/home/galleta-item-banner-7.png';
+
+const bottomCookies = [item1, item2, item3, item4, item5, item6, item7, item1, item2];
+---
+
+<section class="relative w-full max-w-[1400px] mx-auto px-4 sm:px-6 pt-4 pb-6">
+	<!-- Contenedor del Banner con bordes redondeados y fondo gingham/picnic -->
+	<div
+		class="relative w-full overflow-hidden rounded-[28px] sm:rounded-[36px] shadow-sm min-h-[300px] sm:min-h-[340px] md:min-h-[380px] flex flex-col justify-between"
+		style="background-color: #f77ca4;"
+	>
+		<!-- Cuadricula Gingham Picnic (Lineas blancas semitransparentes en horizontal y vertical) -->
+		<div
+			class="absolute inset-0 pointer-events-none"
+			style={{
+				backgroundImage: `
+					linear-gradient(90deg, rgba(255, 255, 255, 0.45) 50%, transparent 50%),
+					linear-gradient(rgba(255, 255, 255, 0.45) 50%, transparent 50%)
+				`,
+				backgroundSize: '42px 42px',
+			}}
+			aria-hidden="true"
+		></div>
+
+		<!-- Boton Carrusel Anterior (Izquierda) -->
+		<button
+			type="button"
+			class="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 z-20 flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-[#f45d8c] text-white shadow-md border-2 border-white/80 transition-transform hover:scale-110 active:scale-95 cursor-pointer"
+			aria-label="Anterior slide"
+		>
+			<Icon name="lucide:chevron-left" class="h-6 w-6 stroke-[2.5]" />
+		</button>
+
+		<!-- Boton Carrusel Siguiente (Derecha) -->
+		<button
+			type="button"
+			class="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 z-20 flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-[#f45d8c] text-white shadow-md border-2 border-white/80 transition-transform hover:scale-110 active:scale-95 cursor-pointer"
+			aria-label="Siguiente slide"
+		>
+			<Icon name="lucide:chevron-right" class="h-6 w-6 stroke-[2.5]" />
+		</button>
+
+		<!-- Escenario Central: Texto 'Nuestras Galletas' + Galleta Principal -->
+		<div class="relative z-10 flex-1 flex items-center justify-center px-8 sm:px-16 pt-6 pb-2 min-h-[220px] sm:min-h-[260px]">
+			<div class="relative flex items-center justify-center w-full max-w-[900px]">
+				<!-- 'Nuestras' (Arriba izquierda, en script con stroke/relieve) -->
+				<span
+					style="paint-order: stroke fill;"
+					class="absolute -top-4 sm:-top-8 md:-top-10 left-4 sm:left-12 md:left-16 font-exmouth text-[55px] sm:text-[85px] md:text-[115px] lg:text-[135px] leading-none text-[#d7ebfb] [-webkit-text-stroke:5px_#ffffff] sm:[-webkit-text-stroke:8px_#ffffff] md:[-webkit-text-stroke:10px_#ffffff] select-none pointer-events-none z-10"
+				>
+					Nuestras
+				</span>
+
+				<!-- Galleta Principal Centrada -->
+				<div class="relative z-20 flex items-center justify-center">
+					<div class="relative h-32 w-32 sm:h-44 sm:w-44 md:h-52 md:w-52 lg:h-56 lg:w-56 transition-transform duration-300 hover:scale-105">
+						<Image
+							src={galletaBanner1}
+							alt="Galleta artesanal de Maracuya"
+							class="h-full w-full object-contain drop-shadow-[0_12px_24px_rgba(58,32,14,0.35)]"
+							loading="eager"
+						/>
+					</div>
+				</div>
+
+				<!-- 'Galletas' (Abajo derecha, en script con stroke/relieve) -->
+				<span
+					style="paint-order: stroke fill;"
+					class="absolute -bottom-6 sm:-bottom-8 md:-bottom-10 right-4 sm:right-12 md:right-16 font-exmouth text-[55px] sm:text-[85px] md:text-[115px] lg:text-[135px] leading-none text-[#d7ebfb] [-webkit-text-stroke:5px_#ffffff] sm:[-webkit-text-stroke:8px_#ffffff] md:[-webkit-text-stroke:10px_#ffffff] select-none pointer-events-none z-10"
+				>
+					Galletas
+				</span>
+			</div>
+		</div>
+
+		<!-- Franja Inferior: Galletas asomandose en la base (mitad tapadas) -->
+		<div class="relative z-10 w-full overflow-hidden flex items-end justify-center pointer-events-none">
+			<div class="flex items-end justify-around sm:justify-center gap-2 sm:gap-6 md:gap-8 w-full max-w-[1280px] px-4 ">
+				{bottomCookies.map((cookie) => (
+					<div class="relative shrink-0 w-12 sm:w-16 md:w-20 lg:w-24">
+						<Image
+							src={cookie}
+							alt=""
+							class="w-full h-auto object-contain drop-shadow-[0_-4px_8px_rgba(58,32,14,0.18)]"
+						/>
+					</div>
+				))}
+			</div>
+		</div>
+	</div>
+</section>

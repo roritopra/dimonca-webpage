@@ -6,7 +6,10 @@ import ProductDetailActions from '../../components/menu/ProductDetailActions';
 import { PRODUCTS } from '../../data/products';
 
 export function getStaticPaths() {
-	return PRODUCTS.map((product) => ({
+	// Solo productos normales / individuales
+	const singleProducts = PRODUCTS.filter((p) => p.productType === 'single');
+
+	return singleProducts.map((product) => ({
 		params: { id: product.id },
 		props: { product },
 	}));
@@ -14,11 +17,11 @@ export function getStaticPaths() {
 
 const { product } = Astro.props;
 
-if (!product) {
+if (!product || product.productType !== 'single') {
 	return Astro.redirect('/menu');
 }
 
-const relatedProducts = PRODUCTS.filter((p) => p.id !== product.id && (p.category === product.category || p.badge === 'Top Ventas')).slice(0, 3);
+const relatedProducts = PRODUCTS.filter((p) => p.id !== product.id && p.productType === 'single').slice(0, 3);
 ---
 
 <Layout>

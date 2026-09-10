@@ -1,4 +1,6 @@
-export type ProductCategory = 'galletas' | 'cuchareables' | 'brownies' | 'tortas' | 'otros';
+﻿export type ProductCategory = 'galletas' | 'cuchareables' | 'brownies' | 'tortas' | 'otros';
+
+export type ProductType = 'single' | 'custom_box';
 
 export interface CategoryInfo {
 	id: ProductCategory;
@@ -6,9 +8,17 @@ export interface CategoryInfo {
 	description: string;
 }
 
+export interface BoxConfiguration {
+	capacity: number; // Ej: 3, 9 galletas
+	allowDuplicates?: boolean;
+	includesIceCream?: boolean;
+	availableItemCategory: ProductCategory; // Normalmente 'galletas'
+}
+
 export interface Product {
 	id: string;
 	name: string;
+	productType: ProductType; // 'single' para normales, 'custom_box' para armar cajas
 	category: ProductCategory;
 	categoryLabel: string;
 	price: number;
@@ -25,8 +35,15 @@ export interface Product {
 	available: boolean;
 	accentColor?: string;
 	variant?: 'standard' | 'premium';
+	boxConfig?: BoxConfiguration;
 }
 
+export interface SelectedBoxItem {
+	productId: string;
+	name: string;
+	imageSrc: string;
+	quantity: number;
+}
 
 export interface CartItem {
 	productId: string;
@@ -38,5 +55,5 @@ export interface CartItem {
 	quantity: number;
 	shortDescription?: string;
 	selectedItems?: string[];
+	boxContents?: SelectedBoxItem[];
 }
-

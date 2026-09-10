@@ -1,4 +1,4 @@
-﻿import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import MenuCard from './MenuCard';
 import MenuFilters from './MenuFilters';
 import { PRODUCTS } from '../../data/products';
@@ -53,15 +53,7 @@ export default function MenuCatalog({ initialProducts = PRODUCTS }: MenuCatalogP
 						{filteredProducts.map((product) => (
 							<MenuCard
 								key={product.id}
-								product={{
-									id: product.id,
-									name: product.name,
-									price: product.price,
-									priceFormatted: product.priceFormatted,
-									imageSrc: product.imageSrc,
-									category: product.category,
-									variant: product.variant || 'standard',
-								}}
+								product={product}
 							/>
 						))}
 					</div>

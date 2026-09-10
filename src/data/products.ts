@@ -1,6 +1,6 @@
 ﻿import type { CategoryInfo, Product } from '../types/products';
 
-// Importación de las imágenes oficiales de src/assets/images/menu/products/
+// Importación de imágenes oficiales
 import product1 from '../assets/images/menu/products/product-1.png';
 import product2 from '../assets/images/menu/products/product-2.png';
 import product3 from '../assets/images/menu/products/product-3.png';
@@ -43,12 +43,12 @@ export const CATEGORIES: CategoryInfo[] = [
 	},
 ];
 
-// Productos en modo mock listos para consumir o sustituir por CMS / API
 export const PRODUCTS: Product[] = [
 	// Fila 1
 	{
 		id: 'galleta-caramelo-salado',
 		name: 'Galleta Caramelo Salado',
+		productType: 'single',
 		category: 'galletas',
 		categoryLabel: 'Galletas',
 		price: 11000,
@@ -64,6 +64,7 @@ export const PRODUCTS: Product[] = [
 	{
 		id: 'galleta-roche',
 		name: 'Galleta Roché',
+		productType: 'single',
 		category: 'galletas',
 		categoryLabel: 'Galletas',
 		price: 11000,
@@ -79,6 +80,7 @@ export const PRODUCTS: Product[] = [
 	{
 		id: 'combo-arma-tu-caja-x3',
 		name: 'Arma tu caja x3',
+		productType: 'custom_box',
 		category: 'galletas',
 		categoryLabel: 'Combos',
 		price: 39000,
@@ -88,10 +90,17 @@ export const PRODUCTS: Product[] = [
 		imageSrc: productSpecial1.src,
 		available: true,
 		variant: 'premium',
+		boxConfig: {
+			capacity: 3,
+			allowDuplicates: true,
+			includesIceCream: false,
+			availableItemCategory: 'galletas',
+		},
 	},
 	{
 		id: 'galleta-klim',
 		name: 'Galleta Klim',
+		productType: 'single',
 		category: 'galletas',
 		categoryLabel: 'Galletas',
 		price: 11000,
@@ -107,6 +116,7 @@ export const PRODUCTS: Product[] = [
 	{
 		id: 'galleta-maracuya',
 		name: 'Galleta Maracuyá',
+		productType: 'single',
 		category: 'galletas',
 		categoryLabel: 'Galletas',
 		price: 11000,
@@ -124,6 +134,7 @@ export const PRODUCTS: Product[] = [
 	{
 		id: 'combo-arma-tu-caja-x9',
 		name: 'Arma tu caja x9',
+		productType: 'custom_box',
 		category: 'galletas',
 		categoryLabel: 'Combos',
 		price: 39000,
@@ -133,10 +144,17 @@ export const PRODUCTS: Product[] = [
 		imageSrc: productSpecial2.src,
 		available: true,
 		variant: 'premium',
+		boxConfig: {
+			capacity: 9,
+			allowDuplicates: true,
+			includesIceCream: false,
+			availableItemCategory: 'galletas',
+		},
 	},
 	{
 		id: 'galleta-habibi',
 		name: 'Galleta Habibi',
+		productType: 'single',
 		category: 'galletas',
 		categoryLabel: 'Galletas',
 		price: 11000,
@@ -152,6 +170,7 @@ export const PRODUCTS: Product[] = [
 	{
 		id: 'crookie',
 		name: 'Crookie',
+		productType: 'single',
 		category: 'otros',
 		categoryLabel: 'Otros productos',
 		price: 11000,
@@ -167,6 +186,7 @@ export const PRODUCTS: Product[] = [
 	{
 		id: 'combo-arma-tu-caja-x3-helado',
 		name: 'Arma tu caja x3 + Helado',
+		productType: 'custom_box',
 		category: 'galletas',
 		categoryLabel: 'Combos',
 		price: 39000,
@@ -176,12 +196,19 @@ export const PRODUCTS: Product[] = [
 		imageSrc: productSpecial3.src,
 		available: true,
 		variant: 'premium',
+		boxConfig: {
+			capacity: 3,
+			allowDuplicates: true,
+			includesIceCream: true,
+			availableItemCategory: 'galletas',
+		},
 	},
 
 	// Fila 3
 	{
 		id: 'galleta-red-velvet',
 		name: 'Galleta Red Velvet',
+		productType: 'single',
 		category: 'galletas',
 		categoryLabel: 'Galletas',
 		price: 11000,
@@ -197,6 +224,7 @@ export const PRODUCTS: Product[] = [
 	{
 		id: 'galleta-pistacho',
 		name: 'Galleta Pistacho',
+		productType: 'single',
 		category: 'galletas',
 		categoryLabel: 'Galletas',
 		price: 11000,
@@ -211,10 +239,12 @@ export const PRODUCTS: Product[] = [
 	},
 ];
 
-// Helpers para consultar productos (listos para conectar con CMS o Supabase API en el futuro)
-export async function getProducts(options?: { category?: string; query?: string }): Promise<Product[]> {
-	// Simulación asíncrona de llamada a API
+export async function getProducts(options?: { category?: string; query?: string; type?: 'single' | 'custom_box' }): Promise<Product[]> {
 	let result = [...PRODUCTS];
+
+	if (options?.type) {
+		result = result.filter((p) => p.productType === options.type);
+	}
 
 	if (options?.category && options.category !== 'todas') {
 		result = result.filter((p) => p.category === options.category);
@@ -230,4 +260,9 @@ export async function getProducts(options?: { category?: string; query?: string 
 
 export function getProductById(id: string): Product | undefined {
 	return PRODUCTS.find((p) => p.id === id);
+}
+
+// Helper para obtener todas las galletas disponibles para armar las cajas
+export function getAvailableCookies(): Product[] {
+	return PRODUCTS.filter((p) => p.productType === 'single' && p.category === 'galletas');
 }

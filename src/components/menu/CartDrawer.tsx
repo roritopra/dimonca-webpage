@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useStore } from '@nanostores/react';
 import {
 	$cart,
@@ -289,6 +289,7 @@ export default function CartDrawer() {
 													{
 														id: upsell.id,
 														name: upsell.name,
+														productType: 'single',
 														category: 'cuchareables',
 														categoryLabel: 'Antojos',
 														price: upsell.price,

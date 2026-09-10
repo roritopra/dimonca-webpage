@@ -1,18 +1,9 @@
 import React, { useState } from 'react';
 import { addToCart } from '../../stores/cartStore';
-
-export interface ProductItem {
-	id: string;
-	name: string;
-	price: number;
-	priceFormatted: string;
-	imageSrc: string;
-	category?: string;
-	variant?: 'standard' | 'premium';
-}
+import type { Product } from '../../types/products';
 
 interface MenuCardProps {
-	product: ProductItem;
+	product: Product;
 }
 
 export default function MenuCard({ product }: MenuCardProps) {
@@ -29,22 +20,9 @@ export default function MenuCard({ product }: MenuCardProps) {
 		const nextQty = quantity + 1;
 		setQuantity(nextQty);
 		// Sincronizar con el carrito global persistente
-		addToCart(
-			{
-				id: product.id,
-				name: product.name,
-				category: (product.category as any) || 'galletas',
-				categoryLabel: isPremium ? 'Combos' : 'Galletas',
-				price: product.price,
-				priceFormatted: product.priceFormatted,
-				shortDescription: product.name,
-				fullDescription: product.name,
-				imageSrc: product.imageSrc,
-				available: true,
-			},
-			1
-		);
+		addToCart(product, 1);
 	}
+
 
 	return (
 		<article
@@ -93,7 +71,7 @@ export default function MenuCard({ product }: MenuCardProps) {
 						</span>
 
 						<a
-							href={`/menu/${product.id}`}
+							href={`/menu/caja/${product.id}`}
 							className="flex items-center gap-1.5 rounded-full bg-pink px-4 sm:px-5 py-1.5 sm:py-2 text-xs sm:text-sm font-bold text-white shadow-xs transition-transform hover:scale-105 active:scale-95 no-underline cursor-pointer"
 						>
 							<span>Ver más</span>

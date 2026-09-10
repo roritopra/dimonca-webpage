@@ -1,4 +1,4 @@
-﻿---
+---
 import { Image } from 'astro:assets';
 import { Icon } from 'astro-icon/components';
 
@@ -74,7 +74,7 @@ const bottomCookies = [item1, item2, item3, item4, item5, item6, item7, item1, i
 				</span>
 
 				<!-- ============================================================== -->
-				<!-- CAPA 2 & 3: CONTENEDOR DE LA GALLETA Y SU MÁSCARA CIRCULAR       -->
+				<!-- CAPA 2: CONTENEDOR DE LA GALLETA                               -->
 				<!-- ============================================================== -->
 				<div class="relative z-20 flex items-center justify-center">
 					<!-- Wrapper con el tamaño exacto de la galleta -->
@@ -87,29 +87,6 @@ const bottomCookies = [item1, item2, item3, item4, item5, item6, item7, item1, i
 							class="h-full w-full object-contain drop-shadow-[0_16px_32px_rgba(58,32,14,0.38)]"
 							loading="eager"
 						/>
-
-						<!-- MÁSCARA CIRCULAR EXACTA (Idéntica al círculo de Figma):                               -->
-						<!-- Contenedor circular con overflow-hidden ajustado a la silueta real de la galleta (inset-[4%]) -->
-						<div class="absolute inset-[4%] rounded-full overflow-hidden pointer-events-none z-30">
-							<!-- Sub-lienzo posicionado inversamente para empatar con la escala del contenedor maestro de 960px -->
-							<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[960px] h-[340px] flex items-center justify-center pointer-events-none">
-								
-								<!-- 'Nuestras' en blanco sin stroke, recortado exclusivamente dentro del círculo de la galleta -->
-								<span
-									class="absolute top-0 sm:top-2 md:top-4 lg:top-5 left-2 sm:left-8 md:left-12 lg:left-14 font-exmouth text-[60px] sm:text-[90px] md:text-[120px] lg:text-[145px] xl:text-[160px] leading-none text-white select-none pointer-events-none"
-								>
-									Nuestras
-								</span>
-
-								<!-- 'Galletas' en blanco sin stroke, recortado exclusivamente dentro del círculo de la galleta -->
-								<span
-									class="absolute bottom-0 sm:bottom-2 md:bottom-4 lg:bottom-[26px] right-2 sm:right-8 md:right-12 lg:right-[56px] font-exmouth text-[60px] sm:text-[90px] md:text-[120px] lg:text-[145px] xl:text-[160px] leading-none text-white select-none pointer-events-none"
-								>
-									Galletas
-								</span>
-							</div>
-						</div>
-
 					</div>
 				</div>
 

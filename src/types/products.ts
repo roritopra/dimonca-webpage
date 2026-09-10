@@ -36,4 +36,7 @@ export interface CartItem {
 	priceFormatted: string;
 	imageSrc: string;
 	quantity: number;
+	shortDescription?: string;
+	selectedItems?: string[];
 }
+

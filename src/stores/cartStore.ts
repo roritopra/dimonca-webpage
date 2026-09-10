@@ -1,4 +1,4 @@
-﻿import { persistentAtom } from '@nanostores/persistent';
+import { persistentAtom } from '@nanostores/persistent';
 import { atom, computed } from 'nanostores';
 import type { CartItem, Product } from '../types/products';
 
@@ -59,9 +59,12 @@ export function addToCart(product: Product, quantity = 1): void {
 			priceFormatted: product.priceFormatted,
 			imageSrc: product.imageSrc,
 			quantity,
+			shortDescription: product.shortDescription,
+			selectedItems: product.id.includes('caja') ? ['Red Velvet', 'Pistacho', 'Maracuyá'] : undefined,
 		};
 		$cart.set([...current, newItem]);
 	}
+
 
 	openCart();
 }

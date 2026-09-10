@@ -1,0 +1,277 @@
+﻿import React, { useState, useMemo } from 'react';
+import type { Product, SelectedBoxItem } from '../../types/products';
+import { addToCart, formatCurrency } from '../../stores/cartStore';
+
+interface BoxBuilderProps {
+	boxProduct: Product;
+	availableCookies: Product[];
+}
+
+export default function BoxBuilder({ boxProduct, availableCookies }: BoxBuilderProps) {
+	const maxCapacity = boxProduct.boxConfig?.capacity || 3;
+	const basePrice = boxProduct.price;
+
+	// Estado: mapa de id de galleta -> cantidad seleccionada
+	const [selectedCounts, setSelectedCounts] = useState<Record<string, number>>({});
+
+	// Total de galletas actualmente elegidas
+	const totalSelectedCookies = useMemo(() => {
+		return Object.values(selectedCounts).reduce((sum, count) => sum + count, 0);
+	}, [selectedCounts]);
+
+	// Precio total: base + adiciones de galletas especiales
+	const totalPrice = useMemo(() => {
+		let total = basePrice;
+		for (const cookie of availableCookies) {
+			const count = selectedCounts[cookie.id] || 0;
+			if (count > 0 && cookie.extraPrice) {
+				total += cookie.extraPrice * count;
+			}
+		}
+		return total;
+	}, [basePrice, availableCookies, selectedCounts]);
+
+	function handleDecrease(cookieId: string) {
+		setSelectedCounts((prev) => {
+			const current = prev[cookieId] || 0;
+			if (current <= 0) return prev;
+			const next = { ...prev };
+			if (current === 1) {
+				delete next[cookieId];
+			} else {
+				next[cookieId] = current - 1;
+			}
+			return next;
+		});
+	}
+
+	function handleIncrease(cookieId: string) {
+		if (totalSelectedCookies >= maxCapacity) {
+			alert(`Solo puedes elegir un máximo de ${maxCapacity} galletas para esta caja.`);
+			return;
+		}
+
+		setSelectedCounts((prev) => ({
+			...prev,
+			[cookieId]: (prev[cookieId] || 0) + 1,
+		}));
+	}
+
+	function handleAddToCart(isDirectBuy = false) {
+		if (totalSelectedCookies !== maxCapacity) {
+			alert(`Por favor elige las ${maxCapacity} galletas para completar tu caja (llevas ${totalSelectedCookies}/${maxCapacity}).`);
+			return;
+		}
+
+		// Construir lista de galletas para el carrito
+		const boxContents: SelectedBoxItem[] = [];
+		const selectedNames: string[] = [];
+
+		for (const cookie of availableCookies) {
+			const count = selectedCounts[cookie.id];
+			if (count && count > 0) {
+				boxContents.push({
+					productId: cookie.id,
+					name: cookie.name,
+					imageSrc: cookie.imageSrc,
+					quantity: count,
+				});
+				for (let i = 0; i < count; i++) {
+					selectedNames.push(cookie.name);
+				}
+			}
+		}
+
+		// Añadir al store persistente del carrito
+		addToCart(
+			{
+				id: `${boxProduct.id}-${Date.now()}`,
+				name: boxProduct.name,
+				productType: 'custom_box',
+				category: boxProduct.category,
+				categoryLabel: boxProduct.categoryLabel,
+				price: totalPrice,
+				priceFormatted: formatCurrency(totalPrice),
+				shortDescription: `${boxProduct.name}: ${selectedNames.join(', ')}`,
+				fullDescription: boxProduct.fullDescription,
+				imageSrc: boxProduct.imageSrc,
+				available: true,
+			},
+			1
+		);
+
+		if (isDirectBuy) {
+			alert('¡Listo para comprar! El sistema validará tu sesión con Supabase.');
+			window.location.href = '/login';
+		}
+	}
+
+	return (
+		<div className="w-full flex flex-col xl:flex-row items-stretch min-h-[620px] bg-[#f7f3ea] border-b border-brown/15">
+			
+			{/* ========================================================= */}
+			{/* COLUMNA IZQUIERDA: CAJA PROTAGONISTA SOBRE PATRÓN DE PUNTOS */}
+			{/* ========================================================= */}
+			<div
+				className="w-full xl:w-1/2 relative flex items-center justify-center p-8 lg:p-14 border-b xl:border-b-0 xl:border-r border-brown/15 min-h-[420px] xl:min-h-[620px]"
+				style={{
+					backgroundImage: 'radial-gradient(circle, rgba(58, 32, 14, 0.22) 1.8px, transparent 1.8px)',
+					backgroundSize: '20px 20px',
+					backgroundColor: '#f7f2e8',
+				}}
+			>
+				<div className="relative w-full max-w-[520px] flex items-center justify-center">
+					<img
+						src={boxProduct.imageSrc}
+						alt={boxProduct.name}
+						className="w-full h-auto max-h-[440px] object-contain drop-shadow-[0_18px_32px_rgba(58,32,14,0.22)] transition-transform duration-300 hover:scale-105"
+					/>
+				</div>
+			</div>
+
+			{/* ========================================================= */}
+			{/* COLUMNA DERECHA: SELECCIÓN DE GALLETAS + FOOTER CON TOTAL  */}
+			{/* ========================================================= */}
+			<div className="w-full xl:w-1/2 flex flex-col justify-between bg-[#f7f3ea] relative">
+				
+				{/* Encabezado con Botón Cerrar (X) */}
+				<div className="px-6 lg:px-10 pt-8 pb-4">
+					<div className="flex items-start justify-between">
+						<div>
+							<h1 className="font-sans text-3xl lg:text-4xl font-black text-pink tracking-tight">
+								{boxProduct.name.toLowerCase().includes('x3') ? 'Caja X3 galletas' : boxProduct.name}
+							</h1>
+							<p className="font-sans text-xl lg:text-2xl font-black text-brown mt-1">
+								{boxProduct.priceFormatted}
+							</p>
+							<p className="text-xs lg:text-sm text-brown/70 mt-1 leading-relaxed">
+								Caja con {maxCapacity} galletas. Escoge tus {maxCapacity} sabores favoritos.
+							</p>
+						</div>
+
+						{/* Botón X de volver al menú */}
+						<a
+							href="/menu"
+							className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-brown/60 hover:text-pink shadow-xs border border-brown/10 transition-colors"
+							aria-label="Cerrar y volver al menú"
+						>
+							<span className="text-base font-bold leading-none">✕</span>
+						</a>
+					</div>
+
+					<div className="mt-4 flex items-center justify-between border-b border-brown/10 pb-3">
+						<p className="font-sans text-sm font-extrabold text-brown">
+							Elije máximo {maxCapacity}:
+						</p>
+						<span className="font-sans text-xs font-bold px-2.5 py-0.5 rounded-full bg-pink/15 text-pink">
+							{totalSelectedCookies} / {maxCapacity} elegidas
+						</span>
+					</div>
+				</div>
+
+				{/* Lista de Galletas con Scroll Estilizado (.cart-scrollbar) */}
+				<div className="flex-1 overflow-y-auto max-h-[380px] xl:max-h-[400px] px-6 lg:px-10 py-2 cart-scrollbar">
+					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-5">
+						{availableCookies.map((cookie) => {
+							const count = selectedCounts[cookie.id] || 0;
+							const hasExtra = !!cookie.extraPrice;
+
+							return (
+								<div key={cookie.id} className="flex items-center gap-3">
+									{/* Miniatura de la galleta */}
+									<div className="relative h-14 w-14 shrink-0 rounded-full overflow-hidden bg-white/50 border border-brown/10 flex items-center justify-center shadow-2xs">
+										<img
+											src={cookie.imageSrc}
+											alt={cookie.name}
+											className="h-full w-full object-contain p-0.5"
+										/>
+									</div>
+
+									{/* Info + Contador */}
+									<div className="flex flex-col flex-1 min-w-0">
+										<div className="flex items-baseline gap-1">
+											<span className="font-sans text-xs font-extrabold text-brown truncate">
+												{cookie.name.replace('Galleta ', '')}
+											</span>
+											{hasExtra && (
+												<span className="text-[10px] font-bold text-pink shrink-0">
+													{cookie.extraPriceFormatted}
+												</span>
+											)}
+										</div>
+
+										{/* Selector de cantidad (- 0 +) */}
+										<div className="mt-1.5 flex items-center gap-1.5">
+											<div className="flex items-center rounded-full border border-pink/40 bg-[#fff5f8] px-1.5 py-0.5 shadow-2xs">
+												<button
+													type="button"
+													onClick={() => handleDecrease(cookie.id)}
+													disabled={count <= 0}
+													className="flex h-5 w-5 items-center justify-center rounded-full bg-pink text-white text-xs font-bold hover:opacity-90 active:scale-90 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+												>
+													−
+												</button>
+												<span className="min-w-5 text-center font-sans text-xs font-bold text-brown/80 px-1">
+													{count}
+												</span>
+												<button
+													type="button"
+													onClick={() => handleIncrease(cookie.id)}
+													disabled={totalSelectedCookies >= maxCapacity}
+													className="flex h-5 w-5 items-center justify-center rounded-full bg-pink text-white text-xs font-bold hover:opacity-90 active:scale-90 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+												>
+													+
+												</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							);
+						})}
+					</div>
+				</div>
+
+				{/* Footer Fijo con Total y Botones de Acción */}
+				<div className="border-t border-brown/15 bg-[#f5efe3] px-6 lg:px-10 py-5">
+					<div className="flex items-center gap-2 mb-4">
+						<span className="font-sans text-lg font-black text-brown">Total:</span>
+						<span className="font-sans text-xl font-black text-brown">
+							{formatCurrency(totalPrice)}
+						</span>
+					</div>
+
+					<div className="flex items-center gap-3">
+						{/* Botón Comprar */}
+						<button
+							type="button"
+							onClick={() => handleAddToCart(true)}
+							className="flex flex-1 items-center justify-center gap-2 rounded-full bg-pink py-3 px-5 font-sans text-sm lg:text-base font-bold text-white shadow-md shadow-pink/20 hover:opacity-95 active:scale-98 transition-all cursor-pointer"
+						>
+							<span>Comprar</span>
+							<span className="flex h-4 w-4 items-center justify-center rounded-full bg-white text-pink text-[10px] font-extrabold">
+								↗
+							</span>
+						</button>
+
+						{/* Botón Añadir al carrito */}
+						<button
+							type="button"
+							onClick={() => handleAddToCart(false)}
+							className="flex flex-1 items-center justify-center gap-2 rounded-full border-2 border-pink bg-transparent py-2.5 px-5 font-sans text-sm lg:text-base font-bold text-pink hover:bg-pink/10 active:scale-98 transition-all cursor-pointer"
+						>
+							<span>Añadir al carrito</span>
+							<svg className="h-5 w-5 stroke-current stroke-2" fill="none" viewBox="0 0 24 24">
+								<path
+									strokeLinecap="round"
+									strokeLinejoin="round"
+									d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+								/>
+							</svg>
+						</button>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	);
+}

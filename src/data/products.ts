@@ -1,4 +1,4 @@
-﻿import type { CategoryInfo, Product } from '../types/products';
+import type { CategoryInfo, Product } from '../types/products';
 
 // Importación de imágenes oficiales
 import product1 from '../assets/images/menu/products/product-1.png';
@@ -166,7 +166,26 @@ export const PRODUCTS: Product[] = [
 		imageSrc: product5.src,
 		available: true,
 		variant: 'standard',
+		extraPrice: 2000,
+		extraPriceFormatted: '(+$2000)',
 	},
+	{
+		id: 'galleta-nutella',
+		name: 'Nutella',
+		productType: 'single',
+		category: 'galletas',
+		categoryLabel: 'Galletas',
+		price: 11000,
+		priceFormatted: '$11.000',
+		shortDescription: 'Galleta con masa artesanal y generoso corazón de Nutella fundida.',
+		fullDescription: 'Crujiente por fuera con masa suave repleta de chispas y un centro volcánico de auténtica crema de avellanas Nutella.',
+		imageSrc: product2.src,
+		available: true,
+		variant: 'standard',
+		extraPrice: 1000,
+		extraPriceFormatted: '(+$1000)',
+	},
+
 	{
 		id: 'crookie',
 		name: 'Crookie',

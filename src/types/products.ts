@@ -1,4 +1,4 @@
-﻿export type ProductCategory = 'galletas' | 'cuchareables' | 'brownies' | 'tortas' | 'otros';
+export type ProductCategory = 'galletas' | 'cuchareables' | 'brownies' | 'tortas' | 'otros';
 
 export type ProductType = 'single' | 'custom_box';
 
@@ -36,7 +36,10 @@ export interface Product {
 	accentColor?: string;
 	variant?: 'standard' | 'premium';
 	boxConfig?: BoxConfiguration;
+	extraPrice?: number;
+	extraPriceFormatted?: string;
 }
+
 
 export interface SelectedBoxItem {
 	productId: string;

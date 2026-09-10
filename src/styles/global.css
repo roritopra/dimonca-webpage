@@ -52,6 +52,30 @@
 	}
 }
 
+/* Scrollbar estilizado en Pink sin fondo blanco para el Carrito */
+.cart-scrollbar {
+	scrollbar-width: thin;
+	scrollbar-color: #f45d8c transparent;
+}
+
+.cart-scrollbar::-webkit-scrollbar {
+	width: 6px;
+}
+
+.cart-scrollbar::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+.cart-scrollbar::-webkit-scrollbar-thumb {
+	background-color: #f45d8c;
+	border-radius: 9999px;
+}
+
+.cart-scrollbar::-webkit-scrollbar-thumb:hover {
+	background-color: #d94372;
+}
+
+
 /* View Transitions: Animación de Cortina en 2 Fases (Clip Wipe Izquierda -> Derecha) */
 :root {
 	--curtain-color: #6ca7d5;

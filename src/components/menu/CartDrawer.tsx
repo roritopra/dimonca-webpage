@@ -56,13 +56,33 @@ export default function CartDrawer() {
 	useEffect(() => {
 		if (isOpen) {
 			document.body.style.overflow = 'hidden';
+			document.documentElement.style.overflow = 'hidden';
+			if ((window as any).lenis) {
+				(window as any).lenis.stop();
+			}
 		} else {
 			document.body.style.overflow = '';
+			document.documentElement.style.overflow = '';
+			if ((window as any).lenis) {
+				(window as any).lenis.start();
+			}
 		}
 		return () => {
 			document.body.style.overflow = '';
+			document.documentElement.style.overflow = '';
+			if ((window as any).lenis) {
+				(window as any).lenis.start();
+			}
 		};
 	}, [isOpen]);
+
+	function handleOverlayWheel(e: React.WheelEvent) {
+		// Redirigir el scroll del mouse hacia el interior del carrito incluso si el cursor está sobre el overlay
+		const scrollContainer = document.getElementById('cart-scroll-body');
+		if (scrollContainer) {
+			scrollContainer.scrollTop += e.deltaY;
+		}
+	}
 
 	function handleCheckout() {
 		alert('¡Listo para comprar! Aquí se validará la autenticación con Supabase.');
@@ -73,14 +93,15 @@ export default function CartDrawer() {
 
 	return (
 		<div
-			className={`fixed inset-0 z-[10001] transition-visibility duration-300 ${
+			className={`fixed inset-0 z-[10001] transition-visibility duration-300 overscroll-none touch-none ${
 				isOpen ? 'visible' : 'invisible'
 			}`}
 			aria-hidden={!isOpen}
+			onWheel={handleOverlayWheel}
 		>
 			{/* Backdrop oscurecido */}
 			<div
-				className={`fixed inset-0 bg-brown/50 backdrop-blur-2xs transition-opacity duration-300 ${
+				className={`fixed inset-0 bg-brown/50 backdrop-blur-2xs transition-opacity duration-300 overscroll-none touch-none ${
 					isOpen ? 'opacity-100' : 'opacity-0'
 				}`}
 				onClick={closeCart}
@@ -88,15 +109,16 @@ export default function CartDrawer() {
 
 			{/* Panel lateral con ancho ampliado según diseño */}
 			<aside
-				className={`fixed inset-y-0 right-0 z-10 flex w-full max-w-[500px] sm:max-w-[540px] flex-col bg-beige text-brown shadow-2xl transition-transform duration-300 ease-out ${
+				className={`fixed inset-y-0 right-0 z-10 flex w-full max-w-[500px] sm:max-w-[540px] flex-col bg-[#f7f3eb] text-brown shadow-2xl transition-transform duration-300 ease-out overscroll-contain touch-auto ${
 					isOpen ? 'translate-x-0' : 'translate-x-full'
 				}`}
+				onWheel={(e) => e.stopPropagation()}
 			>
 				{/* 1. Header del Carrito */}
 				<div className="flex items-center justify-between px-6 py-5 border-b border-brown/10 bg-[#fbf8f2]">
 					<div className="flex items-center gap-3">
 						{/* Icono de Carrito con borde azul y cuerpo rosa */}
-						<div className="flex h-8 w-8 items-center justify-center rounded-lg p-1 text-pink">
+						<div className="flex h-8 w-8 items-center justify-center rounded-lg border border-[#9accf4] p-1 text-pink">
 							<svg className="h-6 w-6 stroke-current stroke-2" fill="none" viewBox="0 0 24 24">
 								<path
 									strokeLinecap="round"
@@ -115,7 +137,7 @@ export default function CartDrawer() {
 						<button
 							type="button"
 							onClick={closeCart}
-							className="flex h-8 w-8 items-center justify-center rounded-md text-pink hover:bg-pink/10 transition-colors"
+							className="flex h-8 w-8 items-center justify-center rounded-md border border-pink/60 text-pink hover:bg-pink/10 transition-colors"
 							aria-label="Cerrar carrito"
 						>
 							<span className="text-base font-bold leading-none">✕</span>
@@ -123,8 +145,11 @@ export default function CartDrawer() {
 					</div>
 				</div>
 
-				{/* 2. Cuerpo desplazable (Items + Sugerencias) */}
-				<div className="flex-1 overflow-y-auto px-6 py-5 space-y-6">
+				{/* 2. Cuerpo desplazable (Items + Sugerencias) con scrollbar pink sin fondo blanco */}
+				<div
+					id="cart-scroll-body"
+					className="flex-1 overflow-y-auto px-6 py-5 space-y-6 overscroll-contain cart-scrollbar"
+				>
 					{cart.length === 0 ? (
 						<div className="py-16 text-center">
 							<p className="font-sans text-lg font-bold text-brown">Tu carrito está vacío</p>

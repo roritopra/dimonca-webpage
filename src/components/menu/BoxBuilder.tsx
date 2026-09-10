@@ -1,4 +1,4 @@
-﻿import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import type { Product, SelectedBoxItem } from '../../types/products';
 import { addToCart, formatCurrency } from '../../stores/cartStore';
 
@@ -170,55 +170,57 @@ export default function BoxBuilder({ boxProduct, availableCookies }: BoxBuilderP
 				</div>
 
 				{/* Lista de Galletas con Scroll Estilizado (.cart-scrollbar) */}
-				<div className="flex-1 overflow-y-auto max-h-[380px] xl:max-h-[400px] px-6 lg:px-10 py-2 cart-scrollbar">
-					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-5">
+				<div className="flex-1 overflow-y-auto max-h-[380px] xl:max-h-[420px] px-6 lg:px-10 py-2 cart-scrollbar">
+					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-5 gap-y-6">
 						{availableCookies.map((cookie) => {
 							const count = selectedCounts[cookie.id] || 0;
 							const hasExtra = !!cookie.extraPrice;
 
 							return (
-								<div key={cookie.id} className="flex items-center gap-3">
-									{/* Miniatura de la galleta */}
-									<div className="relative h-14 w-14 shrink-0 rounded-full overflow-hidden bg-white/50 border border-brown/10 flex items-center justify-center shadow-2xs">
+								<div key={cookie.id} className="flex items-center gap-2.5">
+									{/* Galleta PNG sin fondo, mucho más grande */}
+									<div className="relative h-16 w-16 xl:h-[72px] xl:w-[72px] shrink-0 flex items-center justify-center">
 										<img
 											src={cookie.imageSrc}
 											alt={cookie.name}
-											className="h-full w-full object-contain p-0.5"
+											className="h-full w-full object-contain drop-shadow-[0_4px_10px_rgba(58,32,14,0.12)] transition-transform duration-200 hover:scale-105"
 										/>
 									</div>
 
 									{/* Info + Contador */}
 									<div className="flex flex-col flex-1 min-w-0">
-										<div className="flex items-baseline gap-1">
-											<span className="font-sans text-xs font-extrabold text-brown truncate">
+										<div className="flex flex-col">
+											<span className="font-sans text-xs font-extrabold text-brown leading-tight truncate">
 												{cookie.name.replace('Galleta ', '')}
 											</span>
 											{hasExtra && (
-												<span className="text-[10px] font-bold text-pink shrink-0">
-													{cookie.extraPriceFormatted}
+												<span className="text-[11px] font-bold text-pink leading-tight">
+													(+{cookie.extraPriceFormatted})
 												</span>
 											)}
 										</div>
 
 										{/* Selector de cantidad (- 0 +) */}
-										<div className="mt-1.5 flex items-center gap-1.5">
-											<div className="flex items-center rounded-full border border-pink/40 bg-[#fff5f8] px-1.5 py-0.5 shadow-2xs">
+										<div className="mt-1.5 flex items-center">
+											<div className="inline-flex items-center gap-1.5">
 												<button
 													type="button"
 													onClick={() => handleDecrease(cookie.id)}
 													disabled={count <= 0}
-													className="flex h-5 w-5 items-center justify-center rounded-full bg-pink text-white text-xs font-bold hover:opacity-90 active:scale-90 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+													className="flex h-5 w-5 items-center justify-center rounded-full bg-pink text-white text-xs font-bold hover:opacity-90 active:scale-90 disabled:opacity-35 disabled:cursor-not-allowed cursor-pointer transition-transform"
+													aria-label={`Disminuir ${cookie.name}`}
 												>
 													−
 												</button>
-												<span className="min-w-5 text-center font-sans text-xs font-bold text-brown/80 px-1">
+												<span className="min-w-4 text-center font-sans text-xs font-extrabold text-pink">
 													{count}
 												</span>
 												<button
 													type="button"
 													onClick={() => handleIncrease(cookie.id)}
 													disabled={totalSelectedCookies >= maxCapacity}
-													className="flex h-5 w-5 items-center justify-center rounded-full bg-pink text-white text-xs font-bold hover:opacity-90 active:scale-90 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+													className="flex h-5 w-5 items-center justify-center rounded-full bg-pink text-white text-xs font-bold hover:opacity-90 active:scale-90 disabled:opacity-35 disabled:cursor-not-allowed cursor-pointer transition-transform"
+													aria-label={`Aumentar ${cookie.name}`}
 												>
 													+
 												</button>

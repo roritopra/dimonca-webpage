@@ -1,9 +1,10 @@
 ---
 import estIconBrown from '../../assets/images/shared/est-icon-brown.png';
 import estIcon from '../../assets/images/shared/est-icon.png';
+import estIconPink from '../../assets/images/shared/est-icon-pink.png';
 
 interface Props {
-  variant?: 'blue' | 'brown';
+  variant?: 'blue' | 'brown' | 'pink';
 }
 
 const { variant = 'blue' } = Astro.props;
@@ -20,9 +21,21 @@ const items = [
 const repeats = 4;
 
 const isBrown = variant === 'brown';
-const borderClass = isBrown ? 'border-brown' : 'border-blue-500';
-const textClass = isBrown ? 'text-brown' : 'text-blue-500';
-const icon = isBrown ? estIconBrown : estIcon;
+const isPink = variant === 'pink';
+
+let borderClass = 'border-blue-500';
+let textClass = 'text-blue-500';
+let icon = estIcon;
+
+if (isBrown) {
+  borderClass = 'border-brown';
+  textClass = 'text-brown';
+  icon = estIconBrown;
+} else if (isPink) {
+  borderClass = 'border-pink';
+  textClass = 'text-pink';
+  icon = estIconPink;
+}
 ---
 
 <section

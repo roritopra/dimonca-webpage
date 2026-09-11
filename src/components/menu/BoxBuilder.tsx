@@ -131,14 +131,14 @@ export default function BoxBuilder({ boxProduct, availableCookies }: BoxBuilderP
 			{/* COLUMNA IZQUIERDA: CAJA PROTAGONISTA SOBRE PATRÓN DE PUNTOS */}
 			{/* ========================================================= */}
 			<div
-				className="w-full xl:w-1/2 relative flex items-center justify-center p-8 lg:p-14 border-b xl:border-b-0 xl:border-r border-brown/15 min-h-[440px] xl:min-h-[620px] select-none overflow-hidden"
+				className="w-full xl:w-1/2 relative flex items-center justify-center p-6 sm:p-8 lg:p-10 xl:p-8 border-b xl:border-b-0 xl:border-r border-brown/15 min-h-[360px] sm:min-h-[420px] xl:min-h-[520px] select-none overflow-hidden"
 				style={{
 					backgroundImage: 'radial-gradient(circle, rgba(58, 32, 14, 0.22) 1.8px, transparent 1.8px)',
 					backgroundSize: '20px 20px',
 					backgroundColor: '#f7f2e8',
 				}}
 			>
-				<div className="relative w-full max-w-[538px] aspect-[538/387] flex items-center justify-center">
+				<div className="relative w-full max-w-[420px] sm:max-w-[480px] xl:max-w-[500px] aspect-[538/387] flex items-center justify-center">
 					{!isBoxOpen ? (
 						/* Caja Cerrada (cuando no hay ninguna galleta agregada) */
 						<img
@@ -157,27 +157,28 @@ export default function BoxBuilder({ boxProduct, availableCookies }: BoxBuilderP
 							/>
 
 							{/* Capa 2: Galletas Seleccionadas Asomándose (Z-Index 20) */}
-							<div className="absolute inset-x-0 bottom-3 h-[240px] z-20 flex items-end justify-center pointer-events-none px-6">
-								<div className="relative w-full max-w-[420px] h-full flex items-end justify-center">
+							<div className="absolute inset-x-0 bottom-[4%] h-[64%] z-20 flex items-end justify-center pointer-events-none px-[3%]">
+								<div className="relative w-full h-full flex items-end justify-center">
 									{chosenCookiesList.map((cookie, idx) => {
 										// Distribución armónica de las galletas según la cantidad dentro de la caja
 										const total = chosenCookiesList.length;
-										const spread = total === 1 ? 0 : (idx - (total - 1) / 2) * (total > 5 ? 42 : total > 3 ? 55 : 75);
-										const rotation = (idx % 2 === 0 ? 1 : -1) * ((idx + 1) * 4);
-										const yOffset = idx % 2 === 0 ? 0 : 8;
+										const step = total > 6 ? 24 : total > 3 ? 32 : 44;
+										const translateX = total === 1 ? 0 : (idx - (total - 1) / 2) * step;
+										const rotation = (idx % 2 === 0 ? 1 : -1) * ((idx + 1) * 3);
+										const yOffset = idx % 2 === 0 ? 0 : 3;
 
 										return (
 											<div
 												key={`${cookie.id}-${idx}`}
-												className="absolute bottom-6 flex items-center justify-center transition-all duration-400 ease-out animate-in fade-in zoom-in-75"
+												className="absolute bottom-[8%] w-[34%] aspect-square flex items-center justify-center transition-all duration-300 ease-out"
 												style={{
-													transform: `translateX(${spread}px) translateY(-${yOffset}px) rotate(${rotation}deg)`,
+													transform: `translateX(${translateX}%) translateY(-${yOffset}%) rotate(${rotation}deg)`,
 												}}
 											>
 												<img
 													src={cookie.imageSrc}
 													alt={cookie.name}
-													className="w-28 h-28 sm:w-32 sm:h-32 object-contain drop-shadow-[0_8px_16px_rgba(58,32,14,0.3)]"
+													className="w-full h-full object-contain drop-shadow-[0_6px_14px_rgba(58,32,14,0.3)]"
 												/>
 											</div>
 										);
@@ -190,7 +191,7 @@ export default function BoxBuilder({ boxProduct, availableCookies }: BoxBuilderP
 								src={coverBoxImg.src}
 								alt=""
 								aria-hidden="true"
-								className="absolute bottom-0 left-0 w-full h-auto object-contain z-30 pointer-events-none"
+								className="absolute bottom-0 left-0 w-full h-[25.09%] object-contain z-30 pointer-events-none"
 							/>
 						</div>
 					)}

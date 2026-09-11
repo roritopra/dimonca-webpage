@@ -1,49 +1,106 @@
-import type { Product, ProductCategory } from '../types/products';
-import { PRODUCTS } from '../data/products';
+import type { Product, ProductCategory, ProductType } from '../types/products';
+import { supabase } from './supabase';
 
-/**
- * Capa de acceso a datos de productos con firma de Supabase.
- *
- * HOY: mock en memoria (importa PRODUCTS de data/products.ts) con latencia simulada,
- * para que todo el consumo sea asincrónico igual que en producción.
- *
- * Al integrar Supabase real, solo cambia el cuerpo de cada función; el resto del
- * código (páginas, componentes, stores) ya consume esta API asincrónicamente:
- *
- *   import { createClient } from '@supabase/supabase-js';
- *   const supabase = createClient(import.meta.env.SUPABASE_URL, import.meta.env.SUPABASE_ANON_KEY);
- *   const { data, error } = await supabase.from('products').select('*').eq('available', true);
- *
- * Tabla `products` en Supabase (una fila por producto, columnas = interfaz Product):
- *   id               text  PK     'galleta-roche'
- *   name             text         'Galleta Roché'
- *   product_type     text         'single' | 'custom_box'
- *   category         text         'galletas' | 'cuchareables' | 'brownies' | 'tortas' | 'otros'
- *   category_label   text         'Galletas'
- *   price            int4         11000  (COP)
- *   price_formatted  text         '$11.000'
- *   short_desc       text
- *   full_desc        text
- *   ingredients      text[]       {Mantequilla pura, ...}     (nullable)
- *   allergens        text[]       {Gluten, Lácteos, Huevo}    (nullable)
- *   image_src        text         URL del PNG principal (obligatoria)
- *   image_hover_src  text                                     (nullable)
- *   gallery          text[]       máx. 3 fotos terciarias     (nullable, solo 'single')
- *   available        boolean
- *   box_config       jsonb?       {capacity, allowDuplicates, includesIceCream, availableItemCategory} (solo custom_box)
- */
+const PRODUCT_IMAGES_BUCKET = 'product-images';
+
+function publicImageUrl(path: string): string {
+	return supabase.storage.from(PRODUCT_IMAGES_BUCKET).getPublicUrl(path).data.publicUrl;
+}
+
+interface ProductRow {
+	id: string;
+	name: string;
+	product_type: string;
+	category: string;
+	category_label: string;
+	price: number;
+	price_formatted: string;
+	extra_price: number | null;
+	extra_price_formatted: string | null;
+	short_description: string;
+	full_description: string;
+	ingredients: string[] | null;
+	allergens: string[] | null;
+	image_src: string;
+	image_hover_src: string | null;
+	gallery: string[] | null;
+	badge: string | null;
+	badge_color: string | null;
+	rating: number | null;
+	available: boolean;
+	accent_color: string | null;
+	variant: string | null;
+	box_config: {
+		capacity: number;
+		allowDuplicates?: boolean;
+		includesIceCream?: boolean;
+		availableItemCategory: string;
+	} | null;
+}
+
+function mapProduct(row: ProductRow): Product {
+	const product: Product = {
+		id: row.id,
+		name: row.name,
+		productType: row.product_type as ProductType,
+		category: row.category as ProductCategory,
+		categoryLabel: row.category_label,
+		price: row.price,
+		priceFormatted: row.price_formatted,
+		shortDescription: row.short_description,
+		fullDescription: row.full_description,
+		ingredients: row.ingredients ?? undefined,
+		allergens: row.allergens ?? undefined,
+		imageSrc: publicImageUrl(row.image_src),
+		imageHoverSrc: row.image_hover_src ? publicImageUrl(row.image_hover_src) : undefined,
+		gallery: row.gallery?.map(publicImageUrl),
+		badge: row.badge ?? undefined,
+		badgeColor: row.badge_color ?? undefined,
+		rating: row.rating ?? undefined,
+		available: row.available,
+		accentColor: row.accent_color ?? undefined,
+		variant: (row.variant as Product['variant']) ?? undefined,
+		extraPrice: row.extra_price ?? undefined,
+		extraPriceFormatted: row.extra_price_formatted ?? undefined,
+		boxConfig: row.box_config
+			? {
+					capacity: row.box_config.capacity,
+					allowDuplicates: row.box_config.allowDuplicates,
+					includesIceCream: row.box_config.includesIceCream,
+					availableItemCategory: row.box_config.availableItemCategory as ProductCategory,
+				}
+			: undefined,
+	};
+	return product;
+}
+
 export async function getProducts(): Promise<Product[]> {
-	// Mock: simula la latencia de red de un GET
-	await new Promise((resolve) => setTimeout(resolve, 120));
-	return PRODUCTS;
+	const { data, error } = await supabase
+		.from('products')
+		.select('*')
+		.eq('available', true)
+		.order('sort_order');
+
+	if (error) {
+		console.error('[productsApi] Error al obtener productos:', error.message);
+		return [];
+	}
+
+	return (data as ProductRow[]).map(mapProduct);
 }
 
 export async function getProductsByCategory(category: ProductCategory): Promise<Product[]> {
 	const products = await getProducts();
-	return products.filter((p) => p.category === category && p.available);
+	return products.filter((p) => p.category === category);
 }
 
 export async function getProductById(id: string): Promise<Product | undefined> {
-	const products = await getProducts();
-	return products.find((p) => p.id === id);
+	const { data, error } = await supabase.from('products').select('*').eq('id', id).maybeSingle();
+
+	if (error) {
+		console.error(`[productsApi] Error al obtener el producto ${id}:`, error.message);
+		return undefined;
+	}
+
+	return data ? mapProduct(data as ProductRow) : undefined;
 }

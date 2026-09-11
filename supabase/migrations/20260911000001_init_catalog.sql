@@ -16,7 +16,7 @@ RETURNS text
 LANGUAGE sql
 IMMUTABLE
 AS $$
-  SELECT '$' || regexp_replace(amount::text, '\d(?=(\d{3})+$)', '\0.', 'g');
+  SELECT '$' || regexp_replace(amount::text, '\d(?=(\d{3})+$)', '\&.', 'g');
 $$;
 
 -- ----------------------------------------------------------------------------

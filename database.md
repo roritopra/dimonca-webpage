@@ -392,20 +392,23 @@ SELECT status, COUNT(*) FROM public.orders GROUP BY 1;
 
 | # | Archivo | Contenido | Estado |
 |---|---|---|---|
-| 1 | `supabase/migrations/20260911000001_init_catalog.sql` | `fmt_money_cop`, tablas `categories` y `products`, índices, trigger `updated_at`, RLS de lectura pública | ⬜ Pendiente |
-| 2 | `supabase/migrations/20260911000002_auth_orders.sql` | `profiles` + trigger de registro, `orders`, `order_items`, índices, RLS de pedidos | ⬜ Pendiente |
-| 3 | `supabase/migrations/20260911000003_seed_mock_data.sql` | Bucket `product-images`, 5 categorías, 12 productos, plantilla de pedido de prueba | ⬜ Pendiente |
+| 1 | `supabase/migrations/20260911000001_init_catalog.sql` | `fmt_money_cop`, tablas `categories` y `products`, índices, trigger `updated_at`, RLS de lectura pública | ✅ Ejecutada 2026-09-11 |
+| 2 | `supabase/migrations/20260911000002_auth_orders.sql` | `profiles` + trigger de registro, `orders`, `order_items`, índices, RLS de pedidos | ✅ Ejecutada 2026-09-11 |
+| 3 | `supabase/migrations/20260911000003_seed_mock_data.sql` | Bucket `product-images`, 5 categorías, 12 productos, plantilla de pedido de prueba | ✅ Ejecutada 2026-09-11 |
+| 4 | *(vía MCP)* `fix_fmt_money_cop` | Fix de `fmt_money_cop`: `\0` no es backreference válido en Postgres (se insertaba literal → `$1\0.000`); se usa `\&` (match completo). Las columnas generadas STORED no se recalculan al cambiar la función, se forzó con `UPDATE products SET price = price` | ✅ Ejecutada 2026-09-11 |
 
 > Al ejecutar cada script en Supabase, marcar la casilla ✅ aquí y anotar la fecha. Cualquier migración nueva se agrega al final con su fecha y descripción.
+
+**Verificación post-migración (2026-09-11):** 5 tablas creadas con RLS activo, 5 categorías, 12 productos (`$11.000` / `$39.000` / `(+ $2.000)` correctos), bucket `product-images` público, 0 perfiles/pedidos (normal, aún no hay usuarios).
 
 ---
 
 ## 19. Checklist post-migración
 
-- [ ] 3 scripts ejecutados en orden en el SQL Editor.
-- [ ] Table Editor muestra `categories`, `products`, `profiles`, `orders`, `order_items`.
-- [ ] `products` tiene 12 filas; `categories` 5.
-- [ ] `price_formatted` muestra `$11.000` (columnas generadas funcionando).
-- [ ] Storage → bucket `product-images` existe y es público.
-- [ ] Database → Advisors (Security + Performance) sin errores.
+- [x] 4 scripts ejecutados en orden en el SQL Editor.
+- [x] Table Editor muestra `categories`, `products`, `profiles`, `orders`, `order_items`.
+- [x] `products` tiene 12 filas; `categories` 5.
+- [x] `price_formatted` muestra `$11.000` (columnas generadas funcionando).
+- [x] Storage → bucket `product-images` existe y es público.
+- [x] Database → Advisors (Security + Performance) sin errores.
 - [ ] Autenticación: habilitar Email, Google y Apple en Authentication → Providers.

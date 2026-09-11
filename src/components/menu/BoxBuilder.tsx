@@ -171,19 +171,19 @@ export default function BoxBuilder({ boxProduct, availableCookies }: BoxBuilderP
 
 				{/* Lista de Galletas con Scroll Estilizado (.cart-scrollbar) */}
 				<div className="flex-1 overflow-y-auto max-h-[380px] xl:max-h-[420px] px-6 lg:px-10 py-2 cart-scrollbar">
-					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-5 gap-y-6">
+					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
 						{availableCookies.map((cookie) => {
 							const count = selectedCounts[cookie.id] || 0;
 							const hasExtra = !!cookie.extraPrice;
 
 							return (
 								<div key={cookie.id} className="flex items-center gap-2.5">
-									{/* Galleta PNG sin fondo, mucho más grande */}
-									<div className="relative h-16 w-16 xl:h-[72px] xl:w-[72px] shrink-0 flex items-center justify-center">
+									{/* Galleta PNG sin fondo, tamaño grande sin sombras */}
+									<div className="relative h-20 w-20 xl:h-28 xl:w-28 shrink-0 flex items-center justify-center">
 										<img
 											src={cookie.imageSrc}
 											alt={cookie.name}
-											className="h-full w-full object-contain drop-shadow-[0_4px_10px_rgba(58,32,14,0.12)] transition-transform duration-200 hover:scale-105"
+											className="h-full w-full object-contain transition-transform duration-200 hover:scale-105"
 										/>
 									</div>
 

@@ -36,62 +36,57 @@ export default function ProductDetailActions({ product }: Props) {
 	}
 
 	return (
-		<div className="flex flex-col gap-5 pt-6 border-t border-brown/15">
-			{/* Selector de Unidades */}
-			<div className="flex items-center gap-4">
-				<span className="font-sans text-sm font-bold text-brown">Cantidad:</span>
-				<div className="flex items-center rounded-full border border-brown/20 bg-white px-2 py-1 shadow-xs">
-					<button
-						type="button"
-						onClick={handleDecrease}
-						disabled={quantity <= 1}
-						className="flex h-8 w-8 items-center justify-center rounded-full text-brown/70 hover:bg-pink/10 hover:text-pink transition-colors disabled:opacity-30 disabled:hover:bg-transparent text-lg font-bold"
-						aria-label="Disminuir unidades"
-					>
-						-
-					</button>
-					<span className="min-w-10 text-center font-sans text-base font-bold text-brown">
-						{quantity}
-					</span>
-					<button
-						type="button"
-						onClick={handleIncrease}
-						className="flex h-8 w-8 items-center justify-center rounded-full text-brown/70 hover:bg-pink/10 hover:text-pink transition-colors text-lg font-bold"
-						aria-label="Aumentar unidades"
-					>
-						+
-					</button>
-				</div>
-				<span className="text-xs text-brown/60">
-					Subtotal: <strong className="text-brown">{new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(product.price * quantity).replace('COP', '$')}</strong>
+		<div className="flex flex-col gap-4">
+			{/* Selector de Unidades: píldora blanca con bordes azules según diseño final */}
+			<div className="relative flex h-12 items-center rounded-full border-2 border-blue-600 bg-white shadow-[0_3px_10px_rgba(58,32,14,0.10)]">
+				<button
+					type="button"
+					onClick={handleDecrease}
+					disabled={quantity <= 1}
+					className="absolute left-0.5 flex h-10 w-10 items-center justify-center rounded-full bg-blue-500 text-xl font-bold text-white shadow-[0_2px_8px_rgba(106,167,213,0.5)] transition-transform hover:scale-105 active:scale-95 disabled:opacity-40 disabled:hover:scale-100 cursor-pointer"
+					aria-label="Disminuir unidades"
+				>
+					&minus;
+				</button>
+				<span className="w-full text-center font-sans text-lg font-bold text-blue-600">
+					{quantity}
 				</span>
-			</div>
-
-			{/* Botones de Acción */}
-			<div className="flex flex-col sm:flex-row gap-3 pt-2">
 				<button
 					type="button"
-					onClick={handleAddToCart}
-					disabled={isAdding}
-					className="flex flex-1 items-center justify-center gap-2 rounded-full border-2 border-pink bg-white px-6 py-3.5 font-sans text-base font-bold text-pink shadow-xs transition-all hover:bg-pink hover:text-white active:scale-95 cursor-pointer"
+					onClick={handleIncrease}
+					className="absolute right-0.5 flex h-10 w-10 items-center justify-center rounded-full bg-blue-500 text-xl font-bold text-white shadow-[0_2px_8px_rgba(106,167,213,0.5)] transition-transform hover:scale-105 active:scale-95 cursor-pointer"
+					aria-label="Aumentar unidades"
 				>
-					<svg className="h-5 w-5 stroke-current stroke-2" fill="none" viewBox="0 0 24 24">
-						<path strokeLinecap="round" strokeLinejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-					</svg>
-					<span>{isAdding ? '¡Agregado!' : 'Agregar al Carrito'}</span>
-				</button>
-
-				<button
-					type="button"
-					onClick={handleBuyNow}
-					className="flex flex-1 items-center justify-center gap-2 rounded-full bg-pink px-6 py-3.5 font-sans text-base font-bold text-white shadow-md shadow-pink/25 transition-all hover:scale-[1.02] active:scale-95 cursor-pointer"
-				>
-					<span>Comprar Ahora</span>
-					<svg className="h-5 w-5 stroke-current stroke-2" fill="none" viewBox="0 0 24 24">
-						<path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-					</svg>
+					+
 				</button>
 			</div>
+
+			{/* Botón principal Comprar: píldora azul con círculo de flecha, según diseño final */}
+			<button
+				type="button"
+				onClick={handleBuyNow}
+				className="flex h-12 items-center justify-between rounded-full bg-blue-600 px-2 pl-8 font-sans text-lg font-bold text-white shadow-[0_3px_12px_rgba(106,167,213,0.45)] transition-all hover:bg-blue-500 active:scale-[0.98] cursor-pointer"
+			>
+				<span>Comprar</span>
+				<span className="flex h-8 w-8 items-center justify-center rounded-full bg-white">
+					<svg className="h-4 w-4 text-pink" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+						<path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7m0 0H8m9 0v9" />
+					</svg>
+				</span>
+			</button>
+
+			{/* Botón secundario: agregar al carrito */}
+			<button
+				type="button"
+				onClick={handleAddToCart}
+				disabled={isAdding}
+				className="flex h-11 items-center justify-center gap-2 rounded-full border-2 border-blue-600 bg-white px-6 font-sans text-base font-bold text-blue-600 transition-all hover:bg-blue-200/50 active:scale-[0.98] cursor-pointer disabled:opacity-80"
+			>
+				<svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+					<path strokeLinecap="round" strokeLinejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+				</svg>
+				<span>{isAdding ? '¡Agregado!' : 'Agregar al carrito'}</span>
+			</button>
 		</div>
 	);
 }

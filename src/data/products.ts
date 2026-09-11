@@ -167,7 +167,7 @@ export const PRODUCTS: Product[] = [
 		available: true,
 		variant: 'standard',
 		extraPrice: 2000,
-		extraPriceFormatted: '(+$2000)',
+		extraPriceFormatted: '(+ $2.000)',
 	},
 	{
 		id: 'galleta-nutella',
@@ -183,7 +183,7 @@ export const PRODUCTS: Product[] = [
 		available: true,
 		variant: 'standard',
 		extraPrice: 1000,
-		extraPriceFormatted: '(+$1000)',
+		extraPriceFormatted: '(+ $1.000)',
 	},
 
 	{

@@ -138,7 +138,7 @@ export default function BoxBuilder({ boxProduct, availableCookies }: BoxBuilderP
 					backgroundColor: '#f7f2e8',
 				}}
 			>
-				<div className="relative w-full max-w-[420px] sm:max-w-[480px] xl:max-w-[500px] aspect-[538/387] min-h-[260px] flex items-center justify-center">
+				<div className="relative w-full max-w-[420px] sm:max-w-[480px] xl:max-w-[500px] aspect-[538/387] flex items-center justify-center">
 					{/* 1. Caja Cerrada (visible cuando no hay galletas seleccionadas) */}
 					<div
 						className={`absolute inset-0 w-full h-full flex items-center justify-center transition-all duration-300 ease-out ${
@@ -323,7 +323,7 @@ export default function BoxBuilder({ boxProduct, availableCookies }: BoxBuilderP
 											</span>
 											{hasExtra && (
 												<span className="text-[11px] font-bold text-pink leading-tight">
-													(+{cookie.extraPriceFormatted})
+													{cookie.extraPriceFormatted || `(+ $${cookie.extraPrice})`}
 												</span>
 											)}
 										</div>

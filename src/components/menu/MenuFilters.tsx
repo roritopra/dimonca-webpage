@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 
 interface MenuFiltersProps {
 	activeCategory?: string;
@@ -20,11 +20,9 @@ export default function MenuFilters({
 	onCategoryChange,
 	onSearchChange,
 }: MenuFiltersProps) {
-	const [selectedCat, setSelectedCat] = useState<string>(activeCategory);
 	const [searchVal, setSearchVal] = useState<string>('');
 
 	function handleCategoryClick(id: string) {
-		setSelectedCat(id);
 		onCategoryChange?.(id);
 	}
 
@@ -65,7 +63,7 @@ export default function MenuFilters({
 			{/* 2. Píldoras / Tabs de Categorías */}
 			<div className="mt-4 sm:mt-5 flex items-center justify-start gap-2.5 sm:gap-3 overflow-x-auto pb-1 scrollbar-none">
 				{CATEGORIES.map((cat) => {
-					const isActive = selectedCat === cat.id;
+					const isActive = activeCategory === cat.id;
 
 					return (
 						<button

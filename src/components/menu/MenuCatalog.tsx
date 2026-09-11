@@ -105,8 +105,14 @@ function syncCategoryToUrl(category: string): void {
 export default function MenuCatalog() {
 	const [products, setProducts] = useState<Product[]>([]);
 	const [status, setStatus] = useState<LoadStatus>('loading');
-	const [activeCategory, setActiveCategory] = useState<string>(getInitialCategory);
+	// La categoría se inicializa SIEMPRE en 'todas' en el server (SSR/SSG) y se corrige
+	// de la URL justo después de la hidratación, evitando mismatch con el HTML prerenderizado.
+	const [activeCategory, setActiveCategory] = useState<string>('todas');
 	const [searchQuery, setSearchQuery] = useState<string>('');
+
+	useEffect(() => {
+		setActiveCategory(getInitialCategory());
+	}, []);
 
 	const loadProducts = useCallback(async () => {
 		setStatus('loading');

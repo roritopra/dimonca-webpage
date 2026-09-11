@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import { AnimatePresence, motion } from 'motion/react';
 import type { Product, SelectedBoxItem } from '../../types/products';
 import { addToCart, formatCurrency } from '../../stores/cartStore';
 
@@ -299,7 +300,7 @@ export default function BoxBuilder({ boxProduct, availableCookies }: BoxBuilderP
 				</div>
 
 				{/* Lista de Galletas con Scroll Estilizado (.cart-scrollbar) */}
-				<div className="flex-1 overflow-y-auto max-h-[380px] xl:max-h-[420px] px-4 sm:px-6 lg:px-10 py-2 cart-scrollbar">
+				<div className="flex-1 overflow-y-auto max-h-[380px] xl:max-h-[420px] px-4 sm:px-6 lg:px-10 py-2 pb-24 sm:pb-2 cart-scrollbar">
 					<div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-5">
 						{availableCookies.map((cookie) => {
 							const count = selectedCounts[cookie.id] || 0;
@@ -365,8 +366,8 @@ export default function BoxBuilder({ boxProduct, availableCookies }: BoxBuilderP
 					</div>
 				</div>
 
-				{/* Footer Fijo con Total y Botones de Acción */}
-				<div className="border-t border-brown/15 bg-[#f5efe3] px-6 lg:px-10 py-5">
+				{/* 1. Footer Desktop (visible solo desde sm: >=640px) */}
+				<div className="hidden sm:block border-t border-brown/15 bg-[#f5efe3] px-6 lg:px-10 py-5">
 					<div className="flex items-center gap-2 mb-4">
 						<span className="font-sans text-lg font-black text-brown">Total:</span>
 						<span className="font-sans text-xl font-medium text-brown">
@@ -374,12 +375,24 @@ export default function BoxBuilder({ boxProduct, availableCookies }: BoxBuilderP
 						</span>
 					</div>
 
-					<div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-						{/* Botón Añadir al carrito (primero en móvil <= 640px) */}
+					<div className="flex items-center gap-3">
+						{/* Botón Comprar */}
+						<button
+							type="button"
+							onClick={() => handleAddToCart(true)}
+							className="flex flex-1 items-center justify-center gap-2 rounded-full bg-pink py-3 px-5 font-sans text-sm lg:text-base font-bold text-white shadow-md shadow-pink/20 hover:opacity-95 active:scale-98 transition-all cursor-pointer"
+						>
+							<span>Comprar</span>
+							<span className="flex h-4 w-4 items-center justify-center rounded-full bg-white text-pink text-[10px] font-extrabold">
+								↗
+							</span>
+						</button>
+
+						{/* Botón Añadir al carrito */}
 						<button
 							type="button"
 							onClick={() => handleAddToCart(false)}
-							className="flex flex-1 items-center justify-center gap-2 rounded-full border-2 border-pink bg-transparent py-2.5 px-5 font-sans text-sm lg:text-base font-bold text-pink hover:bg-pink/10 active:scale-98 transition-all cursor-pointer order-1 sm:order-2"
+							className="flex flex-1 items-center justify-center gap-2 rounded-full border-2 border-pink bg-transparent py-2.5 px-5 font-sans text-sm lg:text-base font-bold text-pink hover:bg-pink/10 active:scale-98 transition-all cursor-pointer"
 						>
 							<span>Añadir al carrito</span>
 							<svg className="h-5 w-5 stroke-current stroke-2" fill="none" viewBox="0 0 24 24">
@@ -390,22 +403,56 @@ export default function BoxBuilder({ boxProduct, availableCookies }: BoxBuilderP
 								/>
 							</svg>
 						</button>
-
-						{/* Botón Comprar (de último en móvil <= 640px) */}
-						<button
-							type="button"
-							onClick={() => handleAddToCart(true)}
-							className="flex flex-1 items-center justify-center gap-2 rounded-full bg-pink py-3 px-5 font-sans text-sm lg:text-base font-bold text-white shadow-md shadow-pink/20 hover:opacity-95 active:scale-98 transition-all cursor-pointer order-2 sm:order-1"
-						>
-							<span>Comprar</span>
-							<span className="flex h-4 w-4 items-center justify-center rounded-full bg-white text-pink text-[10px] font-extrabold">
-								↗
-							</span>
-						</button>
 					</div>
 				</div>
 
 			</div>
+
+			{/* 2. Footer Flotante Móvil (< 640px) que acompaña siempre en el bottom al hacer scroll, animado con motion */}
+			<AnimatePresence>
+				{totalSelectedCookies > 0 && (
+					<motion.div
+						key="mobile-box-footer"
+						initial={{ y: '100%', opacity: 0 }}
+						animate={{ y: 0, opacity: 1 }}
+						exit={{ y: '100%', opacity: 0 }}
+						transition={{
+							type: 'spring',
+							damping: 25,
+							stiffness: 280,
+							mass: 0.8,
+						}}
+						className="fixed bottom-0 inset-x-0 z-[999] sm:hidden bg-[#f5efe3]/95 backdrop-blur-md border-t border-brown/20 px-5 py-3.5 shadow-[0_-8px_24px_rgba(58,32,14,0.12)]"
+					>
+						<div className="flex items-center justify-between gap-4 max-w-md mx-auto">
+							<div className="flex flex-col">
+								<span className="text-[11px] font-bold text-brown/60 uppercase tracking-wider">
+									Total ({totalSelectedCookies}/{maxCapacity})
+								</span>
+								<span className="font-sans text-lg font-black text-brown leading-tight">
+									{formatCurrency(totalPrice)}
+								</span>
+							</div>
+
+							{/* Solo botón Añadir al carrito en mobile */}
+							<button
+								type="button"
+								onClick={() => handleAddToCart(false)}
+								className="flex flex-1 items-center justify-center gap-2 rounded-full bg-pink py-3 px-5 font-sans text-sm font-bold text-white shadow-md shadow-pink/25 active:scale-95 transition-transform cursor-pointer"
+							>
+								<span>Añadir al carrito</span>
+								<svg className="h-4 w-4 stroke-current stroke-2" fill="none" viewBox="0 0 24 24">
+									<path
+										strokeLinecap="round"
+										strokeLinejoin="round"
+										d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+									/>
+								</svg>
+							</button>
+						</div>
+					</motion.div>
+				)}
+			</AnimatePresence>
 		</div>
 	);
 }

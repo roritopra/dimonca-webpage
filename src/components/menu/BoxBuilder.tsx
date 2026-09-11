@@ -74,7 +74,7 @@ export default function BoxBuilder({ boxProduct, availableCookies }: BoxBuilderP
 		}));
 	}
 
-	function handleAddToCart(isDirectBuy = false) {
+	function handleAddToCart() {
 		if (totalSelectedCookies !== maxCapacity) {
 			alert(`Por favor elige las ${maxCapacity} galletas para completar tu caja (llevas ${totalSelectedCookies}/${maxCapacity}).`);
 			return;
@@ -117,11 +117,6 @@ export default function BoxBuilder({ boxProduct, availableCookies }: BoxBuilderP
 			1,
 			selectedNames
 		);
-
-		if (isDirectBuy) {
-			alert('¡Listo para comprar! El sistema validará tu sesión con Supabase.');
-			window.location.href = '/login';
-		}
 	}
 
 	const isBoxOpen = totalSelectedCookies > 0;
@@ -376,22 +371,10 @@ export default function BoxBuilder({ boxProduct, availableCookies }: BoxBuilderP
 					</div>
 
 					<div className="flex items-center gap-3">
-						{/* Botón Comprar */}
-						<button
-							type="button"
-							onClick={() => handleAddToCart(true)}
-							className="flex flex-1 items-center justify-center gap-2 rounded-full bg-pink py-3 px-5 font-sans text-sm lg:text-base font-bold text-white shadow-md shadow-pink/20 hover:opacity-95 active:scale-98 transition-all cursor-pointer"
-						>
-							<span>Comprar</span>
-							<span className="flex h-4 w-4 items-center justify-center rounded-full bg-white text-pink text-[10px] font-extrabold">
-								↗
-							</span>
-						</button>
-
 						{/* Botón Añadir al carrito */}
 						<button
 							type="button"
-							onClick={() => handleAddToCart(false)}
+							onClick={handleAddToCart}
 							className="flex flex-1 items-center justify-center gap-2 rounded-full border-2 border-pink bg-transparent py-2.5 px-5 font-sans text-sm lg:text-base font-bold text-pink hover:bg-pink/10 active:scale-98 transition-all cursor-pointer"
 						>
 							<span>Añadir al carrito</span>
@@ -437,7 +420,7 @@ export default function BoxBuilder({ boxProduct, availableCookies }: BoxBuilderP
 							{/* Solo botón Añadir al carrito en mobile */}
 							<button
 								type="button"
-								onClick={() => handleAddToCart(false)}
+								onClick={handleAddToCart}
 								className="flex flex-1 items-center justify-center gap-2 rounded-full bg-pink py-3 px-5 font-sans text-sm font-bold text-white shadow-md shadow-pink/25 active:scale-95 transition-transform cursor-pointer"
 							>
 								<span>Añadir al carrito</span>

@@ -127,7 +127,7 @@ const firstRowProducts: Product[] = [
 							<span class="relative">{product.priceFormatted}</span>
 						</p>
 
-						<p class="mt-4 max-w-[300px] text-[13px] leading-7 text-brown/90 sm:text-sm sm:leading-[1.95]">{product.fullDescription}</p>
+						<p class="mt-4 text-[13px] leading-7 text-brown/90 sm:text-sm sm:leading-[1.95]">{product.fullDescription}</p>
 
 						<div class="mt-8 max-w-[300px]">
 							<ProductDetailActions client:load product={product} />
@@ -174,7 +174,9 @@ const firstRowProducts: Product[] = [
 
 				<!-- Columna derecha: galería de fotos del producto -->
 					{
-						gallery.length > 0 && (
+						/* Galería lateral: solo si hay más de una foto (obligatorio 1 principal en PNG + opcionales terciarias).
+						   Con una única foto no se muestra la columna derecha (se repetiría el PNG). */
+						gallery.length > 1 && (
 							<div class="order-2 flex flex-row justify-center gap-4 lg:order-3 lg:flex-col lg:gap-5">
 							{gallery.map((src, i) => (
 								<button

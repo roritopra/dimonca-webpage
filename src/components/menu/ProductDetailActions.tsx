@@ -26,15 +26,6 @@ export default function ProductDetailActions({ product }: Props) {
 		}, 600);
 	}
 
-	function handleBuyNow() {
-		addToCart(product, quantity);
-		// Mock de verificación de autenticación para pagar
-		alert(
-			'¡Listo para comprar! El sistema validará tu sesión con Supabase antes de proceder al pago.'
-		);
-		window.location.href = '/login';
-	}
-
 	return (
 		<div className="flex flex-col gap-4">
 			{/* Selector de Unidades: píldora blanca con bordes azules según diseño final */}
@@ -61,31 +52,19 @@ export default function ProductDetailActions({ product }: Props) {
 				</button>
 			</div>
 
-			{/* Botón principal Comprar: píldora azul con círculo de flecha, según diseño final */}
-			<button
-				type="button"
-				onClick={handleBuyNow}
-				className="flex h-12 items-center justify-between rounded-full bg-blue-600 px-2 pl-8 font-sans text-lg font-bold text-white shadow-[0_3px_12px_rgba(106,167,213,0.45)] transition-all hover:bg-blue-500 active:scale-[0.98] cursor-pointer"
-			>
-				<span>Comprar</span>
-				<span className="flex h-8 w-8 items-center justify-center rounded-full bg-white">
-					<svg className="h-4 w-4 text-pink" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-						<path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7m0 0H8m9 0v9" />
-					</svg>
-				</span>
-			</button>
-
-			{/* Botón secundario: agregar al carrito */}
+			{/* Botón principal: agregar al carrito */}
 			<button
 				type="button"
 				onClick={handleAddToCart}
 				disabled={isAdding}
-				className="flex h-11 items-center justify-center gap-2 rounded-full border-2 border-blue-600 bg-white px-6 font-sans text-base font-bold text-blue-600 transition-all hover:bg-blue-200/50 active:scale-[0.98] cursor-pointer disabled:opacity-80"
+				className="flex h-12 items-center justify-center gap-2 rounded-full bg-blue-600 px-6 font-sans text-lg font-bold text-white shadow-[0_3px_12px_rgba(106,167,213,0.45)] transition-all hover:bg-blue-500 active:scale-[0.98] cursor-pointer disabled:opacity-80"
 			>
-				<svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-					<path strokeLinecap="round" strokeLinejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-				</svg>
-				<span>{isAdding ? '¡Agregado!' : 'Agregar al carrito'}</span>
+				<span>Agregar al carrito</span>
+				<span className="flex h-8 w-8 items-center justify-center rounded-full bg-white">
+					<svg className="h-4 w-4 text-pink" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+						<path strokeLinecap="round" strokeLinejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+					</svg>
+				</span>
 			</button>
 		</div>
 	);

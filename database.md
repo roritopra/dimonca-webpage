@@ -360,25 +360,12 @@ SELECT status, COUNT(*) FROM public.orders GROUP BY 1;
 
 ## 17. Roadmap — tablas futuras (NO ejecutar aún)
 
-### Carrito persistente por usuario (decidido, para después)
+### Carrito persistente por usuario (✅ implementado — migración 4)
 
-```sql
--- create table public.carts (
---   id          uuid primary key default gen_random_uuid(),
---   user_id     uuid not null unique references auth.users(id) on delete cascade,
---   updated_at  timestamptz not null default now()
--- );
--- create table public.cart_items (
---   id             uuid primary key default gen_random_uuid(),
---   cart_id        uuid not null references public.carts(id) on delete cascade,
---   product_id     text not null references public.products(id) on delete cascade,
---   quantity       integer not null check (quantity > 0),
---   selected_items jsonb,          -- sabores elegidos (custom_box)
---   box_contents   jsonb,          -- snapshot de la caja armada
---   created_at     timestamptz not null default now(),
---   unique (cart_id, product_id)
--- );
-```
+- `carts`: 1 carrito por usuario (`user_id` UNIQUE, FK a `auth.users`).
+- `cart_items`: líneas del carrito con **snapshot** del producto (nombre, precio, imagen) para renderizar sin JOINs. Para cajas armadas (`custom_box`), `product_id` apunta al producto real de la caja y el contenido va en `box_contents` (jsonb) + `selected_items` (jsonb).
+- Índice único parcial: un `single` no se repite en el mismo carrito (se suma cantidad); las cajas armadas sí pueden repetirse (cada una con contenido distinto).
+- RLS: el usuario puede SELECT/INSERT/UPDATE/DELETE **solo** sobre las líneas de su propio carrito (a diferencia de `orders`, aquí gestiona libremente).
 
 ### Otros candidatos (a definir)
 
@@ -396,6 +383,7 @@ SELECT status, COUNT(*) FROM public.orders GROUP BY 1;
 | 2 | `supabase/migrations/20260911000002_auth_orders.sql` | `profiles` + trigger de registro, `orders`, `order_items`, índices, RLS de pedidos | ✅ Ejecutada 2026-09-11 |
 | 3 | `supabase/migrations/20260911000003_seed_mock_data.sql` | Bucket `product-images`, 5 categorías, 12 productos, plantilla de pedido de prueba | ✅ Ejecutada 2026-09-11 |
 | 4 | *(vía MCP)* `fix_fmt_money_cop` | Fix de `fmt_money_cop`: `\0` no es backreference válido en Postgres (se insertaba literal → `$1\0.000`); se usa `\&` (match completo). Las columnas generadas STORED no se recalculan al cambiar la función, se forzó con `UPDATE products SET price = price` | ✅ Ejecutada 2026-09-11 |
+| 5 | `supabase/migrations/20260911000004_carts.sql` | Carrito persistente: tablas `carts` y `cart_items` (con snapshot del producto y `box_contents` para cajas armadas), índice único parcial para singles, triggers, RLS con CRUD propio del usuario | ✅ Ejecutada 2026-09-11 |
 
 > Al ejecutar cada script en Supabase, marcar la casilla ✅ aquí y anotar la fecha. Cualquier migración nueva se agrega al final con su fecha y descripción.
 

@@ -137,7 +137,8 @@ export default function BoxBuilder({ boxProduct }: BoxBuilderProps) {
 				available: true,
 			},
 			1,
-			selectedNames
+			selectedNames,
+			boxContents
 		);
 	}
 

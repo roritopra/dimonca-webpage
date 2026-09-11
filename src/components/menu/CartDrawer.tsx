@@ -128,7 +128,7 @@ export default function CartDrawer() {
 				{/* 1. Header del Carrito */}
 				<div className="flex items-center justify-between px-6 py-5 border-b border-brown/10 bg-[#fbf8f2]">
 					<div className="flex items-center gap-3">
-						<div className="flex h-8 w-8 items-center justify-center rounded-lg border border-[#9accf4] p-1 text-pink">
+						<div className="flex h-8 w-8 items-center justify-center rounded-lg p-1 text-pink">
 							<svg className="h-6 w-6 stroke-current stroke-2" fill="none" viewBox="0 0 24 24">
 								<path
 									strokeLinecap="round"
@@ -145,7 +145,7 @@ export default function CartDrawer() {
 					<button
 						type="button"
 						onClick={closeCart}
-						className="flex h-8 w-8 items-center justify-center rounded-md border border-pink/60 text-pink hover:bg-pink/10 transition-colors"
+						className="flex h-8 w-8 items-center justify-center rounded-md text-pink hover:bg-pink/10 transition-colors"
 						aria-label="Cerrar carrito"
 					>
 						<span className="text-base font-bold leading-none">✕</span>
@@ -213,27 +213,21 @@ export default function CartDrawer() {
 													<button
 														type="button"
 														onClick={() => removeFromCart(item.productId)}
-														className="flex h-6 w-6 items-center justify-center rounded border border-[#9accf4] text-pink hover:bg-pink/10 transition-colors"
+														className="flex h-6 w-6 items-center justify-center rounded text-pink hover:bg-pink/10 transition-colors"
 														aria-label={`Eliminar ${item.name}`}
 													>
 														<span className="text-xs font-bold leading-none">✕</span>
 													</button>
 												</div>
 
-												{isBox ? (
+												{isBox && item.selectedItems && item.selectedItems.length > 0 ? (
 													<ul className="mt-1 space-y-0.5 text-xs text-brown/70">
-														<li className="flex items-center gap-1.5">
-															<span className="h-1 w-1 rounded-full bg-brown/50 inline-block"></span>
-															Red Velvet
-														</li>
-														<li className="flex items-center gap-1.5">
-															<span className="h-1 w-1 rounded-full bg-brown/50 inline-block"></span>
-															Pistacho
-														</li>
-														<li className="flex items-center gap-1.5">
-															<span className="h-1 w-1 rounded-full bg-brown/50 inline-block"></span>
-															Maracuyá
-														</li>
+														{item.selectedItems.map((cookieName, idx) => (
+															<li key={`${idx}-${cookieName}`} className="flex items-center gap-1.5">
+																<span className="h-1 w-1 rounded-full bg-brown/50 inline-block shrink-0"></span>
+																<span className="truncate">{cookieName}</span>
+															</li>
+														))}
 													</ul>
 												) : (
 													<p className="mt-1 text-xs text-brown/60 line-clamp-2 leading-relaxed">

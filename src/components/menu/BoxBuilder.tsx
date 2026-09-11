@@ -98,7 +98,7 @@ export default function BoxBuilder({ boxProduct, availableCookies }: BoxBuilderP
 			}
 		}
 
-		// Añadir al store persistente del carrito
+		// Añadir al store persistente del carrito con las galletas dinámicamente seleccionadas
 		addToCart(
 			{
 				id: `${boxProduct.id}-${Date.now()}`,
@@ -113,7 +113,8 @@ export default function BoxBuilder({ boxProduct, availableCookies }: BoxBuilderP
 				imageSrc: boxProduct.imageSrc,
 				available: true,
 			},
-			1
+			1,
+			selectedNames
 		);
 
 		if (isDirectBuy) {
@@ -298,16 +299,19 @@ export default function BoxBuilder({ boxProduct, availableCookies }: BoxBuilderP
 				</div>
 
 				{/* Lista de Galletas con Scroll Estilizado (.cart-scrollbar) */}
-				<div className="flex-1 overflow-y-auto max-h-[380px] xl:max-h-[420px] px-6 lg:px-10 py-2 cart-scrollbar">
-					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+				<div className="flex-1 overflow-y-auto max-h-[380px] xl:max-h-[420px] px-4 sm:px-6 lg:px-10 py-2 cart-scrollbar">
+					<div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-5">
 						{availableCookies.map((cookie) => {
 							const count = selectedCounts[cookie.id] || 0;
 							const hasExtra = !!cookie.extraPrice;
 
 							return (
-								<div key={cookie.id} className="flex items-center gap-2.5">
-									{/* Galleta PNG sin fondo, tamaño grande sin sombras */}
-									<div className="relative h-20 w-20 xl:h-28 xl:w-28 shrink-0 flex items-center justify-center">
+								<div
+									key={cookie.id}
+									className="flex flex-col sm:flex-row items-center justify-between bg-white sm:bg-transparent rounded-3xl sm:rounded-none p-3.5 sm:p-0 shadow-[0_4px_16px_rgba(58,32,14,0.05)] sm:shadow-none border border-brown/5 sm:border-0 min-h-[220px] sm:min-h-0 sm:gap-2.5 transition-all"
+								>
+									{/* Imagen de la Galleta */}
+									<div className="relative h-24 w-24 sm:h-28 sm:w-28 xl:h-28 xl:w-28 shrink-0 flex items-center justify-center my-1 sm:my-0">
 										<img
 											src={cookie.imageSrc}
 											alt={cookie.name}
@@ -315,39 +319,39 @@ export default function BoxBuilder({ boxProduct, availableCookies }: BoxBuilderP
 										/>
 									</div>
 
-									{/* Info + Contador */}
-									<div className="flex flex-col flex-1 min-w-0">
-										<div className="flex flex-col">
-											<span className="font-sans text-xs font-extrabold text-brown leading-tight truncate">
+									{/* Info + Contador (Centrado vertical en mobile, flex-between pegado abajo) */}
+									<div className="flex flex-col flex-1 w-full sm:w-auto items-center sm:items-start justify-between sm:justify-start min-w-0 mt-2 sm:mt-0 text-center sm:text-left">
+										<div className="flex flex-col items-center sm:items-start">
+											<span className="font-sans text-sm sm:text-xs xl:text-sm font-extrabold text-brown leading-tight truncate max-w-full">
 												{cookie.name.replace('Galleta ', '')}
 											</span>
 											{hasExtra && (
-												<span className="text-[11px] font-bold text-pink leading-tight">
+												<span className="text-[12px] sm:text-[11px] font-bold text-pink leading-tight mt-0.5">
 													{cookie.extraPriceFormatted || `(+ $${cookie.extraPrice})`}
 												</span>
 											)}
 										</div>
 
-										{/* Selector de cantidad (- 0 +) */}
-										<div className="mt-1.5 flex items-center">
-											<div className="inline-flex items-center gap-1.5">
+										{/* Selector de cantidad (- 0 +) (Siempre pegado abajo en móvil) */}
+										<div className="mt-3 sm:mt-1.5 flex items-center justify-center sm:justify-start w-full">
+											<div className="inline-flex items-center gap-3 sm:gap-1.5">
 												<button
 													type="button"
 													onClick={() => handleDecrease(cookie.id)}
 													disabled={count <= 0}
-													className="flex h-5 w-5 items-center justify-center rounded-full bg-pink text-white text-xs font-bold hover:opacity-90 active:scale-90 disabled:opacity-35 disabled:cursor-not-allowed cursor-pointer transition-transform"
+													className="flex h-7 w-7 sm:h-5 sm:w-5 xl:h-6 xl:w-6 items-center justify-center rounded-full bg-pink text-white text-sm sm:text-xs font-bold hover:opacity-90 active:scale-90 disabled:opacity-35 disabled:cursor-not-allowed cursor-pointer transition-transform shadow-xs sm:shadow-none"
 													aria-label={`Disminuir ${cookie.name}`}
 												>
 													−
 												</button>
-												<span className="min-w-4 text-center font-sans text-xs font-extrabold text-pink">
+												<span className="min-w-5 sm:min-w-4 text-center font-sans text-sm sm:text-xs xl:text-sm font-extrabold text-pink">
 													{count}
 												</span>
 												<button
 													type="button"
 													onClick={() => handleIncrease(cookie.id)}
 													disabled={totalSelectedCookies >= maxCapacity}
-													className="flex h-5 w-5 items-center justify-center rounded-full bg-pink text-white text-xs font-bold hover:opacity-90 active:scale-90 disabled:opacity-35 disabled:cursor-not-allowed cursor-pointer transition-transform"
+													className="flex h-7 w-7 sm:h-5 sm:w-5 xl:h-6 xl:w-6 items-center justify-center rounded-full bg-pink text-white text-sm sm:text-xs font-bold hover:opacity-90 active:scale-90 disabled:opacity-35 disabled:cursor-not-allowed cursor-pointer transition-transform shadow-xs sm:shadow-none"
 													aria-label={`Aumentar ${cookie.name}`}
 												>
 													+
@@ -365,29 +369,17 @@ export default function BoxBuilder({ boxProduct, availableCookies }: BoxBuilderP
 				<div className="border-t border-brown/15 bg-[#f5efe3] px-6 lg:px-10 py-5">
 					<div className="flex items-center gap-2 mb-4">
 						<span className="font-sans text-lg font-black text-brown">Total:</span>
-						<span className="font-sans text-xl font-black text-brown">
+						<span className="font-sans text-xl font-medium text-brown">
 							{formatCurrency(totalPrice)}
 						</span>
 					</div>
 
-					<div className="flex items-center gap-3">
-						{/* Botón Comprar */}
-						<button
-							type="button"
-							onClick={() => handleAddToCart(true)}
-							className="flex flex-1 items-center justify-center gap-2 rounded-full bg-pink py-3 px-5 font-sans text-sm lg:text-base font-bold text-white shadow-md shadow-pink/20 hover:opacity-95 active:scale-98 transition-all cursor-pointer"
-						>
-							<span>Comprar</span>
-							<span className="flex h-4 w-4 items-center justify-center rounded-full bg-white text-pink text-[10px] font-extrabold">
-								↗
-							</span>
-						</button>
-
-						{/* Botón Añadir al carrito */}
+					<div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+						{/* Botón Añadir al carrito (primero en móvil <= 640px) */}
 						<button
 							type="button"
 							onClick={() => handleAddToCart(false)}
-							className="flex flex-1 items-center justify-center gap-2 rounded-full border-2 border-pink bg-transparent py-2.5 px-5 font-sans text-sm lg:text-base font-bold text-pink hover:bg-pink/10 active:scale-98 transition-all cursor-pointer"
+							className="flex flex-1 items-center justify-center gap-2 rounded-full border-2 border-pink bg-transparent py-2.5 px-5 font-sans text-sm lg:text-base font-bold text-pink hover:bg-pink/10 active:scale-98 transition-all cursor-pointer order-1 sm:order-2"
 						>
 							<span>Añadir al carrito</span>
 							<svg className="h-5 w-5 stroke-current stroke-2" fill="none" viewBox="0 0 24 24">
@@ -397,6 +389,18 @@ export default function BoxBuilder({ boxProduct, availableCookies }: BoxBuilderP
 									d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
 								/>
 							</svg>
+						</button>
+
+						{/* Botón Comprar (de último en móvil <= 640px) */}
+						<button
+							type="button"
+							onClick={() => handleAddToCart(true)}
+							className="flex flex-1 items-center justify-center gap-2 rounded-full bg-pink py-3 px-5 font-sans text-sm lg:text-base font-bold text-white shadow-md shadow-pink/20 hover:opacity-95 active:scale-98 transition-all cursor-pointer order-2 sm:order-1"
+						>
+							<span>Comprar</span>
+							<span className="flex h-4 w-4 items-center justify-center rounded-full bg-white text-pink text-[10px] font-extrabold">
+								↗
+							</span>
 						</button>
 					</div>
 				</div>

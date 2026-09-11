@@ -42,13 +42,16 @@ export function toggleCart(): void {
 	$isCartOpen.set(!$isCartOpen.get());
 }
 
-export function addToCart(product: Product, quantity = 1): void {
+export function addToCart(product: Product, quantity = 1, selectedItems?: string[]): void {
 	const current = $cart.get();
 	const existingIndex = current.findIndex((item) => item.productId === product.id);
 
 	if (existingIndex > -1) {
 		const updated = [...current];
 		updated[existingIndex].quantity += quantity;
+		if (selectedItems && selectedItems.length > 0) {
+			updated[existingIndex].selectedItems = selectedItems;
+		}
 		$cart.set(updated);
 	} else {
 		const newItem: CartItem = {
@@ -60,7 +63,7 @@ export function addToCart(product: Product, quantity = 1): void {
 			imageSrc: product.imageSrc,
 			quantity,
 			shortDescription: product.shortDescription,
-			selectedItems: product.id.includes('caja') ? ['Red Velvet', 'Pistacho', 'Maracuyá'] : undefined,
+			selectedItems: selectedItems && selectedItems.length > 0 ? selectedItems : undefined,
 		};
 		$cart.set([...current, newItem]);
 	}

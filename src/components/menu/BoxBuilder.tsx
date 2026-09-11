@@ -181,8 +181,48 @@ export default function BoxBuilder({ boxProduct, availableCookies }: BoxBuilderP
 						<div className="absolute inset-x-0 bottom-[2%] top-[6%] z-20 overflow-hidden pointer-events-none px-[3%] flex items-end justify-center">
 							<div className="relative w-full h-[70%] flex items-end justify-center">
 								{chosenCookiesList.map((cookie, idx) => {
+									const isNineBox = maxCapacity > 3;
+
+									if (isNineBox) {
+										// Distribución de 2 filas para la caja de 9:
+										// Primeras 5 galletas (idx 0..4): Fila delantera (abajo, z-Index mayor 25)
+										// Siguientes 4 galletas (idx 5..8): Fila trasera (arriba/medio, detrás de la primera fila z-Index 21)
+										const isBackRow = idx >= 5;
+										const rowIndex = isBackRow ? idx - 5 : idx;
+										const rowTotal = isBackRow ? Math.min(4, chosenCookiesList.length - 5) : Math.min(5, chosenCookiesList.length);
+
+										const step = 23;
+										const translateX = rowTotal === 1 ? 0 : (rowIndex - (rowTotal - 1) / 2) * step;
+										const rotation = (idx % 2 === 0 ? 1 : -1) * ((rowIndex + 1) * 2.5);
+
+										// Fila trasera está elevada aproximadamente a la mitad (unos píxeles más abajo para quedar en la mitad justa) y con z-Index menor
+										const bottomPos = isBackRow ? 33 : 10;
+										const zIndex = isBackRow ? 21 : 25;
+										const cookieWidth = 34;
+
+										return (
+											<div
+												key={`cookie-slot-${idx}-${cookie.id}`}
+												className="absolute aspect-square flex items-center justify-center transition-all duration-300 ease-out animate-in fade-in slide-in-from-bottom-6"
+												style={{
+													bottom: `${bottomPos}%`,
+													width: `${cookieWidth}%`,
+													zIndex,
+													transform: `translateX(${translateX}%) rotate(${rotation}deg)`,
+												}}
+											>
+												<img
+													src={cookie.imageSrc}
+													alt={cookie.name}
+													className="w-full h-full object-contain drop-shadow-[0_6px_14px_rgba(58,32,14,0.3)]"
+												/>
+											</div>
+										);
+									}
+
+									// Caja normal (ej: x3): Fila única centrada
 									const total = chosenCookiesList.length;
-									const step = total > 6 ? 24 : total > 3 ? 32 : 44;
+									const step = 44;
 									const translateX = total === 1 ? 0 : (idx - (total - 1) / 2) * step;
 									const rotation = (idx % 2 === 0 ? 1 : -1) * ((idx + 1) * 3);
 									const yOffset = idx % 2 === 0 ? 0 : 3;
@@ -190,7 +230,7 @@ export default function BoxBuilder({ boxProduct, availableCookies }: BoxBuilderP
 									return (
 										<div
 											key={`cookie-slot-${idx}-${cookie.id}`}
-											className="absolute bottom-[10%] w-[34%] aspect-square flex items-center justify-center transition-all duration-300 ease-out animate-in fade-in slide-in-from-bottom-6"
+											className="absolute bottom-[10%] w-[34%] aspect-square flex items-center justify-center transition-all duration-300 ease-out animate-in fade-in slide-in-from-bottom-6 z-25"
 											style={{
 												transform: `translateX(${translateX}%) translateY(-${yOffset}%) rotate(${rotation}deg)`,
 											}}

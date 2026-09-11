@@ -1,5 +1,4 @@
 import React, { useState, useMemo } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
 import type { Product, SelectedBoxItem } from '../../types/products';
 import { addToCart, formatCurrency } from '../../stores/cartStore';
 
@@ -140,34 +139,28 @@ export default function BoxBuilder({ boxProduct, availableCookies }: BoxBuilderP
 				}}
 			>
 				<div className="relative w-full max-w-[420px] sm:max-w-[480px] xl:max-w-[500px] aspect-[538/387] flex items-center justify-center">
-					{/* 1. Caja Cerrada con crossfade rápido y simultáneo */}
-					<motion.div
-						initial={false}
-						animate={{
-							opacity: !isBoxOpen ? 1 : 0,
-							scale: !isBoxOpen ? 1 : 0.98,
-							pointerEvents: !isBoxOpen ? 'auto' : 'none',
-						}}
-						transition={{ duration: 0.22, ease: 'easeOut' }}
-						className="absolute inset-0 w-full h-full flex items-center justify-center"
+					{/* 1. Caja Cerrada (visible cuando no hay galletas seleccionadas) */}
+					<div
+						className={`absolute inset-0 w-full h-full flex items-center justify-center transition-all duration-300 ease-out ${
+							!isBoxOpen
+								? 'opacity-100 scale-100 pointer-events-auto'
+								: 'opacity-0 scale-98 pointer-events-none'
+						}`}
 					>
 						<img
 							src={closedBoxImg.src}
 							alt="Caja cerrada de Dimonca"
 							className="w-full h-full object-contain drop-shadow-[0_20px_32px_rgba(58,32,14,0.18)]"
 						/>
-					</motion.div>
+					</div>
 
-					{/* 2. Caja Abierta con Galletas que emergen limpiamente sin traspasar el cover */}
-					<motion.div
-						initial={false}
-						animate={{
-							opacity: isBoxOpen ? 1 : 0,
-							scale: isBoxOpen ? 1 : 1.01,
-							pointerEvents: isBoxOpen ? 'auto' : 'none',
-						}}
-						transition={{ duration: 0.22, ease: 'easeOut' }}
-						className="absolute inset-0 w-full h-full"
+					{/* 2. Caja Abierta (visible cuando hay al menos 1 galleta seleccionada) */}
+					<div
+						className={`absolute inset-0 w-full h-full transition-all duration-300 ease-out ${
+							isBoxOpen
+								? 'opacity-100 scale-100 pointer-events-auto'
+								: 'opacity-0 scale-98 pointer-events-none'
+						}`}
 					>
 						{/* Capa 1: Fondo de la Caja Abierta (Z-Index 10) */}
 						<img
@@ -176,47 +169,32 @@ export default function BoxBuilder({ boxProduct, availableCookies }: BoxBuilderP
 							className="absolute inset-0 w-full h-full object-contain z-10 drop-shadow-[0_20px_32px_rgba(58,32,14,0.18)] pointer-events-none"
 						/>
 
-						{/* Capa 2: Galletas Seleccionadas - recortadas exactamente en el límite inferior de la caja */}
+						{/* Capa 2: Galletas Seleccionadas - contenidas arriba de la base de la caja con overflow-hidden abajo */}
 						<div className="absolute inset-x-0 bottom-[2%] top-[6%] z-20 overflow-hidden pointer-events-none px-[3%] flex items-end justify-center">
 							<div className="relative w-full h-[70%] flex items-end justify-center">
-								<AnimatePresence>
-									{chosenCookiesList.map((cookie, idx) => {
-										const total = chosenCookiesList.length;
-										const step = total > 6 ? 24 : total > 3 ? 32 : 44;
-										const translateX = total === 1 ? 0 : (idx - (total - 1) / 2) * step;
-										const rotation = (idx % 2 === 0 ? 1 : -1) * ((idx + 1) * 3);
-										const yOffset = idx % 2 === 0 ? 0 : 3;
+								{chosenCookiesList.map((cookie, idx) => {
+									const total = chosenCookiesList.length;
+									const step = total > 6 ? 24 : total > 3 ? 32 : 44;
+									const translateX = total === 1 ? 0 : (idx - (total - 1) / 2) * step;
+									const rotation = (idx % 2 === 0 ? 1 : -1) * ((idx + 1) * 3);
+									const yOffset = idx % 2 === 0 ? 0 : 3;
 
-										return (
-											<motion.div
-												key={`cookie-slot-${idx}-${cookie.id}`}
-												layout
-												initial={{ y: '32%', opacity: 0, scale: 0.88 }}
-												animate={{
-													x: `${translateX}%`,
-													y: `-${yOffset}%`,
-													rotate: rotation,
-													opacity: 1,
-													scale: 1,
-												}}
-												exit={{ y: '32%', opacity: 0, scale: 0.85 }}
-												transition={{
-													layout: { type: 'spring', stiffness: 380, damping: 30 },
-													y: { duration: 0.28, ease: [0.22, 1, 0.36, 1] },
-													opacity: { duration: 0.18 },
-													scale: { duration: 0.22 },
-												}}
-												className="absolute bottom-[10%] w-[34%] aspect-square flex items-center justify-center"
-											>
-												<img
-													src={cookie.imageSrc}
-													alt={cookie.name}
-													className="w-full h-full object-contain drop-shadow-[0_6px_14px_rgba(58,32,14,0.3)]"
-												/>
-											</motion.div>
-										);
-									})}
-								</AnimatePresence>
+									return (
+										<div
+											key={`cookie-slot-${idx}-${cookie.id}`}
+											className="absolute bottom-[10%] w-[34%] aspect-square flex items-center justify-center transition-all duration-300 ease-out animate-in fade-in slide-in-from-bottom-6"
+											style={{
+												transform: `translateX(${translateX}%) translateY(-${yOffset}%) rotate(${rotation}deg)`,
+											}}
+										>
+											<img
+												src={cookie.imageSrc}
+												alt={cookie.name}
+												className="w-full h-full object-contain drop-shadow-[0_6px_14px_rgba(58,32,14,0.3)]"
+											/>
+										</div>
+									);
+								})}
 							</div>
 						</div>
 
@@ -227,7 +205,7 @@ export default function BoxBuilder({ boxProduct, availableCookies }: BoxBuilderP
 							aria-hidden="true"
 							className="absolute bottom-0 left-0 w-full h-[25.09%] object-contain z-30 pointer-events-none"
 						/>
-					</motion.div>
+					</div>
 				</div>
 			</div>
 
@@ -254,6 +232,7 @@ export default function BoxBuilder({ boxProduct, availableCookies }: BoxBuilderP
 						{/* Botón X de volver al menú */}
 						<a
 							href="/menu"
+							data-astro-reload
 							className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-brown/60 hover:text-pink shadow-xs border border-brown/10 transition-colors"
 							aria-label="Cerrar y volver al menú"
 						>

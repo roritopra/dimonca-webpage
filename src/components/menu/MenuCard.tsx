@@ -72,6 +72,7 @@ export default function MenuCard({ product }: MenuCardProps) {
 
 						<a
 							href={`/menu/caja/${product.id}`}
+							data-astro-reload
 							className="flex items-center gap-1.5 rounded-full bg-pink px-4 sm:px-5 py-1.5 sm:py-2 text-xs sm:text-sm font-bold text-white shadow-xs transition-transform hover:scale-105 active:scale-95 no-underline cursor-pointer"
 						>
 							<span>Ver más</span>

@@ -138,8 +138,9 @@ export default function CartDrawer() {
 			/>
 
 			{/* Panel lateral */}
+			{/* Panel lateral */}
 			<aside
-				className={`fixed inset-y-0 right-0 z-10 flex w-full max-w-[500px] sm:max-w-[540px] flex-col bg-[#f7f3eb] text-brown shadow-2xl transition-transform duration-300 ease-out overscroll-contain touch-auto ${
+				className={`fixed inset-y-0 right-0 z-10 flex w-full max-w-[500px] sm:max-w-[580px] lg:max-w-[640px] flex-col bg-[#f7f3eb] text-brown shadow-2xl transition-transform duration-300 ease-out overscroll-contain touch-auto ${
 					isOpen ? 'translate-x-0' : 'translate-x-full'
 				}`}
 				onWheel={(e) => e.stopPropagation()}
@@ -212,71 +213,88 @@ export default function CartDrawer() {
 									return (
 										<div
 											key={item.productId}
-											className="relative flex items-center gap-4 bg-transparent pb-4"
+											className="relative flex items-center gap-4 sm:gap-6 bg-transparent pb-5 border-b border-brown/10 last:border-b-0"
 										>
-											{/* Marco de Imagen Cuadrado compacto con borde rosa suave */}
-											<div className="relative h-20 w-20 sm:h-22 sm:w-22 shrink-0 rounded-2xl border border-pink/60 bg-[#faf6f0] p-1.5 flex items-center justify-center overflow-hidden shadow-2xs">
+											{/* Marco de Imagen Cuadrado con borde rosa suave (escalado para desktop) */}
+											<div className="relative h-24 w-24 sm:h-36 sm:w-36 md:h-40 md:w-40 shrink-0 rounded-2xl sm:rounded-3xl border-2 border-pink/60 bg-[#faf6f0] p-2 sm:p-3 flex items-center justify-center overflow-hidden shadow-xs">
 												<img
 													src={item.imageSrc}
 													alt={item.name}
-													className="max-h-full max-w-full object-contain drop-shadow-xs"
+													className="max-h-full max-w-full object-contain drop-shadow-xs transition-transform duration-300 hover:scale-105"
 												/>
 											</div>
 
 											{/* Detalles del Ítem */}
-											<div className="flex flex-1 flex-col justify-between self-stretch py-0.5">
-												<div className="flex items-start justify-between">
-													<h3 className="font-sans text-base font-extrabold text-brown leading-tight">
+											<div className="flex flex-1 flex-col justify-between self-stretch py-1">
+												<div className="flex items-start justify-between gap-2">
+													<h3 className="font-sans text-base sm:text-xl font-extrabold text-brown leading-snug">
 														{item.name}
 													</h3>
 													<button
 														type="button"
 														onClick={() => removeFromCart(item.productId)}
-														className="flex h-6 w-6 items-center justify-center rounded text-pink hover:bg-pink/10 transition-colors"
+														className="flex h-8 w-8 items-center justify-center rounded-full text-pink hover:bg-pink/10 transition-colors cursor-pointer shrink-0"
 														aria-label={`Eliminar ${item.name}`}
+														title="Eliminar producto"
 													>
-														<span className="text-xs font-bold leading-none">✕</span>
+														<svg className="h-5 w-5 fill-none stroke-current stroke-2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round">
+															<polyline points="3 6 5 6 21 6"></polyline>
+															<path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+															<line x1="10" y1="11" x2="10" y2="17"></line>
+															<line x1="14" y1="11" x2="14" y2="17"></line>
+														</svg>
 													</button>
 												</div>
 
 												{isBox && item.selectedItems && item.selectedItems.length > 0 ? (
-													<ul className="mt-1 space-y-0.5 text-xs text-brown/70">
+													<ul className="mt-1.5 space-y-1 text-xs sm:text-sm text-brown/70">
 														{item.selectedItems.map((cookieName, idx) => (
-															<li key={`${idx}-${cookieName}`} className="flex items-center gap-1.5">
-																<span className="h-1 w-1 rounded-full bg-brown/50 inline-block shrink-0"></span>
+															<li key={`${idx}-${cookieName}`} className="flex items-center gap-2">
+																<span className="h-1.5 w-1.5 rounded-full bg-brown/50 inline-block shrink-0"></span>
 																<span className="truncate">{cookieName}</span>
 															</li>
 														))}
 													</ul>
 												) : (
-													<p className="mt-1 text-xs text-brown/60 line-clamp-2 leading-relaxed">
+													<p className="mt-1.5 text-xs sm:text-sm text-brown/65 line-clamp-2 leading-relaxed">
 														{item.shortDescription ||
 															'El postre que nos transporta a la infancia en cada bocado...'}
 													</p>
 												)}
 
-												<div className="mt-2.5 flex items-center justify-between">
-													<div className="flex items-center rounded-full border border-pink/40 bg-[#fff5f8] px-2 py-0.5 shadow-2xs">
+												<div className="mt-3 sm:mt-4 flex items-center justify-between gap-3">
+													{/* Píldora de Cantidad (-  qty  +) */}
+													<div className="flex items-center rounded-full border border-pink/40 bg-[#fff5f8] px-2.5 py-1 sm:py-1.5 shadow-2xs">
 														<button
 															type="button"
 															onClick={() => updateQuantity(item.productId, -1)}
-															className="flex h-5 w-5 items-center justify-center rounded-full bg-pink text-white text-xs font-bold hover:opacity-90 active:scale-90 cursor-pointer"
+															className="flex h-6 w-6 sm:h-7 sm:w-7 items-center justify-center rounded-full bg-pink text-white text-xs sm:text-sm font-bold hover:opacity-90 active:scale-90 cursor-pointer"
+															aria-label={item.quantity === 1 ? `Eliminar ${item.name}` : `Restar 1 unidad de ${item.name}`}
+															title={item.quantity === 1 ? 'Eliminar del carrito' : 'Restar 1'}
 														>
-															−
+															{item.quantity === 1 ? (
+																<svg className="h-3.5 w-3.5 fill-none stroke-current stroke-2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round">
+																	<polyline points="3 6 5 6 21 6"></polyline>
+																	<path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+																</svg>
+															) : (
+																<span>−</span>
+															)}
 														</button>
-														<span className="min-w-6 text-center font-sans text-xs font-bold text-brown/75">
+														<span className="min-w-8 text-center font-sans text-xs sm:text-sm font-bold text-brown/75">
 															{item.quantity}
 														</span>
 														<button
 															type="button"
 															onClick={() => updateQuantity(item.productId, 1)}
-															className="flex h-5 w-5 items-center justify-center rounded-full bg-pink text-white text-xs font-bold hover:opacity-90 active:scale-90 cursor-pointer"
+															className="flex h-6 w-6 sm:h-7 sm:w-7 items-center justify-center rounded-full bg-pink text-white text-xs sm:text-sm font-bold hover:opacity-90 active:scale-90 cursor-pointer"
+															aria-label={`Añadir 1 unidad de ${item.name}`}
 														>
 															+
 														</button>
 													</div>
 
-													<span className="font-sans text-base font-extrabold text-pink">
+													<span className="font-sans text-base sm:text-xl font-extrabold text-pink">
 														{formatCurrency(item.price * item.quantity)}
 													</span>
 												</div>
@@ -335,9 +353,17 @@ export default function CartDrawer() {
 																}}
 																disabled={itemQty <= 0}
 																className="flex h-5 w-5 sm:h-6 sm:w-6 items-center justify-center rounded-full bg-pink text-white transition-all hover:opacity-90 active:scale-90 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
-																aria-label={`Restar 1 unidad de ${upsell.name}`}
+																aria-label={itemQty === 1 ? `Eliminar ${upsell.name}` : `Restar 1 unidad de ${upsell.name}`}
+																title={itemQty === 1 ? 'Eliminar del carrito' : 'Restar 1'}
 															>
-																<span className="text-xs sm:text-sm font-extrabold leading-none">−</span>
+																{itemQty === 1 ? (
+																	<svg className="h-3 w-3 fill-none stroke-current stroke-2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round">
+																		<polyline points="3 6 5 6 21 6"></polyline>
+																		<path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+																	</svg>
+																) : (
+																	<span className="text-xs sm:text-sm font-extrabold leading-none">−</span>
+																)}
 															</button>
 
 															<span className="font-sans text-[11px] sm:text-xs font-semibold text-brown/70 select-none">

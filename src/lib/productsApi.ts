@@ -83,7 +83,7 @@ export async function getProducts(): Promise<Product[]> {
 
 	if (error) {
 		console.error('[productsApi] Error al obtener productos:', error.message);
-		return [];
+		throw new Error(`No se pudieron cargar los productos: ${error.message}`);
 	}
 
 	return (data as ProductRow[]).map(mapProduct);
@@ -103,4 +103,22 @@ export async function getProductById(id: string): Promise<Product | undefined> {
 	}
 
 	return data ? mapProduct(data as ProductRow) : undefined;
+}
+
+// Galletas armables para las cajas custom: productos single de categoría 'galletas'
+export async function getAvailableCookies(): Promise<Product[]> {
+	const { data, error } = await supabase
+		.from('products')
+		.select('*')
+		.eq('available', true)
+		.eq('product_type', 'single')
+		.eq('category', 'galletas')
+		.order('sort_order');
+
+	if (error) {
+		console.error('[productsApi] Error al obtener las galletas armables:', error.message);
+		throw new Error(`No se pudieron cargar las galletas: ${error.message}`);
+	}
+
+	return (data as ProductRow[]).map(mapProduct);
 }

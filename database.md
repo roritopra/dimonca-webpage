@@ -245,7 +245,7 @@ Bucket **`product-images`** (público, creado por la migración 3).
 | `boxes/` | PNG de las cajas/combos | `boxes/arma-tu-caja-x3.png` |
 | `gallery/` | Fotos terciarias (galería, máx. 3 por producto) | `gallery/galleta-roche-foto-1.png` |
 
-> ⚠️ Antes de conectar el front a Supabase, subir los PNG de `src/assets/images/menu/products/` al bucket con **exactamente** esos nombres (la migración 3 inserta las rutas que espera). Nota: el mock usa `product2.png` para Nutella; en el bucket Nutella tendrá su propio archivo `single/galleta-nutella.png`.
+> ✅ **Imágenes subidas (2026-09-11):** los 15 archivos del catálogo ya están en el bucket (9 `single/` + 3 `boxes/` + 3 `gallery/`), verificados con URLs públicas 200. La subida se hizo vía Storage API con una política temporal de INSERT para `anon` que fue **eliminada** al terminar — el bucket sigue siendo solo de lectura pública. Las imágenes de la interacción del BoxBuilder (caja abierta/cerrada) **no** se suben: viven como assets estáticos del front. Nota: el mock usa `product2.png` para Nutella; en el bucket Nutella tiene su propio archivo `single/galleta-nutella.png` (misma imagen).
 
 ---
 

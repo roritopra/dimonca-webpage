@@ -4,28 +4,25 @@ import Navbar from '../../../components/common/Navbar.astro';
 import Footer from '../../../components/common/Footer.astro';
 import CarruselScroll from '../../../components/common/CarruselScroll.astro';
 import BoxBuilder from '../../../components/menu/BoxBuilder';
-import { PRODUCTS, getAvailableCookies } from '../../../data/products';
+import { PRODUCTS } from '../../../data/products';
 import type { Product } from '../../../types/products';
 
 export function getStaticPaths() {
 	const boxProducts = PRODUCTS.filter((p) => p.productType === 'custom_box');
-	const availableCookies = PRODUCTS.filter((p) => p.productType === 'single' && p.category === 'galletas');
 
 	return boxProducts.map((product) => ({
 		params: { id: product.id },
 		props: {
 			product,
-			availableCookies,
 		},
 	}));
 }
 
 interface Props {
 	product: Product;
-	availableCookies: Product[];
 }
 
-const { product, availableCookies } = Astro.props;
+const { product } = Astro.props;
 
 if (!product || product.productType !== 'custom_box') {
 	return Astro.redirect('/menu');
@@ -37,7 +34,7 @@ if (!product || product.productType !== 'custom_box') {
 
 	<main id="main-content" class="bg-beige p-0 m-0">
 		{/* Experiencia de Armado de Caja (Mitad Izquierda: Caja con fondo punteado | Mitad Derecha: Galletas y Footer) */}
-		<BoxBuilder client:load key={product.id} boxProduct={product} availableCookies={availableCookies} />
+		<BoxBuilder client:load key={product.id} boxProduct={product} />
 
 		{/* Carrusel de cinta con movimiento infinito en rosado */}
 		<CarruselScroll variant="pink" />

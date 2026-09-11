@@ -1,20 +1,42 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import type { Product, SelectedBoxItem } from '../../types/products';
 import { addToCart, formatCurrency } from '../../stores/cartStore';
+import { getAvailableCookies } from '../../lib/productsApi';
 
 import closedBoxImg from '../../assets/images/menu/box-page/closed-box.png';
 import openedBoxImg from '../../assets/images/menu/box-page/opened-box.png';
 import coverBoxImg from '../../assets/images/menu/box-page/cover-box.png';
 
+type CookieLoadStatus = 'loading' | 'ready' | 'error';
+
 interface BoxBuilderProps {
 	boxProduct: Product;
-	availableCookies: Product[];
 }
 
-export default function BoxBuilder({ boxProduct, availableCookies }: BoxBuilderProps) {
+export default function BoxBuilder({ boxProduct }: BoxBuilderProps) {
 	const maxCapacity = boxProduct.boxConfig?.capacity || 3;
 	const basePrice = boxProduct.price;
+
+	// GET de galletas armables desde Supabase (solo single + categoría 'galletas')
+	const [availableCookies, setAvailableCookies] = useState<Product[]>([]);
+	const [cookieStatus, setCookieStatus] = useState<CookieLoadStatus>('loading');
+
+	const loadCookies = useCallback(async () => {
+		setCookieStatus('loading');
+		try {
+			const data = await getAvailableCookies();
+			setAvailableCookies(data);
+			setCookieStatus('ready');
+		} catch (err) {
+			console.error('[BoxBuilder] Error al cargar las galletas:', err);
+			setCookieStatus('error');
+		}
+	}, []);
+
+	useEffect(() => {
+		loadCookies();
+	}, [loadCookies]);
 
 	// Estado: mapa de id de galleta -> cantidad seleccionada
 	const [selectedCounts, setSelectedCounts] = useState<Record<string, number>>({});
@@ -296,8 +318,65 @@ export default function BoxBuilder({ boxProduct, availableCookies }: BoxBuilderP
 
 				{/* Lista de Galletas con Scroll Estilizado (.cart-scrollbar) */}
 				<div className="flex-1 overflow-y-auto max-h-[380px] xl:max-h-[420px] px-4 sm:px-6 lg:px-10 py-2 pb-24 sm:pb-2 cart-scrollbar">
-					<div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-5">
-						{availableCookies.map((cookie) => {
+					{cookieStatus === 'loading' ? (
+						/* Skeleton: imita las tarjetas de galleta mientras carga el GET */
+						<div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-5" aria-hidden="true">
+							{Array.from({ length: 6 }).map((_, i) => (
+								<div
+									key={`cookie-skeleton-${i}`}
+									className="flex flex-col sm:flex-row items-center justify-between bg-white sm:bg-transparent rounded-3xl sm:rounded-none p-3.5 sm:p-0 shadow-[0_4px_16px_rgba(58,32,14,0.05)] sm:shadow-none border border-brown/5 sm:border-0 min-h-[220px] sm:min-h-0 sm:gap-2.5"
+								>
+									<div className="h-24 w-24 sm:h-28 sm:w-28 shrink-0 animate-pulse rounded-2xl bg-pink/15 sm:bg-pink/10" />
+									<div className="flex flex-col flex-1 w-full sm:w-auto items-center sm:items-start gap-2 mt-2 sm:mt-0">
+										<div className="h-4 w-3/4 animate-pulse rounded-full bg-pink/15" />
+										<div className="h-7 w-24 animate-pulse rounded-full bg-pink/15 sm:mt-1" />
+									</div>
+								</div>
+							))}
+						</div>
+					) : cookieStatus === 'error' ? (
+						/* Estado de error con reintento */
+						<div className="flex flex-col items-center gap-4 py-12 text-center">
+							<div className="flex h-12 w-12 items-center justify-center rounded-full bg-pink/10">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									strokeWidth="2"
+									strokeLinecap="round"
+									strokeLinejoin="round"
+									className="h-6 w-6 text-pink"
+									aria-hidden="true"
+								>
+									<path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3" />
+									<path d="M12 9v4" />
+									<path d="M12 17h.01" />
+								</svg>
+							</div>
+							<div>
+								<p className="font-sans text-base font-bold text-brown">Ups, algo salió mal</p>
+								<p className="mt-1 font-sans text-sm text-brown/70">
+									No pudimos cargar las galletas para tu caja.
+								</p>
+							</div>
+							<button
+								type="button"
+								onClick={loadCookies}
+								className="rounded-full bg-pink px-6 py-2.5 font-sans text-sm font-bold text-white shadow-xs transition-transform hover:scale-105 active:scale-95 cursor-pointer"
+							>
+								Reintentar
+							</button>
+						</div>
+					) : availableCookies.length === 0 ? (
+						<div className="py-12 text-center">
+							<p className="font-sans text-base font-semibold text-brown/70">
+								No hay galletas disponibles por ahora.
+							</p>
+						</div>
+					) : (
+						<div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-5">
+							{availableCookies.map((cookie) => {
 							const count = selectedCounts[cookie.id] || 0;
 							const hasExtra = !!cookie.extraPrice;
 
@@ -357,8 +436,9 @@ export default function BoxBuilder({ boxProduct, availableCookies }: BoxBuilderP
 									</div>
 								</div>
 							);
-						})}
-					</div>
+							})}
+						</div>
+					)}
 				</div>
 
 				{/* 1. Footer Desktop (visible solo desde sm: >=640px) */}

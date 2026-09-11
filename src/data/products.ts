@@ -10,10 +10,15 @@ import product6 from '../assets/images/menu/products/product-6.png';
 import product7 from '../assets/images/menu/products/product-7.png';
 import product8 from '../assets/images/menu/products/product-8.png';
 
-// Especiales / Premiums
+// Imágenes especiales / Premium
 import productSpecial1 from '../assets/images/menu/products/product-special-1.png';
 import productSpecial2 from '../assets/images/menu/products/product-special-2.png';
 import productSpecial3 from '../assets/images/menu/products/product-special-3.png';
+
+// Galería de fotos terciarias (mock de Figma, por ahora solo Galleta Roché)
+import rocheFoto1 from '../assets/images/menu/products/roche-foto-1.png';
+import rocheFoto2 from '../assets/images/menu/products/roche-foto-2.png';
+import rocheFoto3 from '../assets/images/menu/products/roche-foto-3.png';
 
 export const CATEGORIES: CategoryInfo[] = [
 	{
@@ -74,6 +79,7 @@ export const PRODUCTS: Product[] = [
 		ingredients: ['Avellanas tostadas', 'Crema de cacao y avellanas', 'Chocolate de leche', 'Mantequilla fresca'],
 		allergens: ['Frutos secos (avellanas)', 'Gluten', 'Lácteos', 'Huevo'],
 		imageSrc: product2.src,
+		gallery: [rocheFoto1.src, rocheFoto2.src, rocheFoto3.src],
 		available: true,
 		variant: 'standard',
 	},

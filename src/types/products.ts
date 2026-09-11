@@ -29,6 +29,10 @@ export interface Product {
 	allergens?: string[];
 	imageSrc: string;
 	imageHoverSrc?: string;
+	// Galería de fotos terciarias (opcional, solo productos normales/single, máximo 3).
+	// Se muestran como miniaturas a la derecha; al seleccionarlas rellenan la estrella completa
+	// con una máscara, reemplazando al producto PNG principal.
+	gallery?: string[];
 	badge?: string;
 	badgeColor?: string;
 	rating?: number;

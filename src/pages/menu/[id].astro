@@ -1,4 +1,4 @@
-﻿---
+---
 import Layout from '../../layouts/Layout.astro';
 import Navbar from '../../components/common/Navbar.astro';
 import Footer from '../../components/common/Footer.astro';
@@ -105,23 +105,24 @@ const firstRowProducts: Product[] = [
 							viewBox="0 0 438.648 437.279"
 							fill="none"
 							xmlns="http://www.w3.org/2000/svg"
-							class="h-auto w-full drop-shadow-[0_18px_30px_rgba(58,32,14,0.18)]"
+							class="pd-layer pd-principal-layer h-auto w-full drop-shadow-[0_18px_30px_rgba(58,32,14,0.18)]"
 							role="presentation"
 						>
 							<path fill={theme.star} d="M202.121 15.5555C204.213 -5.18518 234.436 -5.18517 236.528 15.5555C238.296 33.0823 262.076 37.0505 269.439 21.0475C278.153 2.10993 306.738 11.9233 301.982 32.2195C297.964 49.3707 319.167 60.8454 331.327 48.1003C345.718 33.018 369.568 51.5812 358.48 69.2336C349.11 84.1506 365.438 101.888 381.078 93.7823C399.586 84.1897 416.116 109.491 399.897 122.587C386.191 133.653 395.876 155.732 413.3 153.143C433.92 150.08 441.339 179.378 421.747 186.498C405.19 192.514 407.181 216.541 424.502 219.75C444.999 223.548 442.504 253.668 421.661 254.04C404.048 254.355 398.13 277.726 413.47 286.386C431.623 296.633 419.483 324.31 399.649 317.895C382.888 312.473 369.701 332.657 381.399 345.828C395.241 361.415 374.772 383.65 358.096 371.142C344.003 360.573 324.978 375.381 331.765 391.637C339.796 410.873 313.216 425.258 301.504 408.013C291.608 393.44 268.805 401.268 269.946 418.847C271.296 439.649 241.485 444.624 236.008 424.51C231.379 407.513 207.27 407.513 202.641 424.51C197.163 444.624 167.353 439.649 168.703 418.847C169.844 401.268 147.041 393.44 137.144 408.013C125.433 425.258 98.8525 410.873 106.884 391.637C113.671 375.381 94.6452 360.573 80.5529 371.142C63.8765 383.65 43.4072 361.415 57.2496 345.828C68.947 332.657 55.7605 312.473 38.9997 317.895C19.1655 324.31 7.02517 296.633 25.1785 286.386C40.5189 277.726 34.6004 254.355 16.9875 254.04C-3.85512 253.668 -6.3509 223.548 14.1462 219.75C31.4671 216.541 33.458 192.514 16.9015 186.498C-2.69087 179.378 4.72837 150.08 25.348 153.143C42.7725 155.732 52.4571 133.653 38.7512 122.587C22.5322 109.491 39.0625 84.1897 57.5702 93.7823C73.2101 101.888 89.5388 84.1506 80.1688 69.2336C69.0807 51.5812 92.9307 33.018 107.321 48.1003C119.481 60.8454 140.685 49.3707 136.666 32.2195C131.91 11.9233 160.496 2.10994 169.209 21.0475C176.572 37.0505 200.353 33.0823 202.121 15.5555Z"></path>
 						</svg>
-						<!-- Foto terciaria: la estrella se convierte en la imagen usando la estrella como máscara CSS -->
+						<!-- Foto terciaria: la estrella se convierte en la imagen usando la estrella como máscara CSS. -->
+						<!-- Ambas capas SIEMPRE renderizadas (patrón de BoxBuilder: crossfade con opacity, nunca display:none) -->
 						<img
 							id="pd-star-photo"
 							alt={product.name}
-							class="absolute inset-0 hidden h-full w-full object-cover"
-							style="-webkit-mask-image:url('/images/menu/product-detail/star-flower.svg');mask-image:url('/images/menu/product-detail/star-flower.svg');-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-size:100% 100%;mask-size:100% 100%;-webkit-mask-position:center;mask-position:center;"
+							src={gallery[1] ?? ''}
+							class="pd-layer pd-photo-layer pd-layer-hidden pd-star-mask absolute inset-0 h-full w-full object-cover"
 						/>
 						<img
 							id="pd-main-image"
 							src={gallery[0]}
 							alt={product.name}
-							class="absolute inset-0 m-auto h-[90%] w-[90%] object-contain drop-shadow-[0_12px_18px_rgba(58,32,14,0.25)] transition-transform duration-300"
+							class="pd-layer pd-principal-layer absolute inset-0 m-auto h-[90%] w-[90%] object-contain drop-shadow-[0_12px_18px_rgba(58,32,14,0.25)] transition-transform duration-300"
 							width="440"
 							height="440"
 						/>
@@ -184,9 +185,7 @@ const firstRowProducts: Product[] = [
 		if (!thumb) return;
 
 		// Solo actúa en páginas que tienen la galería del detalle
-		const mainImage = document.getElementById('pd-main-image') as HTMLImageElement | null;
-		const starShape = document.getElementById('pd-star-shape');
-		const starPhoto = document.getElementById('pd-star-photo') as HTMLImageElement | null;
+		const mainImage = document.getElementById('pd-main-image');
 		if (!mainImage) return;
 
 		const img = thumb.querySelector('img');
@@ -198,19 +197,44 @@ const firstRowProducts: Product[] = [
 			t.classList.toggle('outline-white', t === thumb);
 		});
 
+		const principalLayers = [...document.querySelectorAll<HTMLElement>('.pd-principal-layer')];
+		const photoLayer = document.querySelector<HTMLElement>('.pd-photo-layer');
+
 		if (thumbs.indexOf(thumb) === 0) {
 			// Imagen principal: PNG del producto sobre la estrella festoneada
-			mainImage.classList.remove('hidden');
-			starShape?.classList.remove('hidden');
-			starPhoto?.classList.add('hidden');
+			principalLayers.forEach((el) => el.classList.remove('pd-layer-hidden'));
+			photoLayer?.classList.add('pd-layer-hidden');
 		} else {
 			// Foto terciaria: la imagen llena toda la forma de la estrella vía máscara CSS
-			mainImage.classList.add('hidden');
-			starShape?.classList.add('hidden');
-			if (starPhoto) {
-				starPhoto.src = img.src;
-				starPhoto.classList.remove('hidden');
+			principalLayers.forEach((el) => el.classList.add('pd-layer-hidden'));
+			if (photoLayer) {
+				photoLayer.src = img.src;
+				photoLayer.classList.remove('pd-layer-hidden');
 			}
 		}
 	});
 </script>
+
+<style is:global>
+	pd-star-mask,
+  .pd-star-mask {
+    -webkit-mask-image: url('data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjQzOC42NDgiIGhlaWdodD0iNDM3LjI3OSIgdmlld0JveD0iMCAwIDQzOC42NDggNDM3LjI3OSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9IlN0YXIgMiIgZD0iTTIwMi4xMjEgMTUuNTU1NUMyMDQuMjEzIC01LjE4NTE4IDIzNC40MzYgLTUuMTg1MTcgMjM2LjUyOCAxNS41NTU1VjE1LjU1NTVDMjM4LjI5NiAzMy4wODIzIDI2Mi4wNzYgMzcuMDUwNSAyNjkuNDM5IDIxLjA0NzVWMjEuMDQ3NUMyNzguMTUzIDIuMTA5OTMgMzA2LjczOCAxMS45MjMzIDMwMS45ODIgMzIuMjE5NVYzMi4yMTk1QzI5Ny45NjQgNDkuMzcwNyAzMTkuMTY3IDYwLjg0NTQgMzMxLjMyNyA0OC4xMDAzVjQ4LjEwMDNDMzQ1LjcxOCAzMy4wMTggMzY5LjU2OCA1MS41ODEyIDM1OC40OCA2OS4yMzM2VjY5LjIzMzZDMzQ5LjExIDg0LjE1MDYgMzY1LjQzOCAxMDEuODg4IDM4MS4wNzggOTMuNzgyM1Y5My43ODIzQzM5OS41ODYgODQuMTg5NyA0MTYuMTE2IDEwOS40OTEgMzk5Ljg5NyAxMjIuNTg3VjEyMi41ODdDMzg2LjE5MSAxMzMuNjUzIDM5NS44NzYgMTU1LjczMiA0MTMuMyAxNTMuMTQzVjE1My4xNDNDNDMzLjkyIDE1MC4wOCA0NDEuMzM5IDE3OS4zNzggNDIxLjc0NyAxODYuNDk4VjE4Ni40OThDNDA1LjE5IDE5Mi41MTQgNDA3LjE4MSAyMTYuNTQxIDQyNC41MDIgMjE5Ljc1VjIxOS43NUM0NDQuOTk5IDIyMy41NDggNDQyLjUwNCAyNTMuNjY4IDQyMS42NjEgMjU0LjA0VjI1NC4wNEM0MDQuMDQ4IDI1NC4zNTUgMzk4LjEzIDI3Ny43MjYgNDEzLjQ3IDI4Ni4zODZWMjg2LjM4NkM0MzEuNjIzIDI5Ni42MzMgNDE5LjQ4MyAzMjQuMzEgMzk5LjY0OSAzMTcuODk1VjMxNy44OTVDMzgyLjg4OCAzMTIuNDczIDM2OS43MDEgMzMyLjY1NyAzODEuMzk5IDM0NS44MjhWMzQ1LjgyOEMzOTUuMjQxIDM2MS40MTUgMzc0Ljc3MiAzODMuNjUgMzU4LjA5NiAzNzEuMTQyVjM3MS4xNDJDMzQ0LjAwMyAzNjAuNTczIDMyNC45NzggMzc1LjM4MSAzMzEuNzY1IDM5MS42MzdWMzkxLjYzN0MzMzkuNzk2IDQxMC44NzMgMzEzLjIxNiA0MjUuMjU4IDMwMS41MDQgNDA4LjAxM1Y0MDguMDEzQzI5MS42MDggMzkzLjQ0IDI2OC44MDUgNDAxLjI2OCAyNjkuOTQ2IDQxOC44NDdWNDE4Ljg0N0MyNzEuMjk2IDQzOS42NDkgMjQxLjQ4NSA0NDQuNjI0IDIzNi4wMDggNDI0LjUxVjQyNC41MUMyMzEuMzc5IDQwNy41MTMgMjA3LjI3IDQwNy41MTMgMjAyLjY0MSA0MjQuNTFWNDI0LjUxQzE5Ny4xNjMgNDQ0LjYyNCAxNjcuMzUzIDQzOS42NDkgMTY4LjcwMyA0MTguODQ3VjQxOC44NDdDMTY5Ljg0NCA0MDEuMjY4IDE0Ny4wNDEgMzkzLjQ0IDEzNy4xNDQgNDA4LjAxM1Y0MDguMDEzQzEyNS40MzMgNDI1LjI1OCA5OC44NTI1IDQxMC44NzMgMTA2Ljg4NCAzOTEuNjM3VjM5MS42MzdDMTEzLjY3MSAzNzUuMzgxIDk0LjY0NTIgMzYwLjU3MyA4MC41NTI5IDM3MS4xNDJWMzcxLjE0MkM2My44NzY1IDM4My42NSA0My40MDcyIDM2MS40MTUgNTcuMjQ5NiAzNDUuODI4VjM0NS44MjhDNjguOTQ3IDMzMi42NTcgNTUuNzYwNSAzMTIuNDczIDM4Ljk5OTcgMzE3Ljg5NVYzMTcuODk1QzE5LjE2NTUgMzI0LjMxIDcuMDI1MTcgMjk2LjYzMyAyNS4xNzg1IDI4Ni4zODZWMjg2LjM4NkM0MC41MTg5IDI3Ny43MjYgMzQuNjAwNCAyNTQuMzU1IDE2Ljk4NzUgMjU0LjA0VjI1NC4wNEMtMy44NTUxMiAyNTMuNjY4IC02LjM1MDkgMjIzLjU0OCAxNC4xNDYyIDIxOS43NVYyMTkuNzVDMzEuNDY3MSAyMTYuNTQxIDMzLjQ1OCAxOTIuNTE0IDE2LjkwMTUgMTg2LjQ5OFYxODYuNDk4Qy0yLjY5MDg3IDE3OS4zNzggNC43MjgzNyAxNTAuMDggMjUuMzQ4IDE1My4xNDNWMTUzLjE0M0M0Mi43NzI1IDE1NS43MzIgNTIuNDU3MSAxMzMuNjUzIDM4Ljc1MTIgMTIyLjU4N1YxMjIuNTg3QzIyLjUzMjIgMTA5LjQ5MSAzOS4wNjI1IDg0LjE4OTcgNTcuNTcwMiA5My43ODIzVjkzLjc4MjNDNzMuMjEwMSAxMDEuODg4IDg5LjUzODggODQuMTUwNiA4MC4xNjg4IDY5LjIzMzZWNjkuMjMzNkM2OS4wODA3IDUxLjU4MTIgOTIuOTMwNyAzMy4wMTggMTA3LjMyMSA0OC4xMDAzVjQ4LjEwMDNDMTE5LjQ4MSA2MC44NDU0IDE0MC42ODUgNDkuMzcwNyAxMzYuNjY2IDMyLjIxOTVWMzIuMjE5NUMxMzEuOTEgMTEuOTIzMyAxNjAuNDk2IDIuMTA5OTQgMTY5LjIwOSAyMS4wNDc1VjIxLjA0NzVDMTc2LjU3MiAzNy4wNTA1IDIwMC4zNTMgMzMuMDgyMyAyMDIuMTIxIDE1LjU1NTVWMTUuNTU1NVoiIGZpbGw9IiM5QUNDRjQiLz4KPC9zdmc+Cg==');
+    mask-image: url('data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjQzOC42NDgiIGhlaWdodD0iNDM3LjI3OSIgdmlld0JveD0iMCAwIDQzOC42NDggNDM3LjI3OSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggaWQ9IlN0YXIgMiIgZD0iTTIwMi4xMjEgMTUuNTU1NUMyMDQuMjEzIC01LjE4NTE4IDIzNC40MzYgLTUuMTg1MTcgMjM2LjUyOCAxNS41NTU1VjE1LjU1NTVDMjM4LjI5NiAzMy4wODIzIDI2Mi4wNzYgMzcuMDUwNSAyNjkuNDM5IDIxLjA0NzVWMjEuMDQ3NUMyNzguMTUzIDIuMTA5OTMgMzA2LjczOCAxMS45MjMzIDMwMS45ODIgMzIuMjE5NVYzMi4yMTk1QzI5Ny45NjQgNDkuMzcwNyAzMTkuMTY3IDYwLjg0NTQgMzMxLjMyNyA0OC4xMDAzVjQ4LjEwMDNDMzQ1LjcxOCAzMy4wMTggMzY5LjU2OCA1MS41ODEyIDM1OC40OCA2OS4yMzM2VjY5LjIzMzZDMzQ5LjExIDg0LjE1MDYgMzY1LjQzOCAxMDEuODg4IDM4MS4wNzggOTMuNzgyM1Y5My43ODIzQzM5OS41ODYgODQuMTg5NyA0MTYuMTE2IDEwOS40OTEgMzk5Ljg5NyAxMjIuNTg3VjEyMi41ODdDMzg2LjE5MSAxMzMuNjUzIDM5NS44NzYgMTU1LjczMiA0MTMuMyAxNTMuMTQzVjE1My4xNDNDNDMzLjkyIDE1MC4wOCA0NDEuMzM5IDE3OS4zNzggNDIxLjc0NyAxODYuNDk4VjE4Ni40OThDNDA1LjE5IDE5Mi41MTQgNDA3LjE4MSAyMTYuNTQxIDQyNC41MDIgMjE5Ljc1VjIxOS43NUM0NDQuOTk5IDIyMy41NDggNDQyLjUwNCAyNTMuNjY4IDQyMS42NjEgMjU0LjA0VjI1NC4wNEM0MDQuMDQ4IDI1NC4zNTUgMzk4LjEzIDI3Ny43MjYgNDEzLjQ3IDI4Ni4zODZWMjg2LjM4NkM0MzEuNjIzIDI5Ni42MzMgNDE5LjQ4MyAzMjQuMzEgMzk5LjY0OSAzMTcuODk1VjMxNy44OTVDMzgyLjg4OCAzMTIuNDczIDM2OS43MDEgMzMyLjY1NyAzODEuMzk5IDM0NS44MjhWMzQ1LjgyOEMzOTUuMjQxIDM2MS40MTUgMzc0Ljc3MiAzODMuNjUgMzU4LjA5NiAzNzEuMTQyVjM3MS4xNDJDMzQ0LjAwMyAzNjAuNTczIDMyNC45NzggMzc1LjM4MSAzMzEuNzY1IDM5MS42MzdWMzkxLjYzN0MzMzkuNzk2IDQxMC44NzMgMzEzLjIxNiA0MjUuMjU4IDMwMS41MDQgNDA4LjAxM1Y0MDguMDEzQzI5MS42MDggMzkzLjQ0IDI2OC44MDUgNDAxLjI2OCAyNjkuOTQ2IDQxOC44NDdWNDE4Ljg0N0MyNzEuMjk2IDQzOS42NDkgMjQxLjQ4NSA0NDQuNjI0IDIzNi4wMDggNDI0LjUxVjQyNC41MUMyMzEuMzc5IDQwNy41MTMgMjA3LjI3IDQwNy41MTMgMjAyLjY0MSA0MjQuNTFWNDI0LjUxQzE5Ny4xNjMgNDQ0LjYyNCAxNjcuMzUzIDQzOS42NDkgMTY4LjcwMyA0MTguODQ3VjQxOC44NDdDMTY5Ljg0NCA0MDEuMjY4IDE0Ny4wNDEgMzkzLjQ0IDEzNy4xNDQgNDA4LjAxM1Y0MDguMDEzQzEyNS40MzMgNDI1LjI1OCA5OC44NTI1IDQxMC44NzMgMTA2Ljg4NCAzOTEuNjM3VjM5MS42MzdDMTEzLjY3MSAzNzUuMzgxIDk0LjY0NTIgMzYwLjU3MyA4MC41NTI5IDM3MS4xNDJWMzcxLjE0MkM2My44NzY1IDM4My42NSA0My40MDcyIDM2MS40MTUgNTcuMjQ5NiAzNDUuODI4VjM0NS44MjhDNjguOTQ3IDMzMi42NTcgNTUuNzYwNSAzMTIuNDczIDM4Ljk5OTcgMzE3Ljg5NVYzMTcuODk1QzE5LjE2NTUgMzI0LjMxIDcuMDI1MTcgMjk2LjYzMyAyNS4xNzg1IDI4Ni4zODZWMjg2LjM4NkM0MC41MTg5IDI3Ny43MjYgMzQuNjAwNCAyNTQuMzU1IDE2Ljk4NzUgMjU0LjA0VjI1NC4wNEMtMy44NTUxMiAyNTMuNjY4IC02LjM1MDkgMjIzLjU0OCAxNC4xNDYyIDIxOS43NVYyMTkuNzVDMzEuNDY3MSAyMTYuNTQxIDMzLjQ1OCAxOTIuNTE0IDE2LjkwMTUgMTg2LjQ5OFYxODYuNDk4Qy0yLjY5MDg3IDE3OS4zNzggNC43MjgzNyAxNTAuMDggMjUuMzQ4IDE1My4xNDNWMTUzLjE0M0M0Mi43NzI1IDE1NS43MzIgNTIuNDU3MSAxMzMuNjUzIDM4Ljc1MTIgMTIyLjU4N1YxMjIuNTg3QzIyLjUzMjIgMTA5LjQ5MSAzOS4wNjI1IDg0LjE4OTcgNTcuNTcwMiA5My43ODIzVjkzLjc4MjNDNzMuMjEwMSAxMDEuODg4IDg5LjUzODggODQuMTUwNiA4MC4xNjg4IDY5LjIzMzZWNjkuMjMzNkM2OS4wODA3IDUxLjU4MTIgOTIuOTMwNyAzMy4wMTggMTA3LjMyMSA0OC4xMDAzVjQ4LjEwMDNDMTE5LjQ4MSA2MC44NDU0IDE0MC42ODUgNDkuMzcwNyAxMzYuNjY2IDMyLjIxOTVWMzIuMjE5NUMxMzEuOTEgMTEuOTIzMyAxNjAuNDk2IDIuMTA5OTQgMTY5LjIwOSAyMS4wNDc1VjIxLjA0NzVDMTc2LjU3MiAzNy4wNTA1IDIwMC4zNTMgMzMuMDgyMyAyMDIuMTIxIDE1LjU1NTVWMTUuNTU1NVoiIGZpbGw9IiM5QUNDRjQiLz4KPC9zdmc+Cg==');
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-size: 100% 100%;
+    mask-size: 100% 100%;
+    -webkit-mask-position: center;
+    mask-position: center;
+  }
+
+  .pd-layer {
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+  }
+
+  .pd-layer-hidden {
+    opacity: 0 !important;
+    transform: scale(0.98);
+    pointer-events: none;
+  }
+</style>

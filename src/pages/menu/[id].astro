@@ -2,9 +2,11 @@
 import Layout from '../../layouts/Layout.astro';
 import Navbar from '../../components/common/Navbar.astro';
 import Footer from '../../components/common/Footer.astro';
+import CarruselScroll from '../../components/common/CarruselScroll.astro';
 import ProductDetailActions from '../../components/menu/ProductDetailActions';
+import MenuCard from '../../components/menu/MenuCard';
 import { PRODUCTS } from '../../data/products';
-import type { ProductCategory } from '../../types/products';
+import type { Product, ProductCategory } from '../../types/products';
 
 export function getStaticPaths() {
 	// Solo productos normales / individuales
@@ -39,7 +41,14 @@ const gallery = [product.imageSrc, product.imageHoverSrc].filter(Boolean) as str
 
 const polkaBgStyle = `background-color:${theme.bg};background-image:radial-gradient(${theme.dot} 9%, transparent 10%),radial-gradient(${theme.dot} 9%, transparent 10%);background-position:0 0,32px 32px;background-size:64px 64px;`;
 
-const relatedProducts = PRODUCTS.filter((p) => p.id !== product.id && p.productType === 'single').slice(0, 3);
+// Primera fila del menú en galletas, tal cual está en /menu: caramelo salado, roché, arma tu caja x3, klim y maracuyá
+const firstRowProducts: Product[] = [
+	PRODUCTS.find((p) => p.id === 'galleta-caramelo-salado'),
+	PRODUCTS.find((p) => p.id === 'galleta-roche'),
+	PRODUCTS.find((p) => p.id === 'combo-arma-tu-caja-x3'),
+	PRODUCTS.find((p) => p.id === 'galleta-klim'),
+	PRODUCTS.find((p) => p.id === 'galleta-maracuya'),
+].filter((p): p is Product => Boolean(p));
 ---
 
 <Layout>
@@ -119,48 +128,22 @@ const relatedProducts = PRODUCTS.filter((p) => p.id !== product.id && p.productT
 			</div>
 		</section>
 
-		{
-			relatedProducts.length > 0 && (
-				<section class="bg-beige py-16">
-					<div class="mx-auto max-w-6xl px-6">
-						<div class="mb-8 text-center">
-							<h2 class="font-sans text-2xl font-extrabold text-brown sm:text-3xl">
-								También te puede gustar
-							</h2>
-							<p class="font-script text-2xl text-pink">el maridaje perfecto</p>
-						</div>
+		<!-- Carrusel de cinta en rosado: conectado sin espaciado con la sección del producto -->
+		<CarruselScroll variant="pink" />
 
-						<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
-							{relatedProducts.map((rel) => (
-								<a
-									href={`/menu/${rel.id}`}
-									class="group flex flex-col rounded-3xl border border-brown/10 bg-white p-5 shadow-[0_4px_20px_rgba(58,32,14,0.06)] transition-all hover:-translate-y-1 hover:shadow-lg"
-								>
-									<div class="flex h-44 items-center justify-center rounded-2xl bg-beige/50 p-4">
-										<img
-											src={rel.imageSrc}
-											alt={rel.name}
-											class="h-full object-contain transition-transform group-hover:scale-105"
-										/>
-									</div>
-									<div class="mt-4">
-										<span class="text-[11px] font-semibold uppercase tracking-wider text-pink">
-											{rel.categoryLabel}
-										</span>
-										<h3 class="font-sans text-base font-bold text-brown group-hover:text-pink transition-colors">
-											{rel.name}
-										</h3>
-										<span class="mt-1 block font-sans text-base font-bold text-brown">
-											{rel.priceFormatted}
-										</span>
-									</div>
-								</a>
-							))}
-						</div>
-					</div>
-				</section>
-			)
-		}
+		<!-- Más sabores para ti: primera fila del menú en galletas (reutiliza MenuCard) -->
+		<section class="bg-beige pt-8 sm:pt-10 pb-20">
+			<div class="mx-auto w-full max-w-[1400px] px-4 sm:px-6">
+				<h2 class="font-sans text-2xl font-extrabold text-brown sm:text-3xl">Más sabores para ti</h2>
+				<div class="mt-5 sm:mt-6 grid grid-cols-2 gap-3.5 sm:grid-cols-4 sm:gap-5 lg:grid-cols-6">
+					{
+						firstRowProducts.map((rel: Product) => (
+							<MenuCard client:visible product={rel} />
+						))
+					}
+				</div>
+			</div>
+		</section>
 	</main>
 
 	<Footer />

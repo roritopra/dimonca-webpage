@@ -1,5 +1,6 @@
 import React from 'react';
-import MenuCard, { type ProductItem } from './MenuCard';
+import MenuCard from './MenuCard';
+import type { Product } from '../../types/products';
 
 import carameloSaladoImg from '../../assets/images/menu/home/galleta-item-banner-3.png';
 import rocheImg from '../../assets/images/menu/home/galleta-item-banner-4.png';
@@ -11,7 +12,7 @@ import redVelvetImg from '../../assets/images/menu/home/galleta-item-banner-2.pn
 import pistachoImg from '../../assets/images/menu/home/galleta-item-banner-6.png';
 import cajaImg from '../../assets/images/home/combos/caja.png';
 
-const MOCK_PRODUCTS: ProductItem[] = [
+const MOCK_PRODUCTS: Product[] = [
 	// Fila 1
 	{
 		id: 'galleta-caramelo-salado',

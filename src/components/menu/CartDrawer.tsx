@@ -303,12 +303,12 @@ export default function CartDrawer() {
 												key={upsell.id}
 												className="flex flex-col justify-between rounded-[22px] sm:rounded-[26px] border border-pink/60 bg-beige overflow-hidden pb-3 shadow-[0_2px_10px_rgba(58,32,14,0.04)] hover:shadow-[0_6px_16px_rgba(58,32,14,0.08)] transition-all duration-300"
 											>
-												{/* Imagen recortada como la card de galleta estándar */}
-												<div className="relative h-20 sm:h-24 w-full overflow-hidden bg-transparent">
+												{/* Imagen de la galleta centrada y más arriba */}
+												<div className="relative h-20 sm:h-24 w-full overflow-hidden bg-transparent flex items-center justify-center pt-2">
 													<img
 														src={upsell.imageSrc}
 														alt={upsell.name}
-														className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-32 sm:w-36 max-w-none object-contain drop-shadow-[0_4px_10px_rgba(58,32,14,0.12)] transition-transform duration-300 hover:scale-105"
+														className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-28 sm:w-32 max-w-none object-contain drop-shadow-[0_4px_10px_rgba(58,32,14,0.12)] transition-transform duration-300 hover:scale-105"
 														loading="lazy"
 													/>
 												</div>

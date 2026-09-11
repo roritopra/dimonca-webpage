@@ -15,6 +15,7 @@ import cakeHoverImg from '../../assets/images/home/navbar/cake-hover.png';
 import crookieImg from '../../assets/images/home/navbar/crookie.png';
 import crookieHoverImg from '../../assets/images/home/navbar/crookie-hover.png';
 import CartButton from '../menu/CartButton';
+import NavbarAuthButton from '../auth/NavbarAuthButton';
 
 const categories = [
 	{ label: 'Galletas', img: cookieImg.src, imgHover: cookieHoverImg.src },
@@ -104,16 +105,9 @@ const isMenu = currentPath.startsWith('/menu');
 			>Sobre Nosotros</a
 		>
 
-		<!-- Iconos Login y Carrito (cambian a blanco en menú móvil abierto) -->
+		<!-- Auth condicional (login/perfil) y Carrito (cambian a blanco en menú móvil abierto) -->
 		<div id="nav-action-icons" class="flex items-center justify-end w-[84px] sm:w-[92px] gap-3 sm:gap-5 xl:w-auto xl:flex-1 xl:justify-center z-50 text-pink transition-colors duration-300">
-			<a
-				id="nav-login-btn"
-				class="flex h-9 w-9 items-center justify-center rounded-full transition-transform hover:scale-110 active:scale-95"
-				href="/login"
-				aria-label="Iniciar sesión o ver mi cuenta"
-			>
-				<Icon name="lucide:circle-user-round" class="h-7 w-7 sm:h-8 sm:w-8 stroke-[1.75]" aria-hidden="true" />
-			</a>
+			<NavbarAuthButton client:load />
 			<CartButton client:load />
 		</div>
 	</div>

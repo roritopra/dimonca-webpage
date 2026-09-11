@@ -1,0 +1,104 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { Icon } from 'astro-icon/components';
+import cookieImg from '../assets/images/home/hero/hero-cookie.png';
+---
+
+<Layout>
+	<main id="main-content" class="notfound-hero relative flex min-h-screen w-full items-center justify-center overflow-hidden">
+		<div class="mx-auto flex w-full max-w-2xl flex-col items-center px-6 py-24 text-center">
+			<!-- Galleta flotante con sombra -->
+			<div class="notfound-cookie relative mb-2 select-none" aria-hidden="true">
+				<div class="absolute -inset-[12%] rounded-full bg-white/55 blur-3xl"></div>
+				<img
+					src={cookieImg.src}
+					alt=""
+					width="180"
+					height="180"
+					class="relative h-32 w-32 object-contain drop-shadow-[0_18px_30px_rgba(58,32,14,0.25)] sm:h-40 sm:w-40"
+					loading="eager"
+				/>
+			</div>
+
+			<!-- ¡Ups! en tipografía script -->
+			<p class="font-script text-5xl leading-none text-brown sm:text-6xl" aria-hidden="true">¡Ups!</p>
+
+			<!-- 404 con contorno blanco (mismo efecto que el título del detalle) -->
+			<h1 class="relative z-0 mt-1 inline-block font-sans text-[88px] font-extrabold leading-none text-pink sm:text-[120px]">
+				<span
+					aria-hidden="true"
+					class="absolute inset-0 select-none text-white [-webkit-text-stroke:12px_white]"
+				>
+					404
+				</span>
+				<span class="relative">404</span>
+			</h1>
+
+			<p class="mt-4 max-w-md font-sans text-base font-semibold text-brown sm:text-lg">
+				Esta página se nos desmoronó en migas
+			</p>
+			<p class="mt-2 max-w-md font-sans text-sm leading-relaxed text-brown/70">
+				El enlace que seguiste no existe o fue movido. No te preocupes, tenemos algo horneándose
+				para ti en el menú.
+			</p>
+
+			<!-- Acciones -->
+			<div class="mt-8 flex flex-col items-center gap-3 sm:flex-row">
+				<a
+					href="/"
+					class="flex h-12 items-center justify-center gap-2 rounded-full bg-pink px-7 font-sans text-sm font-bold text-white shadow-[0_4px_14px_rgba(244,93,140,0.35)] transition-transform hover:scale-105 active:scale-95 no-underline"
+				>
+					<Icon name="lucide:house" class="h-4 w-4" aria-hidden="true" />
+					Volver al inicio
+				</a>
+				<a
+					href="/menu"
+					class="flex h-12 items-center justify-center gap-2 rounded-full border-2 border-pink bg-transparent px-7 font-sans text-sm font-bold text-pink transition-transform hover:scale-105 hover:bg-pink/10 active:scale-95 no-underline"
+				>
+					Ver el menú
+					<Icon name="lucide:arrow-right" class="h-4 w-4" aria-hidden="true" />
+				</a>
+			</div>
+		</div>
+	</main>
+</Layout>
+
+<style>
+	/* Fondo de puntitos: azul en mobile/tablet, rosado en desktop (como el detalle de producto) */
+	.notfound-hero {
+		background-color: #9cc8ef;
+		background-image: radial-gradient(rgba(255, 255, 255, 0.4) 7%, transparent 8%),
+			radial-gradient(rgba(255, 255, 255, 0.4) 7%, transparent 8%);
+		background-position: 0 0, 17px 17px;
+		background-size: 34px 34px;
+	}
+
+	@media (min-width: 1024px) {
+		.notfound-hero {
+			background-color: var(--beige);
+			background-image: radial-gradient(#aed6f6 7%, transparent 8%),
+				radial-gradient(#aed6f6 7%, transparent 8%);
+		}
+	}
+
+	/* Flotación suave de la galleta */
+	.notfound-cookie img {
+		animation: notfound-float 3.2s ease-in-out infinite;
+	}
+
+	@keyframes notfound-float {
+		0%,
+		100% {
+			transform: translateY(0) rotate(-4deg);
+		}
+		50% {
+			transform: translateY(-12px) rotate(4deg);
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.notfound-cookie img {
+			animation: none;
+		}
+	}
+</style>

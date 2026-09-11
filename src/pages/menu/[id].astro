@@ -27,12 +27,12 @@ if (!product || product.productType !== 'single') {
 // Tema visual por categoría: el diseño de la página depende del tipo de producto.
 // Galletas: fondo rosado con puntitos + badge estrella azul (diseño final de Figma).
 const DETAIL_THEMES: Record<ProductCategory, { bg: string; dot: string; star: string }> = {
-	galletas: { bg: '#f8a9c6', dot: '#9accf4', star: '#9accf4' },
-	brownies: { bg: '#f8a9c6', dot: '#9accf4', star: '#9accf4' },
-	tortas: { bg: '#f8a9c6', dot: '#9accf4', star: '#9accf4' },
-	otros: { bg: '#f8a9c6', dot: '#9accf4', star: '#9accf4' },
+	galletas: { bg: '#f8a9c6', dot: '#aed6f6', star: '#9accf4' },
+	brownies: { bg: '#f8a9c6', dot: '#aed6f6', star: '#9accf4' },
+	tortas: { bg: '#f8a9c6', dot: '#aed6f6', star: '#9accf4' },
+	otros: { bg: '#f8a9c6', dot: '#aed6f6', star: '#9accf4' },
 	// TODO: diseño propio para cuchareables (incluye condicional de toppings)
-	cuchareables: { bg: '#f8a9c6', dot: '#9accf4', star: '#9accf4' },
+	cuchareables: { bg: '#f8a9c6', dot: '#aed6f6', star: '#9accf4' },
 };
 const theme = DETAIL_THEMES[product.category] ?? DETAIL_THEMES.otros;
 
@@ -54,7 +54,7 @@ const firstRowProducts: Product[] = [
 <Layout>
 	<Navbar />
 
-	<main id="main-content" class="min-h-screen pb-20">
+	<main id="main-content" class="min-h-screen">
 		<!-- Sección héroe del producto: diseño final de Figma (galletas) -->
 		<section class="relative w-full" style={polkaBgStyle}>
 			<div
@@ -94,6 +94,12 @@ const firstRowProducts: Product[] = [
 				<!-- Columna central: producto sobre badge de estrella festoneada -->
 				<div class="order-1 flex justify-center lg:order-2">
 					<div class="relative w-[300px] sm:w-[400px] lg:w-[440px]">
+						<!-- Iluminador: elipse blanca 20% más grande que la estrella, con layer blur y 55% transparencia -->
+						<div
+							aria-hidden="true"
+							class="absolute -inset-[10%] rounded-full bg-white/55 blur-3xl"
+						>
+						</div>
 						<svg
 							viewBox="0 0 438.648 437.279"
 							fill="none"

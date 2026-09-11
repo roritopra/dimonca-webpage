@@ -37,7 +37,7 @@ if (!product || product.productType !== 'custom_box') {
 
 	<main id="main-content" class="bg-beige p-0 m-0">
 		{/* Experiencia de Armado de Caja (Mitad Izquierda: Caja con fondo punteado | Mitad Derecha: Galletas y Footer) */}
-		<BoxBuilder client:load boxProduct={product} availableCookies={availableCookies} />
+		<BoxBuilder client:load key={product.id} boxProduct={product} availableCookies={availableCookies} />
 
 		{/* Carrusel de cinta con movimiento infinito en rosado */}
 		<CarruselScroll variant="pink" />

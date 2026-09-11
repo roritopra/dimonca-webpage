@@ -138,7 +138,7 @@ export default function BoxBuilder({ boxProduct, availableCookies }: BoxBuilderP
 					backgroundColor: '#f7f2e8',
 				}}
 			>
-				<div className="relative w-full max-w-[420px] sm:max-w-[480px] xl:max-w-[500px] aspect-[538/387] flex items-center justify-center">
+				<div className="relative w-full max-w-[420px] sm:max-w-[480px] xl:max-w-[500px] aspect-[538/387] min-h-[260px] flex items-center justify-center">
 					{/* 1. Caja Cerrada (visible cuando no hay galletas seleccionadas) */}
 					<div
 						className={`absolute inset-0 w-full h-full flex items-center justify-center transition-all duration-300 ease-out ${
@@ -149,8 +149,12 @@ export default function BoxBuilder({ boxProduct, availableCookies }: BoxBuilderP
 					>
 						<img
 							src={closedBoxImg.src}
+							width={closedBoxImg.width}
+							height={closedBoxImg.height}
 							alt="Caja cerrada de Dimonca"
-							className="w-full h-full object-contain drop-shadow-[0_20px_32px_rgba(58,32,14,0.18)]"
+							className="w-full h-full object-contain drop-shadow-[0_20px_32px_rgba(58,32,14,0.18)] block"
+							loading="eager"
+							decoding="sync"
 						/>
 					</div>
 
@@ -165,8 +169,12 @@ export default function BoxBuilder({ boxProduct, availableCookies }: BoxBuilderP
 						{/* Capa 1: Fondo de la Caja Abierta (Z-Index 10) */}
 						<img
 							src={openedBoxImg.src}
+							width={openedBoxImg.width}
+							height={openedBoxImg.height}
 							alt="Caja abierta de Dimonca"
-							className="absolute inset-0 w-full h-full object-contain z-10 drop-shadow-[0_20px_32px_rgba(58,32,14,0.18)] pointer-events-none"
+							className="absolute inset-0 w-full h-full object-contain z-10 drop-shadow-[0_20px_32px_rgba(58,32,14,0.18)] pointer-events-none block"
+							loading="eager"
+							decoding="sync"
 						/>
 
 						{/* Capa 2: Galletas Seleccionadas - contenidas arriba de la base de la caja con overflow-hidden abajo */}
@@ -232,7 +240,6 @@ export default function BoxBuilder({ boxProduct, availableCookies }: BoxBuilderP
 						{/* Botón X de volver al menú */}
 						<a
 							href="/menu"
-							data-astro-reload
 							className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-brown/60 hover:text-pink shadow-xs border border-brown/10 transition-colors"
 							aria-label="Cerrar y volver al menú"
 						>

@@ -14,35 +14,54 @@ import {
 // Imagen de caja vacía
 import emptyBoxImg from '../../assets/images/menu/home/empty-box.png';
 
-// Mock de sugerencias para "¿Un último antojo?"
-import cuchareableRedVelvetImg from '../../assets/images/home/more-than/cuchareable.png';
-import klimImg from '../../assets/images/menu/products/product-3.png';
-import miniCuchareableImg from '../../assets/images/home/more-than/mini-cake.png';
+// Mock de sugerencias para "¿Un último antojo?" (estilo de galletas del menú)
+import carameloSaladoImg from '../../assets/images/menu/home/galleta-item-banner-3.png';
+import rocheImg from '../../assets/images/menu/home/galleta-item-banner-4.png';
+import klimImg from '../../assets/images/menu/home/galleta-item-banner-5.png';
+import type { Product } from '../../types/products';
 
-const UPSELL_ITEMS = [
+const UPSELL_ITEMS: Product[] = [
 	{
-		id: 'cuchareable-red-velvet',
-		name: 'Cuchareable Red Velvet',
-		price: 18000,
-		priceFormatted: '$ 18.000',
-		imageSrc: cuchareableRedVelvetImg.src,
-		borderClass: 'border-[#9accf4]',
-	},
-	{
-		id: 'galleta-klim-upsell',
-		name: 'Galleta Klim',
+		id: 'galleta-caramelo-salado',
+		name: 'Galleta Caramelo Salado',
+		productType: 'single',
+		category: 'galletas',
+		categoryLabel: 'Galletas',
 		price: 11000,
-		priceFormatted: '$ 11.000',
-		imageSrc: klimImg.src,
-		borderClass: 'border-pink/70',
+		priceFormatted: '$11.000',
+		shortDescription: 'Galleta con trozos de caramelo suave y un toque de sal marina.',
+		fullDescription: 'Galleta con trozos de caramelo suave y un toque de sal marina.',
+		imageSrc: carameloSaladoImg.src,
+		available: true,
+		variant: 'standard',
 	},
 	{
-		id: 'mini-cuchareable-maracuya',
-		name: 'Mini Cuchareable Maracuyá',
-		price: 14000,
-		priceFormatted: '$ 14.000',
-		imageSrc: miniCuchareableImg.src,
-		borderClass: 'border-[#9accf4]',
+		id: 'galleta-roche',
+		name: 'Galleta Roché',
+		productType: 'single',
+		category: 'galletas',
+		categoryLabel: 'Galletas',
+		price: 11000,
+		priceFormatted: '$11.000',
+		shortDescription: 'Galleta estilo bombón roche con avellanas y centro de chocolate.',
+		fullDescription: 'Galleta estilo bombón roche con avellanas y centro de chocolate.',
+		imageSrc: rocheImg.src,
+		available: true,
+		variant: 'standard',
+	},
+	{
+		id: 'galleta-klim',
+		name: 'Galleta Klim',
+		productType: 'single',
+		category: 'galletas',
+		categoryLabel: 'Galletas',
+		price: 11000,
+		priceFormatted: '$11.000',
+		shortDescription: 'La consentida de la casa con deliciosa leche en polvo Klim.',
+		fullDescription: 'La consentida de la casa con deliciosa leche en polvo Klim.',
+		imageSrc: klimImg.src,
+		available: true,
+		variant: 'standard',
 	},
 ];
 
@@ -274,42 +293,71 @@ export default function CartDrawer() {
 									¿Un último antojo?
 								</h3>
 
-								<div className="grid grid-cols-3 gap-2.5 sm:gap-3">
-									{UPSELL_ITEMS.map((upsell) => (
-										<div
-											key={upsell.id}
-											onClick={() =>
-												addToCart(
-													{
-														id: upsell.id,
-														name: upsell.name,
-														productType: 'single',
-														category: 'cuchareables',
-														categoryLabel: 'Antojos',
-														price: upsell.price,
-														priceFormatted: upsell.priceFormatted,
-														shortDescription: upsell.name,
-														fullDescription: upsell.name,
-														imageSrc: upsell.imageSrc,
-														available: true,
-													},
-													1
-												)
-											}
-											className={`flex flex-col justify-between rounded-2xl border ${upsell.borderClass} bg-white/80 p-2.5 shadow-2xs hover:shadow-md transition-all hover:scale-[1.02] cursor-pointer`}
-										>
-											<div className="relative h-20 w-full flex items-center justify-center overflow-hidden">
-												<img
-													src={upsell.imageSrc}
-													alt={upsell.name}
-													className="h-full w-full object-contain"
-												/>
-											</div>
-											<p className="mt-2 font-sans text-xs font-bold text-brown leading-tight line-clamp-2">
-												{upsell.name}
-											</p>
-										</div>
-									))}
+								<div className="grid grid-cols-2 md:grid-cols-3 gap-2.5 sm:gap-3">
+									{UPSELL_ITEMS.map((upsell) => {
+										const currentItemInCart = cart.find((item) => item.productId === upsell.id);
+										const itemQty = currentItemInCart ? currentItemInCart.quantity : 0;
+
+										return (
+											<article
+												key={upsell.id}
+												className="flex flex-col justify-between rounded-[22px] sm:rounded-[26px] border border-pink/60 bg-beige overflow-hidden pb-3 shadow-[0_2px_10px_rgba(58,32,14,0.04)] hover:shadow-[0_6px_16px_rgba(58,32,14,0.08)] transition-all duration-300"
+											>
+												{/* Imagen recortada como la card de galleta estándar */}
+												<div className="relative h-20 sm:h-24 w-full overflow-hidden bg-transparent">
+													<img
+														src={upsell.imageSrc}
+														alt={upsell.name}
+														className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-32 sm:w-36 max-w-none object-contain drop-shadow-[0_4px_10px_rgba(58,32,14,0.12)] transition-transform duration-300 hover:scale-105"
+														loading="lazy"
+													/>
+												</div>
+
+												{/* Información y botones */}
+												<div className="mt-2 flex flex-col px-2.5 sm:px-3">
+													<h4 className="font-sans text-xs sm:text-sm font-extrabold text-brown leading-tight line-clamp-1">
+														{upsell.name}
+													</h4>
+
+													<div className="mt-1.5 flex flex-col gap-1.5 sm:gap-2">
+														<span className="font-sans text-xs sm:text-sm font-bold text-pink">
+															{upsell.priceFormatted}
+														</span>
+
+														{/* Píldora de Cantidad (-  qty  +) */}
+														<div className="flex w-full items-center justify-between rounded-full border border-pink/40 bg-[#fff5f8] px-1.5 py-0.5 shadow-2xs">
+															<button
+																type="button"
+																onClick={() => {
+																	if (itemQty > 0) {
+																		updateQuantity(upsell.id, -1);
+																	}
+																}}
+																disabled={itemQty <= 0}
+																className="flex h-5 w-5 sm:h-6 sm:w-6 items-center justify-center rounded-full bg-pink text-white transition-all hover:opacity-90 active:scale-90 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+																aria-label={`Restar 1 unidad de ${upsell.name}`}
+															>
+																<span className="text-xs sm:text-sm font-extrabold leading-none">−</span>
+															</button>
+
+															<span className="font-sans text-[11px] sm:text-xs font-semibold text-brown/70 select-none">
+																{itemQty}
+															</span>
+
+															<button
+																type="button"
+																onClick={() => addToCart(upsell, 1)}
+																className="flex h-5 w-5 sm:h-6 sm:w-6 items-center justify-center rounded-full bg-pink text-white transition-all hover:opacity-90 active:scale-90 cursor-pointer"
+																aria-label={`Añadir 1 unidad de ${upsell.name}`}
+															>
+																<span className="text-xs sm:text-sm font-extrabold leading-none">+</span>
+															</button>
+														</div>
+													</div>
+												</div>
+											</article>
+										);
+									})}
 								</div>
 							</div>
 						</div>

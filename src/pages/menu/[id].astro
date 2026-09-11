@@ -27,19 +27,19 @@ if (!product || product.productType !== 'single') {
 // Tema visual por categoría: el diseño de la página depende del tipo de producto.
 // Galletas: fondo rosado con puntitos + badge estrella azul (diseño final de Figma).
 const DETAIL_THEMES: Record<ProductCategory, { bg: string; dot: string; star: string }> = {
-	galletas: { bg: '#f8a9c6', dot: '#fbcadd', star: '#9accf4' },
-	brownies: { bg: '#f8a9c6', dot: '#fbcadd', star: '#9accf4' },
-	tortas: { bg: '#f8a9c6', dot: '#fbcadd', star: '#9accf4' },
-	otros: { bg: '#f8a9c6', dot: '#fbcadd', star: '#9accf4' },
+	galletas: { bg: '#f8a9c6', dot: '#9accf4', star: '#9accf4' },
+	brownies: { bg: '#f8a9c6', dot: '#9accf4', star: '#9accf4' },
+	tortas: { bg: '#f8a9c6', dot: '#9accf4', star: '#9accf4' },
+	otros: { bg: '#f8a9c6', dot: '#9accf4', star: '#9accf4' },
 	// TODO: diseño propio para cuchareables (incluye condicional de toppings)
-	cuchareables: { bg: '#f8a9c6', dot: '#fbcadd', star: '#9accf4' },
+	cuchareables: { bg: '#f8a9c6', dot: '#9accf4', star: '#9accf4' },
 };
 const theme = DETAIL_THEMES[product.category] ?? DETAIL_THEMES.otros;
 
 // Galería de fotos del producto (se reemplaza/puebla con fotos reales por producto)
 const gallery = [product.imageSrc, product.imageHoverSrc].filter(Boolean) as string[];
 
-const polkaBgStyle = `background-color:${theme.bg};background-image:radial-gradient(${theme.dot} 9%, transparent 10%),radial-gradient(${theme.dot} 9%, transparent 10%);background-position:0 0,32px 32px;background-size:64px 64px;`;
+const polkaBgStyle = `background-color:${theme.bg};background-image:radial-gradient(${theme.dot} 7%, transparent 8%),radial-gradient(${theme.dot} 7%, transparent 8%);background-position:0 0,17px 17px;background-size:34px 34px;`;
 
 // Primera fila del menú en galletas, tal cual está en /menu: caramelo salado, roché, arma tu caja x3, klim y maracuyá
 const firstRowProducts: Product[] = [
@@ -73,9 +73,18 @@ const firstRowProducts: Product[] = [
 						<span class="relative">{product.name}</span>
 					</h1>
 
-					<p class="mt-3 font-sans text-3xl font-bold text-brown sm:text-4xl">{product.priceFormatted}</p>
+					<!-- Precio con contorno blanco igual que el título -->
+					<p class="relative z-0 inline-block self-start mt-3 font-sans text-3xl font-bold text-brown sm:text-4xl">
+						<span
+							aria-hidden="true"
+							class="absolute inset-0 select-none text-white [-webkit-text-stroke:9px_white]"
+						>
+							{product.priceFormatted}
+						</span>
+						<span class="relative">{product.priceFormatted}</span>
+					</p>
 
-					<p class="mt-4 text-sm leading-relaxed text-brown/90 sm:text-base">{product.fullDescription}</p>
+					<p class="mt-4 max-w-[300px] text-[13px] leading-7 text-brown/90 sm:text-sm sm:leading-[1.95]">{product.fullDescription}</p>
 
 					<div class="mt-8 max-w-[300px]">
 						<ProductDetailActions client:load product={product} />

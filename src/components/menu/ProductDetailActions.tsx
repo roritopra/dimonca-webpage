@@ -43,7 +43,7 @@ export default function ProductDetailActions({ product }: Props) {
 					type="button"
 					onClick={handleDecrease}
 					disabled={quantity <= 1}
-					className="absolute left-0.5 flex h-10 w-10 items-center justify-center rounded-full bg-blue-500 text-xl font-bold text-white shadow-[0_2px_8px_rgba(106,167,213,0.5)] transition-transform hover:scale-105 active:scale-95 disabled:opacity-40 disabled:hover:scale-100 cursor-pointer"
+					className="absolute left-0.5 flex h-10 w-10 items-center justify-center rounded-full bg-blue-600 text-xl font-bold text-white shadow-[0_2px_8px_rgba(106,167,213,0.5)] transition-transform hover:scale-105 active:scale-95 disabled:opacity-30 disabled:shadow-none disabled:hover:scale-100 disabled:cursor-not-allowed cursor-pointer"
 					aria-label="Disminuir unidades"
 				>
 					&minus;
@@ -54,7 +54,7 @@ export default function ProductDetailActions({ product }: Props) {
 				<button
 					type="button"
 					onClick={handleIncrease}
-					className="absolute right-0.5 flex h-10 w-10 items-center justify-center rounded-full bg-blue-500 text-xl font-bold text-white shadow-[0_2px_8px_rgba(106,167,213,0.5)] transition-transform hover:scale-105 active:scale-95 cursor-pointer"
+					className="absolute right-0.5 flex h-10 w-10 items-center justify-center rounded-full bg-blue-600 text-xl font-bold text-white shadow-[0_2px_8px_rgba(106,167,213,0.5)] transition-transform hover:scale-105 active:scale-95 cursor-pointer"
 					aria-label="Aumentar unidades"
 				>
 					+

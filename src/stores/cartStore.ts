@@ -92,6 +92,20 @@ export function removeFromCart(productId: string): void {
 	$cart.set(current.filter((item) => item.productId !== productId));
 }
 
+export function restoreCartItem(item: CartItem, index?: number): void {
+	const current = $cart.get();
+	const exists = current.some((i) => i.productId === item.productId);
+	if (exists) return;
+
+	if (typeof index === 'number' && index >= 0 && index <= current.length) {
+		const updated = [...current];
+		updated.splice(index, 0, item);
+		$cart.set(updated);
+	} else {
+		$cart.set([...current, item]);
+	}
+}
+
 export function clearCart(): void {
 	$cart.set([]);
 }

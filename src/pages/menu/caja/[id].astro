@@ -4,11 +4,13 @@ import Navbar from '../../../components/common/Navbar.astro';
 import Footer from '../../../components/common/Footer.astro';
 import CarruselScroll from '../../../components/common/CarruselScroll.astro';
 import BoxBuilder from '../../../components/menu/BoxBuilder';
-import { PRODUCTS } from '../../../data/products';
+import { getProducts } from '../../../lib/productsApi';
 import type { Product } from '../../../types/products';
 
-export function getStaticPaths() {
-	const boxProducts = PRODUCTS.filter((p) => p.productType === 'custom_box');
+// GET a Supabase en tiempo de build: los datos de la caja salen de la BD.
+export async function getStaticPaths() {
+	const products = await getProducts();
+	const boxProducts = products.filter((p) => p.productType === 'custom_box');
 
 	return boxProducts.map((product) => ({
 		params: { id: product.id },

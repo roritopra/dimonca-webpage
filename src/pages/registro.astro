@@ -1,0 +1,19 @@
+---
+import Layout from '../layouts/Layout.astro';
+import RegisterForm from '../components/auth/RegisterForm';
+---
+
+<Layout>
+	<main id="main-content" class="flex min-h-screen items-center justify-center bg-beige px-6 pt-24 pb-20">
+		<div class="flex w-full max-w-sm flex-col items-center gap-8">
+			<div class="text-center">
+				<h1 class="font-sans text-3xl font-extrabold text-pink">Crea tu cuenta</h1>
+				<p class="mt-2 font-sans text-sm text-brown/70">
+					Únete a Dimonca y guarda tu carrito donde quieras
+				</p>
+			</div>
+
+			<RegisterForm client:load />
+		</div>
+	</main>
+</Layout>

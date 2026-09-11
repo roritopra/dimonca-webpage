@@ -6,12 +6,15 @@ import CarruselScroll from '../../components/common/CarruselScroll.astro';
 import ProductDetailActions from '../../components/menu/ProductDetailActions';
 import MenuCard from '../../components/menu/MenuCard';
 import { Icon } from 'astro-icon/components';
-import { PRODUCTS } from '../../data/products';
+import { getProducts } from '../../lib/productsApi';
 import type { Product, ProductCategory } from '../../types/products';
 
-export function getStaticPaths() {
+// GET a Supabase en tiempo de build: las páginas de detalle se generan desde la BD.
+// Si Supabase falla, getProducts lanza error y el build falla visiblemente.
+export async function getStaticPaths() {
+	const products = await getProducts();
 	// Solo productos normales / individuales
-	const singleProducts = PRODUCTS.filter((p) => p.productType === 'single');
+	const singleProducts = products.filter((p) => p.productType === 'single');
 
 	return singleProducts.map((product) => ({
 		params: { id: product.id },
@@ -24,6 +27,9 @@ const { product } = Astro.props;
 if (!product || product.productType !== 'single') {
 	return Astro.redirect('/menu');
 }
+
+// Lista completa (para "Más sabores para ti"): misma consulta del catálogo
+const allProducts = await getProducts();
 
 // Tema visual por categoría: el diseño dependende del tipo de producto.
 // Desktop (>=1024px): fondo rosado con puntitos + estrella azul (diseño final de Figma).
@@ -59,14 +65,8 @@ const gallery = [product.imageSrc, ...(product.gallery ?? [])];
 
 const polkaBgVars = `--pd-bg-mobile:${theme.mobileBg};--pd-dot-mobile:${theme.mobileDot};--pd-bg-desktop:${theme.bg};--pd-dot-desktop:${theme.dot};--pd-star-mobile:${theme.mobileStar};--pd-star-desktop:${theme.star};`;
 
-// Primera fila del menú en galletas, tal cual está en /menu: caramelo salado, roché, arma tu caja x3, klim y maracuyá
-const firstRowProducts: Product[] = [
-	PRODUCTS.find((p) => p.id === 'galleta-caramelo-salado'),
-	PRODUCTS.find((p) => p.id === 'galleta-roche'),
-	PRODUCTS.find((p) => p.id === 'combo-arma-tu-caja-x3'),
-	PRODUCTS.find((p) => p.id === 'galleta-klim'),
-	PRODUCTS.find((p) => p.id === 'galleta-maracuya'),
-].filter((p): p is Product => Boolean(p));
+// Primera fila del menú en galletas, tal cual está en /menu (los primeros 5 por sort_order)
+const firstRowProducts: Product[] = allProducts.slice(0, 5);
 ---
 
 <Layout>

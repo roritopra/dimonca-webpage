@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import type { Product, SelectedBoxItem } from '../../types/products';
 import { addToCart, formatCurrency } from '../../stores/cartStore';
 
@@ -139,28 +140,47 @@ export default function BoxBuilder({ boxProduct, availableCookies }: BoxBuilderP
 				}}
 			>
 				<div className="relative w-full max-w-[420px] sm:max-w-[480px] xl:max-w-[500px] aspect-[538/387] flex items-center justify-center">
-					{!isBoxOpen ? (
-						/* Caja Cerrada (cuando no hay ninguna galleta agregada) */
+					{/* 1. Caja Cerrada con crossfade rápido y simultáneo */}
+					<motion.div
+						initial={false}
+						animate={{
+							opacity: !isBoxOpen ? 1 : 0,
+							scale: !isBoxOpen ? 1 : 0.98,
+							pointerEvents: !isBoxOpen ? 'auto' : 'none',
+						}}
+						transition={{ duration: 0.22, ease: 'easeOut' }}
+						className="absolute inset-0 w-full h-full flex items-center justify-center"
+					>
 						<img
 							src={closedBoxImg.src}
 							alt="Caja cerrada de Dimonca"
-							className="w-full h-full object-contain drop-shadow-[0_20px_32px_rgba(58,32,14,0.18)] transition-all duration-500 ease-out"
+							className="w-full h-full object-contain drop-shadow-[0_20px_32px_rgba(58,32,14,0.18)]"
 						/>
-					) : (
-						/* Caja Abierta con Galletas intercaladas en el eje Z */
-						<div className="relative w-full h-full">
-							{/* Capa 1: Fondo de la Caja Abierta (Z-Index 10) */}
-							<img
-								src={openedBoxImg.src}
-								alt="Caja abierta de Dimonca"
-								className="absolute inset-0 w-full h-full object-contain z-10 drop-shadow-[0_20px_32px_rgba(58,32,14,0.18)] pointer-events-none"
-							/>
+					</motion.div>
 
-							{/* Capa 2: Galletas Seleccionadas Asomándose (Z-Index 20) */}
-							<div className="absolute inset-x-0 bottom-[4%] h-[64%] z-20 flex items-end justify-center pointer-events-none px-[3%]">
-								<div className="relative w-full h-full flex items-end justify-center">
+					{/* 2. Caja Abierta con Galletas que emergen limpiamente sin traspasar el cover */}
+					<motion.div
+						initial={false}
+						animate={{
+							opacity: isBoxOpen ? 1 : 0,
+							scale: isBoxOpen ? 1 : 1.01,
+							pointerEvents: isBoxOpen ? 'auto' : 'none',
+						}}
+						transition={{ duration: 0.22, ease: 'easeOut' }}
+						className="absolute inset-0 w-full h-full"
+					>
+						{/* Capa 1: Fondo de la Caja Abierta (Z-Index 10) */}
+						<img
+							src={openedBoxImg.src}
+							alt="Caja abierta de Dimonca"
+							className="absolute inset-0 w-full h-full object-contain z-10 drop-shadow-[0_20px_32px_rgba(58,32,14,0.18)] pointer-events-none"
+						/>
+
+						{/* Capa 2: Galletas Seleccionadas - recortadas exactamente en el límite inferior de la caja */}
+						<div className="absolute inset-x-0 bottom-[2%] top-[6%] z-20 overflow-hidden pointer-events-none px-[3%] flex items-end justify-center">
+							<div className="relative w-full h-[70%] flex items-end justify-center">
+								<AnimatePresence>
 									{chosenCookiesList.map((cookie, idx) => {
-										// Distribución armónica de las galletas según la cantidad dentro de la caja
 										const total = chosenCookiesList.length;
 										const step = total > 6 ? 24 : total > 3 ? 32 : 44;
 										const translateX = total === 1 ? 0 : (idx - (total - 1) / 2) * step;
@@ -168,33 +188,46 @@ export default function BoxBuilder({ boxProduct, availableCookies }: BoxBuilderP
 										const yOffset = idx % 2 === 0 ? 0 : 3;
 
 										return (
-											<div
-												key={`${cookie.id}-${idx}`}
-												className="absolute bottom-[8%] w-[34%] aspect-square flex items-center justify-center transition-all duration-300 ease-out"
-												style={{
-													transform: `translateX(${translateX}%) translateY(-${yOffset}%) rotate(${rotation}deg)`,
+											<motion.div
+												key={`cookie-slot-${idx}-${cookie.id}`}
+												layout
+												initial={{ y: '32%', opacity: 0, scale: 0.88 }}
+												animate={{
+													x: `${translateX}%`,
+													y: `-${yOffset}%`,
+													rotate: rotation,
+													opacity: 1,
+													scale: 1,
 												}}
+												exit={{ y: '32%', opacity: 0, scale: 0.85 }}
+												transition={{
+													layout: { type: 'spring', stiffness: 380, damping: 30 },
+													y: { duration: 0.28, ease: [0.22, 1, 0.36, 1] },
+													opacity: { duration: 0.18 },
+													scale: { duration: 0.22 },
+												}}
+												className="absolute bottom-[10%] w-[34%] aspect-square flex items-center justify-center"
 											>
 												<img
 													src={cookie.imageSrc}
 													alt={cookie.name}
 													className="w-full h-full object-contain drop-shadow-[0_6px_14px_rgba(58,32,14,0.3)]"
 												/>
-											</div>
+											</motion.div>
 										);
 									})}
-								</div>
+								</AnimatePresence>
 							</div>
-
-							{/* Capa 3: Cobertura frontal inferior de la caja (Z-Index 30) */}
-							<img
-								src={coverBoxImg.src}
-								alt=""
-								aria-hidden="true"
-								className="absolute bottom-0 left-0 w-full h-[25.09%] object-contain z-30 pointer-events-none"
-							/>
 						</div>
-					)}
+
+						{/* Capa 3: Cobertura frontal inferior de la caja (Z-Index 30) */}
+						<img
+							src={coverBoxImg.src}
+							alt=""
+							aria-hidden="true"
+							className="absolute bottom-0 left-0 w-full h-[25.09%] object-contain z-30 pointer-events-none"
+						/>
+					</motion.div>
 				</div>
 			</div>
 

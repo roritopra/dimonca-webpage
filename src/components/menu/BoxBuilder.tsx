@@ -2,6 +2,10 @@ import React, { useState, useMemo } from 'react';
 import type { Product, SelectedBoxItem } from '../../types/products';
 import { addToCart, formatCurrency } from '../../stores/cartStore';
 
+import closedBoxImg from '../../assets/images/menu/box-page/closed-box.png';
+import openedBoxImg from '../../assets/images/menu/box-page/opened-box.png';
+import coverBoxImg from '../../assets/images/menu/box-page/cover-box.png';
+
 interface BoxBuilderProps {
 	boxProduct: Product;
 	availableCookies: Product[];
@@ -18,6 +22,18 @@ export default function BoxBuilder({ boxProduct, availableCookies }: BoxBuilderP
 	const totalSelectedCookies = useMemo(() => {
 		return Object.values(selectedCounts).reduce((sum, count) => sum + count, 0);
 	}, [selectedCounts]);
+
+	// Lista plana de galletas elegidas para posicionarlas dentro de la caja
+	const chosenCookiesList = useMemo(() => {
+		const list: Product[] = [];
+		for (const cookie of availableCookies) {
+			const count = selectedCounts[cookie.id] || 0;
+			for (let i = 0; i < count; i++) {
+				list.push(cookie);
+			}
+		}
+		return list;
+	}, [availableCookies, selectedCounts]);
 
 	// Precio total: base + adiciones de galletas especiales
 	const totalPrice = useMemo(() => {
@@ -106,6 +122,8 @@ export default function BoxBuilder({ boxProduct, availableCookies }: BoxBuilderP
 		}
 	}
 
+	const isBoxOpen = totalSelectedCookies > 0;
+
 	return (
 		<div className="w-full flex flex-col xl:flex-row items-stretch min-h-[620px] bg-[#f7f3ea] border-b border-brown/15">
 			
@@ -113,19 +131,69 @@ export default function BoxBuilder({ boxProduct, availableCookies }: BoxBuilderP
 			{/* COLUMNA IZQUIERDA: CAJA PROTAGONISTA SOBRE PATRÓN DE PUNTOS */}
 			{/* ========================================================= */}
 			<div
-				className="w-full xl:w-1/2 relative flex items-center justify-center p-8 lg:p-14 border-b xl:border-b-0 xl:border-r border-brown/15 min-h-[420px] xl:min-h-[620px]"
+				className="w-full xl:w-1/2 relative flex items-center justify-center p-8 lg:p-14 border-b xl:border-b-0 xl:border-r border-brown/15 min-h-[440px] xl:min-h-[620px] select-none overflow-hidden"
 				style={{
 					backgroundImage: 'radial-gradient(circle, rgba(58, 32, 14, 0.22) 1.8px, transparent 1.8px)',
 					backgroundSize: '20px 20px',
 					backgroundColor: '#f7f2e8',
 				}}
 			>
-				<div className="relative w-full max-w-[520px] flex items-center justify-center">
-					<img
-						src={boxProduct.imageSrc}
-						alt={boxProduct.name}
-						className="w-full h-auto max-h-[440px] object-contain drop-shadow-[0_18px_32px_rgba(58,32,14,0.22)] transition-transform duration-300 hover:scale-105"
-					/>
+				<div className="relative w-full max-w-[538px] aspect-[538/387] flex items-center justify-center">
+					{!isBoxOpen ? (
+						/* Caja Cerrada (cuando no hay ninguna galleta agregada) */
+						<img
+							src={closedBoxImg.src}
+							alt="Caja cerrada de Dimonca"
+							className="w-full h-full object-contain drop-shadow-[0_20px_32px_rgba(58,32,14,0.18)] transition-all duration-500 ease-out"
+						/>
+					) : (
+						/* Caja Abierta con Galletas intercaladas en el eje Z */
+						<div className="relative w-full h-full">
+							{/* Capa 1: Fondo de la Caja Abierta (Z-Index 10) */}
+							<img
+								src={openedBoxImg.src}
+								alt="Caja abierta de Dimonca"
+								className="absolute inset-0 w-full h-full object-contain z-10 drop-shadow-[0_20px_32px_rgba(58,32,14,0.18)] pointer-events-none"
+							/>
+
+							{/* Capa 2: Galletas Seleccionadas Asomándose (Z-Index 20) */}
+							<div className="absolute inset-x-0 bottom-3 h-[240px] z-20 flex items-end justify-center pointer-events-none px-6">
+								<div className="relative w-full max-w-[420px] h-full flex items-end justify-center">
+									{chosenCookiesList.map((cookie, idx) => {
+										// Distribución armónica de las galletas según la cantidad dentro de la caja
+										const total = chosenCookiesList.length;
+										const spread = total === 1 ? 0 : (idx - (total - 1) / 2) * (total > 5 ? 42 : total > 3 ? 55 : 75);
+										const rotation = (idx % 2 === 0 ? 1 : -1) * ((idx + 1) * 4);
+										const yOffset = idx % 2 === 0 ? 0 : 8;
+
+										return (
+											<div
+												key={`${cookie.id}-${idx}`}
+												className="absolute bottom-6 flex items-center justify-center transition-all duration-400 ease-out animate-in fade-in zoom-in-75"
+												style={{
+													transform: `translateX(${spread}px) translateY(-${yOffset}px) rotate(${rotation}deg)`,
+												}}
+											>
+												<img
+													src={cookie.imageSrc}
+													alt={cookie.name}
+													className="w-28 h-28 sm:w-32 sm:h-32 object-contain drop-shadow-[0_8px_16px_rgba(58,32,14,0.3)]"
+												/>
+											</div>
+										);
+									})}
+								</div>
+							</div>
+
+							{/* Capa 3: Cobertura frontal inferior de la caja (Z-Index 30) */}
+							<img
+								src={coverBoxImg.src}
+								alt=""
+								aria-hidden="true"
+								className="absolute bottom-0 left-0 w-full h-auto object-contain z-30 pointer-events-none"
+							/>
+						</div>
+					)}
 				</div>
 			</div>
 

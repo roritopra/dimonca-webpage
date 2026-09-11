@@ -7,6 +7,7 @@ interface MenuFiltersProps {
 }
 
 const CATEGORIES = [
+	{ id: 'todas', label: 'Todos' },
 	{ id: 'galletas', label: 'Galletas' },
 	{ id: 'cuchareables', label: 'Cuchareables' },
 	{ id: 'brownies', label: 'Brownies' },
@@ -15,7 +16,7 @@ const CATEGORIES = [
 ];
 
 export default function MenuFilters({
-	activeCategory = 'galletas',
+	activeCategory = 'todas',
 	onCategoryChange,
 	onSearchChange,
 }: MenuFiltersProps) {

@@ -94,7 +94,12 @@ async function pushCartToServer(): Promise<void> {
 	}
 }
 
-// Descarga el carrito del servidor y lo fusiona con el local
+// Descarga el carrito del servidor al iniciar sesión:
+// - Si el servidor YA tiene items → la BD es la fuente de verdad (el local se
+//   descarta). Esto evita duplicación: si hicieramos merge local+servidor en
+//   cada recarga, las cantidades crecerían x2 en cada refresh.
+// - Si el servidor está VACÍO → se adopta el carrito local (migración de
+//   invitado: lo que agregaste sin sesión sube a tu cuenta).
 async function pullAndMerge(): Promise<void> {
 	const user = $user.get();
 	if (!user || isMerging) return;
@@ -103,52 +108,19 @@ async function pullAndMerge(): Promise<void> {
 	try {
 		const cartId = await getOrCreateCartId(user.id);
 		const serverItems = await fetchCartItems(cartId);
-		const localItems = $cart.get();
-		const merged = mergeCarts(localItems, serverItems);
 
-		// El resultado fusionado pasa a ser la fuente de verdad (local + BD)
-		$cart.set(merged);
-		await replaceCartItems(cartId, merged);
+		if (serverItems.length > 0) {
+			$cart.set(serverItems);
+		} else {
+			const localItems = $cart.get();
+			$cart.set(localItems);
+			await replaceCartItems(cartId, localItems);
+		}
 	} catch (err) {
-		console.error('[cartStore] Error al fusionar el carrito al iniciar sesión:', err);
+		console.error('[cartStore] Error al cargar el carrito al iniciar sesión:', err);
 	} finally {
 		isMerging = false;
 	}
-}
-
-// Fusiona el carrito local (invitado) con el del servidor:
-// - items single con el mismo productId: se suman cantidades
-// - cajas armadas (custom_box): se conservan como líneas independientes
-function mergeCarts(localItems: CartItem[], serverItems: CartItem[]): CartItem[] {
-	const result: CartItem[] = [...serverItems];
-
-	for (const local of localItems) {
-		const localIsBox =
-			(local.boxContents?.length ?? 0) > 0 || (local.selectedItems?.length ?? 0) > 0;
-
-		if (localIsBox) {
-			result.push(local);
-			continue;
-		}
-
-		const existingIndex = result.findIndex(
-			(server) =>
-				server.productId === local.productId &&
-				(server.boxContents?.length ?? 0) === 0 &&
-				(server.selectedItems?.length ?? 0) === 0
-		);
-
-		if (existingIndex >= 0) {
-			result[existingIndex] = {
-				...result[existingIndex],
-				quantity: result[existingIndex].quantity + local.quantity,
-			};
-		} else {
-			result.push(local);
-		}
-	}
-
-	return result;
 }
 
 // ============================================================================

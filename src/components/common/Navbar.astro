@@ -18,11 +18,11 @@ import CartButton from '../menu/CartButton';
 import NavbarAuthButton from '../auth/NavbarAuthButton';
 
 const categories = [
-	{ label: 'Galletas', img: cookieImg.src, imgHover: cookieHoverImg.src },
-	{ label: 'Cuchareables', img: cuchareableImg.src, imgHover: cuchareableHoverImg.src },
-	{ label: 'Brownies', img: brownieImg.src, imgHover: brownieHoverImg.src },
-	{ label: 'Pasteles', img: cakeImg.src, imgHover: cakeHoverImg.src },
-	{ label: 'Más Productos', img: crookieImg.src, imgHover: crookieHoverImg.src },
+	{ label: 'Galletas', menuCat: 'galletas', img: cookieImg.src, imgHover: cookieHoverImg.src },
+	{ label: 'Cuchareables', menuCat: 'cuchareables', img: cuchareableImg.src, imgHover: cuchareableHoverImg.src },
+	{ label: 'Brownies', menuCat: 'brownies', img: brownieImg.src, imgHover: brownieHoverImg.src },
+	{ label: 'Pasteles', menuCat: 'tortas', img: cakeImg.src, imgHover: cakeHoverImg.src },
+	{ label: 'Más Productos', menuCat: 'otros', img: crookieImg.src, imgHover: crookieHoverImg.src },
 ];
 
 const currentPath = Astro.url.pathname;
@@ -68,24 +68,20 @@ const isMenu = currentPath.startsWith('/menu');
 			>Encuéntranos</a
 		>
 		<div class="relative hidden xl:flex flex-1 min-w-0 items-center justify-center">
-			<a
-				href="/menu"
-				class:list={[
-					'p-2.5 text-[15px] leading-[1.2] no-underline transition-colors hover:opacity-75',
-					isMenu ? 'text-pink font-bold' : 'text-brown'
-				]}
-			>
-				Menú
-			</a>
+			<!-- Botón Menú: ya no navega, ahora despliega el submenú de categorías (palabra + chevron juntos) -->
 			<button
 				id="menu-btn"
-				class="flex h-[30px] cursor-pointer items-center justify-center border-0 bg-transparent p-1 text-brown transition-colors hover:opacity-75 group-data-[open]:text-pink"
+				class:list={[
+					'flex cursor-pointer items-center gap-1 border-0 bg-transparent p-2.5 text-[15px] leading-[1.2] transition-colors hover:opacity-75 group-data-[open]:text-pink',
+					isMenu ? 'text-pink font-bold' : 'text-brown'
+				]}
 				type="button"
 				aria-haspopup="true"
 				aria-expanded="false"
 				aria-controls="dropdown"
 				aria-label="Desplegar categorías de postres"
 			>
+				Menú
 				<Icon
 					name="lucide:chevron-down"
 					class="h-4 w-4 shrink-0 transition-transform duration-200 group-data-[open]:rotate-180"
@@ -121,7 +117,7 @@ const isMenu = currentPath.startsWith('/menu');
 			categories.map((c) => {
 				if (c.label === 'Galletas' || c.label === 'Más Productos') {
 					return (
-						<a data-category="split" class="flex w-[121px] flex-col items-center justify-center gap-[9px] no-underline" href={`/#${c.label.toLowerCase().replace(/\s+/g, '-')}`}>
+						<a data-category="split" class="flex w-[121px] flex-col items-center justify-center gap-[9px] no-underline" href={`/menu?cat=${c.menuCat}`}>
 							<div class="nav-cookie-wrap relative h-[121px] w-[121px]">
 								<div class="nav-cookie-left absolute inset-y-0 left-0 w-1/2 overflow-hidden">
 									<img class="absolute top-0 left-0 h-full w-[121px] max-w-none object-cover" src={c.img} alt={c.label} />
@@ -136,7 +132,7 @@ const isMenu = currentPath.startsWith('/menu');
 					);
 				} else if (c.label === 'Brownies') {
 					return (
-						<a data-category="brownies" class="flex w-[121px] flex-col items-center justify-center gap-[9px] no-underline" href="/#brownies">
+						<a data-category="brownies" class="flex w-[121px] flex-col items-center justify-center gap-[9px] no-underline" href="/menu?cat=brownies">
 							<div class="relative h-[121px] w-[121px]">
 								<img class="brownie-left absolute inset-0 block h-full w-full object-cover object-center opacity-0" src={browniePistachoImg.src} alt="" aria-hidden="true" />
 								<img class="brownie-right absolute inset-0 block h-full w-full object-cover object-center opacity-0" src={brownieRedVelvetImg.src} alt="" aria-hidden="true" />
@@ -147,7 +143,7 @@ const isMenu = currentPath.startsWith('/menu');
 					);
 				} else {
 					return (
-						<a class="flex w-[121px] flex-col items-center justify-center gap-[9px] no-underline" href={`/#${c.label.toLowerCase().replace(/\s+/g, '-')}`}>
+						<a class="flex w-[121px] flex-col items-center justify-center gap-[9px] no-underline" href={`/menu?cat=${c.menuCat}`}>
 							<div class="relative h-[121px] w-[121px] overflow-clip">
 								<img class="absolute inset-0 block h-full w-full object-cover object-center" src={c.img} alt={c.label} />
 								<img class="absolute inset-0 block h-full w-full object-cover object-center opacity-0" src={c.imgHover} alt="" aria-hidden="true" />
@@ -205,7 +201,7 @@ const isMenu = currentPath.startsWith('/menu');
 						<!-- 1. Galletas -->
 						<a
 							class="flex flex-col items-center justify-between w-[130px] sm:w-[140px] h-[135px] sm:h-[145px] p-3 rounded-xl border border-white/80 bg-white/10 text-white no-underline transition-transform active:scale-95 hover:bg-white/20"
-							href="/#galletas"
+							href="/menu?cat=galletas"
 						>
 							<div class="flex flex-1 items-center justify-center w-full">
 								<img class="h-16 w-16 object-contain drop-shadow-md" src={cookieImg.src} alt="Galletas" />
@@ -216,7 +212,7 @@ const isMenu = currentPath.startsWith('/menu');
 						<!-- 2. Cuchareables -->
 						<a
 							class="flex flex-col items-center justify-between w-[130px] sm:w-[140px] h-[135px] sm:h-[145px] p-3 rounded-xl border border-white/80 bg-white/10 text-white no-underline transition-transform active:scale-95 hover:bg-white/20"
-							href="/#cuchareables"
+							href="/menu?cat=cuchareables"
 						>
 							<div class="flex flex-1 items-center justify-center w-full">
 								<img class="h-16 w-16 object-contain drop-shadow-md" src={cuchareableImg.src} alt="Cuchareables" />
@@ -227,7 +223,7 @@ const isMenu = currentPath.startsWith('/menu');
 						<!-- 3. Brownies -->
 						<a
 							class="flex flex-col items-center justify-between w-[130px] sm:w-[140px] h-[135px] sm:h-[145px] p-3 rounded-xl border border-white/80 bg-white/10 text-white no-underline transition-transform active:scale-95 hover:bg-white/20"
-							href="/#brownies"
+							href="/menu?cat=brownies"
 						>
 							<div class="flex flex-1 items-center justify-center w-full">
 								<img class="h-16 w-16 object-contain drop-shadow-md" src={brownieImg.src} alt="Brownies" />
@@ -238,7 +234,7 @@ const isMenu = currentPath.startsWith('/menu');
 						<!-- 4. Tortas / Pasteles -->
 						<a
 							class="flex flex-col items-center justify-between w-[130px] sm:w-[140px] h-[135px] sm:h-[145px] p-3 rounded-xl border border-white/80 bg-white/10 text-white no-underline transition-transform active:scale-95 hover:bg-white/20"
-							href="/#pasteles"
+							href="/menu?cat=tortas"
 						>
 							<div class="flex flex-1 items-center justify-center w-full">
 								<img class="h-16 w-16 object-contain drop-shadow-md" src={cakeImg.src} alt="Tortas" />
@@ -249,7 +245,7 @@ const isMenu = currentPath.startsWith('/menu');
 						<!-- 5. Otros Productos (centrado solo abajo) -->
 						<a
 							class="flex flex-col items-center justify-between w-[130px] sm:w-[140px] h-[135px] sm:h-[145px] p-3 rounded-xl border border-white/80 bg-white/10 text-white no-underline transition-transform active:scale-95 hover:bg-white/20"
-							href="/#más-productos"
+							href="/menu?cat=otros"
 						>
 							<div class="flex flex-1 items-center justify-center w-full">
 								<img class="h-16 w-16 object-contain drop-shadow-md" src={crookieImg.src} alt="Otros Productos" />

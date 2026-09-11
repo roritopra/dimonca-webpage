@@ -86,10 +86,26 @@ function MenuErrorState({ onRetry }: { onRetry: () => void }) {
 	);
 }
 
+const VALID_URL_CATEGORIES = ['galletas', 'cuchareables', 'brownies', 'tortas', 'otros'];
+
+// Navegación con estado en la URL (/menu?cat=cuchareables, entre otras URLs): deep-links del navbar,
+// compartibles y indexables (SEO). Fuera de parámetro válido se muestra 'todas' (Todos).
+function getInitialCategory(): string {
+	if (typeof window === 'undefined') return 'todas';
+	const cat = new URLSearchParams(window.location.search).get('cat') ?? '';
+	return VALID_URL_CATEGORIES.includes(cat) ? cat : 'todas';
+}
+
+function syncCategoryToUrl(category: string): void {
+	if (typeof window === 'undefined') return;
+	const url = category === 'todas' ? '/menu' : `/menu?cat=${category}`;
+	window.history.replaceState(null, '', url);
+}
+
 export default function MenuCatalog() {
 	const [products, setProducts] = useState<Product[]>([]);
 	const [status, setStatus] = useState<LoadStatus>('loading');
-	const [activeCategory, setActiveCategory] = useState<string>('galletas');
+	const [activeCategory, setActiveCategory] = useState<string>(getInitialCategory);
 	const [searchQuery, setSearchQuery] = useState<string>('');
 
 	const loadProducts = useCallback(async () => {
@@ -132,7 +148,10 @@ export default function MenuCatalog() {
 			{/* Barra de Búsqueda y Tabs */}
 			<MenuFilters
 				activeCategory={activeCategory}
-				onCategoryChange={(cat) => setActiveCategory(cat)}
+				onCategoryChange={(cat) => {
+					setActiveCategory(cat);
+					syncCategoryToUrl(cat);
+				}}
 				onSearchChange={(q) => setSearchQuery(q)}
 			/>
 

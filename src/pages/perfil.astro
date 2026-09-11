@@ -1,0 +1,17 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ProfileView from '../components/auth/ProfileView';
+---
+
+<Layout>
+	<main id="main-content" class="flex min-h-screen items-center justify-center bg-beige px-6 pt-24 pb-20">
+		<div class="flex w-full max-w-sm flex-col items-center gap-8">
+			<div class="text-center">
+				<h1 class="font-sans text-3xl font-extrabold text-pink">Mi perfil</h1>
+				<p class="mt-2 font-sans text-sm text-brown/70">Tu información de cuenta</p>
+			</div>
+
+			<ProfileView client:load />
+		</div>
+	</main>
+</Layout>

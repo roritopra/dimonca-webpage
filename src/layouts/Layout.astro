@@ -3,6 +3,7 @@ import { ClientRouter } from 'astro:transitions';
 import '../styles/global.css';
 import Intro from '../components/home/Intro.astro';
 import CartDrawer from '../components/menu/CartDrawer';
+import AuthProvider from '../components/auth/AuthProvider';
 ---
 
 <!doctype html>
@@ -35,6 +36,7 @@ import CartDrawer from '../components/menu/CartDrawer';
 			Saltar al contenido principal
 		</a>
 		<slot />
+		<AuthProvider client:load />
 		<CartDrawer client:load />
 
 		<script>

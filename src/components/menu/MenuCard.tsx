@@ -27,7 +27,7 @@ export default function MenuCard({ product }: MenuCardProps) {
 	return (
 		<article
 			className={`flex flex-col justify-between rounded-[28px] sm:rounded-[34px] border border-pink/60 bg-beige backdrop-blur-xs overflow-hidden pb-4 sm:pb-5 shadow-[0_4px_16px_rgba(58,32,14,0.04)] hover:shadow-[0_12px_28px_rgba(58,32,14,0.09)] transition-all duration-300 ${
-				isPremium ? 'col-span-1 md:col-span-2' : 'col-span-1'
+				isPremium ? 'col-span-2' : 'col-span-1'
 			}`}
 		>
 			{/* Área Superior: Imagen (Sin padding, ocupa todo el ancho y alto asignado de la card) */}

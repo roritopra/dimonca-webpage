@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import MenuCard, { type ProductItem } from './MenuCard';
 
 import carameloSaladoImg from '../../assets/images/menu/home/galleta-item-banner-3.png';
@@ -110,8 +110,8 @@ const MOCK_PRODUCTS: ProductItem[] = [
 export default function MenuProductGrid() {
 	return (
 		<section className="relative w-full max-w-[1400px] mx-auto px-4 sm:px-6 pb-20">
-			{/* Grid adaptable de 6 columnas en desktop para encajar perfectamente estándar (1 col) y premium (2 cols) */}
-			<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 sm:gap-5">
+			{/* Grid adaptable: 2 columnas en mobile y tablet (<768px), 4 en md y 6 en lg */}
+			<div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3.5 sm:gap-5">
 				{MOCK_PRODUCTS.map((product) => (
 					<MenuCard key={product.id} product={product} />
 				))}

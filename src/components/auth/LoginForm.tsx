@@ -74,7 +74,7 @@ export default function LoginForm() {
 					onChange={(e) => setPassword(e.target.value)}
 					placeholder="Contraseña"
 					aria-label="Contraseña"
-					className="h-12 w-full rounded-full border-2 border-pink/60 bg-white px-5 font-sans text-sm text-brown outline-none transition-colors placeholder:text-brown/50 focus:border-pink focus:ring-2 focus:ring-pink/15"
+					className="h-12 w-full rounded-lg border-2 border-brown-300 bg-beige px-5 font-sans text-sm text-brown outline-none transition-colors placeholder:text-brown-400 focus:border-pink focus:ring-2 focus:ring-pink/15"
 				/>
 			</div>
 

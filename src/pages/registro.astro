@@ -4,16 +4,25 @@ import RegisterForm from '../components/auth/RegisterForm';
 ---
 
 <Layout>
-	<main id="main-content" class="flex min-h-screen items-center justify-center bg-beige px-6 pt-24 pb-20">
-		<div class="flex w-full max-w-sm flex-col items-center gap-8">
-			<div class="text-center">
-				<h1 class="font-sans text-3xl font-extrabold text-pink">Crea tu cuenta</h1>
-				<p class="mt-2 font-sans text-sm text-brown/70">
-					Únete a Dimonca y guarda tu carrito donde quieras
-				</p>
+	<main id="main-content" class="relative min-h-screen py-12 sm:py-16">
+		<!-- Fondo azul con cuadrícula picnic girada 30° a la izquierda (patrón Gingham de MenuBanner) -->
+		<div class="absolute inset-0 overflow-hidden" aria-hidden="true">
+			<div
+				class="absolute -inset-[50%]"
+				style="background-color:#9cc8ef;background-image:linear-gradient(90deg, rgba(255,255,255,0.45) 50%, transparent 50%),linear-gradient(rgba(255,255,255,0.45) 50%, transparent 50%);background-size:42px 42px;transform:rotate(-30deg);"
+			>
 			</div>
+		</div>
 
-			<RegisterForm client:load />
+		<!-- Tarjeta blanca del formulario -->
+		<div class="relative z-10 flex justify-center px-4">
+			<div class="w-full max-w-md rounded-3xl bg-beige px-6 py-8 shadow-[0_18px_50px_rgba(58,32,14,0.18)] sm:px-9 sm:py-10">
+				<h1 class="self-start text-left font-sans text-3xl font-extrabold text-brown">Registro:</h1>
+
+				<div class="mt-6">
+					<RegisterForm client:load />
+				</div>
+			</div>
 		</div>
 	</main>
 </Layout>

@@ -3,19 +3,32 @@ import { supabase } from '../../lib/supabase';
 
 type AuthStatus = 'idle' | 'loading' | 'success' | 'error';
 
+const inputClasses =
+	'h-12 w-full rounded-lg border-2 border-brown-300 bg-beige px-5 pr-12 font-sans text-sm text-brown outline-none transition-colors placeholder:text-brown-400 focus:border-pink focus:ring-2 focus:ring-pink/15';
+
 export default function RegisterForm() {
 	const [fullName, setFullName] = useState('');
 	const [phone, setPhone] = useState('');
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
+	const [confirmPassword, setConfirmPassword] = useState('');
+	const [showPassword, setShowPassword] = useState(false);
+	const [showConfirm, setShowConfirm] = useState(false);
 	const [status, setStatus] = useState<AuthStatus>('idle');
 	const [errorMessage, setErrorMessage] = useState('');
 	const [needsConfirmation, setNeedsConfirmation] = useState(false);
 
 	async function handleSubmit(e: React.FormEvent) {
 		e.preventDefault();
-		setStatus('loading');
 		setErrorMessage('');
+
+		if (password !== confirmPassword) {
+			setErrorMessage('Las contraseñas no coinciden.');
+			setStatus('error');
+			return;
+		}
+
+		setStatus('loading');
 		setNeedsConfirmation(false);
 
 		// full_name y phone van en los metadatos: el trigger on_auth_user_created
@@ -73,7 +86,7 @@ export default function RegisterForm() {
 
 	if (needsConfirmation) {
 		return (
-			<div className="flex w-full max-w-sm flex-col items-center gap-4 text-center">
+			<div className="flex w-full flex-col items-center gap-4 text-center">
 				<div className="flex h-14 w-14 items-center justify-center rounded-full bg-pink/10">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
@@ -106,7 +119,24 @@ export default function RegisterForm() {
 	}
 
 	return (
-		<form onSubmit={handleSubmit} className="flex w-full max-w-sm flex-col gap-4">
+		<form onSubmit={handleSubmit} className="flex w-full flex-col gap-4">
+			{/* Abrir cuenta con Google (Apple fuera del flujo) */}
+			<div>
+				<p className="font-sans text-sm font-bold text-brown">Abrir cuenta con:</p>
+				<button
+					type="button"
+					onClick={handleGoogleSignUp}
+					disabled={status === 'loading'}
+					className="mt-2 flex h-11 w-full items-center justify-center gap-2.5 rounded-full border-2 border-blue-600 bg- px-6 font-sans text-sm font-bold text-blue-600 transition-all hover:bg-blue-200/40 active:scale-[0.98] cursor-pointer disabled:opacity-70"
+				>
+					<GoogleIcon />
+					Google
+				</button>
+			</div>
+
+			{/* Divisor */}
+			<div className="h-0.5 rounded-full bg-blue-600/50" />
+
 			<div>
 				<label htmlFor="reg-name" className="font-sans text-sm font-bold text-brown">
 					Nombre completo
@@ -117,8 +147,8 @@ export default function RegisterForm() {
 					required
 					value={fullName}
 					onChange={(e) => setFullName(e.target.value)}
-					placeholder="Tu nombre"
-					className="mt-1.5 h-12 w-full rounded-2xl border border-brown/20 bg-white px-4 font-sans text-sm text-brown outline-none transition-colors placeholder:text-brown/40 focus:border-pink"
+					placeholder="Nombre completo"
+					className={`mt-1.5 ${inputClasses}`}
 				/>
 			</div>
 
@@ -132,14 +162,14 @@ export default function RegisterForm() {
 					required
 					value={phone}
 					onChange={(e) => setPhone(e.target.value)}
-					placeholder="+57 300 000 0000"
-					className="mt-1.5 h-12 w-full rounded-2xl border border-brown/20 bg-white px-4 font-sans text-sm text-brown outline-none transition-colors placeholder:text-brown/40 focus:border-pink"
+					placeholder="Teléfono"
+					className={`mt-1.5 ${inputClasses}`}
 				/>
 			</div>
 
 			<div>
 				<label htmlFor="reg-email" className="font-sans text-sm font-bold text-brown">
-					Correo electrónico
+					Correo
 				</label>
 				<input
 					id="reg-email"
@@ -147,8 +177,8 @@ export default function RegisterForm() {
 					required
 					value={email}
 					onChange={(e) => setEmail(e.target.value)}
-					placeholder="tu@correo.com"
-					className="mt-1.5 h-12 w-full rounded-2xl border border-brown/20 bg-white px-4 font-sans text-sm text-brown outline-none transition-colors placeholder:text-brown/40 focus:border-pink"
+					placeholder="Correo"
+					className={`mt-1.5 ${inputClasses}`}
 				/>
 			</div>
 
@@ -156,16 +186,38 @@ export default function RegisterForm() {
 				<label htmlFor="reg-password" className="font-sans text-sm font-bold text-brown">
 					Contraseña
 				</label>
-				<input
-					id="reg-password"
-					type="password"
-					required
-					minLength={6}
-					value={password}
-					onChange={(e) => setPassword(e.target.value)}
-					placeholder="Mínimo 6 caracteres"
-					className="mt-1.5 h-12 w-full rounded-2xl border border-brown/20 bg-white px-4 font-sans text-sm text-brown outline-none transition-colors placeholder:text-brown/40 focus:border-pink"
-				/>
+				<div className="relative">
+					<input
+						id="reg-password"
+						type={showPassword ? 'text' : 'password'}
+						required
+						minLength={6}
+						value={password}
+						onChange={(e) => setPassword(e.target.value)}
+						placeholder="Contraseña"
+						className={inputClasses}
+					/>
+					<EyeToggle show={showPassword} onToggle={() => setShowPassword(!showPassword)} />
+				</div>
+			</div>
+
+			<div>
+				<label htmlFor="reg-confirm" className="font-sans text-sm font-bold text-brown">
+					Confirmar contraseña
+				</label>
+				<div className="relative">
+					<input
+						id="reg-confirm"
+						type={showConfirm ? 'text' : 'password'}
+						required
+						minLength={6}
+						value={confirmPassword}
+						onChange={(e) => setConfirmPassword(e.target.value)}
+						placeholder="Confirmar contraseña"
+						className={inputClasses}
+					/>
+					<EyeToggle show={showConfirm} onToggle={() => setShowConfirm(!showConfirm)} />
+				</div>
 			</div>
 
 			{status === 'error' && (
@@ -177,33 +229,13 @@ export default function RegisterForm() {
 			<button
 				type="submit"
 				disabled={status === 'loading'}
-				className="mt-2 flex h-12 items-center justify-center rounded-full bg-pink px-6 font-sans text-base font-bold text-white shadow-xs transition-transform hover:scale-[1.02] active:scale-95 cursor-pointer disabled:opacity-70 disabled:hover:scale-100"
+				className="mt-1 flex h-12 items-center justify-center rounded-full bg-blue-600 px-6 font-sans text-base font-bold text-white shadow-[0_3px_12px_rgba(106,167,213,0.45)] transition-all hover:bg-blue-500 active:scale-[0.98] cursor-pointer disabled:opacity-70 disabled:hover:scale-100"
 			>
-				{status === 'loading' ? 'Creando cuenta...' : 'Crear cuenta'}
+				{status === 'loading' ? 'Creando cuenta...' : 'Registrate'}
 			</button>
 
-			{/* Separador */}
-			<div className="my-1 flex items-center gap-3">
-				<span className="h-px flex-1 bg-brown/15" />
-				<span className="font-sans text-xs font-semibold uppercase tracking-wide text-brown/40">
-					o
-				</span>
-				<span className="h-px flex-1 bg-brown/15" />
-			</div>
-
-			{/* Registrarse con Google */}
-			<button
-				type="button"
-				onClick={handleGoogleSignUp}
-				disabled={status === 'loading'}
-				className="flex h-12 items-center justify-center gap-3 rounded-full border border-brown/20 bg-white px-6 font-sans text-sm font-bold text-brown shadow-xs transition-transform hover:scale-[1.02] active:scale-95 cursor-pointer disabled:opacity-70 disabled:hover:scale-100"
-			>
-				<GoogleIcon />
-				Continuar con Google
-			</button>
-
-			<p className="text-center font-sans text-sm text-brown/70">
-				¿Ya tienes cuenta?{' '}
+			<p className="text-center font-sans text-sm text-brown/80">
+				¿Ya tienes una cuenta?{' '}
 				<a href="/login" className="font-bold text-pink no-underline hover:underline">
 					Inicia sesión
 				</a>
@@ -212,26 +244,46 @@ export default function RegisterForm() {
 	);
 }
 
-// Logo oficial de Google (multicolor)
+// Logo de Google en versión stroke monocolor
 function GoogleIcon() {
 	return (
-		<svg viewBox="0 0 24 24" className="h-5 w-5" aria-hidden="true">
-			<path
-				fill="#4285F4"
-				d="M23.49 12.27c0-.79-.07-1.54-.19-2.27H12v4.51h6.47a5.57 5.57 0 0 1-2.4 3.58v3h3.86c2.26-2.09 3.56-5.17 3.56-8.82z"
-			/>
-			<path
-				fill="#34A853"
-				d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.86-3c-1.08.72-2.45 1.16-4.07 1.16-3.13 0-5.78-2.11-6.73-4.96H1.29v3.09A11.99 11.99 0 0 0 12 24z"
-			/>
-			<path
-				fill="#FBBC05"
-				d="M5.27 14.29A7.2 7.2 0 0 1 4.89 12c0-.8.14-1.57.38-2.29V6.62H1.29a11.97 11.97 0 0 0 0 10.76l3.98-3.09z"
-			/>
-			<path
-				fill="#EA4335"
-				d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.31 0 3.26 2.69 1.29 6.62l3.98 3.09C6.22 6.86 8.87 4.75 12 4.75z"
-			/>
+		<svg
+			viewBox="0 0 24 24"
+			className="h-5 w-5"
+			fill="none"
+			stroke="currentColor"
+			strokeWidth="2"
+			strokeLinecap="round"
+			strokeLinejoin="round"
+			aria-hidden="true"
+		>
+			<path d="M20.4 12.4a8.4 8.4 0 1 1-2.9-6.5" />
+			<path d="M20.4 12.4h-8.4" />
 		</svg>
+	);
+}
+
+// Ojo con/para mostrar y ocultar contraseñas (stroke blue-600 como en el diseño, hereda currentColor)
+function EyeToggle({ show, onToggle }: { show: boolean; onToggle: () => void }) {
+	return (
+		<button
+			type="button"
+			onClick={onToggle}
+			className="absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer text-blue-600 transition-opacity hover:opacity-70"
+			aria-label={show ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+			aria-pressed={show}
+		>
+			{show ? (
+				<svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+					<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z" />
+					<circle cx="12" cy="12" r="3" />
+				</svg>
+			) : (
+				<svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+					<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
+					<line x1="1" y1="1" x2="23" y2="23" />
+				</svg>
+			)}
+		</button>
 	);
 }

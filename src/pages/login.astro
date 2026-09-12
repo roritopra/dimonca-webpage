@@ -1,19 +1,56 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import LoginForm from '../components/auth/LoginForm';
+import { Icon } from 'astro-icon/components';
+import bannerLogin from '../assets/images/login/banner-login.png';
+
+// Rayas verticales anchas (mismo patrón del hero/giro y FindUs: 31px de rayón por 62px de paso)
+const stripes = Array.from({ length: 12 }, (_, i) => ({
+	left: (i * (62.1 / 720)) * 100,
+	width: (31 / 720) * 100,
+}));
 ---
 
 <Layout>
-	<main id="main-content" class="flex min-h-screen items-center justify-center bg-beige px-6 pt-24 pb-20">
-		<div class="flex w-full max-w-sm flex-col items-center gap-8">
-			<div class="text-center">
-				<h1 class="font-sans text-3xl font-extrabold text-pink">Inicia sesión</h1>
-				<p class="mt-2 font-sans text-sm text-brown/70">
-					Bienvenido de vuelta a Dimonca
-				</p>
-			</div>
+	<main id="main-content" class="grid min-h-screen grid-cols-1 bg-beige lg:grid-cols-2">
+		<!-- Mitad izquierda: formulario de inicio de sesión -->
+		<div class="relative flex flex-col items-center justify-center px-6 py-16 sm:px-10">
+			<a
+				href="/"
+				class="absolute left-6 top-6 flex h-11 w-11 items-center justify-center rounded-full bg-white text-pink shadow-md transition-transform active:scale-95"
+				aria-label="Volver al inicio"
+			>
+				<Icon name="lucide:arrow-left" class="h-5 w-5" aria-hidden="true" />
+			</a>
 
-			<LoginForm client:load />
+			<div class="w-full max-w-sm">
+				<h1 class="self-start text-left font-sans text-3xl font-extrabold text-brown">Iniciar Sesión</h1>
+				<div class="mt-8">
+					<LoginForm client:load />
+				</div>
+			</div>
 		</div>
+
+		<!-- Mitad derecha: banner sobre fondo rosado con rayas verticales -->
+		<aside class="relative hidden overflow-hidden lg:block" aria-label="Imagen de bienvenida Dimonca">
+			<div class="absolute inset-0 bg-[#f45d8c]" aria-hidden="true"></div>
+			<div class="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+				{
+					stripes.map((s) => (
+						<div
+							class="absolute top-0 bottom-0 bg-[#f6acbf]"
+							style={`left: ${s.left}%; width: ${s.width}%;`}
+						/>
+					))
+				}
+			</div>
+			<div class="relative z-10 flex h-full w-full items-center justify-center p-8">
+				<img
+					src={bannerLogin.src}
+					alt="Bienvenido a Dimonca: cookies sobre fondo rosado"
+					class="h-full max-h-[92%] w-auto object-contain"
+				/>
+			</div>
+		</aside>
 	</main>
 </Layout>

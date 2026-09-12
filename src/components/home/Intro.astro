@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 import sobre1Img from "../../assets/images/home/sobre-nosotros/foto-1.png";
 import sobre2Img from "../../assets/images/home/sobre-nosotros/foto-2.png";
 import sobre3Img from "../../assets/images/home/sobre-nosotros/foto-3.png";
@@ -55,12 +56,12 @@ import sobre4Img from "../../assets/images/home/sobre-nosotros/foto-4.png";
     <!-- 2. Slideshow con máscara de recorte D (6 imágenes) -->
     <div id="intro-d-masked" class="absolute inset-0 h-full w-full opacity-0">
       <div id="intro-slides-wrapper" class="relative h-full w-full bg-beige">
-        <img class="intro-slide active" src={sobre1Img.src} alt="" />
-        <img class="intro-slide" src={sobre2Img.src} alt="" />
-        <img class="intro-slide" src={sobre3Img.src} alt="" />
-        <img class="intro-slide" src={sobre4Img.src} alt="" />
-        <img class="intro-slide" src={sobre1Img.src} alt="" />
-        <img class="intro-slide" src={sobre2Img.src} alt="" />
+        <Image class="intro-slide active" src={sobre1Img} alt="" width={720} height={720} loading="eager" />
+        <Image class="intro-slide" src={sobre2Img} alt="" width={720} height={720} loading="eager" />
+        <Image class="intro-slide" src={sobre3Img} alt="" width={720} height={720} loading="eager" />
+        <Image class="intro-slide" src={sobre4Img} alt="" width={720} height={720} loading="eager" />
+        <Image class="intro-slide" src={sobre1Img} alt="" width={720} height={720} loading="eager" />
+        <Image class="intro-slide" src={sobre2Img} alt="" width={720} height={720} loading="eager" />
       </div>
     </div>
   </div>

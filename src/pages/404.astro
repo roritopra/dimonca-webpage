@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { Icon } from 'astro-icon/components';
+import { Image } from 'astro:assets';
 import cookieImg from '../assets/images/home/hero/hero-cookie.png';
 ---
 
@@ -10,11 +11,11 @@ import cookieImg from '../assets/images/home/hero/hero-cookie.png';
 			<!-- Galleta flotante con sombra -->
 			<div class="notfound-cookie relative mb-2 select-none" aria-hidden="true">
 				<div class="absolute -inset-[12%] rounded-full bg-white/55 blur-3xl"></div>
-				<img
-					src={cookieImg.src}
+				<Image
+					src={cookieImg}
 					alt=""
-					width="180"
-					height="180"
+					width={360}
+					height={360}
 					class="relative h-32 w-32 object-contain drop-shadow-[0_18px_30px_rgba(58,32,14,0.25)] sm:h-40 sm:w-40"
 					loading="eager"
 				/>

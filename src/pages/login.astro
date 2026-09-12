@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import LoginForm from '../components/auth/LoginForm';
 import { Icon } from 'astro-icon/components';
+import { Image } from 'astro:assets';
 import bannerLogin from '../assets/images/login/banner-login.png';
 
 // Rayas verticales anchas (mismo patrón del hero/giro y FindUs: 31px de rayón por 62px de paso)
@@ -45,10 +46,13 @@ const stripes = Array.from({ length: 12 }, (_, i) => ({
 				}
 			</div>
 			<div class="relative z-10 flex h-full w-full items-center justify-center p-8">
-				<img
-					src={bannerLogin.src}
+				<Image
+					src={bannerLogin}
 					alt="Bienvenido a Dimonca: cookies sobre fondo rosado"
 					class="h-full max-h-[92%] w-auto object-contain"
+					width={720}
+					height={900}
+					loading="eager"
 				/>
 			</div>
 		</aside>

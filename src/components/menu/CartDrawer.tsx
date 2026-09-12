@@ -18,6 +18,9 @@ import type { CartItem } from '../../types/products';
 // Imagen de caja vacía
 import emptyBoxImg from '../../assets/images/menu/home/empty-box.png';
 
+// Aviso de fallo de sincronización (carrito híbrido)
+import { $cartSyncError } from '../../stores/cartStore';
+
 // Mock de sugerencias para "¿Un último antojo?" (estilo de galletas del menú)
 import carameloSaladoImg from '../../assets/images/menu/home/galleta-item-banner-3.png';
 import rocheImg from '../../assets/images/menu/home/galleta-item-banner-4.png';
@@ -74,6 +77,7 @@ export default function CartDrawer() {
 	const total = useStore($cartTotal);
 	const isOpen = useStore($isCartOpen);
 	const authStatus = useStore($authStatus);
+	const cartSyncError = useStore($cartSyncError);
 	const [mounted, setMounted] = useState(false);
 	const [lastRemovedItem, setLastRemovedItem] = useState<{ item: CartItem; index: number } | null>(null);
 	const undoTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -239,6 +243,21 @@ export default function CartDrawer() {
 				) : (
 					// ESTADO CON PRODUCTOS: Lista de items + Antojo + Subtotal
 					<>
+						{/* Aviso: fallo de sincronización con la cuenta (solo logueado) */}
+						{cartSyncError && authStatus === 'loggedIn' && (
+							<div className="mx-6 mt-4 flex items-start gap-2.5 rounded-2xl bg-amber-50 border border-amber-300 px-4 py-3">
+								<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mt-0.5 h-4 w-4 shrink-0 text-amber-600" aria-hidden="true">
+									<path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3" />
+									<path d="M12 9v4" />
+									<path d="M12 17h.01" />
+								</svg>
+								<p className="font-sans text-xs leading-relaxed text-amber-700">
+									No pudimos guardar tu carrito en tu cuenta por ahora. Tus productos están a salvo
+									en este dispositivo; vuelve a intentarlo más tarde.
+								</p>
+							</div>
+						)}
+
 						<div
 							id="cart-scroll-body"
 							className="flex-1 overflow-y-auto px-6 py-5 space-y-6 overscroll-contain cart-scrollbar"

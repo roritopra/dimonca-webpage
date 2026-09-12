@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 import estIconBrown from '../../assets/images/shared/est-icon-brown.png';
 import estIcon from '../../assets/images/shared/est-icon.png';
 import estIconPink from '../../assets/images/shared/est-icon-pink.png';
@@ -50,11 +51,14 @@ if (isBrown) {
         items.map((item) => (
           <div class="flex shrink-0 items-center gap-[12px] sm:gap-[18px] lg:gap-[22px] pr-[44px] sm:pr-[68px] lg:pr-[92px]">
             <p class={`m-0 font-sans text-[13px] sm:text-[16px] lg:text-[19px] leading-[1.2] ${textClass}`}>EST</p>
-            <img
+            <Image
               class="block h-5 w-5 sm:h-6 sm:w-6 lg:h-8 lg:w-[30px] object-cover"
-              src={icon.src}
+              src={icon}
               alt=""
               aria-hidden="true"
+              width={60}
+              height={60}
+              loading="lazy"
             />
             <p class={`m-0 text-right font-sans text-[13px] sm:text-[16px] lg:text-[19px] leading-[1.2] ${textClass}`}>
               {item.year}

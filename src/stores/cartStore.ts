@@ -122,8 +122,10 @@ async function pullAndMerge(): Promise<void> {
 			$cart.set(localItems);
 			await replaceCartItems(cartId, localItems);
 		}
+		$cartSyncError.set(false);
 	} catch (err) {
 		console.error('[cartStore] Error al cargar el carrito al iniciar sesión:', err);
+		$cartSyncError.set(true);
 	} finally {
 		isMerging = false;
 	}

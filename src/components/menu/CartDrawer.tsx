@@ -12,6 +12,7 @@ import {
 	addToCart,
 	formatCurrency,
 } from '../../stores/cartStore';
+import { $authStatus } from '../../stores/authStore';
 import type { CartItem } from '../../types/products';
 
 // Imagen de caja vacía
@@ -72,6 +73,7 @@ export default function CartDrawer() {
 	const cart = useStore($cart);
 	const total = useStore($cartTotal);
 	const isOpen = useStore($isCartOpen);
+	const authStatus = useStore($authStatus);
 	const [mounted, setMounted] = useState(false);
 	const [lastRemovedItem, setLastRemovedItem] = useState<{ item: CartItem; index: number } | null>(null);
 	const undoTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -144,8 +146,12 @@ export default function CartDrawer() {
 	}
 
 	function handleCheckout() {
-		alert('¡Listo para comprar! Aquí se validará la autenticación con Supabase.');
-		window.location.href = '/login';
+		closeCart();
+		// Siempre va al checkout: la página maneja ambos estados (banner de
+		// "¿Ya tienes una cuenta?" si no hay sesión, formulario completo si hay).
+		// No se condiciona por authStatus: durante 'initializing' podría mandar
+		// por error a login a un usuario ya logueado.
+		window.location.href = '/checkout';
 	}
 
 	if (!mounted) return null;

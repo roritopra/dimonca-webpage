@@ -35,12 +35,13 @@ async function getBoxProductIds(): Promise<string[]> {
 		.eq('product_type', 'custom_box');
 
 	if (error) {
-		console.error('[cartApi] Error al obtener ids de cajas:', error.message);
-		boxIdsCache = [];
-	} else {
-		boxIdsCache = (data ?? []).map((row) => row.id);
+		// NO cachear en error: un cache vacío haría que las cajas se guarden con
+		// su id falso (con timestamp) y romperían la FK contra products.
+		throw new Error(`No se pudieron resolver los ids de las cajas: ${error.message}`);
 	}
-	return boxIdsCache ?? [];
+
+	boxIdsCache = (data ?? []).map((row) => row.id);
+	return boxIdsCache;
 }
 
 function isBoxItem(item: CartItem): boolean {
@@ -50,7 +51,8 @@ function isBoxItem(item: CartItem): boolean {
 // Resuelve el product_id real para la BD: los items de caja vienen con un id
 // falso con timestamp (ej. "combo-arma-tu-caja-x3-1736...") que no existe en
 // products; se mapea de vuelta al id real de la caja por prefijo.
-async function resolveProductId(item: CartItem): Promise<string> {
+// Exportada: ordersApi la reutiliza al crear las líneas del pedido.
+export async function resolveProductId(item: CartItem): Promise<string> {
 	if (isBoxItem(item)) {
 		const boxIds = await getBoxProductIds();
 		const match = boxIds.find((id) => item.productId === id || item.productId.startsWith(`${id}-`));

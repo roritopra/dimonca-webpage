@@ -384,6 +384,7 @@ SELECT status, COUNT(*) FROM public.orders GROUP BY 1;
 | 3 | `supabase/migrations/20260911000003_seed_mock_data.sql` | Bucket `product-images`, 5 categorías, 12 productos, plantilla de pedido de prueba | ✅ Ejecutada 2026-09-11 |
 | 4 | *(vía MCP)* `fix_fmt_money_cop` | Fix de `fmt_money_cop`: `\0` no es backreference válido en Postgres (se insertaba literal → `$1\0.000`); se usa `\&` (match completo). Las columnas generadas STORED no se recalculan al cambiar la función, se forzó con `UPDATE products SET price = price` | ✅ Ejecutada 2026-09-11 |
 | 5 | `supabase/migrations/20260911000004_carts.sql` | Carrito persistente: tablas `carts` y `cart_items` (con snapshot del producto y `box_contents` para cajas armadas), índice único parcial para singles, triggers, RLS con CRUD propio del usuario | ✅ Ejecutada 2026-09-11 |
+| 6 | *(vía MCP)* `security_fixes_functions` | Endurecimiento según linter de Supabase: `search_path` fijo en `set_updated_at` y `fmt_money_cop`; `REVOKE EXECUTE` de `handle_new_user()` a anon/authenticated (solo la invoca el trigger) | ✅ Ejecutada 2026-09-12 |
 
 > Al ejecutar cada script en Supabase, marcar la casilla ✅ aquí y anotar la fecha. Cualquier migración nueva se agrega al final con su fecha y descripción.
 

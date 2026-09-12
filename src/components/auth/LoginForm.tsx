@@ -28,7 +28,9 @@ export default function LoginForm() {
 		}
 
 		setStatus('success');
-		window.location.href = '/menu';
+		// Vuelve a donde el usuario venía (ej. /checkout) o al menú por defecto
+		const redirectTo = new URLSearchParams(window.location.search).get('redirect');
+		window.location.href = redirectTo && redirectTo.startsWith('/') ? redirectTo : '/menu';
 	}
 
 	// OAuth con Google: redirige a la pantalla de consentimiento de Google y

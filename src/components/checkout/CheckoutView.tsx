@@ -355,7 +355,7 @@ export default function CheckoutView() {
 }
 
 const inputClass =
-	'h-11 w-full rounded-xl border border-brown/25 bg-white px-3.5 font-sans text-sm text-brown outline-none transition-colors placeholder:text-brown/40 focus:border-pink';
+	'h-12 w-full rounded-lg border-2 border-brown-300 bg-beige px-5 font-sans text-sm text-brown outline-none transition-colors placeholder:text-brown-400 focus:border-pink focus:ring-2 focus:ring-pink/15';
 
 function Field({ id, label, children }: { id: string; label: string; children: React.ReactNode }) {
 	return (

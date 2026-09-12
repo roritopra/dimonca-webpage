@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Icon } from '@iconify/react';
 import { supabase } from '../../lib/supabase';
 
 type AuthStatus = 'idle' | 'loading' | 'success' | 'error';
@@ -122,21 +123,7 @@ export default function LoginForm() {
 	);
 }
 
-// Logo de Google en versión stroke (trazo monocolor rosa, hereda currentColor)
+// Logo de Google en stroke rosa (set arcticons:google de Iconify vía @iconify/react)
 function GoogleIcon() {
-	return (
-		<svg
-			viewBox="0 0 24 24"
-			className="h-5 w-5 text-pink"
-			fill="none"
-			stroke="currentColor"
-			strokeWidth="2"
-			strokeLinecap="round"
-			strokeLinejoin="round"
-			aria-hidden="true"
-		>
-		<path d="M20.4 12.4a8.4 8.4 0 1 1-2.9-6.5" />
-		<path d="M20.4 12.4h-8.4" />
-		</svg>
-	);
+	return <Icon icon="akar-icons:google-fill" className="h-5 w-5 text-pink" aria-hidden="true" />;
 }

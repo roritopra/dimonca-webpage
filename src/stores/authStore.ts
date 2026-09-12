@@ -50,6 +50,12 @@ function setSession(session: Session | null): void {
 	}
 }
 
+// Recarga el perfil desde la BD (tras editar datos en el perfil)
+export async function refreshProfile(): Promise<void> {
+	const userId = $user.get()?.id;
+	if (userId) await loadProfile(userId);
+}
+
 // Carga el perfil (profiles) del usuario logueado desde Supabase
 async function loadProfile(userId: string): Promise<void> {
 	const { data, error } = await supabase

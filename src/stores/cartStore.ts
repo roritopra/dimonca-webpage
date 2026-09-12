@@ -14,6 +14,10 @@ export const $cart = persistentAtom<CartItem[]>('dimonca_cart', [], {
 // Estado de visibilidad del Drawer lateral del carrito
 export const $isCartOpen = atom<boolean>(false);
 
+// Indica si la última sincronización del carrito con Supabase falló
+// (para mostrar feedback en la UI; se limpia al sincronizar bien)
+export const $cartSyncError = atom<boolean>(false);
+
 // Número total de ítems en el carrito
 export const $cartCount = computed($cart, (items) =>
 	items.reduce((total, item) => total + item.quantity, 0)
@@ -89,8 +93,10 @@ async function pushCartToServer(): Promise<void> {
 	try {
 		const cartId = await getOrCreateCartId(user.id);
 		await replaceCartItems(cartId, $cart.get());
+		$cartSyncError.set(false);
 	} catch (err) {
 		console.error('[cartStore] Error al sincronizar el carrito con Supabase:', err);
+		$cartSyncError.set(true);
 	}
 }
 

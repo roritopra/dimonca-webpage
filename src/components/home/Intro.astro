@@ -110,13 +110,11 @@ import sobre4Img from "../../assets/images/home/sobre-nosotros/foto-4.png";
     object-fit: cover;
     object-position: center;
     opacity: 0;
-    transform: scale(1.15);
-    transition: opacity 0.12s ease-out, transform 0.15s ease-out;
+    /* Corte estático: sin transición ni zoom, igual que el corte final a la máscara */
   }
 
   .intro-slide.active {
     opacity: 1;
-    transform: scale(1);
   }
 </style>
 

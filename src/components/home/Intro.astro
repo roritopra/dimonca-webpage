@@ -66,11 +66,22 @@ import sobre4Img from "../../assets/images/home/sobre-nosotros/foto-4.png";
   </div>
 </div>
 
+<!-- Guard de sesión: si la intro ya se reprodujo en esta pestaña, se oculta
+     ANTES del primer paint (script inline síncrono) para evitar el flash rosa.
+     sessionStorage se borra al cerrar la pestaña → la intro vuelve a aparecer
+     solo cuando el usuario abre el sitio de nuevo (nueva pestaña/sesión). -->
+<script is:inline>
+  if (sessionStorage.getItem('dimonca_intro_played') === '1') {
+    var introOverlay = document.getElementById('intro-overlay');
+    if (introOverlay) introOverlay.style.display = 'none';
+  }
+</script>
+
 <style>
   #intro-overlay {
     position: fixed;
     inset: 0;
-    z-index: 9999;
+    z-index: 12000;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -112,7 +123,17 @@ import sobre4Img from "../../assets/images/home/sobre-nosotros/foto-4.png";
 <script>
   import { animate } from 'motion';
 
+  const INTRO_SESSION_FLAG = 'dimonca_intro_played';
+
   function playIntroAnimation() {
+    // Si ya se reprodujo en esta sesión (pestaña), no se vuelve a mostrar:
+    // solo juega al abrir el sitio de nuevo (nueva pestaña / tras cerrarlo).
+    if (sessionStorage.getItem(INTRO_SESSION_FLAG) === '1') {
+      const overlay = document.getElementById('intro-overlay');
+      if (overlay) overlay.style.display = 'none';
+      return;
+    }
+
     const overlay = document.getElementById('intro-overlay');
     const dContainer = document.getElementById('intro-d-container');
     const dSolid = document.getElementById('intro-d-solid');
@@ -193,6 +214,9 @@ import sobre4Img from "../../assets/images/home/sobre-nosotros/foto-4.png";
             if (progress < 1) {
               requestAnimationFrame(stepExpansion);
             } else {
+              // Marcar la intro como vista: no se repite en navegaciones
+              // internas ni recargas de esta pestaña, solo al reabrir el sitio.
+              sessionStorage.setItem(INTRO_SESSION_FLAG, '1');
               if (overlay) overlay.style.display = 'none';
               document.body.style.overflow = '';
             }

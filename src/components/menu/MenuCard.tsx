@@ -57,9 +57,9 @@ export default function MenuCard({ product, withTransition = false }: MenuCardPr
 					/>
 				</div>
 			) : (
-				// Tarjeta Estándar (Galleta individual): en reposo la galleta va tapada a media vista
-				// (overflow oculto); en hover la card la destapa y sube completa sobresaliendo
-				<div className="relative h-32 sm:h-36 w-full overflow-hidden group-hover:overflow-visible bg-transparent">
+				// Tarjeta Estándar (Galleta individual): en reposo la galleta queda tapada a media vista
+				// (clip-path). En hover el clip se expande suavemente hacia arriba y la galleta sube completa.
+				<div className="relative h-32 sm:h-36 w-full bg-transparent [clip-path:inset(0_0_0_0)] transition-[clip-path] duration-[450ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:[clip-path:inset(-140px_0_0_0)]">
 					<img
 						src={product.imageSrc}
 						alt={product.name}

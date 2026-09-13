@@ -40,7 +40,7 @@ export default function MenuCard({ product, withTransition = false }: MenuCardPr
 
 	return (
 		<article
-			className={`flex flex-col justify-between rounded-[28px] sm:rounded-[34px] border border-pink/60 bg-beige backdrop-blur-xs overflow-hidden pb-4 sm:pb-5 shadow-[0_4px_16px_rgba(58,32,14,0.04)] hover:shadow-[0_12px_28px_rgba(58,32,14,0.09)] transition-all duration-300 ${
+			className={`group relative flex flex-col justify-between rounded-[28px] sm:rounded-[34px] border border-pink/60 bg-beige backdrop-blur-xs pb-4 sm:pb-5 shadow-[0_4px_16px_rgba(58,32,14,0.04)] hover:shadow-[0_12px_28px_rgba(58,32,14,0.09)] transition-[background-color,box-shadow] duration-300 ease-out hover:bg-[#ffeaf2] ${
 				isPremium ? 'col-span-2' : 'col-span-1'
 			}`}
 			data-vt-card={useNames ? product.id : undefined}
@@ -57,12 +57,13 @@ export default function MenuCard({ product, withTransition = false }: MenuCardPr
 					/>
 				</div>
 			) : (
-				// Tarjeta Estándar (Galleta individual): Sin padding, abarca todo el ancho de borde a borde
-				<div className="relative h-32 sm:h-36 w-full overflow-hidden bg-transparent">
+				// Tarjeta Estándar (Galleta individual): en reposo la galleta va tapada a media vista
+				// (overflow oculto); en hover la card la destapa y sube completa sobresaliendo
+				<div className="relative h-32 sm:h-36 w-full overflow-hidden group-hover:overflow-visible bg-transparent">
 					<img
 						src={product.imageSrc}
 						alt={product.name}
-						className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-48 sm:w-56 max-w-none object-contain drop-shadow-[0_8px_16px_rgba(58,32,14,0.14)] transition-transform duration-300 hover:scale-105"
+						className="absolute bottom-0 left-1/2 z-10 -translate-x-1/2 translate-y-1/2 w-48 sm:w-56 max-w-none object-contain drop-shadow-[0_8px_16px_rgba(58,32,14,0.14)] transition-transform duration-[450ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-y-[26px] sm:group-hover:translate-y-[42px]"
 						data-vt-image={useNames ? '' : undefined}
 						loading="lazy"
 					/>

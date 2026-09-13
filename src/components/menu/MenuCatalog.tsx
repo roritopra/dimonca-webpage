@@ -185,6 +185,7 @@ export default function MenuCatalog() {
 							<MenuCard
 								key={product.id}
 								product={product}
+								withTransition
 							/>
 						))}
 					</div>

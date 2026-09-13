@@ -103,10 +103,19 @@ const firstRowProducts: Product[] = allProducts.slice(0, 5);
 				<div
 					class="flex flex-col items-stretch gap-10 lg:grid lg:grid-cols-[minmax(250px,300px)_1fr_88px] lg:items-center lg:gap-6 lg:pb-0 pt-2 lg:pt-0"
 				>
-					<!-- Columna izquierda: información del producto (mobile: bloque beige de ancho completo) -->
-					<div class="order-4 -mx-6 flex flex-col bg-beige px-6 pb-9 pt-10 sm:pt-12 lg:order-1 lg:m-0 lg:bg-transparent lg:p-0 lg:pb-0">
+				<!-- Columna izquierda: información del producto (mobile: bloque beige de ancho completo) -->
+				<!-- Lleva el mismo view-transition-name que la card del menú: la card hace morph
+				     hacia este panel. Sin match, el snapshot viejo quedaría como un "vidrio"
+				     flotando encima del contenido nuevo (capa superior de la VT API). -->
+					<div
+						class="order-4 -mx-6 flex flex-col bg-beige px-6 pb-9 pt-10 sm:pt-12 lg:order-1 lg:m-0 lg:bg-transparent lg:p-0 lg:pb-0"
+						style={`view-transition-name: product-card-${product.id};`}
+					>
 						<!-- Título con contorno blanco (duplicado posicionado detrás) -->
-						<h1 class="relative z-0 inline-block self-start font-sans text-4xl font-extrabold leading-tight text-pink sm:text-5xl">
+						<h1
+							class="relative z-0 inline-block self-start font-sans text-4xl font-extrabold leading-tight text-pink sm:text-5xl"
+							style={`view-transition-name: product-name-${product.id};`}
+						>
 							<span
 								aria-hidden="true"
 								class="absolute inset-0 select-none text-white [-webkit-text-stroke:10px_white]"
@@ -117,7 +126,10 @@ const firstRowProducts: Product[] = allProducts.slice(0, 5);
 						</h1>
 
 						<!-- Precio con contorno blanco igual que el título -->
-						<p class="relative z-0 inline-block self-start mt-3 font-sans text-3xl font-bold text-brown sm:text-4xl">
+						<p
+							class="relative z-0 inline-block self-start mt-3 font-sans text-3xl font-bold text-brown sm:text-4xl"
+							style={`view-transition-name: product-price-${product.id};`}
+						>
 							<span
 								aria-hidden="true"
 								class="absolute inset-0 select-none text-white [-webkit-text-stroke:9px_white]"
@@ -166,6 +178,7 @@ const firstRowProducts: Product[] = allProducts.slice(0, 5);
 							src={gallery[0]}
 							alt={product.name}
 							class="pd-layer pd-principal-layer absolute inset-0 m-auto h-[90%] w-[90%] object-contain drop-shadow-[0_12px_18px_rgba(58,32,14,0.25)] transition-transform duration-300"
+							style={`view-transition-name: product-image-${product.id};`}
 							width="440"
 							height="440"
 						/>

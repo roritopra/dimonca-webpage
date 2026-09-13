@@ -1,0 +1,77 @@
+/* ============================================================================
+   View Transitions personalizadas — Dimonca
+   Efecto "expansión de card" (estilo App Store) al abrir un producto desde
+   el menú. SOLO mobile (< 640px), como decidió diseño.
+
+   Mecánica: MenuCard.tsx y /menu/[id].astro comparten los mismos
+   view-transition-name por producto:
+     - product-card-<id>   → la card completa se expande cubriendo la pantalla
+     - product-image-<id>  → la imagen vuela a su posición con mini-rebote
+     - product-name-<id>   → el título interpola café → rosa con stroke blanco
+     - product-price-<id>  → igual que el título
+
+   NOTA anti-bug: estos estilos viven en un CSS global importado por el Layout
+   (NO inyectados por JS). Así sobreviven los swaps de <head> del ClientRouter
+   y la animación existe en TODAS las navegaciones sin excepción.
+   ========================================================================== */
+
+@media (max-width: 639px) {
+	/* Los grupos de transición (card, imagen, título, precio) interpolan
+	   posición/tamaño con un overshoot suave = mini rebote */
+	::view-transition-group(*) {
+		animation-duration: 0.45s;
+		animation-timing-function: cubic-bezier(0.34, 1.4, 0.64, 1);
+	}
+
+	/* Contenido nuevo del detalle (estrella, galería, descripción, botones):
+	   fade-in suave con leve subida */
+	::view-transition-new(root) {
+		animation: vt-detail-content-in 0.4s cubic-bezier(0.22, 1, 0.36, 1) 0.12s both;
+	}
+
+	/* El contenido viejo (la grilla del menú) se desvanece rápido */
+	::view-transition-old(root) {
+		animation: vt-menu-content-out 0.18s ease-in both;
+	}
+
+	@keyframes vt-detail-content-in {
+		from {
+			opacity: 0;
+			transform: translateY(14px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	@keyframes vt-menu-content-out {
+		to {
+			opacity: 0;
+		}
+	}
+}
+
+/* ==========================================================================
+   DESKTOP (>= 640px): la animación de expansión es exclusiva de mobile.
+   Se anulan TODOS los nombres en ambas páginas — un nombre activo en la
+   página destino sin match en la de origen hace que sus elementos "vuelen"
+   por encima de la cortina del curtains wipe.
+   ========================================================================== */
+@media (min-width: 640px) {
+	/* Los estilos inline ganan por especificidad sobre selectores normales,
+	   por eso todos llevan !important. Los selectores [style*=...] cubren
+	   tanto los inline styles de React (cards) como los de Astro (detalle). */
+	article[style*='product-'],
+	div[style*='product-card-'],
+	h1[style*='product-name-'],
+	p[style*='product-price-'],
+	img[style*='product-image-'] {
+		view-transition-name: none !important;
+	}
+}
+
+/* ==========================================================================
+   Fallback (navegadores sin View Transitions API: Safari/Firefox):
+   la navegación es normal sin animación — degradación elegante.
+   ========================================================================== */

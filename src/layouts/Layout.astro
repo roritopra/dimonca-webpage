@@ -1,6 +1,7 @@
 ---
 import { ClientRouter } from 'astro:transitions';
 import '../styles/global.css';
+import '../styles/view-transitions.css';
 import Intro from '../components/home/Intro.astro';
 import CartDrawer from '../components/menu/CartDrawer';
 import AuthProvider from '../components/auth/AuthProvider';
@@ -42,6 +43,51 @@ import AuthProvider from '../components/auth/AuthProvider';
 
 		<script>
 			import Lenis from 'lenis';
+
+			// ======================================================================
+			// View Transition: expansión card → detalle (solo mobile vía CSS)
+			// Los nombres de transición se aplican SOLO a la card clickeada en el
+			// momento del click. Si todas las cards los tuvieran, las no clickeadas
+			// quedarían como snapshots fantasma flotando durante la transición.
+			// capture:true → corre antes del interceptor de clicks de Astro.
+			// ======================================================================
+			document.addEventListener(
+				'click',
+				(e) => {
+					if (!(e.target instanceof Element)) return;
+					const link = e.target.closest('a[href^="/menu/"]');
+					if (!link) return;
+					const card = link.closest<HTMLElement>('[data-vt-card]');
+					if (!card) return;
+
+					const id = card.getAttribute('data-vt-card');
+					if (!id) return;
+
+					card.style.viewTransitionName = `product-card-${id}`;
+					card
+						.querySelector<HTMLElement>('[data-vt-image]')
+						?.style.setProperty('view-transition-name', `product-image-${id}`);
+					card
+						.querySelector<HTMLElement>('[data-vt-name]')
+						?.style.setProperty('view-transition-name', `product-name-${id}`);
+					card
+						.querySelector<HTMLElement>('[data-vt-price]')
+						?.style.setProperty('view-transition-name', `product-price-${id}`);
+				},
+				true
+			);
+
+			// Al SALIR de una página de detalle, quitar sus nombres de transición:
+			// si volviera al menú con nombres activos y sin match en las cards,
+			// los snapshots del detalle flotarían como fantasmas sobre el menú.
+			document.addEventListener('astro:before-preparation', () => {
+				if (!document.getElementById('pd-hero')) return;
+				document.querySelectorAll<HTMLElement>('[style*="view-transition-name"]').forEach((el) => {
+					if (el.style.viewTransitionName.startsWith('product-')) {
+						el.style.viewTransitionName = '';
+					}
+				});
+			});
 
 			let lenisInstance: Lenis | null = null;
 			let rafId: number | null = null;

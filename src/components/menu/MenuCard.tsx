@@ -4,11 +4,25 @@ import type { Product } from '../../types/products';
 
 interface MenuCardProps {
 	product: Product;
+	/**
+	 * Activa los view-transition-name para la animación de expansión card → detalle.
+	 * SOLO en la grilla del menú: si otra card en la misma página repite el nombre
+	 * (ej. "Más sabores" en el detalle), el navegador aborta la transición completa
+	 * y no se ve ninguna animación.
+	 */
+	withTransition?: boolean;
 }
 
-export default function MenuCard({ product }: MenuCardProps) {
+export default function MenuCard({ product, withTransition = false }: MenuCardProps) {
 	const isPremium = product.variant === 'premium';
 	const [quantity, setQuantity] = useState<number>(0);
+
+	// La animación de expansión es solo mobile (< 640px, gate por CSS en
+	// view-transitions.css). Los nombres de transición NO se ponen aquí:
+	// si todas las cards los tuvieran, las 11 no clickeadas quedarían como
+	// snapshots fantasma flotando durante la transición. Un script global los
+	// aplica SOLO a la card clickeada en el momento del click (ver Layout).
+	const useNames = withTransition && !isPremium;
 
 	function handleDecrease() {
 		if (quantity > 0) {
@@ -29,6 +43,7 @@ export default function MenuCard({ product }: MenuCardProps) {
 			className={`flex flex-col justify-between rounded-[28px] sm:rounded-[34px] border border-pink/60 bg-beige backdrop-blur-xs overflow-hidden pb-4 sm:pb-5 shadow-[0_4px_16px_rgba(58,32,14,0.04)] hover:shadow-[0_12px_28px_rgba(58,32,14,0.09)] transition-all duration-300 ${
 				isPremium ? 'col-span-2' : 'col-span-1'
 			}`}
+			data-vt-card={useNames ? product.id : undefined}
 		>
 			{/* Área Superior: Imagen (Sin padding, ocupa todo el ancho y alto asignado de la card) */}
 			{isPremium ? (
@@ -48,6 +63,7 @@ export default function MenuCard({ product }: MenuCardProps) {
 						src={product.imageSrc}
 						alt={product.name}
 						className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-48 sm:w-56 max-w-none object-contain drop-shadow-[0_8px_16px_rgba(58,32,14,0.14)] transition-transform duration-300 hover:scale-105"
+						data-vt-image={useNames ? '' : undefined}
 						loading="lazy"
 					/>
 				</div>
@@ -57,7 +73,10 @@ export default function MenuCard({ product }: MenuCardProps) {
 			{/* Área Inferior: Datos y Acciones (Con el padding original) */}
 			<div className="mt-3 sm:mt-4 flex flex-col px-4 sm:px-5">
 				{/* Título */}
-				<h3 className="font-sans text-base sm:text-lg font-extrabold text-brown leading-tight line-clamp-1">
+				<h3
+					className="font-sans text-base sm:text-lg font-extrabold text-brown leading-tight line-clamp-1"
+					data-vt-name={useNames ? '' : undefined}
+				>
 					{product.name}
 				</h3>
 
@@ -83,7 +102,10 @@ export default function MenuCard({ product }: MenuCardProps) {
 				) : (
 					// Card Estándar: Precio arriba, Selector de unidades (- 0 +) y botón 'Ver más'
 					<div className="mt-2 flex flex-col gap-2.5 sm:gap-3">
-						<span className="font-sans text-sm sm:text-base font-bold text-pink">
+						<span
+							className="font-sans text-sm sm:text-base font-bold text-pink"
+							data-vt-price={useNames ? '' : undefined}
+						>
 							{product.priceFormatted}
 						</span>
 

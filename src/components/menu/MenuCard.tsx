@@ -57,13 +57,14 @@ export default function MenuCard({ product, withTransition = false }: MenuCardPr
 					/>
 				</div>
 			) : (
-				// Tarjeta Estándar (Galleta individual): en reposo la galleta queda tapada a media vista
-				// (clip-path). En hover el clip se expande suavemente hacia arriba y la galleta sube completa.
-				<div className="relative h-32 sm:h-36 w-full bg-transparent [clip-path:inset(0_0_0_0)] transition-[clip-path] duration-[450ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:[clip-path:inset(-140px_0_0_0)]">
+				// Tarjeta Estándar (Galleta individual): franja de imagen más baja y la card empuja
+				// el contenido hacia abajo (justify-between); en reposo galleta tapada a media vista
+				// (clip-path); en hover el clip se expande hacia arriba y la galleta sube completa.
+				<div className="relative h-28 sm:h-30 w-full bg-transparent [clip-path:inset(0_0_0_0)] transition-[clip-path] duration-[450ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:[clip-path:inset(-140px_0_0_0)]">
 					<img
 						src={product.imageSrc}
 						alt={product.name}
-						className="absolute bottom-0 left-1/2 z-10 -translate-x-1/2 translate-y-1/2 w-48 sm:w-56 max-w-none object-contain drop-shadow-[0_8px_16px_rgba(58,32,14,0.14)] transition-transform duration-[450ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-y-[26px] sm:group-hover:translate-y-[42px]"
+						className="absolute bottom-0 left-1/2 z-10 -translate-x-1/2 translate-y-1/2 w-48 sm:w-56 max-w-none object-contain drop-shadow-[0_8px_16px_rgba(58,32,14,0.14)] transition-transform duration-[450ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-y-[42px] sm:group-hover:translate-y-[45px]"
 						data-vt-image={useNames ? '' : undefined}
 						loading="lazy"
 					/>

@@ -369,7 +369,7 @@ SELECT status, COUNT(*) FROM public.orders GROUP BY 1;
 
 ### Otros candidatos (a definir)
 
-- **`payments` / transacciones de pago**: cuando se integre pasarela (Wompi, Mercado Pago, etc.); por ahora `orders.payment_method` cubre lo mínimo.
+- **Método de pago**: ⏸️ **SUSPENDIDO hasta que la clienta decida** — puede ser pasarela (Wompi, MercadoPago, PayU) o modos alternativos (ej. orden creada + confirmación por WhatsApp). El modelo ya lo soporta: `orders.payment_method` es texto libre y `status = 'pending'` es el punto de partida de cualquiera de las vías. No implementar hasta nuevo aviso.
 - **`addresses`**: libreta de direcciones por usuario si el delivery crece.
 - **`discounts`/cupones**: para campañas.
 

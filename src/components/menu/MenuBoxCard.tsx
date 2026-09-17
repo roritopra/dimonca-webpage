@@ -1,30 +1,75 @@
 import React from 'react';
+import { motion } from 'motion/react';
 import type { Product } from '../../types/products';
 
 interface MenuBoxCardProps {
 	product: Product;
 }
 
+// Springs suaves: salida elástica sin rebotes bruscos
+const CARD_SPRING = { type: 'spring', stiffness: 220, damping: 26 } as const;
+const IMAGE_SPRING = { type: 'spring', stiffness: 180, damping: 18 } as const;
+
 /**
  * Card exclusiva para CAJAS (productos `isPremium` / custom_box).
- * - La imagen de la caja se expande en escala en hover (no se desplaza hacia arriba).
- * - El bloque de info es un panel blanco FIJO (rounded-lg), sin overlays ni flotación.
+ * - La imagen de la caja se expande en escala en hover con spring de `motion`
+ *   (no se desplaza hacia arriba).
+ * - El bloque de info es transparente en reposo; en hover aparece el panel
+ *   blanco flotando (bg + scale + subida + redondeo + sombra, todo animado
+ *   con springs), sin overlays absolutos ni cambios de layout.
  */
 export default function MenuBoxCard({ product }: MenuBoxCardProps) {
 	return (
-		<article className="group relative col-span-2 flex flex-col justify-between rounded-[28px] sm:rounded-[34px] border border-pink/60 bg-beige backdrop-blur-xs shadow-[0_4px_16px_rgba(58,32,14,0.04)] transition-[background-color,box-shadow] duration-300 ease-out hover:bg-[#ffeaf2] hover:shadow-[0_12px_28px_rgba(58,32,14,0.09)]">
+		<motion.article
+			initial="rest"
+			whileHover="hover"
+			animate="rest"
+			variants={{
+				rest: {
+					backgroundColor: 'rgba(247,242,232,1)',
+					boxShadow: '0 4px 16px rgba(58,32,14,0.04)',
+				},
+				hover: {
+					backgroundColor: 'rgba(255,234,242,1)',
+					boxShadow: '0 12px 28px rgba(58,32,14,0.09)',
+				},
+			}}
+			transition={CARD_SPRING}
+			className="relative col-span-2 flex flex-col justify-between rounded-[28px] sm:rounded-[34px] border border-pink/60 backdrop-blur-xs"
+		>
 			{/* Imagen de la caja: en hover solo escala, sin desplazarse */}
 			<div className="relative flex h-48 sm:h-56 w-full items-center justify-center overflow-hidden bg-transparent">
-				<img
+				<motion.img
 					src={product.imageSrc}
 					alt={product.name}
-					className="h-full w-full object-contain drop-shadow-md transition-transform duration-[450ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-110"
+					variants={{ rest: { scale: 1 }, hover: { scale: 1.1 } }}
+					transition={IMAGE_SPRING}
+					className="h-full w-full object-contain drop-shadow-md"
 					loading="lazy"
 				/>
 			</div>
 
-			{/* Bloque de info: transparente en reposo; en hover aparece el blanco flotando con transición */}
-			<div className="relative mt-3 rounded-lg sm:mt-4 p-4 sm:p-5 bg-transparent transition-[transform,border-radius,box-shadow,background-color] duration-300 ease-out group-hover:-translate-y-1 group-hover:scale-[0.94] group-hover:rounded-2xl group-hover:bg-white group-hover:shadow-[0_10px_26px_rgba(58,32,14,0.10)]">
+			{/* Bloque de info: transparente en reposo; en hover aparece el blanco flotando */}
+			<motion.div
+				variants={{
+					rest: {
+						backgroundColor: 'rgba(255,255,255,0)',
+						scale: 1,
+						y: 0,
+						borderRadius: '8px',
+						boxShadow: '0 0 0 rgba(58,32,14,0)',
+					},
+					hover: {
+						backgroundColor: 'rgba(255,255,255,1)',
+						scale: 0.94,
+						y: -4,
+						borderRadius: '16px',
+						boxShadow: '0 10px 26px rgba(58,32,14,0.10)',
+					},
+				}}
+				transition={CARD_SPRING}
+				className="relative mt-3 sm:mt-4 p-4 sm:p-5"
+			>
 				{/* Contenido en su propio div de flujo (sin overlays encima) */}
 				<div>
 					<h3 className="font-sans text-base sm:text-lg font-extrabold text-brown leading-tight line-clamp-1">
@@ -47,7 +92,7 @@ export default function MenuBoxCard({ product }: MenuBoxCardProps) {
 						</a>
 					</div>
 				</div>
-			</div>
-		</article>
+			</motion.div>
+		</motion.article>
 	);
 }

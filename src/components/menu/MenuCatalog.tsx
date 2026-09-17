@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import MenuCard from './MenuCard';
+import MenuBoxCard from './MenuBoxCard';
 import MenuFilters from './MenuFilters';
 import { getProducts } from '../../lib/productsApi';
 import type { Product } from '../../types/products';
@@ -181,13 +182,14 @@ export default function MenuCatalog() {
 					</div>
 				) : (
 					<div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3.5 sm:gap-5">
-						{filteredProducts.map((product) => (
-							<MenuCard
-								key={product.id}
-								product={product}
-								withTransition
-							/>
-						))}
+						{filteredProducts.map((product) =>
+							// Las premium de CAJA renderizan su componente propio
+							product.variant === 'premium' ? (
+								<MenuBoxCard key={product.id} product={product} />
+							) : (
+								<MenuCard key={product.id} product={product} withTransition />
+							)
+						)}
 					</div>
 				)}
 			</section>

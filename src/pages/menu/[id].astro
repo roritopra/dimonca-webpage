@@ -5,6 +5,7 @@ import Footer from '../../components/common/Footer.astro';
 import CarruselScroll from '../../components/common/CarruselScroll.astro';
 import ProductDetailActions from '../../components/menu/ProductDetailActions';
 import MenuCard from '../../components/menu/MenuCard';
+import MenuBoxCard from '../../components/menu/MenuBoxCard';
 import { Icon } from 'astro-icon/components';
 import { getProducts } from '../../lib/productsApi';
 import type { Product, ProductCategory } from '../../types/products';
@@ -220,9 +221,14 @@ const firstRowProducts: Product[] = allProducts.slice(0, 5);
 				<h2 class="font-sans text-2xl font-extrabold text-brown sm:text-3xl">Más sabores para ti</h2>
 				<div class="mt-5 sm:mt-6 grid grid-cols-2 gap-3.5 sm:grid-cols-4 sm:gap-5 lg:grid-cols-6">
 					{
-						firstRowProducts.map((rel: Product) => (
-							<MenuCard client:visible product={rel} />
-						))
+						firstRowProducts.map((rel: Product) =>
+							// Las premium de CAJA renderizan su componente propio
+							rel.variant === 'premium' ? (
+								<MenuBoxCard client:visible product={rel} />
+							) : (
+								<MenuCard client:visible product={rel} />
+							)
+						)
 					}
 				</div>
 			</div>

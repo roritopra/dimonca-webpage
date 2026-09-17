@@ -8,11 +8,7 @@ interface MenuBoxCardProps {
 /**
  * Card exclusiva para CAJAS (productos `isPremium` / custom_box).
  * - La imagen de la caja se expande en escala en hover (no se desplaza hacia arriba).
- * - En hover aparece un panel blanco flotando ALREDEDOR del bloque de info:
- *   es `absolute` con insets negativos animados, así que no toca el layout
- *   y la card queda quieta (nada se mueve ni se corre).
- * - El panel es el PRIMER hijo con z-0 y el contenido va encima con z-10,
- *   por lo que título, precio y "Ver más" SIEMPRE quedan visibles.
+ * - El bloque de info es un panel blanco FIJO (rounded-lg), sin overlays ni flotación.
  */
 export default function MenuBoxCard({ product }: MenuBoxCardProps) {
 	return (
@@ -27,16 +23,10 @@ export default function MenuBoxCard({ product }: MenuBoxCardProps) {
 				/>
 			</div>
 
-			{/* Bloque de info: tamaño fijo, solo cambia el fondo flotante alrededor */}
-			<div className="relative mt-3 rounded-lg sm:mt-4 p-4 sm:p-5 group-hover:bg-white">
-				{/* Panel blanco: primer hijo (queda detrás) y con z-0 explícito */}
-				<div
-					aria-hidden="true"
-					className="absolute inset-0 z-0 rounded-2xl bg-white opacity-0 transition-all duration-300 ease-out group-hover:-top-2 group-hover:-right-2.5 group-hover:-bottom-3.5 group-hover:-left-2.5 group-hover:opacity-100 group-hover:shadow-[0_6px_20px_rgba(58,32,14,0.07)]"
-				/>
-
-				{/* Contenido: siempre visible encima del panel */}
-				<div className="relative z-10">
+			{/* Bloque de info: transparente en reposo; en hover aparece el blanco flotando con transición */}
+			<div className="relative mt-3 rounded-lg sm:mt-4 p-4 sm:p-5 bg-transparent transition-[transform,border-radius,box-shadow,background-color] duration-300 ease-out group-hover:-translate-y-1 group-hover:scale-[0.94] group-hover:rounded-2xl group-hover:bg-white group-hover:shadow-[0_10px_26px_rgba(58,32,14,0.10)]">
+				{/* Contenido en su propio div de flujo (sin overlays encima) */}
+				<div>
 					<h3 className="font-sans text-base sm:text-lg font-extrabold text-brown leading-tight line-clamp-1">
 						{product.name}
 					</h3>

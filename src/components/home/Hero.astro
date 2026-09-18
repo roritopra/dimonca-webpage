@@ -377,19 +377,39 @@ const slidesData = [
 		}, 50);
 	}
 
-	// Vincular hover a cada slide: la galleta solo hace el pop; la estrella además
-	// arranca/frena el giro continuo (acelera al entrar, desacelera al salir).
+	// Hover unificado: galleta y estrella comparten la misma interacción. Entrar a
+	// CUALQUIERA de las dos arranca ambos efectos (split de la galleta + giro
+	// continuo de la estrella); salir de AMBAS los detiene (el giro desacelera,
+	// no para en seco). Galleta y estrella son hermanos con cajas que se solapan
+	// (la estrella va encima, z-3 sobre z-2): al cruzar de una a otra el navegador
+	// dispara mouseleave en una y mouseenter en la otra aunque el puntero nunca
+	// salió de la zona. Sin el chequeo de relatedTarget eso reiniciaba el hover
+	// (flicker: se desarma y se rearma la partida). Por eso solo se resetea al
+	// salir de ambas; al pasar entre ellas todo se mantiene andando.
 	slides.forEach((slideEl) => {
 		const cookie = slideEl.querySelector<HTMLElement>('.hero-cookie-interactive');
 		const star = slideEl.querySelector<HTMLElement>('.hero-star-interactive');
+		const insideInteractive = (n: EventTarget | null) =>
+			n instanceof Node && ((cookie?.contains(n) ?? false) || (star?.contains(n) ?? false));
+		const spinOn = () => {
+			if (window.scrollY <= 5) setSpinTarget(slideEl, SPIN_MAX);
+		};
 
-		cookie?.addEventListener('mouseenter', () => startHoverState(slideEl));
-		cookie?.addEventListener('mouseleave', () => resetHoverState(slideEl));
+		cookie?.addEventListener('mouseenter', () => {
+			startHoverState(slideEl);
+			spinOn();
+		});
+		cookie?.addEventListener('mouseleave', (e: MouseEvent) => {
+			if (insideInteractive(e.relatedTarget)) return; // va hacia la estrella: todo sigue
+			resetHoverState(slideEl);
+			setSpinTarget(slideEl, 0);
+		});
 		star?.addEventListener('mouseenter', () => {
 			startHoverState(slideEl);
-			if (window.scrollY <= 5) setSpinTarget(slideEl, SPIN_MAX);
+			spinOn();
 		});
-		star?.addEventListener('mouseleave', () => {
+		star?.addEventListener('mouseleave', (e: MouseEvent) => {
+			if (insideInteractive(e.relatedTarget)) return; // va hacia la galleta: todo sigue
 			resetHoverState(slideEl);
 			setSpinTarget(slideEl, 0);
 		});

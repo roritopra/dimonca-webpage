@@ -32,7 +32,6 @@ const slidesData = [
 		starWrapClass: 'top-[115px] right-2 sm:right-6 md:right-10 xl:right-auto xl:top-[186.68px] xl:left-200 h-[145px] w-[145px] sm:h-[195px] sm:w-[195px] md:h-[220px] md:w-[220px] xl:h-[279.66px] xl:w-[282.03px]',
 		starImg: '/images/home/hero/star.svg',
 		starTextClass: 'text-[15px] sm:text-[20px] xl:text-[27px] text-brown [-webkit-text-stroke:3px_#F7F2E8] xl:[-webkit-text-stroke:5px_#F7F2E8]',
-		starTextMargin: 'margin-left: 7px; margin-top: -6px; sm:margin-left: 10px; sm:margin-top: -9px; xl:margin-left: 14.4px; xl:margin-top: -12.6px;',
 		infoTitle: 'Galleta Habibi',
 		infoTitleStroke: 'text-beige [-webkit-text-stroke:8px_#614d3e]',
 		infoDesc: 'Galleta de chocolate tipo brownie, rellena con una exquisita crema de pistacho artesanal. Un postre al mejor estilo Dubai.',
@@ -56,7 +55,6 @@ const slidesData = [
 		starWrapClass: 'top-[115px] right-2 sm:right-6 md:right-10 xl:right-auto xl:top-[186.68px] xl:left-200 h-[155px] w-[155px] sm:h-[210px] sm:w-[210px] md:h-[240px] md:w-[240px] xl:h-[311px] xl:w-[314px]',
 		starImg: '/images/home/hero/star-2.svg',
 		starTextClass: 'text-[16px] sm:text-[22px] xl:text-[30px] text-white',
-		starTextMargin: 'margin-left: 7px; margin-top: -7px; sm:margin-left: 10px; sm:margin-top: -10px; xl:margin-left: 14.5px; xl:margin-top: -14.4px;',
 		infoTitle: 'Crookie Chips',
 		infoTitleStroke: 'text-brown [-webkit-text-stroke:8px_#9ACCF4]',
 		infoDesc: 'Croissant + galleta de chips de chocolate + relleno de nutella. Hojaldrado, super crocante y con un centro cremoso de chocolate.',
@@ -158,12 +156,15 @@ const slidesData = [
 								/>
 							</div>
 
-							<!-- Estrella Nueva -->
+							<!-- Estrella Nueva: el SVG tiene su centro visual desplazado (~+5% X, ~-4.5% Y
+								respecto al centro del viewBox), por eso el texto se ancla en 55% / 45.5%
+								en vez de 50% / 50% para quedar ópticamente centrado en todos los breakpoints.
+								Solo el <img> rota (hero-star-img); el contenedor y el texto no rotan. -->
 							<div class={`hero-star-interactive absolute z-3 ${slide.starWrapClass}`}>
-								<img class="block h-full w-full object-contain" src={slide.starImg} alt="" aria-hidden="true" />
+								<img class="hero-star-img block h-full w-full object-contain will-change-transform" src={slide.starImg} alt="" aria-hidden="true" />
 								<span
-									class={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-sans font-bold whitespace-nowrap text-center leading-[1.2] ${slide.starTextClass}`}
-									style={`${slide.starTextMargin} paint-order: stroke;`}
+									class={`absolute top-[45.5%] left-[55%] -translate-x-1/2 -translate-y-1/2 font-sans font-bold whitespace-nowrap text-center leading-[1.2] ${slide.starTextClass}`}
+									style="paint-order: stroke;"
 								>
 									Nueva
 								</span>
@@ -251,13 +252,16 @@ const slidesData = [
 		}
 		const cookie = slideEl.querySelector<HTMLElement>('.hero-cookie-interactive');
 		const star = slideEl.querySelector<HTMLElement>('.hero-star-interactive');
+		const starImg = slideEl.querySelector<HTMLElement>('.hero-star-img');
 		const leftHalf = slideEl.querySelector<HTMLElement>('.hero-cookie-left');
 		const rightHalf = slideEl.querySelector<HTMLElement>('.hero-cookie-right');
 		const cracked = slideEl.querySelector<HTMLElement>('.hero-cookie-cracked');
 
 		if (window.scrollY <= 5 && cookie) {
 			animate(cookie, { rotate: 0, scale: 1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
-			if (star) animate(star, { rotate: 0, scale: 1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
+			// Solo la estrella rota; el contenedor (y el texto "Nueva") solo recupera escala.
+			if (star) animate(star, { scale: 1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
+			if (starImg) animate(starImg, { rotate: 0 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
 		}
 		if (leftHalf) {
 			animate(leftHalf, { x: 0, opacity: 1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
@@ -274,6 +278,7 @@ const slidesData = [
 		if (window.scrollY > 5 || hoverTimeout) return;
 		const cookie = slideEl.querySelector<HTMLElement>('.hero-cookie-interactive');
 		const star = slideEl.querySelector<HTMLElement>('.hero-star-interactive');
+		const starImg = slideEl.querySelector<HTMLElement>('.hero-star-img');
 		const leftHalf = slideEl.querySelector<HTMLElement>('.hero-cookie-left');
 		const rightHalf = slideEl.querySelector<HTMLElement>('.hero-cookie-right');
 		const cracked = slideEl.querySelector<HTMLElement>('.hero-cookie-cracked');
@@ -282,7 +287,9 @@ const slidesData = [
 
 		const slide = (cookie.offsetWidth / 600) * 2.5;
 		animate(cookie, { rotate: -10 }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
-		if (star) animate(star, { rotate: 18, scale: 1.08 }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
+		// Solo gira el SVG; el texto queda quieto (el contenedor solo escala).
+		if (star) animate(star, { scale: 1.08 }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
+		if (starImg) animate(starImg, { rotate: 18 }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
 		animate(leftHalf, { x: -slide }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
 		animate(rightHalf, { x: slide }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
 
@@ -324,6 +331,8 @@ const slidesData = [
 		const toCookieImg = to.querySelector<HTMLElement>('.hero-cookie-interactive');
 		const fromStar = from.querySelector<HTMLElement>('.hero-star-interactive');
 		const toStar = to.querySelector<HTMLElement>('.hero-star-interactive');
+		const fromStarImg = from.querySelector<HTMLElement>('.hero-star-img');
+		const toStarImg = to.querySelector<HTMLElement>('.hero-star-img');
 		const fromStripes = Array.from(from.querySelectorAll<HTMLElement>('.hero-stripe'));
 		const toStripes = Array.from(to.querySelectorAll<HTMLElement>('.hero-stripe'));
 		const fromTitles = Array.from(from.querySelectorAll<HTMLElement>('.hero-title-word'));
@@ -368,9 +377,12 @@ const slidesData = [
 		if (fromStar) {
 			animate(
 				fromStar,
-				{ opacity: 0, scale: 0.85, y: 24, rotate: -45 },
+				{ opacity: 0, scale: 0.85, y: 24 },
 				{ duration: EXIT_MS / 1000, ease: 'backIn' }
 			);
+		}
+		if (fromStarImg) {
+			animate(fromStarImg, { rotate: -45 }, { duration: EXIT_MS / 1000, ease: 'backIn' });
 		}
 
 		setTimeout(() => {
@@ -417,9 +429,12 @@ const slidesData = [
 			if (toStar) {
 				animate(
 					toStar,
-					{ opacity: [0, 1], scale: [0.9, 1], y: [-16, 0], rotate: [45, 0] },
+					{ opacity: [0, 1], scale: [0.9, 1], y: [-16, 0] },
 					{ duration: ENTER_MS / 1000, ease: 'backOut' }
 				);
+			}
+			if (toStarImg) {
+				animate(toStarImg, { rotate: [45, 0] }, { duration: ENTER_MS / 1000, ease: 'backOut' });
 			}
 			transitioning = false;
 		}, EXIT_MS + PAUSE_MS);
@@ -457,6 +472,7 @@ const slidesData = [
 			const titles = currentSlideEl.querySelectorAll<HTMLElement>('.hero-title-word');
 			const cookieEl = currentSlideEl.querySelector<HTMLElement>('.hero-cookie-interactive');
 			const starEl = currentSlideEl.querySelector<HTMLElement>('.hero-star-interactive');
+			const starImgEl = currentSlideEl.querySelector<HTMLElement>('.hero-star-img');
 			const infoEl = currentSlideEl.querySelector<HTMLElement>('.hero-left-info');
 
 			const scaleTitle = 1 + progress * (current === 0 ? 0.16 : 0.22);
@@ -480,8 +496,11 @@ const slidesData = [
 				const starScale = 1 + progress * 0.28;
 				const starX = progress * 25;
 				const starY = -progress * 20;
-				starEl.style.transform = `translate(${starX}px, ${starY}px) rotate(${starRotate}deg) scale(${starScale})`;
+				// El contenedor se desplaza/escala (arrastra al texto sin rotarlo);
+				// solo el SVG rota.
+				starEl.style.transform = `translate(${starX}px, ${starY}px) scale(${starScale})`;
 				starEl.style.opacity = `${Math.max(1 - progress * 0.3, 0.7)}`;
+				if (starImgEl) starImgEl.style.transform = `rotate(${starRotate}deg)`;
 			}
 
 			const ellipseGlow = currentSlideEl.querySelector<HTMLElement>('div[class*="mix-blend-overlay"]');

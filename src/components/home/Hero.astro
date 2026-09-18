@@ -13,6 +13,14 @@ const stripes = Array.from({ length: 24 }, (_, i) => ({
 	up: i % 2 === 0,
 }));
 
+// Set móvil: menos rayas (12) y más gruesas, como el diseño (~11 visibles).
+// En pantallas angostas las 24 de desktop se ven finitas y apretadas.
+const stripesMobile = Array.from({ length: 12 }, (_, i) => ({
+	left: i * (100 / 12),
+	width: 4,
+	up: i % 2 === 0,
+}));
+
 const slidesData = [
 	{
 		id: 'hero-slide-1',
@@ -72,9 +80,16 @@ const slidesData = [
 					style={idx !== 0 ? 'opacity: 0; visibility: hidden; pointer-events: none;' : ''}
 				>
 					<div class="absolute inset-0 overflow-hidden" aria-hidden="true">
+						{stripesMobile.map((s) => (
+							<div
+								class={`hero-stripe absolute top-0 bottom-0 sm:hidden ${slide.stripeBg}`}
+								style={`left: ${s.left}%; width: ${s.width}%;`}
+								data-dir={s.up ? 'up' : 'down'}
+							/>
+						))}
 						{stripes.map((s) => (
 							<div
-								class={`hero-stripe absolute top-0 bottom-0 ${slide.stripeBg}`}
+								class={`hero-stripe absolute top-0 bottom-0 hidden sm:block ${slide.stripeBg}`}
 								style={`left: ${s.left}%; width: ${s.width}%;`}
 								data-dir={s.up ? 'up' : 'down'}
 							/>

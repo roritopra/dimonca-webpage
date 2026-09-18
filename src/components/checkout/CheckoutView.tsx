@@ -3,6 +3,11 @@ import { useStore } from '@nanostores/react';
 import { $authStatus, $profile, $user } from '../../stores/authStore';
 import { $cart, $cartTotal, clearCart, formatCurrency } from '../../stores/cartStore';
 import { createOrder, type DeliveryMethod } from '../../lib/ordersApi';
+import {
+	fetchMyAddresses,
+	saveAddress,
+	type SavedAddress,
+} from '../../lib/addressesApi';
 import CheckoutSummary from './CheckoutSummary';
 
 // Cobertura de entregas: por ahora solo Cali (Valle del Cauca)
@@ -56,6 +61,14 @@ export default function CheckoutView() {
 	const [submitStatus, setSubmitStatus] = useState<SubmitStatus>('idle');
 	const [submitError, setSubmitError] = useState('');
 
+	// Libreta de direcciones (usuarios recurrentes): prellenado + selector
+	const [savedAddresses, setSavedAddresses] = useState<SavedAddress[]>([]);
+	// '' = sin libreta / primera vez; 'nueva' = escribir una nueva dirección;
+	// <id> = usar la dirección guardada (campos prellenados y editables)
+	const [selectedAddressId, setSelectedAddressId] = useState('nueva');
+	const [doSaveAddress, setDoSaveAddress] = useState(true); // checkbox guardar
+	const [addressesError, setAddressesError] = useState('');
+
 	// Prellenar contacto con el perfil del usuario logueado
 	useEffect(() => {
 		if (!profile) return;
@@ -68,6 +81,70 @@ export default function CheckoutView() {
 		if (!email && profile.email) setEmail(profile.email);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [profile]);
+
+	// Cargar la libreta al entrar logueado: prellenar con la predeterminada.
+	// Si es la primera compra, el usuario escribe su primera dirección y esa
+	// queda guardada como predeterminada (decisión de UX).
+	useEffect(() => {
+		if (authStatus !== 'loggedIn') return;
+
+		let cancelled = false;
+		(async () => {
+			try {
+				const addresses = await fetchMyAddresses();
+				if (cancelled) return;
+				setSavedAddresses(addresses);
+				setDoSaveAddress(addresses.length === 0);
+
+				const preferred = addresses.find((a) => a.is_default) ?? addresses[0];
+				if (preferred) {
+					setSelectedAddressId(preferred.id);
+					prefillFromAddress(preferred);
+				}
+			} catch (err) {
+				if (!cancelled) {
+					console.error('[Checkout] Error al cargar direcciones guardadas:', err);
+					setAddressesError(err instanceof Error ? err.message : 'Error al cargar direcciones');
+				}
+			}
+		})();
+		return () => {
+			cancelled = true;
+		};
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [authStatus]);
+
+	function prefillFromAddress(address: SavedAddress) {
+		setDepartment(address.department);
+		setCity(address.city);
+		setNeighborhood(address.neighborhood);
+		setStreetType(address.street_type || 'Calle');
+		setStreetNumber(address.street_number);
+		setHouseNumber(address.house_number);
+		setInterior(address.interior ?? '');
+		setNotes(address.notes ?? '');
+
+		// Contacto: prellenar desde el destinatario si los campos están vacíos
+		if (!phone && address.phone) setPhone(address.phone);
+	}
+
+	function handleSelectSavedAddress(id: string) {
+		setSelectedAddressId(id);
+		const address = savedAddresses.find((a) => a.id === id);
+		if (address) prefillFromAddress(address);
+	}
+
+	function handleNewAddress() {
+		setSelectedAddressId('nueva');
+		setDepartment('');
+		setCity('');
+		setNeighborhood('');
+		setStreetType('Calle');
+		setStreetNumber('');
+		setHouseNumber('');
+		setInterior('');
+		setNotes('');
+	}
 
 	const cities = department ? DEPARTMENTS[department] ?? [] : [];
 	const hasCoverage = department === COVERAGE_DEPARTMENT && city === COVERAGE_CITY;
@@ -115,6 +192,29 @@ export default function CheckoutView() {
 				deliveryFee,
 				items: cart,
 			});
+
+			// Guardar la dirección en la libreta (si el usuario lo pidió).
+			// La primera dirección que guarde queda como predeterminada automáticamente.
+			if (deliveryMethod === 'domicilio' && doSaveAddress) {
+				try {
+					await saveAddress({
+						full_name: `${firstName} ${lastName}`.trim(),
+						phone,
+						department,
+						city,
+						neighborhood,
+						street_type: streetType,
+						street_number: streetNumber,
+						house_number: houseNumber,
+						interior: interior,
+						notes: notes.trim() !== '' ? notes : null,
+						makeDefault: false, // la primera va sola por ser primera; el resto solo si el usuario la marca
+					});
+				} catch (saveErr) {
+					// La dirección es secundaria: no bloquear el pedido por su fallo
+					console.error('[Checkout] No se pudo guardar la dirección:', saveErr);
+				}
+			}
 
 			clearCart();
 			window.location.href = `/mis-pedidos?nuevo=${order.orderNumber}`;
@@ -253,7 +353,76 @@ export default function CheckoutView() {
 				{deliveryMethod === 'domicilio' && (
 					<section className="rounded-3xl border border-brown/15 bg-beige p-5 sm:p-6">
 						<h2 className="font-sans text-lg font-extrabold text-brown">Dirección</h2>
-						<div className="mt-4 flex flex-col gap-4">
+
+						{/* Selector de libreta (solo si hay direcciones guardadas) */}
+						{savedAddresses.length > 0 && (
+							<div className="mt-4 flex flex-col gap-2">
+								<p className="font-sans text-sm font-bold text-brown/80">Tus direcciones guardadas:</p>
+								<div className="flex flex-col gap-2">
+									{savedAddresses.map((address) => (
+										<button
+											key={address.id}
+											type="button"
+											onClick={() => handleSelectSavedAddress(address.id)}
+											className={`flex cursor-pointer items-start gap-3 rounded-2xl border-2 bg-white p-3.5 text-left transition-colors ${
+												selectedAddressId === address.id
+													? 'border-pink bg-pink/5'
+													: 'border-brown/15 hover:border-pink/50'
+											}`}
+										>
+											<span
+												className={`mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full border-2 ${
+													selectedAddressId === address.id ? 'border-pink' : 'border-brown/30'
+												}`}
+												aria-hidden="true"
+											>
+												{selectedAddressId === address.id && (
+													<span className="h-2 w-2 rounded-full bg-pink" />
+												)}
+											</span>
+											<span className="min-w-0 flex-1">
+												<span className="flex items-center gap-2">
+													<span className="font-sans text-sm font-extrabold text-brown">
+														{address.label ?? 'Dirección'}
+													</span>
+													{address.is_default && (
+														<span className="rounded-full bg-pink/15 px-2 py-0.5 font-sans text-[10px] font-bold uppercase tracking-wide text-pink">
+															Predeterminada
+														</span>
+													)}
+												</span>
+												<span className="block truncate font-sans text-xs text-brown/70">
+													{address.address_line}, {address.neighborhood}, {address.city}
+												</span>
+											</span>
+										</button>
+									))}
+
+									<button
+										type="button"
+										onClick={handleNewAddress}
+										className={`flex cursor-pointer items-center gap-2 rounded-2xl border-2 bg-white p-3.5 font-sans text-sm font-bold transition-colors ${
+											selectedAddressId === 'nueva'
+												? 'border-pink bg-pink/5 text-pink'
+												: 'border-brown/15 text-brown hover:border-pink/50'
+										}`}
+									>
+										<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" className="h-4 w-4" aria-hidden="true">
+											<path d="M5 12h14M12 5v14" />
+										</svg>
+										Usar una nueva dirección
+									</button>
+								</div>
+							</div>
+						)}
+
+						{addressesError && (
+							<p className="mt-2 rounded-xl bg-amber-50 px-4 py-2 font-sans text-xs text-amber-700">
+								{addressesError}
+							</p>
+						)}
+
+						<div className={savedAddresses.length > 0 ? 'mt-5 flex flex-col gap-4' : 'mt-4 flex flex-col gap-4'}>
 							<div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
 								<Field id="co-department" label="Departamento">
 									<select
@@ -318,6 +487,27 @@ export default function CheckoutView() {
 							<Field id="co-notes" label="Notas para el domiciliario (opcional)">
 								<input id="co-notes" type="text" value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Ej: portón verde, llamar al llegar" className={inputClass} />
 							</Field>
+
+							{/* Guardar en la libreta (aparece en próximos pedidos; la primera queda predeterminada) */}
+							<label className="flex cursor-pointer items-start gap-3 pt-1">
+								<input
+									type="checkbox"
+									checked={doSaveAddress}
+									onChange={(e) => {
+										setDoSaveAddress(e.target.checked);
+										if (!e.target.checked) setSelectedAddressId('nueva');
+									}}
+									className="mt-0.5 h-4 w-4 shrink-0 cursor-pointer accent-pink"
+								/>
+								<span className="font-sans text-sm leading-relaxed text-brown/80">
+									Guardar esta dirección en mi libreta
+									{savedAddresses.length === 0 && (
+										<span className="block font-sans text-xs text-brown/50">
+											Será tu dirección predeterminada para próximas compras
+										</span>
+									)}
+								</span>
+							</label>
 						</div>
 					</section>
 				)}

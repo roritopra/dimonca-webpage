@@ -54,6 +54,7 @@ erDiagram
 ```
 
 - `auth_users` = `auth.users`, la tabla interna de **Supabase Auth** (no vive en `public` y no se modifica manualmente).
+- `addresses` = libreta de direcciones del usuario (ver [§8b](#8b-tabla-addresses)); alimenta el prellenado del checkout.
 - Los **carritos** son una tabla futura (ver [Roadmap](#17-roadmap-tablas-futuras-no-ejecutar-aún)); hoy el carrito vive en `localStorage` (`src/stores/cartStore.ts`).
 
 ---
@@ -196,6 +197,35 @@ Líneas de cada pedido. **Guarda snapshot** del producto (`product_name`, `produ
 
 ---
 
+## 8b. Tabla `addresses`
+
+Libreta de direcciones del usuario (migración 5). Un usuario puede tener **N direcciones** y una **predeterminada** (`is_default`). Alimenta el prellenado del checkout: el usuario recurrente ve su dirección predeterminada ya puesta, y elige otra de su libreta si quiere.
+
+> Nota: **no** se agregó columna de dirección a `profiles` a propósito — el patrón correcto es una tabla relacionada 1:N (permite múltiples direcciones sin columnas repetidas ni arrays).
+
+| Columna | Tipo | Descripción |
+|---|---|---|
+| `id` | `uuid` PK | |
+| `user_id` | `uuid` FK → `auth.users(id) ON DELETE CASCADE` | Dueño de la dirección |
+| `label` | `text` | Opcional: "Casa", "Trabajo", "Novia"... |
+| `full_name` | `text` NOT NULL | Nombre del **destinatario** (puede ser un regalo para otra persona) |
+| `phone` | `text` NOT NULL | Teléfono del destinatario |
+| `department` | `text` NOT NULL | Departamento (select del checkout) |
+| `city` | `text` NOT NULL | Ciudad (solo Cali con cobertura hoy) |
+| `neighborhood` | `text` NOT NULL | Barrio |
+| `street_type` | `text` NOT NULL | Tipo de vía: "Calle", "Carrera"… |
+| `street_number` | `text` NOT NULL | Número de vía: "12A" |
+| `house_number` | `text` NOT NULL | Número: "34-56" |
+| `interior` | `text` | Opcional: "Apt 302" |
+| `address_line` | `text` NOT NULL | Dirección compuesta: "Calle 12A #34-56 - Apt 302" |
+| `notes` | `text` | Notas para el domiciliario |
+| `is_default` | `boolean` | Dirección predeterminada — `UNIQUE` parcial por usuario (solo una) |
+| `created_at` / `updated_at` | `timestamptz` | Auditoría |
+
+Constraints: los campos obligatorios no pueden ser `''`. RLS: CRUD completo pero **solo sobre las direcciones propias**.
+
+---
+
 ## 9. Seguridad (RLS) — resumen
 
 | Tabla | anon (sin sesión) | authenticated (con sesión) | Escritura de negocio |
@@ -205,6 +235,9 @@ Líneas de cada pedido. **Guarda snapshot** del producto (`product_name`, `produ
 | `profiles` | — | SELECT, UPDATE (solo la propia) | Trigger automático al registrarse |
 | `orders` | — | SELECT, INSERT (solo propios, `user_id = auth.uid()`) | UPDATE/DELETE solo dashboard / `service_role` |
 | `order_items` | — | SELECT, INSERT (solo ítems de pedidos propios) | Dashboard / `service_role` |
+| `carts` | — | SELECT, INSERT, UPDATE (solo el propio) | DELETE via cascada |
+| `cart_items` | — | SELECT, INSERT, UPDATE, DELETE (solo líneas del propio carrito) | Dashboard / `service_role` |
+| `addresses` | — | SELECT, INSERT, UPDATE, DELETE (solo las propias) | Dashboard / `service_role` |
 
 Notas:
 
@@ -370,8 +403,11 @@ SELECT status, COUNT(*) FROM public.orders GROUP BY 1;
 ### Otros candidatos (a definir)
 
 - **Método de pago**: ⏸️ **SUSPENDIDO hasta que la clienta decida** — puede ser pasarela (Wompi, MercadoPago, PayU) o modos alternativos (ej. orden creada + confirmación por WhatsApp). El modelo ya lo soporta: `orders.payment_method` es texto libre y `status = 'pending'` es el punto de partida de cualquiera de las vías. No implementar hasta nuevo aviso.
-- **`addresses`**: libreta de direcciones por usuario si el delivery crece.
 - **`discounts`/cupones**: para campañas.
+
+### Integración pendiente (front)
+
+- **Checkout**: prellenar la sección de dirección desde `addresses` (dirección predeterminada por defecto, selector si hay varias, y opción "guardar esta dirección" al completar el pedido). La tabla y RLS ya están listos.
 
 ---
 
@@ -385,6 +421,8 @@ SELECT status, COUNT(*) FROM public.orders GROUP BY 1;
 | 4 | *(vía MCP)* `fix_fmt_money_cop` | Fix de `fmt_money_cop`: `\0` no es backreference válido en Postgres (se insertaba literal → `$1\0.000`); se usa `\&` (match completo). Las columnas generadas STORED no se recalculan al cambiar la función, se forzó con `UPDATE products SET price = price` | ✅ Ejecutada 2026-09-11 |
 | 5 | `supabase/migrations/20260911000004_carts.sql` | Carrito persistente: tablas `carts` y `cart_items` (con snapshot del producto y `box_contents` para cajas armadas), índice único parcial para singles, triggers, RLS con CRUD propio del usuario | ✅ Ejecutada 2026-09-11 |
 | 6 | *(vía MCP)* `security_fixes_functions` | Endurecimiento según linter de Supabase: `search_path` fijo en `set_updated_at` y `fmt_money_cop`; `REVOKE EXECUTE` de `handle_new_user()` a anon/authenticated (solo la invoca el trigger) | ✅ Ejecutada 2026-09-12 |
+| 7 | `supabase/migrations/20260911000005_addresses.sql` | Libreta de direcciones: tabla `addresses` (N por usuario, una predeterminada con índice único parcial), índices, trigger, RLS con CRUD propio. Alimenta el prellenado del checkout | ✅ Ejecutada 2026-09-12 |
+| 8 | *(vía MCP)* `address_structured_fields` | Agrega columnas estructuradas a `addresses` (`street_type`, `street_number`, `house_number`, `interior`) para prellenar los campos del checkout sin parsear `address_line` | ✅ Ejecutada 2026-09-12 |
 
 > Al ejecutar cada script en Supabase, marcar la casilla ✅ aquí y anotar la fecha. Cualquier migración nueva se agrega al final con su fecha y descripción.
 

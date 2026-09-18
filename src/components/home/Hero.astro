@@ -321,6 +321,34 @@ const slidesData = [
 		}
 	}
 
+	// --- Lectura del estado visual real ---
+	// El handler de scroll escribe transform/opacity directo en el DOM, mientras
+	// que `motion` recuerda el último valor que ÉL animó. Al volver del scroll,
+	// esa caché queda stale y el siguiente animate() de un solo objetivo arranca
+	// desde un valor falso (= pop instantáneo). Leyendo el computed style y
+	// animando con keyframes explícitos [real, objetivo], el inicio siempre es el correcto.
+	function readBox(el: HTMLElement | null) {
+		if (!el) return { x: 0, y: 0, rot: 0, sc: 1, op: 1 };
+		const cs = getComputedStyle(el);
+		let x = 0;
+		let y = 0;
+		let rot = 0;
+		let sc = 1;
+		if (cs.transform && cs.transform !== 'none') {
+			try {
+				const m = new DOMMatrixReadOnly(cs.transform);
+				x = m.e;
+				y = m.f;
+				rot = (Math.atan2(m.b, m.a) * 180) / Math.PI;
+				sc = Math.hypot(m.a, m.b) || 1;
+			} catch {
+				// Si el navegador no parsea la matriz, se usan los valores identidad.
+			}
+		}
+		const op = Number.parseFloat(cs.opacity);
+		return { x, y, rot, sc, op: Number.isFinite(op) ? op : 1 };
+	}
+
 	function resetHoverState(slideEl: HTMLElement) {
 		if (hoverTimeout) {
 			clearTimeout(hoverTimeout);
@@ -333,9 +361,14 @@ const slidesData = [
 		const cracked = slideEl.querySelector<HTMLElement>('.hero-cookie-cracked');
 
 		if (window.scrollY <= 5 && cookie) {
-			animate(cookie, { rotate: 0, scale: 1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
+			// Keyframes desde el valor real del DOM: inmunes a caché stale de motion tras el scroll.
+			const cb = readBox(cookie);
+			animate(cookie, { rotate: [cb.rot, 0], scale: [cb.sc, 1] }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
 			// Solo la estrella rota (vía el loop de giro); el contenedor solo recupera escala.
-			if (star) animate(star, { scale: 1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
+			if (star) {
+				const sb = readBox(star);
+				animate(star, { scale: [sb.sc, 1] }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
+			}
 		}
 		if (leftHalf) {
 			animate(leftHalf, { x: 0, opacity: 1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
@@ -359,9 +392,14 @@ const slidesData = [
 		if (!cookie || !leftHalf || !rightHalf || !cracked) return;
 
 		const slide = (cookie.offsetWidth / 600) * 2.5;
-		animate(cookie, { rotate: -10 }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
+		// Keyframes desde el valor real del DOM: inmunes a caché stale de motion tras el scroll.
+		const cb0 = readBox(cookie);
+		animate(cookie, { rotate: [cb0.rot, -10] }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
 		// El giro continuo lo maneja el loop (setSpinTarget); aquí solo el pop de escala.
-		if (star) animate(star, { scale: 1.08 }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
+		if (star) {
+			const sb0 = readBox(star);
+			animate(star, { scale: [sb0.sc, 1.08] }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
+		}
 		animate(leftHalf, { x: -slide }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
 		animate(rightHalf, { x: slide }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
 
@@ -373,7 +411,8 @@ const slidesData = [
 			animate(cracked, { opacity: 1 }, { duration: 0.1, ease: 'easeOut' });
 			animate(leftHalf, { opacity: 0 }, { duration: 0.1, ease: 'easeOut' });
 			animate(rightHalf, { opacity: 0 }, { duration: 0.1, ease: 'easeOut' });
-			animate(cookie, { scale: 1.08 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
+			const cb1 = readBox(cookie);
+			animate(cookie, { scale: [cb1.sc, 1.08] }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
 		}, 50);
 	}
 
@@ -446,9 +485,10 @@ const slidesData = [
 
 		fromStripes.forEach((stripe) => {
 			const dir = stripe.dataset.dir === 'up' ? -1 : 1;
+			const b = readBox(stripe);
 			animate(
 				stripe,
-				{ y: dir * travel, opacity: 0 },
+				{ y: [b.y, dir * travel], opacity: [b.op, 0] },
 				{ duration: EXIT_MS / 1000, ease: 'easeInOut' }
 			);
 		});
@@ -456,33 +496,37 @@ const slidesData = [
 		fromTitles.forEach((word) => {
 			const isLeft = word.dataset.dir === 'left';
 			const targetX = isLeft ? -150 : 150;
+			const b = readBox(word);
 			animate(
 				word,
-				{ x: targetX, opacity: 0 },
+				{ x: [b.x, targetX], opacity: [b.op, 0] },
 				{ duration: EXIT_MS / 1000, ease: 'easeInOut' }
 			);
 		});
 
 		if (fromLeftInfo) {
+			const b = readBox(fromLeftInfo);
 			animate(
 				fromLeftInfo,
-				{ x: -120, opacity: 0 },
+				{ x: [b.x, -120], opacity: [b.op, 0] },
 				{ duration: EXIT_MS / 1000, ease: 'easeInOut' }
 			);
 		}
 
 		if (fromCookieImg) {
+			const b = readBox(fromCookieImg);
 			animate(
 				fromCookieImg,
-				{ opacity: 0, scale: 0.8, rotate: -25 },
+				{ opacity: [b.op, 0], scale: [b.sc, 0.8], rotate: [b.rot, -25] },
 				{ duration: EXIT_MS / 1000, ease: 'backIn' }
 			);
 		}
 
 		if (fromStar) {
+			const b = readBox(fromStar);
 			animate(
 				fromStar,
-				{ opacity: 0, scale: 0.85, y: 24 },
+				{ opacity: [b.op, 0], scale: [b.sc, 0.85], y: [b.y, 24] },
 				{ duration: EXIT_MS / 1000, ease: 'backIn' }
 			);
 		}
@@ -565,19 +609,17 @@ const slidesData = [
 			if (!currentSlideEl) return;
 
 			if (scrollY > 5) {
+				// Si había hover activo, deshacerlo con la misma animación suave del
+				// mouseleave (las mitades se juntan, el cracked se desvanece) en vez
+				// de quitarlo de golpe. resetHoverState limpia el timeout pendiente y
+				// anima mitades/cracked; como hoverTimeout queda en null, esto corre
+				// una sola vez al cruzar el umbral aunque el scroll siga disparando.
 				if (hoverTimeout) {
-					clearTimeout(hoverTimeout);
-					hoverTimeout = null;
+					resetHoverState(currentSlideEl);
 				}
 				// Al hacer scroll el giro continuo frena solo (desacelera, no para en seco).
 				const spinSt = getSpin(currentSlideEl);
 				if (spinSt.target !== 0) spinSt.target = 0;
-				const cracked = currentSlideEl.querySelector<HTMLElement>('.hero-cookie-cracked');
-				const leftHalf = currentSlideEl.querySelector<HTMLElement>('.hero-cookie-left');
-				const rightHalf = currentSlideEl.querySelector<HTMLElement>('.hero-cookie-right');
-				if (cracked) cracked.style.opacity = '0';
-				if (leftHalf) { leftHalf.style.opacity = '1'; leftHalf.style.transform = 'none'; }
-				if (rightHalf) { rightHalf.style.opacity = '1'; rightHalf.style.transform = 'none'; }
 			}
 
 			const titles = currentSlideEl.querySelectorAll<HTMLElement>('.hero-title-word');

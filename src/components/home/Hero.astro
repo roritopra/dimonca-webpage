@@ -612,6 +612,94 @@ const slidesData = [
 	prevBtn?.addEventListener('click', () => goTo(current === 0 ? slides.length - 1 : current - 1));
 	nextBtn?.addEventListener('click', () => goTo(current === slides.length - 1 ? 0 : current + 1));
 
+	// --- Animación de entrada inicial: misma coreografía que el ENTER del carrusel ---
+	// Cuando la página abre por primera vez (tras el Intro), el slide visible entra
+	// con los mismos valores del "to" en goTo(): rayas barriendo, títulos desde ±150,
+	// info desde -120, galleta scale 0.8/rotate 25 backOut, estrella scale/y backOut,
+	// starImg rotate +45 -> ángulo actual. Así la entrada se siente como "bum, entra
+	// el otro" igual que al pulsar prev/next hacia Crookie Chips.
+	function playHeroEnter() {
+		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+		const carouselEl = document.getElementById('hero-carousel');
+		// Re-query fresco: tras View Transitions el DOM se reemplaza y `slides` queda stale.
+		const fresh = carouselEl ? Array.from(carouselEl.querySelectorAll<HTMLElement>('[data-slide]')) : slides;
+		const to = fresh[current] ?? fresh[0];
+		if (!to) return;
+		const travel = to.offsetHeight || window.innerHeight;
+		const toSpin = getSpin(to);
+
+		to.style.visibility = 'visible';
+		to.style.pointerEvents = 'auto';
+		animate(to, { opacity: [0, 1] }, { duration: 0.4, ease: 'easeInOut' });
+
+		const toStripes = Array.from(to.querySelectorAll<HTMLElement>('.hero-stripe'));
+		toStripes.forEach((stripe) => {
+			const dir = stripe.dataset.dir === 'up' ? -1 : 1;
+			animate(
+				stripe,
+				{ y: [dir * travel, 0], opacity: [0, 1] },
+				{ duration: ENTER_MS / 1000, ease: 'easeInOut' }
+			);
+		});
+		const toTitles = Array.from(to.querySelectorAll<HTMLElement>('.hero-title-word'));
+		toTitles.forEach((word) => {
+			const isLeft = word.dataset.dir === 'left';
+			const startX = isLeft ? -150 : 150;
+			animate(
+				word,
+				{ x: [startX, 0], opacity: [0, 1] },
+				{ duration: ENTER_MS / 1000, ease: 'easeOut' }
+			);
+		});
+		const toLeftInfo = to.querySelector<HTMLElement>('.hero-left-info');
+		if (toLeftInfo) {
+			animate(
+				toLeftInfo,
+				{ x: [-120, 0], opacity: [0, 1] },
+				{ duration: ENTER_MS / 1000, ease: 'easeOut' }
+			);
+		}
+		const toCookieImg = to.querySelector<HTMLElement>('.hero-cookie-interactive');
+		if (toCookieImg) {
+			animate(
+				toCookieImg,
+				{ opacity: [0, 1], scale: [0.8, 1], rotate: [25, 0] },
+				{ duration: ENTER_MS / 1000, ease: 'backOut' }
+			);
+		}
+		const toStar = to.querySelector<HTMLElement>('.hero-star-interactive');
+		if (toStar) {
+			animate(
+				toStar,
+				{ opacity: [0, 1], scale: [0.9, 1], y: [-16, 0] },
+				{ duration: ENTER_MS / 1000, ease: 'backOut' }
+			);
+		}
+		const toStarImg = to.querySelector<HTMLElement>('.hero-star-img');
+		if (toStarImg) {
+			const total = toSpin.angle + toSpin.scroll;
+			animate(toStarImg, { rotate: [total + 45, total] }, { duration: ENTER_MS / 1000, ease: 'backOut' });
+		}
+	}
+
+	function scheduleHeroEnter() {
+		const overlay = document.getElementById('intro-overlay');
+		const introPending =
+			overlay !== null &&
+			overlay.style.display !== 'none' &&
+			sessionStorage.getItem('dimonca_intro_played') !== '1';
+		if (!introPending) {
+			// Sin intro (ya vista o sin overlay): entrar casi de inmediato.
+			setTimeout(playHeroEnter, 80);
+		} else {
+			// Con intro: esperar a que termine la cortina de la D.
+			window.addEventListener('dimonca:intro-done', () => setTimeout(playHeroEnter, 50), { once: true });
+		}
+	}
+
+	scheduleHeroEnter();
+	document.addEventListener('astro:page-load', scheduleHeroEnter);
+
 	// Animación de scroll: zoom en el título, rotación continua y fade out de UI
 	const heroSection = document.querySelector('section.sticky');
 	if (heroSection) {

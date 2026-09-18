@@ -130,6 +130,9 @@ import sobre4Img from "../../assets/images/home/sobre-nosotros/foto-4.png";
     if (sessionStorage.getItem(INTRO_SESSION_FLAG) === '1') {
       const overlay = document.getElementById('intro-overlay');
       if (overlay) overlay.style.display = 'none';
+      // Avisar al Hero (y futuras entradas por vista) de que puede animar.
+      // Async para que los listeners del Hero ya estén attached.
+      setTimeout(() => window.dispatchEvent(new CustomEvent('dimonca:intro-done')), 0);
       return;
     }
 
@@ -218,6 +221,7 @@ import sobre4Img from "../../assets/images/home/sobre-nosotros/foto-4.png";
               sessionStorage.setItem(INTRO_SESSION_FLAG, '1');
               if (overlay) overlay.style.display = 'none';
               document.body.style.overflow = '';
+              window.dispatchEvent(new CustomEvent('dimonca:intro-done'));
             }
           }
 

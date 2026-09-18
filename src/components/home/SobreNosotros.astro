@@ -115,8 +115,8 @@ const photos = [
       </div>
     </div>
 
-    <!-- Columna de Información / Texto -->
-    <div class="flex w-full max-w-[522px] flex-col items-center lg:items-start text-center lg:text-left gap-4 sm:gap-6">
+    <!-- Columna de Información / Texto (entrada por vista, ver setupSobreReveal) -->
+    <div id="sobre-copy" class="flex w-full max-w-[522px] flex-col items-center lg:items-start text-center lg:text-left gap-4 sm:gap-6">
       <div class="relative w-full flex flex-col items-center lg:items-start">
         <h2
           class="font-sans text-[36px] sm:text-[46px] lg:text-[59px] leading-[1.15] font-bold text-brown m-0"
@@ -159,6 +159,66 @@ const photos = [
 </section>
 
 <script>
+  import { animate } from 'motion';
+
+  // ======================================================================
+  // ESTÁNDAR de entrada por vista (reutilizar en las demás secciones):
+  // - duration 0.7s, ease [0.22, 1, 0.36, 1] (easeOutExpo aprox.)
+  // - desplazamiento y: 24px -> 0, opacity 0 -> 1, stagger 0.12s
+  // - IntersectionObserver threshold 0.35 + rootMargin inferior -10%: dispara
+  //   cuando la columna ya está bien entrada en pantalla, no apenas asoma
+  // - respeta prefers-reduced-motion (deja todo visible, sin animar)
+  // - estado inicial oculto se aplica por JS (no por CSS) para no romper
+  //   el contenido si el JS falla
+  // ======================================================================
+  const REVEAL_DURATION = 0.7;
+  const REVEAL_STAGGER = 0.12;
+  const REVEAL_Y = 24;
+  const REVEAL_EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
+
+  function setupSobreReveal() {
+    const col = document.getElementById('sobre-copy');
+    // Guard por vista: evita doble-setup en carga inicial (módulo + page-load).
+    // En SPA el DOM se reemplaza y el dataset se pierde, así que re-inicializa solo.
+    if (!col || col.dataset.revealInit === '1') return;
+    col.dataset.revealInit = '1';
+
+    const items = Array.from(col.children) as HTMLElement[];
+    if (items.length === 0) return;
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    // Estado inicial instantáneo (antes del primer paint si es posible).
+    items.forEach((el) => {
+      animate(el, { opacity: 0, y: REVEAL_Y }, { duration: 0 });
+    });
+
+    if (!('IntersectionObserver' in window)) {
+      items.forEach((el, i) => {
+        animate(el, { opacity: [0, 1], y: [REVEAL_Y, 0] }, { duration: REVEAL_DURATION, delay: i * REVEAL_STAGGER, ease: REVEAL_EASE });
+      });
+      return;
+    }
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          items.forEach((el, i) => {
+            animate(
+              el,
+              { opacity: [0, 1], y: [REVEAL_Y, 0] },
+              { duration: REVEAL_DURATION, delay: i * REVEAL_STAGGER, ease: REVEAL_EASE }
+            );
+          });
+          io.disconnect();
+        });
+      },
+      { threshold: 0.35, rootMargin: '0px 0px -10% 0px' }
+    );
+    io.observe(col);
+  }
+
   function setupSobreAnimation() {
     const section = document.getElementById("sobre-nosotros");
     const sobre1 = document.getElementById("sobre-1");
@@ -186,9 +246,11 @@ const photos = [
       const rect = section.getBoundingClientRect();
       const windowHeight = window.innerHeight;
 
-      // El progreso va de 0 (cuando entra en pantalla por abajo) a 1 (cuando llega a su punto óptimo de visualización)
-      const start = windowHeight;
-      const end = windowHeight * 0.25;
+      // El progreso va de 0 a 1 mientras la sección entra en pantalla.
+      // Arranca cuando el top de la sección ya está 20% dentro del viewport
+      // (no apenas asoma por abajo) y termina cerca del punto óptimo de vista.
+      const start = windowHeight * 0.8;
+      const end = windowHeight * 0.2;
       const progress = Math.min(Math.max((start - rect.top) / (start - end), 0), 1);
 
       // Interpolación de sobre-1 (arriba izquierda)
@@ -236,4 +298,6 @@ const photos = [
   }
 
   document.addEventListener("astro:page-load", setupSobreAnimation);
+  document.addEventListener("astro:page-load", setupSobreReveal);
+  setupSobreReveal();
 </script>

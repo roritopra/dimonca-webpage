@@ -36,7 +36,7 @@ const isMenu = currentPath.startsWith('/menu');
 
 <header
 	id="navbar"
-	class="group fixed top-0 left-0 xl:relative z-[10000] w-full font-sans drop-shadow-[0px_11px_19.05px_rgba(58,32,14,0.14)]"
+	class="group fixed top-0 left-0 xl:sticky z-[10000] w-full font-sans drop-shadow-[0px_11px_19.05px_rgba(58,32,14,0.14)]"
 >
 	<!-- Barra principal del Navbar -->
 	<div
@@ -588,4 +588,127 @@ const isMenu = currentPath.startsWith('/menu');
 		initNavbar();
 	}
 	document.addEventListener('astro:page-load', initNavbar);
+</script>
+
+<script>
+	import { animate } from 'motion';
+
+	// ======================================================================
+	// Navbar: ocultar al bajar / mostrar al subir + entrada coordinada con Intro.
+	// - Mobile (fixed) y desktop (xl:sticky): ambos se trasladan con transform,
+	//   sin saltos de layout. Al subir aunque sea un poco, el navbar baja de
+	//   arriba (translateY) para no tener que volver hasta el tope.
+	// - Entrada inicial con motion; si hay Intro espera a `dimonca:intro-expanding`
+	//   (+500ms, justo después del Hero que entra a +400ms), si no hay Intro entra
+	//   de una vez. Misma dependencia de sessionStorage que el Hero.
+	// ======================================================================
+	const NAV_HIDE_AFTER = 140; // px de scroll antes de poder ocultarse
+	const NAV_ENTER_DELAY_EXPANDING = 500; // ms tras abrir la máscara del Intro
+	const NAV_EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
+
+	let navScheduled = false;
+	let navEnterPlayed = false;
+	let navHidden = false;
+	let navLastY = 0;
+
+	function getNav() {
+		return document.getElementById('navbar');
+	}
+
+	function navReducedMotion() {
+		return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+	}
+
+	function playNavEnter() {
+		if (navEnterPlayed) return;
+		navEnterPlayed = true;
+		navHidden = false;
+		const nav = getNav();
+		if (!nav || navReducedMotion()) return;
+		animate(nav, { y: ['-110%', '0%'], opacity: [0, 1] }, { duration: 0.8, ease: NAV_EASE });
+	}
+
+	function scheduleNavEnter() {
+		if (navScheduled) return;
+		navScheduled = true;
+		navLastY = window.scrollY;
+		// Estado inicial oculto al instante (sin flash del navbar armado).
+		const nav = getNav();
+		if (nav && !navReducedMotion()) {
+			animate(nav, { y: '-110%', opacity: 0 }, { duration: 0 });
+		}
+		const overlay = document.getElementById('intro-overlay');
+		const introPending =
+			overlay !== null &&
+			overlay.style.display !== 'none' &&
+			sessionStorage.getItem('dimonca_intro_played') !== '1';
+		if (!introPending) {
+			setTimeout(playNavEnter, 150);
+		} else {
+			window.addEventListener('dimonca:intro-expanding', () => setTimeout(playNavEnter, NAV_ENTER_DELAY_EXPANDING), { once: true });
+			window.addEventListener('dimonca:intro-done', () => setTimeout(playNavEnter, 50), { once: true });
+		}
+	}
+
+	function showNav() {
+		const nav = getNav();
+		if (!nav) return;
+		navHidden = false;
+		if (navReducedMotion()) {
+			nav.style.transform = '';
+			nav.style.opacity = '';
+			return;
+		}
+		animate(nav, { y: '0%', opacity: 1 }, { duration: 0.35, ease: NAV_EASE });
+	}
+
+	function hideNav() {
+		const nav = getNav();
+		if (!nav) return;
+		navHidden = true;
+		// Cerrar el dropdown de desktop si quedó abierto al ocultarse.
+		const menuBtn = document.getElementById('menu-btn');
+		if (nav.dataset.open && menuBtn) menuBtn.click();
+		if (navReducedMotion()) {
+			nav.style.transform = 'translateY(-110%)';
+			return;
+		}
+		animate(nav, { y: '-110%' }, { duration: 0.3, ease: NAV_EASE });
+	}
+
+	function onNavScroll() {
+		const nav = getNav();
+		// Sin entrada aún (p. ej. durante el Intro con scroll bloqueado): no ocultar.
+		if (!nav || !navEnterPlayed) return;
+		const y = window.scrollY;
+		const delta = y - navLastY;
+		navLastY = y;
+		if (y <= 8) {
+			if (navHidden) showNav();
+			return;
+		}
+		if (delta > 4 && y > NAV_HIDE_AFTER && !navHidden) {
+			hideNav();
+		} else if (delta < -4 && navHidden) {
+			showNav();
+		}
+	}
+
+	// Un solo listener global (con guard) que re-consulta el header en cada
+	// evento: sobrevive a View Transitions aunque el DOM se reemplace.
+	if (!(window as any).__dimoncaNavScrollInit) {
+		(window as any).__dimoncaNavScrollInit = true;
+		window.addEventListener('scroll', onNavScroll, { passive: true });
+	}
+
+	scheduleNavEnter();
+	document.addEventListener('astro:before-preparation', () => {
+		navScheduled = false;
+		navEnterPlayed = false;
+		navHidden = false;
+	});
+	document.addEventListener('astro:page-load', () => {
+		navLastY = window.scrollY;
+		scheduleNavEnter();
+	});
 </script>

@@ -214,7 +214,10 @@ import sobre4Img from "../../assets/images/home/sobre-nosotros/foto-4.png";
             }
 
             if (progress < 1) {
-              requestAnimationFrame(stepExpansion);
+          requestAnimationFrame(stepExpansion);
+          // Avisar al Hero de que la máscara empezó a abrirse: su entrada arranca
+          // ~0.4s después para solaparse con la apertura (ver scheduleHeroEnter).
+          window.dispatchEvent(new CustomEvent('dimonca:intro-expanding'));
             } else {
               // Marcar la intro como vista: no se repite en navegaciones
               // internas ni recargas de esta pestaña, solo al reabrir el sitio.

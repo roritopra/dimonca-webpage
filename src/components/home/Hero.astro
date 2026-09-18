@@ -256,6 +256,12 @@ const slidesData = [
 	const EXIT_MS = 600;
 	const PAUSE_MS = 200;
 	const ENTER_MS = 600;
+	// Entrada inicial del Hero: misma coreografía que el ENTER pero más lenta para
+	// que se aprecie (el carrusel sigue en 600ms para no sentirse pesado).
+	const HERO_ENTER_MS = 1200;
+	// Con intro: la entrada arranca este tiempo después de que la máscara empieza
+	// a abrirse, para solaparse con la apertura de la cortina.
+	const HERO_ENTER_AFTER_EXPAND_MS = 400;
 
 	let current = 0;
 	let transitioning = false;
@@ -618,7 +624,7 @@ const slidesData = [
 	// info desde -120, galleta scale 0.8/rotate 25 backOut, estrella scale/y backOut,
 	// starImg rotate +45 -> ángulo actual. Así la entrada se siente como "bum, entra
 	// el otro" igual que al pulsar prev/next hacia Crookie Chips.
-	function playHeroEnter() {
+	function playHeroEnter(durationMs = HERO_ENTER_MS) {
 		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 		const carouselEl = document.getElementById('hero-carousel');
 		// Re-query fresco: tras View Transitions el DOM se reemplaza y `slides` queda stale.
@@ -627,10 +633,11 @@ const slidesData = [
 		if (!to) return;
 		const travel = to.offsetHeight || window.innerHeight;
 		const toSpin = getSpin(to);
+		const d = durationMs / 1000;
 
 		to.style.visibility = 'visible';
 		to.style.pointerEvents = 'auto';
-		animate(to, { opacity: [0, 1] }, { duration: 0.4, ease: 'easeInOut' });
+		animate(to, { opacity: [0, 1] }, { duration: 0.6, ease: 'easeInOut' });
 
 		const toStripes = Array.from(to.querySelectorAll<HTMLElement>('.hero-stripe'));
 		toStripes.forEach((stripe) => {
@@ -638,7 +645,7 @@ const slidesData = [
 			animate(
 				stripe,
 				{ y: [dir * travel, 0], opacity: [0, 1] },
-				{ duration: ENTER_MS / 1000, ease: 'easeInOut' }
+				{ duration: d, ease: 'easeInOut' }
 			);
 		});
 		const toTitles = Array.from(to.querySelectorAll<HTMLElement>('.hero-title-word'));
@@ -648,7 +655,7 @@ const slidesData = [
 			animate(
 				word,
 				{ x: [startX, 0], opacity: [0, 1] },
-				{ duration: ENTER_MS / 1000, ease: 'easeOut' }
+				{ duration: d, ease: 'easeOut' }
 			);
 		});
 		const toLeftInfo = to.querySelector<HTMLElement>('.hero-left-info');
@@ -656,7 +663,7 @@ const slidesData = [
 			animate(
 				toLeftInfo,
 				{ x: [-120, 0], opacity: [0, 1] },
-				{ duration: ENTER_MS / 1000, ease: 'easeOut' }
+				{ duration: d, ease: 'easeOut' }
 			);
 		}
 		const toCookieImg = to.querySelector<HTMLElement>('.hero-cookie-interactive');
@@ -664,7 +671,7 @@ const slidesData = [
 			animate(
 				toCookieImg,
 				{ opacity: [0, 1], scale: [0.8, 1], rotate: [25, 0] },
-				{ duration: ENTER_MS / 1000, ease: 'backOut' }
+				{ duration: d, ease: 'backOut' }
 			);
 		}
 		const toStar = to.querySelector<HTMLElement>('.hero-star-interactive');
@@ -672,32 +679,109 @@ const slidesData = [
 			animate(
 				toStar,
 				{ opacity: [0, 1], scale: [0.9, 1], y: [-16, 0] },
-				{ duration: ENTER_MS / 1000, ease: 'backOut' }
+				{ duration: d, ease: 'backOut' }
 			);
 		}
 		const toStarImg = to.querySelector<HTMLElement>('.hero-star-img');
 		if (toStarImg) {
 			const total = toSpin.angle + toSpin.scroll;
-			animate(toStarImg, { rotate: [total + 45, total] }, { duration: ENTER_MS / 1000, ease: 'backOut' });
+			animate(toStarImg, { rotate: [total + 45, total] }, { duration: d, ease: 'backOut' });
 		}
 	}
 
+	// Estado inicial de la entrada aplicado AL INSTANTE (sin animar): deja el Hero
+	// en "blanco" — fondo del slide visible pero rayas/títulos/galleta/estrella
+	// ocultos en su posición de inicio. Así detrás de la máscara del Intro no se ve
+	// el Hero ya armado y la entrada no se siente como un recargón.
+	function setHeroEnterStart() {
+		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+		const carouselEl = document.getElementById('hero-carousel');
+		const fresh = carouselEl ? Array.from(carouselEl.querySelectorAll<HTMLElement>('[data-slide]')) : slides;
+		const to = fresh[current] ?? fresh[0];
+		if (!to) return;
+		const travel = to.offsetHeight || window.innerHeight;
+		const instant = { duration: 0 };
+		animate(to, { opacity: 0 }, instant);
+		to.querySelectorAll<HTMLElement>('.hero-stripe').forEach((stripe) => {
+			const dir = stripe.dataset.dir === 'up' ? -1 : 1;
+			animate(stripe, { y: dir * travel, opacity: 0 }, instant);
+		});
+		to.querySelectorAll<HTMLElement>('.hero-title-word').forEach((word) => {
+			animate(word, { x: word.dataset.dir === 'left' ? -150 : 150, opacity: 0 }, instant);
+		});
+		const info = to.querySelector<HTMLElement>('.hero-left-info');
+		if (info) animate(info, { x: -120, opacity: 0 }, instant);
+		const cookie = to.querySelector<HTMLElement>('.hero-cookie-interactive');
+		if (cookie) animate(cookie, { opacity: 0, scale: 0.8, rotate: 25 }, instant);
+		const star = to.querySelector<HTMLElement>('.hero-star-interactive');
+		if (star) animate(star, { opacity: 0, scale: 0.9, y: -16 }, instant);
+		const starImg = to.querySelector<HTMLElement>('.hero-star-img');
+		if (starImg) {
+			const st = getSpin(to);
+			animate(starImg, { rotate: st.angle + st.scroll + 45 }, instant);
+		}
+		// Los botones compartidos (Ver menú / prev-next) también parten ocultos.
+		const menuBtn = document.getElementById('hero-menu-btn');
+		if (menuBtn) animate(menuBtn, { opacity: 0 }, instant);
+		if (prevBtn) animate(prevBtn, { opacity: 0 }, instant);
+		if (nextBtn) animate(nextBtn, { opacity: 0 }, instant);
+	}
+
+	// NOTA: los botones del carrusel y "Ver menú" los maneja el scroll-fade
+	// (opacityUi) una vez hecha la entrada; aquí solo se ocultan al inicio para que
+	// no floten sobre el fondo en blanco durante el Intro.
+	function revealHeroChrome() {
+		const menuBtn = document.getElementById('hero-menu-btn');
+		if (menuBtn) animate(menuBtn, { opacity: [0, 1] }, { duration: 0.5, ease: 'easeOut' });
+		if (prevBtn) animate(prevBtn, { opacity: [0, 1] }, { duration: 0.5, ease: 'easeOut' });
+		if (nextBtn) animate(nextBtn, { opacity: [0, 1] }, { duration: 0.5, ease: 'easeOut' });
+	}
+
+	let heroEnterScheduled = false;
+	let heroEnterPlayed = false;
+
+	function playHeroEnterOnce() {
+		if (heroEnterPlayed) return;
+		heroEnterPlayed = true;
+		playHeroEnter();
+		revealHeroChrome();
+	}
+
 	function scheduleHeroEnter() {
+		// Idempotente por vista: el módulo corre en la carga inicial Y astro:page-load
+		// dispara justo después — sin este guard la entrada se dispararía dos veces.
+		// Se resetea al navegar (before-preparation) para re-entrar al volver al home.
+		if (heroEnterScheduled) return;
+		heroEnterScheduled = true;
+		// Ocultar de una vez: detrás de la máscara del Intro se ve fondo en blanco,
+		// no el Hero ya armado (evita el efecto "recargón").
+		setHeroEnterStart();
 		const overlay = document.getElementById('intro-overlay');
 		const introPending =
 			overlay !== null &&
 			overlay.style.display !== 'none' &&
 			sessionStorage.getItem('dimonca_intro_played') !== '1';
 		if (!introPending) {
-			// Sin intro (ya vista o sin overlay): entrar casi de inmediato.
-			setTimeout(playHeroEnter, 80);
+			// Sin intro (ya vista en esta pestaña o sin overlay): entrar casi de inmediato.
+			setTimeout(playHeroEnterOnce, 150);
 		} else {
-			// Con intro: esperar a que termine la cortina de la D.
-			window.addEventListener('dimonca:intro-done', () => setTimeout(playHeroEnter, 50), { once: true });
+			// Con intro: entrar 0.4s después de que la máscara empieza a abrirse,
+			// para que la animación se vea a través de la apertura.
+			window.addEventListener(
+				'dimonca:intro-expanding',
+				() => setTimeout(playHeroEnterOnce, HERO_ENTER_AFTER_EXPAND_MS),
+				{ once: true }
+			);
+			// Respaldo por si el evento de expansión se pierde: al terminar la intro.
+			window.addEventListener('dimonca:intro-done', () => setTimeout(playHeroEnterOnce, 50), { once: true });
 		}
 	}
 
 	scheduleHeroEnter();
+	document.addEventListener('astro:before-preparation', () => {
+		heroEnterScheduled = false;
+		heroEnterPlayed = false;
+	});
 	document.addEventListener('astro:page-load', scheduleHeroEnter);
 
 	// Animación de scroll: zoom en el título, rotación continua y fade out de UI

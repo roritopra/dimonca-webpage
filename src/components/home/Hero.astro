@@ -159,9 +159,11 @@ const slidesData = [
 							<!-- Estrella Nueva: el SVG tiene su centro visual desplazado (~+5% X, ~-4.5% Y
 								respecto al centro del viewBox), por eso el texto se ancla en 55% / 45.5%
 								en vez de 50% / 50% para quedar ópticamente centrado en todos los breakpoints.
-								Solo el <img> rota (hero-star-img); el contenedor y el texto no rotan. -->
+								Solo el <img> rota (hero-star-img) alrededor del centro visual de la estrella,
+								que coincide con el texto: la estrella gira y "Nueva" queda quieta.
+								El giro es continuo con aceleración/desaceleración (ver SPIN_* en el script). -->
 							<div class={`hero-star-interactive absolute z-3 ${slide.starWrapClass}`}>
-								<img class="hero-star-img block h-full w-full object-contain will-change-transform" src={slide.starImg} alt="" aria-hidden="true" />
+								<img class="hero-star-img block h-full w-full object-contain will-change-transform" src={slide.starImg} alt="" aria-hidden="true" style="transform-origin: 55% 45.5%;" />
 								<span
 									class={`absolute top-[45.5%] left-[55%] -translate-x-1/2 -translate-y-1/2 font-sans font-bold whitespace-nowrap text-center leading-[1.2] ${slide.starTextClass}`}
 									style="paint-order: stroke;"
@@ -245,6 +247,80 @@ const slidesData = [
 
 	let hoverTimeout: ReturnType<typeof setTimeout> | null = null;
 
+	// --- Giro continuo de la estrella con aceleración / desaceleración ---
+	// Mientras el mouse está sobre la estrella, el SVG acelera de 0 hasta SPIN_MAX
+	// (deg/s); al quitarlo, desacelera suavemente hasta detenerse. Al ser una
+	// velocidad que persigue un objetivo en vez de un salto fijo, entrar/salir
+	// rápido del hover se siente como pisar/soltar pedal, sin cortes toscos.
+	const SPIN_MAX = 200; // velocidad máxima del giro (grados/segundo)
+	const SPIN_ACCEL_K = 3.2; // qué tan rápido acelera (mayor = llega antes al máximo)
+	const SPIN_DECEL_K = 1.6; // qué tan rápido frena (menor = cola de frenado más larga)
+	const SPIN_STOP_EPS = 0.6; // por debajo de esta velocidad se considera detenido
+
+	type SpinState = {
+		angle: number;
+		vel: number;
+		target: number;
+		scroll: number;
+		raf: number | null;
+		last: number;
+		img: HTMLElement | null;
+	};
+	const spinStates = new WeakMap<HTMLElement, SpinState>();
+
+	function getSpin(slideEl: HTMLElement): SpinState {
+		let st = spinStates.get(slideEl);
+		if (!st) {
+			st = { angle: 0, vel: 0, target: 0, scroll: 0, raf: null, last: 0, img: null };
+			spinStates.set(slideEl, st);
+		}
+		if (!st.img) st.img = slideEl.querySelector<HTMLElement>('.hero-star-img');
+		return st;
+	}
+
+	function renderSpin(slideEl: HTMLElement, st: SpinState) {
+		if (!st.img) st.img = slideEl.querySelector<HTMLElement>('.hero-star-img');
+		if (st.img) st.img.style.transform = `rotate(${st.angle + st.scroll}deg)`;
+	}
+
+	function spinTick(slideEl: HTMLElement, st: SpinState, now: number) {
+		const dt = Math.min(Math.max((now - st.last) / 1000, 0), 0.05);
+		st.last = now;
+		const k = st.target > 0 ? SPIN_ACCEL_K : SPIN_DECEL_K;
+		st.vel += (st.target - st.vel) * (1 - Math.exp(-k * dt));
+		if (st.target === 0 && Math.abs(st.vel) < SPIN_STOP_EPS) {
+			st.vel = 0;
+			st.raf = null;
+			renderSpin(slideEl, st);
+			return;
+		}
+		st.angle = (st.angle + st.vel * dt) % 360;
+		renderSpin(slideEl, st);
+		st.raf = requestAnimationFrame((t) => spinTick(slideEl, st, t));
+	}
+
+	function ensureSpin(slideEl: HTMLElement, st: SpinState) {
+		if (st.raf !== null) return;
+		st.last = performance.now();
+		st.raf = requestAnimationFrame((t) => spinTick(slideEl, st, t));
+	}
+
+	function setSpinTarget(slideEl: HTMLElement, target: number) {
+		const st = getSpin(slideEl);
+		st.target = target;
+		if (target > 0 || Math.abs(st.vel) > 0) ensureSpin(slideEl, st);
+	}
+
+	function stopSpinHard(slideEl: HTMLElement) {
+		const st = getSpin(slideEl);
+		st.target = 0;
+		st.vel = 0;
+		if (st.raf !== null) {
+			cancelAnimationFrame(st.raf);
+			st.raf = null;
+		}
+	}
+
 	function resetHoverState(slideEl: HTMLElement) {
 		if (hoverTimeout) {
 			clearTimeout(hoverTimeout);
@@ -252,16 +328,14 @@ const slidesData = [
 		}
 		const cookie = slideEl.querySelector<HTMLElement>('.hero-cookie-interactive');
 		const star = slideEl.querySelector<HTMLElement>('.hero-star-interactive');
-		const starImg = slideEl.querySelector<HTMLElement>('.hero-star-img');
 		const leftHalf = slideEl.querySelector<HTMLElement>('.hero-cookie-left');
 		const rightHalf = slideEl.querySelector<HTMLElement>('.hero-cookie-right');
 		const cracked = slideEl.querySelector<HTMLElement>('.hero-cookie-cracked');
 
 		if (window.scrollY <= 5 && cookie) {
 			animate(cookie, { rotate: 0, scale: 1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
-			// Solo la estrella rota; el contenedor (y el texto "Nueva") solo recupera escala.
+			// Solo la estrella rota (vía el loop de giro); el contenedor solo recupera escala.
 			if (star) animate(star, { scale: 1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
-			if (starImg) animate(starImg, { rotate: 0 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
 		}
 		if (leftHalf) {
 			animate(leftHalf, { x: 0, opacity: 1 }, { type: 'spring', stiffness: 300, damping: 20, mass: 1 });
@@ -278,7 +352,6 @@ const slidesData = [
 		if (window.scrollY > 5 || hoverTimeout) return;
 		const cookie = slideEl.querySelector<HTMLElement>('.hero-cookie-interactive');
 		const star = slideEl.querySelector<HTMLElement>('.hero-star-interactive');
-		const starImg = slideEl.querySelector<HTMLElement>('.hero-star-img');
 		const leftHalf = slideEl.querySelector<HTMLElement>('.hero-cookie-left');
 		const rightHalf = slideEl.querySelector<HTMLElement>('.hero-cookie-right');
 		const cracked = slideEl.querySelector<HTMLElement>('.hero-cookie-cracked');
@@ -287,9 +360,8 @@ const slidesData = [
 
 		const slide = (cookie.offsetWidth / 600) * 2.5;
 		animate(cookie, { rotate: -10 }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
-		// Solo gira el SVG; el texto queda quieto (el contenedor solo escala).
+		// El giro continuo lo maneja el loop (setSpinTarget); aquí solo el pop de escala.
 		if (star) animate(star, { scale: 1.08 }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
-		if (starImg) animate(starImg, { rotate: 18 }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
 		animate(leftHalf, { x: -slide }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
 		animate(rightHalf, { x: slide }, { type: 'spring', stiffness: 350, damping: 20, mass: 1 });
 
@@ -305,15 +377,22 @@ const slidesData = [
 		}, 50);
 	}
 
-	// Vincular hover a cada slide
+	// Vincular hover a cada slide: la galleta solo hace el pop; la estrella además
+	// arranca/frena el giro continuo (acelera al entrar, desacelera al salir).
 	slides.forEach((slideEl) => {
 		const cookie = slideEl.querySelector<HTMLElement>('.hero-cookie-interactive');
 		const star = slideEl.querySelector<HTMLElement>('.hero-star-interactive');
 
 		cookie?.addEventListener('mouseenter', () => startHoverState(slideEl));
 		cookie?.addEventListener('mouseleave', () => resetHoverState(slideEl));
-		star?.addEventListener('mouseenter', () => startHoverState(slideEl));
-		star?.addEventListener('mouseleave', () => resetHoverState(slideEl));
+		star?.addEventListener('mouseenter', () => {
+			startHoverState(slideEl);
+			if (window.scrollY <= 5) setSpinTarget(slideEl, SPIN_MAX);
+		});
+		star?.addEventListener('mouseleave', () => {
+			resetHoverState(slideEl);
+			setSpinTarget(slideEl, 0);
+		});
 	});
 
 	function goTo(index: number) {
@@ -333,6 +412,12 @@ const slidesData = [
 		const toStar = to.querySelector<HTMLElement>('.hero-star-interactive');
 		const fromStarImg = from.querySelector<HTMLElement>('.hero-star-img');
 		const toStarImg = to.querySelector<HTMLElement>('.hero-star-img');
+		// Congelar el giro durante la transición (el fundido oculta el cambio);
+		// el ángulo se conserva para no dar saltos al volver al slide.
+		const fromSpin = getSpin(from);
+		const toSpin = getSpin(to);
+		stopSpinHard(from);
+		stopSpinHard(to);
 		const fromStripes = Array.from(from.querySelectorAll<HTMLElement>('.hero-stripe'));
 		const toStripes = Array.from(to.querySelectorAll<HTMLElement>('.hero-stripe'));
 		const fromTitles = Array.from(from.querySelectorAll<HTMLElement>('.hero-title-word'));
@@ -382,7 +467,9 @@ const slidesData = [
 			);
 		}
 		if (fromStarImg) {
-			animate(fromStarImg, { rotate: -45 }, { duration: EXIT_MS / 1000, ease: 'backIn' });
+			// Giro relativo al ángulo actual: sin saltos aunque la estrella quedara girada.
+			const total = fromSpin.angle + fromSpin.scroll;
+			animate(fromStarImg, { rotate: [total, total - 45] }, { duration: EXIT_MS / 1000, ease: 'backIn' });
 		}
 
 		setTimeout(() => {
@@ -434,7 +521,8 @@ const slidesData = [
 				);
 			}
 			if (toStarImg) {
-				animate(toStarImg, { rotate: [45, 0] }, { duration: ENTER_MS / 1000, ease: 'backOut' });
+				const total = toSpin.angle + toSpin.scroll;
+				animate(toStarImg, { rotate: [total + 45, total] }, { duration: ENTER_MS / 1000, ease: 'backOut' });
 			}
 			transitioning = false;
 		}, EXIT_MS + PAUSE_MS);
@@ -461,6 +549,9 @@ const slidesData = [
 					clearTimeout(hoverTimeout);
 					hoverTimeout = null;
 				}
+				// Al hacer scroll el giro continuo frena solo (desacelera, no para en seco).
+				const spinSt = getSpin(currentSlideEl);
+				if (spinSt.target !== 0) spinSt.target = 0;
 				const cracked = currentSlideEl.querySelector<HTMLElement>('.hero-cookie-cracked');
 				const leftHalf = currentSlideEl.querySelector<HTMLElement>('.hero-cookie-left');
 				const rightHalf = currentSlideEl.querySelector<HTMLElement>('.hero-cookie-right');
@@ -472,7 +563,6 @@ const slidesData = [
 			const titles = currentSlideEl.querySelectorAll<HTMLElement>('.hero-title-word');
 			const cookieEl = currentSlideEl.querySelector<HTMLElement>('.hero-cookie-interactive');
 			const starEl = currentSlideEl.querySelector<HTMLElement>('.hero-star-interactive');
-			const starImgEl = currentSlideEl.querySelector<HTMLElement>('.hero-star-img');
 			const infoEl = currentSlideEl.querySelector<HTMLElement>('.hero-left-info');
 
 			const scaleTitle = 1 + progress * (current === 0 ? 0.16 : 0.22);
@@ -497,10 +587,12 @@ const slidesData = [
 				const starX = progress * 25;
 				const starY = -progress * 20;
 				// El contenedor se desplaza/escala (arrastra al texto sin rotarlo);
-				// solo el SVG rota.
+				// el scroll aporta su ángulo y el loop de giro suma el suyo.
 				starEl.style.transform = `translate(${starX}px, ${starY}px) scale(${starScale})`;
 				starEl.style.opacity = `${Math.max(1 - progress * 0.3, 0.7)}`;
-				if (starImgEl) starImgEl.style.transform = `rotate(${starRotate}deg)`;
+				const spinSt = getSpin(currentSlideEl);
+				spinSt.scroll = starRotate;
+				if (spinSt.raf === null) renderSpin(currentSlideEl, spinSt);
 			}
 
 			const ellipseGlow = currentSlideEl.querySelector<HTMLElement>('div[class*="mix-blend-overlay"]');

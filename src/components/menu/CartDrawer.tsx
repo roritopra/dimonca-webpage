@@ -457,41 +457,6 @@ export default function CartDrawer() {
 							)}
 						</div>
 
-						{/* Toast / Alerta de Artículo Eliminado con Botón Deshacer */}
-						<AnimatePresence>
-							{lastRemovedItem && (
-								<motion.div
-									initial={{ opacity: 0, y: 20, scale: 0.95 }}
-									animate={{ opacity: 1, y: 0, scale: 1 }}
-									exit={{ opacity: 0, y: 15, scale: 0.95 }}
-									transition={{ duration: 0.22, ease: 'easeOut' }}
-									className="px-6 pb-2"
-								>
-									<div className="flex items-center justify-between gap-3 rounded-2xl bg-brown text-[#fbf8f2] px-4 py-3 shadow-lg border border-brown/20">
-										<div className="flex items-center gap-2.5 min-w-0">
-											{/* Chulito en círculo verde suave */}
-											<span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#3fa36c] text-white">
-												<svg className="h-3 w-3 stroke-current stroke-3" fill="none" viewBox="0 0 24 24">
-													<polyline points="20 6 9 17 4 12" strokeLinecap="round" strokeLinejoin="round"></polyline>
-												</svg>
-											</span>
-											<span className="font-sans text-xs sm:text-sm font-semibold truncate">
-												Artículo eliminado
-											</span>
-										</div>
-
-										<button
-											type="button"
-											onClick={handleUndo}
-											className="font-sans text-xs sm:text-sm font-extrabold text-pink hover:text-pink/80 uppercase tracking-wider underline underline-offset-4 cursor-pointer shrink-0 transition-colors"
-										>
-											Deshacer
-										</button>
-									</div>
-								</motion.div>
-							)}
-						</AnimatePresence>
-
 						{/* 3. Footer Fijo con Subtotal y Botón Comprar */}
 						<div className="relative z-10 bg-beige-500 px-6 py-3 shadow-[0px_-8px_22.8px_rgba(157,99,45,0.21)]">
 							<div className="flex items-center justify-between mb-3">
@@ -514,6 +479,42 @@ export default function CartDrawer() {
 						</div>
 					</>
 				)}
+
+				{/* Toast "Artículo eliminado / Deshacer": FUERA del ternario para que
+				    también aparezca al eliminar el ÚLTIMO artículo (estado vacío). */}
+				<AnimatePresence>
+					{lastRemovedItem && (
+						<motion.div
+							initial={{ opacity: 0, y: 20, scale: 0.95 }}
+							animate={{ opacity: 1, y: 0, scale: 1 }}
+							exit={{ opacity: 0, y: 15, scale: 0.95 }}
+							transition={{ duration: 0.22, ease: 'easeOut' }}
+							className="px-6 pb-4"
+						>
+							<div className="flex items-center justify-between gap-3 rounded-2xl bg-brown text-[#fbf8f2] px-4 py-3 shadow-lg border border-brown/20">
+								<div className="flex items-center gap-2.5 min-w-0">
+									{/* Chulito en círculo verde suave */}
+									<span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#3fa36c] text-white">
+										<svg className="h-3 w-3 stroke-current stroke-3" fill="none" viewBox="0 0 24 24">
+											<polyline points="20 6 9 17 4 12" strokeLinecap="round" strokeLinejoin="round"></polyline>
+										</svg>
+									</span>
+									<span className="font-sans text-xs sm:text-sm font-semibold truncate">
+										Artículo eliminado
+									</span>
+								</div>
+
+								<button
+									type="button"
+									onClick={handleUndo}
+									className="font-sans text-xs sm:text-sm font-extrabold text-pink hover:text-pink/80 uppercase tracking-wider underline underline-offset-4 cursor-pointer shrink-0 transition-colors"
+								>
+									Deshacer
+								</button>
+							</div>
+						</motion.div>
+					)}
+				</AnimatePresence>
 			</aside>
 		</div>
 	);

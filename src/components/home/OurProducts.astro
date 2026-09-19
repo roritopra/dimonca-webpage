@@ -57,6 +57,7 @@ const groups = [0, 1, 2, 3];
       class="absolute inset-0 left-1/2 w-[1440px] max-w-full -translate-x-1/2"
     >
       <div
+        id="galletas-dots"
         class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -rotate-35"
         style={{
           width: "2000px",
@@ -70,7 +71,7 @@ const groups = [0, 1, 2, 3];
       >
       </div>
 
-      <div class="absolute inset-x-0 top-[28px] sm:top-[38px] lg:top-[51px] text-center px-4">
+      <div data-galletas="title" class="absolute inset-x-0 top-[28px] sm:top-[38px] lg:top-[51px] text-center px-4">
         <h2
           style="paint-order: stroke;"
           class="m-0 font-sans text-[28px] sm:text-[34px] lg:text-[38px] leading-[1.2] text-brown [-webkit-text-stroke:8px_#F7F2E8] sm:[-webkit-text-stroke:12px_#F7F2E8] lg:[-webkit-text-stroke:15px_#F7F2E8] [filter:drop-shadow(0px_4px_4px_rgba(58,32,14,0.5))]"
@@ -78,7 +79,7 @@ const groups = [0, 1, 2, 3];
           Conoce Nuestras
         </h2>
       </div>
-      <div class="absolute inset-x-0 top-[50px] sm:top-[62px] lg:top-[81px] text-center" aria-hidden="true">
+      <div data-galletas="title" class="absolute inset-x-0 top-[50px] sm:top-[62px] lg:top-[81px] text-center" aria-hidden="true">
         <p
           style="paint-order: stroke;"
           class="m-0 font-exmouth text-[100px] sm:text-[130px] lg:text-[154.71px] leading-[1.2] text-brown [-webkit-text-stroke:8px_#F7F2E8] sm:[-webkit-text-stroke:12px_#F7F2E8] lg:[-webkit-text-stroke:15px_#F7F2E8] [filter:drop-shadow(0px_4px_4px_rgba(58,32,14,0.5))]"
@@ -92,7 +93,7 @@ const groups = [0, 1, 2, 3];
   <!-- Carrusel infinito de borde a borde (sin max-width: toca ambos finales).
     Se mueve solo, despacio, sin botones ni puntos, en mobile y desktop. -->
   <div class="relative w-full pt-[240px] sm:pt-[275px] lg:pt-[310px]">
-    <div class="w-full overflow-hidden py-8">
+    <div id="galletas-marquee" class="w-full overflow-hidden py-8">
       <div class="cookie-marquee-track flex w-max will-change-transform">
         {
           groups.map((g) => (
@@ -111,6 +112,7 @@ const groups = [0, 1, 2, 3];
 
     <div class="mx-auto flex max-w-[1440px] flex-col items-center px-6 sm:px-10 lg:px-20 pb-12 lg:pb-16">
       <a
+        id="galletas-more"
         class="group flex h-[48px] sm:h-[52px] w-[190px] sm:w-[210px] items-center justify-center gap-3
         whitespace-nowrap rounded-[57px] bg-[#6CA7D5] px-6 py-3 font-sans text-[17px] sm:text-[19px]
         leading-[1.2] font-bold text-beige no-underline
@@ -133,6 +135,61 @@ const groups = [0, 1, 2, 3];
 </section>
 
 <script>
+  import { animate } from 'motion';
+
+  // ======================================================================
+  // Entrada por vista (sigue el estándar: 0.7s, ease [0.22,1,0.36,1], once):
+  // - puntos del fondo: solo aparición (opacity, sin desplazamiento)
+  // - título: rise + stagger
+  // - carrusel: barrido de derecha a izquierda (x 100 -> 0)
+  // - botón Ver más: rise con retardo al final
+  // ======================================================================
+  const G_EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
+  const G_DUR = 0.7;
+
+  function setupGalletasEnter() {
+    const section = document.getElementById('galletas');
+    if (!section || section.dataset.enterInit === '1') return;
+    section.dataset.enterInit = '1';
+
+    const dots = section.querySelector<HTMLElement>('#galletas-dots');
+    const titles = Array.from(section.querySelectorAll<HTMLElement>('[data-galletas="title"]'));
+    const marquee = section.querySelector<HTMLElement>('#galletas-marquee');
+    const more = section.querySelector<HTMLElement>('#galletas-more');
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    if (dots) animate(dots, { opacity: 0 }, { duration: 0 });
+    titles.forEach((el) => animate(el, { opacity: 0, y: 24 }, { duration: 0 }));
+    if (marquee) animate(marquee, { opacity: 0, x: 100 }, { duration: 0 });
+    if (more) animate(more, { opacity: 0, y: 24 }, { duration: 0 });
+
+    const play = () => {
+      if (dots) animate(dots, { opacity: [0, 1] }, { duration: 1.1, ease: 'easeOut' });
+      titles.forEach((el, i) =>
+        animate(el, { opacity: [0, 1], y: [24, 0] }, { duration: G_DUR, delay: 0.1 + i * 0.12, ease: G_EASE })
+      );
+      if (marquee) animate(marquee, { opacity: [0, 1], x: [100, 0] }, { duration: 0.9, delay: 0.25, ease: G_EASE });
+      if (more) animate(more, { opacity: [0, 1], y: [24, 0] }, { duration: G_DUR, delay: 0.55, ease: G_EASE });
+    };
+
+    if (!('IntersectionObserver' in window)) {
+      play();
+      return;
+    }
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          play();
+          io.disconnect();
+        });
+      },
+      { threshold: 0.15, rootMargin: '0px 0px -10% 0px' }
+    );
+    io.observe(section);
+  }
+
   // Carrusel infinito: avance lineal lento (px/s) con envolvimiento por módulo
   // sobre el ancho de un grupo. Solo avanza cuando la sección está visible.
   const MARQUEE_SPEED = 28;
@@ -193,4 +250,6 @@ const groups = [0, 1, 2, 3];
 
   initCookieMarquee();
   document.addEventListener('astro:page-load', initCookieMarquee);
+  setupGalletasEnter();
+  document.addEventListener('astro:page-load', setupGalletasEnter);
 </script>

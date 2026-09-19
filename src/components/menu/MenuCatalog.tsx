@@ -1,7 +1,15 @@
 import React, { useState, useMemo, useEffect, useCallback } from 'react';
+import { motion } from 'motion/react';
 import MenuCard from './MenuCard';
 import MenuBoxCard from './MenuBoxCard';
 import MenuFilters from './MenuFilters';
+
+// Entrada del grid: mismo lenguaje que el resto (fade + subida 24px,
+// 0.7s, easeOutExpo). El stagger se deriva del índice pero con tope para
+// que grids largas no tarden una eternidad en revelarse.
+const GRID_EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
+const GRID_STAGGER = 0.06;
+const GRID_MAX_DELAY = 0.6;
 import { getProducts } from '../../lib/productsApi';
 import type { Product } from '../../types/products';
 
@@ -182,14 +190,31 @@ export default function MenuCatalog() {
 					</div>
 				) : (
 					<div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3.5 sm:gap-5">
-						{filteredProducts.map((product) =>
-							// Las premium de CAJA renderizan su componente propio
-							product.variant === 'premium' ? (
-								<MenuBoxCard key={product.id} product={product} />
-							) : (
-								<MenuCard key={product.id} product={product} withTransition />
-							)
-						)}
+						{filteredProducts.map((product, index) => {
+							// Las premium de CAJA renderizan su componente propio.
+							// Cada card entra con fade + subida en stagger (tope de delay)
+							// y re-entra al cambiar de filtro/búsqueda (key incluye
+							// categoría + query). `viewport once` evita re-animar al
+							// hacer scroll arriba/abajo.
+							const delay = Math.min(index * GRID_STAGGER, GRID_MAX_DELAY);
+							const revealKey = `${activeCategory}-${searchQuery.trim().toLowerCase()}-${product.id}`;
+							return (
+								<motion.div
+									key={revealKey}
+									initial={{ opacity: 0, y: 24, scale: 0.97 }}
+									whileInView={{ opacity: 1, y: 0, scale: 1 }}
+									viewport={{ once: true, amount: 0.15 }}
+									transition={{ duration: 0.7, delay, ease: GRID_EASE }}
+									className={product.variant === 'premium' ? 'col-span-2' : 'col-span-1'}
+								>
+									{product.variant === 'premium' ? (
+										<MenuBoxCard product={product} />
+									) : (
+										<MenuCard product={product} withTransition />
+									)}
+								</motion.div>
+							);
+						})}
 					</div>
 				)}
 			</section>

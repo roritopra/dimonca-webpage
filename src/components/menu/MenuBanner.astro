@@ -14,9 +14,10 @@ import item7 from '../../assets/images/menu/home/galleta-item-banner-7.png';
 const bottomCookies = [item1, item2, item3, item4, item5, item6, item7, item1, item2];
 ---
 
-<section class="relative w-full max-w-[1400px] mx-auto px-4 sm:px-6 pt-4 pb-6">
+<section id="menu-banner" class="relative w-full max-w-[1400px] mx-auto px-4 sm:px-6 pt-4 pb-6">
 	<!-- Contenedor del Banner con bordes redondeados y fondo gingham/picnic -->
 	<div
+		id="menu-banner-box"
 		class="relative w-full overflow-hidden rounded-[28px] sm:rounded-[36px] shadow-sm min-h-[320px] sm:min-h-[360px] md:min-h-[420px] lg:min-h-[460px] flex flex-col justify-between"
 		style="background-color: #f77ca4;"
 	>
@@ -35,6 +36,7 @@ const bottomCookies = [item1, item2, item3, item4, item5, item6, item7, item1, i
 
 		<!-- Boton Carrusel Anterior (Izquierda) -->
 		<button
+			id="menu-banner-prev"
 			type="button"
 			class="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 z-40 flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-[#f45d8c] text-white shadow-md border-2 border-white/80 transition-transform hover:scale-110 active:scale-95 cursor-pointer"
 			aria-label="Anterior slide"
@@ -44,6 +46,7 @@ const bottomCookies = [item1, item2, item3, item4, item5, item6, item7, item1, i
 
 		<!-- Boton Carrusel Siguiente (Derecha) -->
 		<button
+			id="menu-banner-next"
 			type="button"
 			class="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 z-40 flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-[#f45d8c] text-white shadow-md border-2 border-white/80 transition-transform hover:scale-110 active:scale-95 cursor-pointer"
 			aria-label="Siguiente slide"
@@ -61,14 +64,14 @@ const bottomCookies = [item1, item2, item3, item4, item5, item6, item7, item1, i
 				<!-- ============================================================== -->
 				<span
 					style="paint-order: stroke fill;"
-					class="absolute top-0 sm:top-2 md:top-4 lg:top-6 left-2 sm:left-8 md:left-12 lg:left-14 font-exmouth text-[60px] sm:text-[90px] md:text-[120px] lg:text-[145px] xl:text-[160px] leading-none text-[#d7ebfb] [-webkit-text-stroke:5px_#ffffff] sm:[-webkit-text-stroke:8px_#ffffff] md:[-webkit-text-stroke:10px_#ffffff] lg:[-webkit-text-stroke:12px_#ffffff] select-none pointer-events-none z-10"
+					class="menu-banner-title-left absolute top-0 sm:top-2 md:top-4 lg:top-6 left-2 sm:left-8 md:left-12 lg:left-14 font-exmouth text-[60px] sm:text-[90px] md:text-[120px] lg:text-[145px] xl:text-[160px] leading-none text-[#d7ebfb] [-webkit-text-stroke:5px_#ffffff] sm:[-webkit-text-stroke:8px_#ffffff] md:[-webkit-text-stroke:10px_#ffffff] lg:[-webkit-text-stroke:12px_#ffffff] select-none pointer-events-none z-10 inline-block"
 				>
 					Nuestras
 				</span>
 
 				<span
 					style="paint-order: stroke fill;"
-					class="absolute bottom-0 sm:bottom-2 md:bottom-4 lg:bottom-6 right-2 sm:right-8 md:right-12 lg:right-14 font-exmouth text-[60px] sm:text-[90px] md:text-[120px] lg:text-[145px] xl:text-[160px] leading-none text-[#d7ebfb] [-webkit-text-stroke:5px_#ffffff] sm:[-webkit-text-stroke:8px_#ffffff] md:[-webkit-text-stroke:10px_#ffffff] lg:[-webkit-text-stroke:12px_#ffffff] select-none pointer-events-none z-10"
+					class="menu-banner-title-right absolute bottom-0 sm:bottom-2 md:bottom-4 lg:bottom-6 right-2 sm:right-8 md:right-12 lg:right-14 font-exmouth text-[60px] sm:text-[90px] md:text-[120px] lg:text-[145px] xl:text-[160px] leading-none text-[#d7ebfb] [-webkit-text-stroke:5px_#ffffff] sm:[-webkit-text-stroke:8px_#ffffff] md:[-webkit-text-stroke:10px_#ffffff] lg:[-webkit-text-stroke:12px_#ffffff] select-none pointer-events-none z-10 inline-block"
 				>
 					Galletas
 				</span>
@@ -78,7 +81,7 @@ const bottomCookies = [item1, item2, item3, item4, item5, item6, item7, item1, i
 				<!-- ============================================================== -->
 				<div class="relative z-20 flex items-center justify-center">
 					<!-- Wrapper con el tamaño exacto de la galleta -->
-					<div class="relative h-36 w-36 sm:h-48 sm:w-48 md:h-64 md:w-64 lg:h-76 lg:w-76 xl:h-84 xl:w-84 transition-transform duration-300 hover:scale-105">
+					<div id="menu-banner-cookie" class="relative h-36 w-36 sm:h-48 sm:w-48 md:h-64 md:w-64 lg:h-76 lg:w-76 xl:h-84 xl:w-84 transition-transform duration-300 hover:scale-105">
 						
 						<!-- Galleta Principal con su sombra -->
 						<Image
@@ -97,7 +100,7 @@ const bottomCookies = [item1, item2, item3, item4, item5, item6, item7, item1, i
 		<div class="relative z-10 w-full overflow-hidden flex items-end justify-center pointer-events-none">
 			<div class="flex items-end justify-around sm:justify-center gap-2 sm:gap-6 md:gap-8 w-full max-w-[1280px] px-4">
 				{bottomCookies.map((cookie) => (
-					<div class="relative shrink-0 w-12 sm:w-16 md:w-20 lg:w-32">
+					<div class="menu-banner-bottom-cookie relative shrink-0 w-12 sm:w-16 md:w-20 lg:w-32">
 						<Image
 							src={cookie}
 							alt=""
@@ -109,3 +112,83 @@ const bottomCookies = [item1, item2, item3, item4, item5, item6, item7, item1, i
 		</div>
 	</div>
 </section>
+
+<script>
+	import { animate } from 'motion';
+
+	// ======================================================================
+	// Entrada del banner del Menú (mismo lenguaje que el Hero del home):
+	// - caja: fade + subida + leve escala
+	// - títulos "Nuestras"/"Galletas": desliz desde laterales con fade
+	// - galleta central: pop elástico (scale + rotate, backOut)
+	// - tira inferior: subida en stagger
+	// - respeta prefers-reduced-motion y re-corre en SPA (astro:page-load)
+	// ======================================================================
+	const BANNER_EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
+
+	function setMenuBannerStart() {
+		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+		const instant = { duration: 0 };
+		const box = document.getElementById('menu-banner-box');
+		const left = document.querySelector<HTMLElement>('#menu-banner .menu-banner-title-left');
+		const right = document.querySelector<HTMLElement>('#menu-banner .menu-banner-title-right');
+		const cookie = document.getElementById('menu-banner-cookie');
+		const bottom = Array.from(document.querySelectorAll<HTMLElement>('#menu-banner .menu-banner-bottom-cookie'));
+		const prev = document.getElementById('menu-banner-prev');
+		const next = document.getElementById('menu-banner-next');
+		if (!box) return;
+		animate(box, { opacity: 0, y: 28, scale: 0.97 }, instant);
+		if (left) animate(left, { opacity: 0, x: -70 }, instant);
+		if (right) animate(right, { opacity: 0, x: 70 }, instant);
+		if (cookie) animate(cookie, { opacity: 0, scale: 0.7, rotate: -14 }, instant);
+		bottom.forEach((el) => animate(el, { opacity: 0, y: 56 }, instant));
+		if (prev) animate(prev, { opacity: 0 }, instant);
+		if (next) animate(next, { opacity: 0 }, instant);
+	}
+
+	function playMenuBannerEnter() {
+		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+		const box = document.getElementById('menu-banner-box');
+		const left = document.querySelector<HTMLElement>('#menu-banner .menu-banner-title-left');
+		const right = document.querySelector<HTMLElement>('#menu-banner .menu-banner-title-right');
+		const cookie = document.getElementById('menu-banner-cookie');
+		const bottom = Array.from(document.querySelectorAll<HTMLElement>('#menu-banner .menu-banner-bottom-cookie'));
+		const prev = document.getElementById('menu-banner-prev');
+		const next = document.getElementById('menu-banner-next');
+		if (!box) return;
+		// Keyframes [origen, destino] para forzar el estado inicial en el primer frame.
+		animate(box, { opacity: [0, 1], y: [28, 0], scale: [0.97, 1] }, { duration: 0.7, ease: BANNER_EASE });
+		if (left) animate(left, { opacity: [0, 1], x: [-70, 0] }, { duration: 0.8, delay: 0.15, ease: BANNER_EASE });
+		if (right) animate(right, { opacity: [0, 1], x: [70, 0] }, { duration: 0.8, delay: 0.15, ease: BANNER_EASE });
+		if (cookie)
+			animate(
+				cookie,
+				{ opacity: [0, 1], scale: [0.7, 1], rotate: [-14, 0] },
+				{ duration: 0.9, delay: 0.25, ease: 'backOut' }
+			);
+		bottom.forEach((el, i) => {
+			animate(el, { opacity: [0, 1], y: [56, 0] }, { duration: 0.6, delay: 0.35 + i * 0.06, ease: BANNER_EASE });
+		});
+		if (prev) animate(prev, { opacity: [0, 1] }, { duration: 0.5, delay: 0.5, ease: 'easeOut' });
+		if (next) animate(next, { opacity: [0, 1] }, { duration: 0.5, delay: 0.5, ease: 'easeOut' });
+	}
+
+	let menuBannerScheduled = false;
+
+	function scheduleMenuBannerEnter() {
+		// Idempotente por vista: el módulo corre en carga inicial y page-load dispara
+		// justo después — sin este guard la entrada se jugaría dos veces.
+		if (menuBannerScheduled) return;
+		menuBannerScheduled = true;
+		if (!document.getElementById('menu-banner')) return;
+		setMenuBannerStart();
+		// Pequeño retardo para solaparse con la cortina de transición de página.
+		setTimeout(playMenuBannerEnter, 120);
+	}
+
+	scheduleMenuBannerEnter();
+	document.addEventListener('astro:before-preparation', () => {
+		menuBannerScheduled = false;
+	});
+	document.addEventListener('astro:page-load', scheduleMenuBannerEnter);
+</script>

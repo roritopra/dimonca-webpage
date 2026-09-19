@@ -1,4 +1,9 @@
-﻿import React, { useEffect, useState } from 'react';
+﻿import React, { useState } from 'react';
+import { motion } from 'motion/react';
+
+// Mismo lenguaje de entrada que las secciones del home:
+// fade + subida 24px, 0.7s, easeOutExpo, con stagger en las píldoras.
+const FILTERS_EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
 interface MenuFiltersProps {
 	activeCategory?: string;
@@ -33,7 +38,12 @@ export default function MenuFilters({
 	}
 
 	return (
-		<section className="relative w-full max-w-[1400px] mx-auto px-4 sm:px-6 pt-2 pb-6">
+		<motion.section
+			initial={{ opacity: 0, y: 24 }}
+			animate={{ opacity: 1, y: 0 }}
+			transition={{ duration: 0.7, delay: 0.2, ease: FILTERS_EASE }}
+			className="relative w-full max-w-[1400px] mx-auto px-4 sm:px-6 pt-2 pb-6"
+		>
 			{/* 1. Barra de Búsqueda */}
 			<div className="relative w-full">
 				<div className="flex items-center w-full bg-white rounded-xl sm:rounded-2xl border border-brown/25 px-4 sm:px-5 py-2.5 sm:py-3 shadow-[0_2px_8px_rgba(58,32,14,0.04)] focus-within:border-pink focus-within:ring-2 focus-within:ring-pink/20 transition-all">
@@ -62,13 +72,16 @@ export default function MenuFilters({
 
 			{/* 2. Píldoras / Tabs de Categorías */}
 			<div className="mt-4 sm:mt-5 flex items-center justify-start gap-2.5 sm:gap-3 overflow-x-auto pb-1 scrollbar-none">
-				{CATEGORIES.map((cat) => {
+				{CATEGORIES.map((cat, i) => {
 					const isActive = activeCategory === cat.id;
 
 					return (
-						<button
+						<motion.button
 							key={cat.id}
 							type="button"
+							initial={{ opacity: 0, y: 16 }}
+							animate={{ opacity: 1, y: 0 }}
+							transition={{ duration: 0.55, delay: 0.3 + i * 0.06, ease: FILTERS_EASE }}
 							onClick={() => handleCategoryClick(cat.id)}
 							className={`shrink-0 rounded-full px-4 sm:px-5 py-1.5 sm:py-2 font-sans text-xs sm:text-sm font-medium transition-all duration-200 cursor-pointer ${
 								isActive
@@ -77,10 +90,10 @@ export default function MenuFilters({
 							}`}
 						>
 							{cat.label}
-						</button>
+						</motion.button>
 					);
 				})}
 			</div>
-		</section>
+		</motion.section>
 	);
 }

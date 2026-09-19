@@ -34,7 +34,7 @@ if (!product || product.productType !== 'custom_box') {
 <Layout>
 	<Navbar />
 
-	<main id="main-content" class="bg-beige m-0 px-0 pb-0 pt-20 sm:pt-24 lg:pt-20 xl:pt-0">
+	<main id="main-content" class="bg-beige m-0 px-0 pb-0 pt-18 sm:pt-24 lg:pt-20 xl:pt-0">
 		{/* Experiencia de Armado de Caja (Mitad Izquierda: Caja con fondo punteado | Mitad Derecha: Galletas y Footer) */}
 		<BoxBuilder client:load key={product.id} boxProduct={product} />
 

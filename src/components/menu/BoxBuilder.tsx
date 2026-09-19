@@ -96,6 +96,16 @@ export default function BoxBuilder({ boxProduct }: BoxBuilderProps) {
 		}));
 	}
 
+	function handleShare() {
+		const url = window.location.href;
+		const title = boxProduct.name;
+		if (navigator.share) {
+			navigator.share({ title, url }).catch(() => {});
+		} else {
+			navigator.clipboard?.writeText(url).catch(() => {});
+		}
+	}
+
 	function handleAddToCart() {
 		if (totalSelectedCookies !== maxCapacity) {
 			alert(`Por favor elige las ${maxCapacity} galletas para completar tu caja (llevas ${totalSelectedCookies}/${maxCapacity}).`);
@@ -158,6 +168,35 @@ export default function BoxBuilder({ boxProduct }: BoxBuilderProps) {
 					backgroundColor: '#f7f2e8',
 				}}
 			>
+				{/* Barra mobile/tablet: volver y compartir, flotando SOBRE el fondo
+				    de punticos (igual que el detalle normal). */}
+				<div className="absolute top-0 inset-x-0 z-40 flex items-center justify-between p-4 sm:p-6 lg:hidden">
+					<a
+						href="/menu"
+						className="flex h-11 w-11 items-center justify-center rounded-full bg-white text-pink shadow-md transition-transform active:scale-95"
+						aria-label="Volver al menú"
+					>
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5" aria-hidden="true">
+							<path d="m12 19-7-7 7-7" />
+							<path d="M19 12H5" />
+						</svg>
+					</a>
+					<button
+						type="button"
+						onClick={handleShare}
+						className="flex h-11 w-11 items-center justify-center rounded-full bg-white text-pink shadow-md transition-transform active:scale-95 cursor-pointer"
+						aria-label="Compartir caja"
+					>
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5" aria-hidden="true">
+							<circle cx="18" cy="5" r="3" />
+							<circle cx="6" cy="12" r="3" />
+							<circle cx="18" cy="19" r="3" />
+							<line x1="8.59" x2="15.42" y1="13.51" y2="17.49" />
+							<line x1="15.41" x2="8.59" y1="6.51" y2="10.49" />
+						</svg>
+					</button>
+				</div>
+
 				<div className="relative w-full max-w-[420px] sm:max-w-[480px] xl:max-w-[500px] aspect-[538/387] flex items-center justify-center">
 					{/* 1. Caja Cerrada (visible cuando no hay galletas seleccionadas) */}
 					<div

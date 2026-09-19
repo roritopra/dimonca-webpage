@@ -444,7 +444,7 @@ export default function BoxBuilder({ boxProduct }: BoxBuilderProps) {
 				</div>
 
 				{/* 1. Footer Desktop (visible solo desde sm: >=640px) */}
-				<div className="hidden sm:block border-t border-brown/15 bg-[#f5efe3] px-6 lg:px-5 py-5 lg:py-2">
+				<div className="hidden sm:block relative z-10 bg-beige-500 px-6 lg:px-5 py-5 lg:py-2 shadow-[0px_-8px_22.8px_rgba(157,99,45,0.21)]">
 					<div className="flex items-center gap-2 mb-4">
 						<span className="font-sans text-xl font-black text-brown-400">Total:</span>
 						<span className="font-sans text-2xl font-medium text-brown-400">
@@ -487,7 +487,7 @@ export default function BoxBuilder({ boxProduct }: BoxBuilderProps) {
 							stiffness: 280,
 							mass: 0.8,
 						}}
-						className="fixed bottom-0 inset-x-0 z-[999] sm:hidden bg-[#f5efe3]/95 backdrop-blur-md border-t border-brown/20 px-5 py-3.5 shadow-[0_-8px_24px_rgba(58,32,14,0.12)]"
+						className="fixed bottom-0 inset-x-0 z-[999] sm:hidden bg-beige-500/95 backdrop-blur-md px-5 py-3.5 shadow-[0px_-8px_22.8px_rgba(157,99,45,0.21)]"
 					>
 						<div className="flex items-center justify-between gap-4 max-w-md mx-auto">
 							<div className="flex flex-col">

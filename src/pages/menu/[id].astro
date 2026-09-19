@@ -109,6 +109,7 @@ const firstRowProducts: Product[] = allProducts.slice(0, 5);
 				     hacia este panel. Sin match, el snapshot viejo quedaría como un "vidrio"
 				     flotando encima del contenido nuevo (capa superior de la VT API). -->
 					<div
+						id="pd-info"
 						class="order-4 -mx-6 flex flex-col bg-beige px-6 pb-9 pt-10 sm:pt-12 lg:order-1 lg:m-0 lg:bg-transparent lg:p-0 lg:pb-0"
 						style={`view-transition-name: product-card-${product.id};`}
 					>
@@ -149,7 +150,7 @@ const firstRowProducts: Product[] = allProducts.slice(0, 5);
 
 					<!-- Columna central: producto sobre badge de estrella festoneada -->
 					<div class="order-1 flex justify-center lg:order-2">
-						<div class="relative w-[min(300px,80vw)] sm:w-[400px] lg:w-[440px]">
+						<div id="pd-visual" class="relative w-[min(300px,80vw)] sm:w-[400px] lg:w-[440px]">
 						<!-- Iluminador: elipse blanca 20% más grande que la estrella, con layer blur y 55% transparencia -->
 						<div
 							aria-hidden="true"
@@ -191,7 +192,7 @@ const firstRowProducts: Product[] = allProducts.slice(0, 5);
 						/* Galería lateral: solo si hay más de una foto (obligatorio 1 principal en PNG + opcionales terciarias).
 						   Con una única foto no se muestra la columna derecha (se repetiría el PNG). */
 						gallery.length > 1 && (
-							<div class="order-2 flex flex-row justify-center gap-4 lg:order-3 lg:flex-col lg:gap-5">
+							<div id="pd-gallery" class="order-2 flex flex-row justify-center gap-4 lg:order-3 lg:flex-col lg:gap-5">
 							{gallery.map((src, i) => (
 								<button
 									type="button"
@@ -216,10 +217,10 @@ const firstRowProducts: Product[] = allProducts.slice(0, 5);
 		<CarruselScroll variant="pink" />
 
 		<!-- Más sabores para ti: primera fila del menú en galletas (reutiliza MenuCard) -->
-		<section class="bg-beige pt-8 sm:pt-10 pb-20">
+		<section id="pd-more" class="bg-beige pt-8 sm:pt-10 pb-20">
 			<div class="mx-auto w-full max-w-[1400px] px-4 sm:px-6">
 				<h2 class="font-sans text-2xl font-extrabold text-brown sm:text-3xl">Más sabores para ti</h2>
-				<div class="mt-5 sm:mt-6 grid grid-cols-2 gap-3.5 sm:grid-cols-4 sm:gap-5 lg:grid-cols-6">
+				<div class="pd-more-grid mt-5 sm:mt-6 grid grid-cols-2 gap-3.5 sm:grid-cols-4 sm:gap-5 lg:grid-cols-6">
 					{
 						firstRowProducts.map((rel: Product) =>
 							// Las premium de CAJA renderizan su componente propio
@@ -239,6 +240,84 @@ const firstRowProducts: Product[] = allProducts.slice(0, 5);
 </Layout>
 
 <script>
+	import { animate } from 'motion';
+
+	// ======================================================================
+	// Entrada del detalle (SOLO ≥640px): mobile (<640px) tiene su propia
+	// animación con View Transitions y NO se toca. Mismo lenguaje del home:
+	// fade + subida 24px, 0.7s, easeOutExpo, stagger.
+	// ======================================================================
+	const PD_EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
+	const PD_DESKTOP = () => window.matchMedia('(min-width: 640px)').matches;
+	const PD_REDUCED = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+	function setupPdEnter() {
+		const hero = document.getElementById('pd-hero');
+		if (!hero || hero.dataset.enterInit === '1') return;
+		// Guard por vista (módulo + page-load). En SPA el DOM se reemplaza y el
+		// dataset se pierde, así que re-inicializa solo.
+		if (!PD_DESKTOP() || PD_REDUCED()) return;
+		hero.dataset.enterInit = '1';
+
+		const instant = { duration: 0 };
+		const info = document.getElementById('pd-info');
+		const infoItems = info ? Array.from(info.children) as HTMLElement[] : [];
+		const visual = document.getElementById('pd-visual');
+		const gallery = document.getElementById('pd-gallery');
+		const thumbs = gallery ? Array.from(gallery.children) as HTMLElement[] : [];
+
+		// Estado inicial instantáneo (antes del primer paint si es posible).
+		infoItems.forEach((el) => animate(el, { opacity: 0, y: 24 }, instant));
+		if (visual) animate(visual, { opacity: 0, scale: 0.85, rotate: -8 }, instant);
+		thumbs.forEach((el) => animate(el, { opacity: 0, y: 16 }, instant));
+
+		// Entrada con keyframes [origen, destino] + pequeño retardo de cortina.
+		setTimeout(() => {
+			infoItems.forEach((el, i) => {
+				animate(el, { opacity: [0, 1], y: [24, 0] }, { duration: 0.7, delay: 0.15 + i * 0.12, ease: PD_EASE });
+			});
+			if (visual) {
+				animate(
+					visual,
+					{ opacity: [0, 1], scale: [0.85, 1], rotate: [-8, 0] },
+					{ duration: 0.9, delay: 0.1, ease: 'backOut' }
+				);
+			}
+			thumbs.forEach((el, i) => {
+				animate(el, { opacity: [0, 1], y: [16, 0] }, { duration: 0.6, delay: 0.4 + i * 0.08, ease: PD_EASE });
+			});
+		}, 120);
+
+		// "Más sabores": reveal por scroll (estándar del home).
+		const more = document.getElementById('pd-more');
+		if (more && 'IntersectionObserver' in window) {
+			const title = more.querySelector('h2');
+			const cards = Array.from(more.querySelectorAll('.pd-more-grid > *')) as HTMLElement[];
+			const targets = [...(title ? [title as HTMLElement] : []), ...cards];
+			targets.forEach((el) => animate(el, { opacity: 0, y: 24 }, instant));
+			const io = new IntersectionObserver(
+				(entries) => {
+					entries.forEach((entry) => {
+						if (!entry.isIntersecting) return;
+						targets.forEach((el, i) => {
+							animate(
+								el,
+								{ opacity: [0, 1], y: [24, 0] },
+								{ duration: 0.7, delay: Math.min(i * 0.08, 0.5), ease: PD_EASE }
+							);
+						});
+						io.disconnect();
+					});
+				},
+				{ threshold: 0.2, rootMargin: '0px 0px -10% 0px' }
+			);
+			io.observe(more);
+		}
+	}
+
+	setupPdEnter();
+	document.addEventListener('astro:page-load', setupPdEnter);
+
 	// Con <ClientRouter>, los scripts empaquetados solo se ejecutan una vez y el DOM se
 	// reemplaza en cada transición. Se usa delegación de eventos sobre document para que
 	// la lógica sobreviva a la navegación (patrón de la doc de Astro: solo eventos de DOM

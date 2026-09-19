@@ -36,7 +36,7 @@ const stripes = Array.from({ length: 24 }, (_, i) => ({
     class="relative mx-auto flex h-full max-w-[1440px] flex-col-reverse lg:flex-row items-center justify-between gap-12 lg:gap-8 px-6 sm:px-12 md:px-20"
   >
     <!-- Imagen combos-caja (abajo en móvil, izquierda en desktop) -->
-    <div class="relative z-10 flex flex-1 items-center justify-center w-full max-w-[420px] sm:max-w-[540px] lg:max-w-none">
+    <div id="combos-img" class="relative z-10 flex flex-1 items-center justify-center w-full max-w-[420px] sm:max-w-[540px] lg:max-w-none">
       <!-- Elipse de brillo detrás de la caja -->
       <div
         class="pointer-events-none absolute h-[340px] w-[340px] sm:h-[440px] sm:w-[440px] lg:h-[566px] lg:w-[566px] rounded-full bg-white/30 mix-blend-overlay blur-[70px] sm:blur-[100px]"
@@ -53,9 +53,10 @@ const stripes = Array.from({ length: 24 }, (_, i) => ({
 
     <!-- Información (arriba en móvil, derecha en desktop) -->
     <div
+      id="combos-copy"
       class="relative z-10 flex w-full max-w-[500px] lg:max-w-[440px] flex-col items-center lg:items-start text-center lg:text-left gap-6 sm:gap-8"
     >
-      <div class="relative w-full flex flex-col items-center lg:items-start">
+      <div data-combos="title" class="relative w-full flex flex-col items-center lg:items-start">
         <h2
           style="paint-order: stroke;"
           class="m-0 font-sans text-[52px] sm:text-[50px] lg:text-[60px] font-bold leading-none text-beige [-webkit-text-stroke:6px_#3A200E] sm:[-webkit-text-stroke:8px_#3A200E] lg:[-webkit-text-stroke:10px_#3A200E] [filter:drop-shadow(0px_4px_4px_rgba(58,32,14,0.5))]"
@@ -72,7 +73,7 @@ const stripes = Array.from({ length: 24 }, (_, i) => ({
       </div>
       <!-- Descripción + botón juntos: en lg el título "Combos" va en absolute y
         ocupa ~160px, así que se compensa con mt para que no lo pise -->
-      <div class="flex w-full flex-col items-center lg:items-start gap-4 sm:gap-5 lg:mt-20">
+      <div data-combos="body" class="flex w-full flex-col items-center lg:items-start gap-4 sm:gap-5 lg:mt-20">
         <p
           style="paint-order: stroke;"
           class="m-0 font-sans text-[16px] sm:text-[17px] lg:text-[18px] leading-relaxed text-beige [-webkit-text-stroke:3px_#3A200E] sm:[-webkit-text-stroke:4px_#3A200E] lg:[-webkit-text-stroke:5px_#3A200E] [filter:drop-shadow(0px_4px_4px_rgba(58,32,14,0.5))]"
@@ -100,3 +101,52 @@ const stripes = Array.from({ length: 24 }, (_, i) => ({
     </div>
   </div>
 </section>
+
+<script>
+  import { animate } from 'motion';
+
+  // Entrada por vista (estándar: 0.7s, ease [0.22,1,0.36,1]):
+  // la caja entra desde la izquierda y el copy con rise en cascada.
+  const CB_EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
+
+  function setupCombosEnter() {
+    const section = document.getElementById('combos');
+    if (!section || section.dataset.enterInit === '1') return;
+    section.dataset.enterInit = '1';
+
+    const img = section.querySelector<HTMLElement>('#combos-img');
+    const title = section.querySelector<HTMLElement>('[data-combos="title"]');
+    const body = section.querySelector<HTMLElement>('[data-combos="body"]');
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    if (img) animate(img, { opacity: 0, x: -60 }, { duration: 0 });
+    if (title) animate(title, { opacity: 0, y: 24 }, { duration: 0 });
+    if (body) animate(body, { opacity: 0, y: 24 }, { duration: 0 });
+
+    const play = () => {
+      if (img) animate(img, { opacity: [0, 1], x: [-60, 0] }, { duration: 0.8, ease: CB_EASE });
+      if (title) animate(title, { opacity: [0, 1], y: [24, 0] }, { duration: 0.7, delay: 0.12, ease: CB_EASE });
+      if (body) animate(body, { opacity: [0, 1], y: [24, 0] }, { duration: 0.7, delay: 0.24, ease: CB_EASE });
+    };
+
+    if (!('IntersectionObserver' in window)) {
+      play();
+      return;
+    }
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          play();
+          io.disconnect();
+        });
+      },
+      { threshold: 0.2, rootMargin: '0px 0px -10% 0px' }
+    );
+    io.observe(section);
+  }
+
+  setupCombosEnter();
+  document.addEventListener('astro:page-load', setupCombosEnter);
+</script>

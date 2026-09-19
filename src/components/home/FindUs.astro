@@ -57,9 +57,9 @@ const findusImages = [
 		</div>
 	</div>
 
-	<div class="relative z-10 mx-auto grid min-h-[600px] max-w-[1440px] grid-cols-1 md:grid-cols-2 items-center">
+	<div class="relative z-10 mx-auto grid min-h-[680px] max-w-[1440px] grid-cols-1 md:grid-cols-2 items-center">
 		<!-- Columna Izquierda (50%) -->
-		<div class="flex flex-col items-start justify-center px-10 md:pl-24 md:pr-12 py-16">
+		<div id="findus-copy" class="flex flex-col items-start justify-center px-10 md:pl-24 md:pr-12 py-16 md:py-20">
 			<!-- Título -->
 			<div class="relative mb-6">
 				<h2 class="m-0 font-sans text-[44px] md:text-[48px] font-bold leading-tight text-brown">
@@ -101,7 +101,7 @@ const findusImages = [
 		</div>
 
 		<!-- Columna Derecha (50%) -->
-		<div class="relative flex h-full min-h-[620px] w-full items-center justify-center overflow-hidden bg-beige">
+		<div id="findus-map" class="relative flex h-full min-h-[700px] w-full items-center justify-center overflow-hidden bg-beige">
 			<!-- Rayas verticales rosadas de fondo -->
 			<div class="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
 				{
@@ -160,8 +160,49 @@ const findusImages = [
 <script>
 	import { animate } from 'motion';
 
-	function setupFindUsGrid() {
+	// Entrada por vista (estándar: 0.7s, ease [0.22,1,0.36,1], stagger 0.12s):
+	// el copy entra con rise en cascada y el mapa con fade + escala suave.
+	const FU_EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
+
+	function setupFindUsEnter() {
 		const section = document.getElementById('encuentranos');
+		if (!section || section.dataset.enterInit === '1') return;
+		section.dataset.enterInit = '1';
+
+		const copy = document.getElementById('findus-copy');
+		const map = document.getElementById('findus-map');
+		const items = copy ? Array.from(copy.children) as HTMLElement[] : [];
+
+		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+		items.forEach((el) => animate(el, { opacity: 0, y: 24 }, { duration: 0 }));
+		if (map) animate(map, { opacity: 0, scale: 0.97 }, { duration: 0 });
+
+		const play = () => {
+			items.forEach((el, i) =>
+				animate(el, { opacity: [0, 1], y: [24, 0] }, { duration: 0.7, delay: i * 0.12, ease: FU_EASE })
+			);
+			if (map) animate(map, { opacity: [0, 1], scale: [0.97, 1] }, { duration: 0.9, delay: 0.15, ease: FU_EASE });
+		};
+
+		if (!('IntersectionObserver' in window)) {
+			play();
+			return;
+		}
+		const io = new IntersectionObserver(
+			(entries) => {
+				entries.forEach((entry) => {
+					if (!entry.isIntersecting) return;
+					play();
+					io.disconnect();
+				});
+			},
+			{ threshold: 0.2, rootMargin: '0px 0px -10% 0px' }
+		);
+		io.observe(section);
+	}
+
+	function setupFindUsGrid() {		const section = document.getElementById('encuentranos');
 		const gridContainer = document.getElementById('findus-grid-container');
 		const grid = document.getElementById('findus-grid');
 		const btnLlegar = section?.querySelector('a[href="#como-llegar"]');
@@ -320,4 +361,6 @@ const findusImages = [
 	}
 
 	document.addEventListener('astro:page-load', setupFindUsGrid);
+	document.addEventListener('astro:page-load', setupFindUsEnter);
+	setupFindUsEnter();
 </script>

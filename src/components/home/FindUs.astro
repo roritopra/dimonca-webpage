@@ -130,6 +130,11 @@ const findusImages = [
 						src={map1Img}
 						alt=""
 						aria-hidden="true"
+						data-sticker
+						data-sway="5"
+						data-duration="3.2"
+						data-delay="0"
+						style="transform-origin: 50% 15%;"
 						class="pointer-events-none absolute top-1/2 -left-12 -translate-y-1/2 z-20 w-[120px] md:w-[140px] drop-shadow-lg"
 						loading="lazy"
 					/>
@@ -139,6 +144,11 @@ const findusImages = [
 						src={map3Img}
 						alt=""
 						aria-hidden="true"
+						data-sticker
+						data-sway="7"
+						data-duration="2.6"
+						data-delay="0.7"
+						style="transform-origin: 50% 10%;"
 						class="pointer-events-none absolute -top-6 -right-6 z-20 w-[90px] md:w-[105px] drop-shadow-lg"
 						loading="lazy"
 					/>
@@ -148,6 +158,11 @@ const findusImages = [
 						src={map2Img}
 						alt=""
 						aria-hidden="true"
+						data-sticker
+						data-sway="4"
+						data-duration="3.8"
+						data-delay="1.3"
+						style="transform-origin: 50% 50%;"
 						class="pointer-events-none absolute bottom-10 scale-150 -right-20 z-20 w-[140px] md:w-[165px] drop-shadow-xl"
 						loading="lazy"
 					/>
@@ -200,6 +215,29 @@ const findusImages = [
 			{ threshold: 0.2, rootMargin: '0px 0px -10% 0px' }
 		);
 		io.observe(section);
+	}
+
+	// Balanceo infinito de los stickers: oscilación de rotación en su misma
+	// posición (solo `rotate` vía motion + origin arriba = efecto colgando).
+	// Cada uno con su amplitud/duración/retardo para que vayan disparejos.
+	// Solo se toca `rotate`: la posición la dan las clases absolute/translate
+	// (Tailwind v4 usa la propiedad `translate`, independiente del `transform`
+	// que escribe motion), así no se pierde el anclaje.
+	function setupFindUsStickers() {
+		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+		const stickers = Array.from(document.querySelectorAll<HTMLElement>('[data-sticker]'));
+		stickers.forEach((st) => {
+			const sway = Number(st.dataset.sway ?? 5);
+			const duration = Number(st.dataset.duration ?? 3);
+			const delay = Number(st.dataset.delay ?? 0);
+			animate(st, { rotate: [-sway, sway] }, {
+				duration,
+				delay,
+				repeat: Infinity,
+				repeatType: 'mirror',
+				ease: 'easeInOut',
+			});
+		});
 	}
 
 	function setupFindUsGrid() {		const section = document.getElementById('encuentranos');
@@ -362,5 +400,7 @@ const findusImages = [
 
 	document.addEventListener('astro:page-load', setupFindUsGrid);
 	document.addEventListener('astro:page-load', setupFindUsEnter);
+	document.addEventListener('astro:page-load', setupFindUsStickers);
 	setupFindUsEnter();
+	setupFindUsStickers();
 </script>

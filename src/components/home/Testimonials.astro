@@ -20,7 +20,8 @@ const testimonials = [
 		stamp: stamp1,
 		badge: badge1,
 		stampClass: 'w-[160px] sm:w-[190px] md:w-[220px] -top-10 -right-8 sm:-top-14 sm:-right-12 md:-top-16 md:-right-16',
-		badgeClass: 'w-[90px] sm:w-[105px] md:w-[120px] -bottom-8 -left-6 sm:-bottom-10 sm:-left-8 md:-bottom-12 md:-left-10',
+		// más grande (pedido)
+		badgeClass: 'w-[116px] sm:w-[136px] md:w-[155px] -bottom-10 -left-8 sm:-bottom-13 sm:-left-10 md:-bottom-15 md:-left-12',
 	},
 	{
 		id: 2,
@@ -29,7 +30,8 @@ const testimonials = [
 		author: 'Camila Morales',
 		stamp: stamp2,
 		badge: badge2,
-		stampClass: 'w-[165px] sm:w-[195px] md:w-[225px] -top-10 -right-8 sm:-top-14 sm:-right-12 md:-top-16 md:-right-16',
+		// más grande (pedido)
+		stampClass: 'w-[210px] sm:w-[245px] md:w-[285px] -top-14 -right-10 sm:-top-18 sm:-right-14 md:-top-21 md:-right-19',
 		badgeClass: 'w-[95px] sm:w-[110px] md:w-[125px] -bottom-8 -left-6 sm:-bottom-10 sm:-left-8 md:-bottom-12 md:-left-10',
 	},
 	{
@@ -39,16 +41,30 @@ const testimonials = [
 		author: 'Sebastián Gómez',
 		stamp: stamp3,
 		badge: badge3,
-		stampClass: 'w-[120px] sm:w-[140px] md:w-[160px] -top-8 -right-6 sm:-top-10 sm:-right-8 md:-top-12 md:-right-10',
-		badgeClass: 'w-[95px] sm:w-[110px] md:w-[125px] -bottom-8 -left-6 sm:-bottom-10 sm:-left-8 md:-bottom-12 md:-left-10',
+		// -50% de tamaño respecto al original (estaba muy grande)
+		stampClass: 'w-[60px] sm:w-[70px] md:w-[80px] -top-4 -right-3 sm:-top-5 sm:-right-4 md:-top-6 md:-right-5',
+		badgeClass: 'w-[143px] sm:w-[165px] md:w-[187px] -bottom-12 -left-9 sm:-bottom-16 sm:-left-12 md:-bottom-20 md:-left-16',
 	},
 ];
+
+// Versión serializable para el JS: los ImageMetadata (stamp/badge) se pasan como
+// strings .src. Si se pasa el objeto entero, `img.src = objeto` queda como
+// "[object Object]" y la imagen se rompe (solo se ve el alt).
+const testimonialData = testimonials.map((t) => ({
+  id: t.id,
+  text: t.text,
+  author: t.author,
+  stamp: t.stamp.src,
+  badge: t.badge.src,
+  stampClass: t.stampClass,
+  badgeClass: t.badgeClass,
+}));
 ---
 
 <section
 	id="testimonials"
 	class="relative w-full h-[620px] md:h-[720px] overflow-hidden select-none"
-	data-testimonials={JSON.stringify(testimonials)}
+	data-testimonials={JSON.stringify(testimonialData)}
 >
 	<!-- Carrusel de fondos -->
 	<div id="testimony-bg-container" class="absolute inset-0 z-0">
@@ -80,7 +96,7 @@ const testimonials = [
 		</button>
 
 		<!-- Card de Testimonio (Toldo / Tienda) -->
-		<div class="relative w-full max-w-[580px] md:max-w-[620px] mx-10 sm:mx-14 md:mx-0">
+		<div id="testimony-card" class="relative w-full max-w-[580px] md:max-w-[620px] mx-10 sm:mx-14 md:mx-0">
 			<!-- Estampa / Stamp Top Right -->
 			<div
 				id="testimony-stamp-wrap"
@@ -183,7 +199,6 @@ const testimonials = [
 
 		const testimonialsData: Array<{
 			id: number;
-			background: string;
 			text: string;
 			author: string;
 			stamp: string;
@@ -275,5 +290,52 @@ const testimonials = [
 		});
 	}
 
+	// Entrada por vista (estándar: 0.7s, ease [0.22,1,0.36,1]): la card sube con
+	// rise y los botones entran con pop. Anima contenedores externos para no
+	// interferir con el crossfade interno del carrusel.
+	const TM_EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
+
+	function setupTestimonyEnter() {
+		const section = document.getElementById('testimonials');
+		if (!section || section.dataset.enterInit === '1') return;
+		section.dataset.enterInit = '1';
+
+		const card = document.getElementById('testimony-card');
+		const prevBtn = document.getElementById('testimony-prev');
+		const nextBtn = document.getElementById('testimony-next');
+		const blocks = [card, prevBtn, nextBtn].filter((el): el is HTMLElement => el !== null);
+		if (blocks.length === 0) return;
+
+		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+		if (card) animate(card, { opacity: 0, y: 32 }, { duration: 0 });
+		if (prevBtn) animate(prevBtn, { opacity: 0, scale: 0.8 }, { duration: 0 });
+		if (nextBtn) animate(nextBtn, { opacity: 0, scale: 0.8 }, { duration: 0 });
+
+		const play = () => {
+			if (card) animate(card, { opacity: [0, 1], y: [32, 0] }, { duration: 0.7, ease: TM_EASE });
+			if (prevBtn) animate(prevBtn, { opacity: [0, 1], scale: [0.8, 1] }, { duration: 0.5, delay: 0.25, ease: TM_EASE });
+			if (nextBtn) animate(nextBtn, { opacity: [0, 1], scale: [0.8, 1] }, { duration: 0.5, delay: 0.35, ease: TM_EASE });
+		};
+
+		if (!('IntersectionObserver' in window)) {
+			play();
+			return;
+		}
+		const io = new IntersectionObserver(
+			(entries) => {
+				entries.forEach((entry) => {
+					if (!entry.isIntersecting) return;
+					play();
+					io.disconnect();
+				});
+			},
+			{ threshold: 0.25, rootMargin: '0px 0px -10% 0px' }
+		);
+		io.observe(section);
+	}
+
 	document.addEventListener('astro:page-load', initTestimonials);
+	document.addEventListener('astro:page-load', setupTestimonyEnter);
+	setupTestimonyEnter();
 </script>

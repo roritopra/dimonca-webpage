@@ -14,6 +14,7 @@ import dimoncaFooterNameImg from "../../assets/images/shared/footer-name.png";
     class="relative z-10 mx-auto flex max-w-[1440px] flex-col justify-between px-10 pt-16 pb-36 md:px-20 lg:pt-20"
   >
     <div
+      id="footer-grid"
       class="grid grid-cols-1 gap-12 sm:grid-cols-2 md:grid-cols-4 lg:gap-16"
     >
       <!-- Columna 1: Logo y Redes Sociales -->
@@ -165,3 +166,59 @@ import dimoncaFooterNameImg from "../../assets/images/shared/footer-name.png";
     />
   </div>
 </footer>
+
+<script>
+  import { animate } from 'motion';
+
+  // Entrada por vista (estándar): 4 columnas con rise en cascada, las galletas
+  // decorativas pop desde su esquina y el nombre grande sube con parallax leve.
+  const FT_EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
+
+  function setupFooterEnter() {
+    const footer = document.querySelector<HTMLElement>('footer');
+    const grid = document.getElementById('footer-grid');
+    if (!footer || !grid || footer.dataset.enterInit === '1') return;
+    footer.dataset.enterInit = '1';
+
+    const cols = Array.from(grid.children) as HTMLElement[];
+    const cookies = footer.querySelectorAll<HTMLElement>('.pointer-events-none.absolute');
+    const cookieLeftEl = cookies[0];
+    const cookieRightEl = cookies[1];
+    const nameEl = cookies[2];
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    cols.forEach((el) => animate(el, { opacity: 0, y: 24 }, { duration: 0 }));
+    if (cookieLeftEl) animate(cookieLeftEl, { opacity: 0, y: 40 }, { duration: 0 });
+    if (cookieRightEl) animate(cookieRightEl, { opacity: 0, y: 40 }, { duration: 0 });
+    if (nameEl) animate(nameEl, { opacity: 0, y: 60 }, { duration: 0 });
+
+    const play = () => {
+      cols.forEach((el, i) =>
+        animate(el, { opacity: [0, 1], y: [24, 0] }, { duration: 0.7, delay: i * 0.12, ease: FT_EASE })
+      );
+      if (cookieLeftEl) animate(cookieLeftEl, { opacity: [0, 1], y: [40, 0] }, { duration: 0.8, delay: 0.35, ease: FT_EASE });
+      if (cookieRightEl) animate(cookieRightEl, { opacity: [0, 1], y: [40, 0] }, { duration: 0.8, delay: 0.45, ease: FT_EASE });
+      if (nameEl) animate(nameEl, { opacity: [0, 0.95], y: [60, 0] }, { duration: 1.1, delay: 0.5, ease: FT_EASE });
+    };
+
+    if (!('IntersectionObserver' in window)) {
+      play();
+      return;
+    }
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          play();
+          io.disconnect();
+        });
+      },
+      { threshold: 0.15 }
+    );
+    io.observe(footer);
+  }
+
+  setupFooterEnter();
+  document.addEventListener('astro:page-load', setupFooterEnter);
+</script>

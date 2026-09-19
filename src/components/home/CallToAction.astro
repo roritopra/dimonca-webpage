@@ -47,7 +47,7 @@ const ctaImages = [
 	</div>
 
 	<!-- Contenido Central del Call to Action -->
-	<div class="relative z-10 mx-auto flex max-w-[860px] flex-col items-center text-center">
+	<div id="cta-block" class="relative z-10 mx-auto flex max-w-[860px] flex-col items-center text-center">
 		<!-- Título principal con caligrafía -->
 		<h2
 			style="paint-order: stroke;"
@@ -225,4 +225,49 @@ const ctaImages = [
 	}
 
 	document.addEventListener('astro:page-load', setupCtaGrid);
+</script>
+
+<script>
+	import { animate } from 'motion';
+
+	// Entrada por vista (estándar: 0.7s, ease [0.22,1,0.36,1]): título -> párrafo
+	// -> botón en cascada. Los stagger se toman de los hijos para no romper el
+	// markup (el título con "Ahora" es un solo h2).
+	const CTA_EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
+
+	function setupCtaEnter() {
+		const block = document.getElementById('cta-block');
+		if (!block || block.dataset.enterInit === '1') return;
+		block.dataset.enterInit = '1';
+
+		const items = Array.from(block.children) as HTMLElement[];
+		if (items.length === 0 || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+		items.forEach((el) => animate(el, { opacity: 0, y: 24 }, { duration: 0 }));
+
+		const play = () => {
+			items.forEach((el, i) =>
+				animate(el, { opacity: [0, 1], y: [24, 0] }, { duration: 0.7, delay: i * 0.12, ease: CTA_EASE })
+			);
+		};
+
+		if (!('IntersectionObserver' in window)) {
+			play();
+			return;
+		}
+		const io = new IntersectionObserver(
+			(entries) => {
+				entries.forEach((entry) => {
+					if (!entry.isIntersecting) return;
+					play();
+					io.disconnect();
+				});
+			},
+			{ threshold: 0.2, rootMargin: '0px 0px -10% 0px' }
+		);
+		io.observe(block);
+	}
+
+	setupCtaEnter();
+	document.addEventListener('astro:page-load', setupCtaEnter);
 </script>

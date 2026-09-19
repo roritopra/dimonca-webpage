@@ -26,11 +26,11 @@ export default function MenuBoxCard({ product }: MenuBoxCardProps) {
 			animate="rest"
 			variants={{
 				rest: {
-					backgroundColor: 'rgba(247,242,232,1)',
+					backgroundColor: '#f7f2e8',
 					boxShadow: '0 4px 16px rgba(58,32,14,0.04)',
 				},
 				hover: {
-					backgroundColor: 'rgba(255,234,242,1)',
+					backgroundColor: '#fddfe8',
 					boxShadow: '0 12px 28px rgba(58,32,14,0.09)',
 				},
 			}}

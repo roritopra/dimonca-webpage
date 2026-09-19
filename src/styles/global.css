@@ -2,16 +2,72 @@
 @import 'lenis/dist/lenis.css';
 
 @theme {
-	--color-beige: #f7f2e8;
-	--color-brown: #3a200e;
+	/* ==================================================================
+	   Design tokens verdaderos — fuente: src/styles/Mode 1.tokens.json
+	   (export Figma, Mode 1). Nomenclatura: --color-{Familia}-{escala}.
+	   Los aliases sin escala (--color-pink, --color-beige, --color-brown)
+	   se conservan apuntando al 500 para NO romper clases actuales
+	   como bg-pink, text-brown, bg-beige.
+	   ================================================================== */
+
+	/* Pink */
+	--color-pink-100: #fddfe8;
+	--color-pink-200: #fbbed1;
+	--color-pink-300: #f89eba;
+	--color-pink-400: #f67da3;
+	--color-pink-500: #f45d8c;
+	--color-pink-600: #c34a70;
+	--color-pink-700: #923854;
+	--color-pink-800: #622538;
+	--color-pink-900: #31131c;
+	--color-pink: #f45d8c;
+
+	/* Brown */
+	--color-brown-100: #d8d2cf;
+	--color-brown-200: #b0a69f;
 	--color-brown-300: #89796e;
 	--color-brown-400: #614d3e;
+	--color-brown-500: #3a200e;
 	--color-brown-600: #2e1a0b;
-	--color-pink: #f45d8c;
-	--color-pink-200: #fbbed1;
+	--color-brown-700: #231308;
+	--color-brown-800: #170d06;
+	--color-brown-900: #0c0603;
+	--color-brown: #3a200e;
+
+	/* Beige */
+	--color-beige-100: #fdfcfa;
+	--color-beige-200: #fcfaf6;
+	--color-beige-300: #faf7f1;
+	--color-beige-400: #f9f5ed;
+	--color-beige-500: #f7f2e8;
+	--color-beige-600: #c6c2ba;
+	--color-beige-700: #94918b;
+	--color-beige-800: #63615d;
+	--color-beige-900: #31302e;
+	--color-beige: #f7f2e8;
+
+	/* Blue */
+	--color-blue-100: #ebf5fd;
 	--color-blue-200: #d7ebfb;
+	--color-blue-300: #c2e0f8;
+	--color-blue-400: #aed6f6;
 	--color-blue-500: #9accf4;
 	--color-blue-600: #6ca7d5;
+	--color-blue-700: #437ba8;
+	--color-blue-800: #2c5576;
+	--color-blue-900: #1e3141;
+
+	/* Yellow (oliva / acentos) */
+	--color-yellow-100: #fefde8;
+	--color-yellow-200: #fefbd1;
+	--color-yellow-300: #fdf8bb;
+	--color-yellow-400: #fdf6a4;
+	--color-yellow-500: #fcf48d;
+	--color-yellow-600: #cac371;
+	--color-yellow-700: #979255;
+	--color-yellow-800: #656238;
+	--color-yellow-900: #32311c;
+	--color-yellow: #fcf48d;
 
 	--font-sans: 'Poppins', ui-sans-serif, system-ui, sans-serif;
 	--font-script: 'Sacramento', cursive;
@@ -55,7 +111,7 @@
 /* Scrollbar estilizado en Pink sin fondo blanco para el Carrito */
 .cart-scrollbar {
 	scrollbar-width: thin;
-	scrollbar-color: #f45d8c transparent;
+	scrollbar-color: var(--color-pink-500) transparent;
 }
 
 .cart-scrollbar::-webkit-scrollbar {
@@ -67,12 +123,12 @@
 }
 
 .cart-scrollbar::-webkit-scrollbar-thumb {
-	background-color: #f45d8c;
+	background-color: var(--color-pink-500);
 	border-radius: 9999px;
 }
 
 .cart-scrollbar::-webkit-scrollbar-thumb:hover {
-	background-color: #d94372;
+	background-color: var(--color-pink-600);
 }
 
 

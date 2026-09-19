@@ -43,7 +43,7 @@ export default function MenuCard({ product, withTransition = false }: MenuCardPr
 
 	return (
 		<article
-			className="group relative col-span-1 flex flex-col justify-between rounded-[28px] sm:rounded-[34px] border border-pink/60 bg-beige backdrop-blur-xs pb-4 sm:pb-5 shadow-[0_4px_16px_rgba(58,32,14,0.04)] hover:shadow-[0_12px_28px_rgba(58,32,14,0.09)] transition-[background-color,box-shadow] duration-300 ease-out hover:bg-[#ffeaf2]"
+			className="group relative col-span-1 flex flex-col justify-between rounded-[28px] sm:rounded-[34px] border border-pink/60 bg-beige backdrop-blur-xs pb-4 sm:pb-5 shadow-[0_4px_16px_rgba(58,32,14,0.04)] hover:shadow-[0_12px_28px_rgba(58,32,14,0.09)] transition-[background-color,box-shadow] duration-300 ease-out hover:bg-pink-100"
 			data-vt-card={useNames ? product.id : undefined}
 		>
 			{/* Área Superior: Imagen (Sin padding, ocupa todo el ancho y alto asignado de la card) */}
@@ -81,7 +81,7 @@ export default function MenuCard({ product, withTransition = false }: MenuCardPr
 					</span>
 
 					{/* Píldora de Cantidad (-  0  +) */}
-					<div className="flex w-full items-center justify-between rounded-full border border-pink/40 bg-[#fff5f8] px-2 py-1 shadow-2xs">
+					<div className="flex w-full items-center justify-between rounded-full border border-pink/40 bg-pink-100 px-2 py-1 shadow-2xs">
 						<button
 							type="button"
 							onClick={handleDecrease}

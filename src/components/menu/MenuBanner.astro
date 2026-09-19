@@ -1,114 +1,89 @@
 ---
 import { Image } from 'astro:assets';
-import { Icon } from 'astro-icon/components';
 
-import galletaBanner1 from '../../assets/images/menu/home/galleta-banner-1.png';
-import item1 from '../../assets/images/menu/home/galleta-item-banner-1.png';
-import item2 from '../../assets/images/menu/home/galleta-item-banner-2.png';
-import item3 from '../../assets/images/menu/home/galleta-item-banner-3.png';
-import item4 from '../../assets/images/menu/home/galleta-item-banner-4.png';
-import item5 from '../../assets/images/menu/home/galleta-item-banner-5.png';
-import item6 from '../../assets/images/menu/home/galleta-item-banner-6.png';
-import item7 from '../../assets/images/menu/home/galleta-item-banner-7.png';
+import menuBanner1 from '../../assets/images/menu/home/menu-banner-1.png';
+import menuBanner2 from '../../assets/images/menu/home/menu-banner-2.png';
 
-const bottomCookies = [item1, item2, item3, item4, item5, item6, item7, item1, item2];
+/* ==========================================================================
+   MenuBanner — carrusel de pósters full-bleed.
+   Cada slide es UNA sola imagen que cubre todo el banner (object-cover).
+   Para agregar más pósters: importa la imagen y añade una entrada al array.
+   ========================================================================== */
+
+const SLIDES = [
+	{
+		id: 'menu-banner-slide-1',
+		img: menuBanner1,
+		alt: 'Banner del menú Dimonca 1',
+	},
+	{
+		id: 'menu-banner-slide-2',
+		img: menuBanner2,
+		alt: 'Banner del menú Dimonca 2',
+	},
+];
 ---
 
 <section id="menu-banner" class="relative w-full max-w-[1400px] mx-auto px-4 sm:px-6 pt-4 pb-6">
-	<!-- Contenedor del Banner con bordes redondeados y fondo gingham/picnic -->
+	<!-- Contenedor del Banner: mismo tamaño de antes, ahora póster full-bleed -->
 	<div
 		id="menu-banner-box"
-		class="relative w-full overflow-hidden rounded-[28px] sm:rounded-[36px] shadow-sm min-h-[320px] sm:min-h-[360px] md:min-h-[420px] lg:min-h-[460px] flex flex-col justify-between"
-		style="background-color: #f77ca4;"
+		class="group/banner relative w-full overflow-hidden rounded-[18px] shadow-sm min-h-[320px] sm:min-h-[360px] md:min-h-[420px] lg:min-h-[460px]"
 	>
-		<!-- Cuadricula Gingham Picnic (Lineas blancas semitransparentes en horizontal y vertical) -->
-		<div
-			class="absolute inset-0 pointer-events-none"
-			style={{
-				backgroundImage: `
-					linear-gradient(90deg, rgba(255, 255, 255, 0.45) 50%, transparent 50%),
-					linear-gradient(rgba(255, 255, 255, 0.45) 50%, transparent 50%)
-				`,
-				backgroundSize: '42px 42px',
-			}}
-			aria-hidden="true"
-		></div>
+		<!-- Slides apilados: cada uno cubre el 100% del banner -->
+		<div id="menu-banner-track" class="absolute inset-0">
+			{SLIDES.map((slide, i) => (
+				<div
+					id={slide.id}
+					class="menu-banner-slide absolute inset-0"
+					data-slide={i}
+					style={i !== 0 ? 'opacity: 0; visibility: hidden; pointer-events: none;' : ''}
+				>
+						<Image
+						src={slide.img}
+						alt={slide.alt}
+						class="absolute inset-0 h-full w-full object-cover"
+						loading={i === 0 ? 'eager' : 'lazy'}
+					/>
+				</div>
+			))}
+		</div>
 
-		<!-- Boton Carrusel Anterior (Izquierda) -->
+		<!-- Flecha anterior -->
 		<button
 			id="menu-banner-prev"
 			type="button"
 			class="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 z-40 flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-pink text-white shadow-md border-2 border-white/80 transition-transform hover:scale-110 active:scale-95 cursor-pointer"
-			aria-label="Anterior slide"
+			aria-label="Anterior banner"
 		>
-			<Icon name="lucide:chevron-left" class="h-6 w-6 stroke-[2.5]" />
+			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6" aria-hidden="true">
+				<path d="m15 18-6-6 6-6" />
+			</svg>
 		</button>
 
-		<!-- Boton Carrusel Siguiente (Derecha) -->
+		<!-- Flecha siguiente -->
 		<button
 			id="menu-banner-next"
 			type="button"
 			class="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 z-40 flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-pink text-white shadow-md border-2 border-white/80 transition-transform hover:scale-110 active:scale-95 cursor-pointer"
-			aria-label="Siguiente slide"
+			aria-label="Siguiente banner"
 		>
-			<Icon name="lucide:chevron-right" class="h-6 w-6 stroke-[2.5]" />
+			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6" aria-hidden="true">
+				<path d="m9 18 6-6-6-6" />
+			</svg>
 		</button>
 
-		<!-- Escenario Central: Texto y Galleta Principal -->
-		<div class="relative z-10 flex-1 flex items-center justify-center px-8 sm:px-16 pt-8 pb-4 min-h-[240px] sm:min-h-[290px] md:min-h-[340px]">
-			<!-- Contenedor Maestro: todo texto y máscara se ancla al mismo ancho y alto relativo -->
-			<div class="relative flex items-center justify-center w-full max-w-[960px]">
-
-				<!-- ============================================================== -->
-				<!-- CAPA 1 (BASE EXTERIOR): Azul con borde blanco grueso           -->
-				<!-- ============================================================== -->
-				<span
-					style="paint-order: stroke fill;"
-					class="menu-banner-title-left absolute top-0 sm:top-2 md:top-4 lg:top-6 left-2 sm:left-8 md:left-12 lg:left-14 font-exmouth text-[60px] sm:text-[90px] md:text-[120px] lg:text-[145px] xl:text-[160px] leading-none text-[#d7ebfb] [-webkit-text-stroke:5px_#ffffff] sm:[-webkit-text-stroke:8px_#ffffff] md:[-webkit-text-stroke:10px_#ffffff] lg:[-webkit-text-stroke:12px_#ffffff] select-none pointer-events-none z-10 inline-block"
-				>
-					Nuestras
-				</span>
-
-				<span
-					style="paint-order: stroke fill;"
-					class="menu-banner-title-right absolute bottom-0 sm:bottom-2 md:bottom-4 lg:bottom-6 right-2 sm:right-8 md:right-12 lg:right-14 font-exmouth text-[60px] sm:text-[90px] md:text-[120px] lg:text-[145px] xl:text-[160px] leading-none text-[#d7ebfb] [-webkit-text-stroke:5px_#ffffff] sm:[-webkit-text-stroke:8px_#ffffff] md:[-webkit-text-stroke:10px_#ffffff] lg:[-webkit-text-stroke:12px_#ffffff] select-none pointer-events-none z-10 inline-block"
-				>
-					Galletas
-				</span>
-
-				<!-- ============================================================== -->
-				<!-- CAPA 2: CONTENEDOR DE LA GALLETA                               -->
-				<!-- ============================================================== -->
-				<div class="relative z-20 flex items-center justify-center">
-					<!-- Wrapper con el tamaño exacto de la galleta -->
-					<div id="menu-banner-cookie" class="relative h-36 w-36 sm:h-48 sm:w-48 md:h-64 md:w-64 lg:h-76 lg:w-76 xl:h-84 xl:w-84 transition-transform duration-300 hover:scale-105">
-						
-						<!-- Galleta Principal con su sombra -->
-						<Image
-							src={galletaBanner1}
-							alt="Galleta artesanal de Maracuya"
-							class="h-full w-full object-contain drop-shadow-[0_16px_32px_rgba(58,32,14,0.38)]"
-							loading="eager"
-						/>
-					</div>
-				</div>
-
-			</div>
-		</div>
-
-		<!-- Franja Inferior: Galletas asomandose en la base (mitad tapadas) -->
-		<div class="relative z-10 w-full overflow-hidden flex items-end justify-center pointer-events-none">
-			<div class="flex items-end justify-around sm:justify-center gap-2 sm:gap-6 md:gap-8 w-full max-w-[1280px] px-4">
-				{bottomCookies.map((cookie) => (
-					<div class="menu-banner-bottom-cookie relative shrink-0 w-12 sm:w-16 md:w-20 lg:w-32">
-						<Image
-							src={cookie}
-							alt=""
-							class="w-full h-auto object-contain drop-shadow-[0_-4px_8px_rgba(58,32,14,0.18)]"
-						/>
-					</div>
-				))}
-			</div>
+		<!-- Dots -->
+		<div id="menu-banner-dots" class="absolute bottom-4 sm:bottom-5 left-1/2 -translate-x-1/2 z-40 flex items-center gap-2">
+			{SLIDES.map((slide, i) => (
+				<button
+					type="button"
+					class="menu-banner-dot h-2.5 rounded-full transition-all duration-300 cursor-pointer"
+					data-dot={i}
+					style={i === 0 ? 'width: 28px; background-color: #fff;' : 'width: 10px; background-color: rgba(255,255,255,0.5);'}
+					aria-label={`Ir al banner ${i + 1}`}
+				/>
+			))}
 		</div>
 	</div>
 </section>
@@ -117,60 +92,149 @@ const bottomCookies = [item1, item2, item3, item4, item5, item6, item7, item1, i
 	import { animate } from 'motion';
 
 	// ======================================================================
-	// Entrada del banner del Menú (mismo lenguaje que el Hero del home):
-	// - caja: fade + subida + leve escala
-	// - títulos "Nuestras"/"Galletas": desliz desde laterales con fade
-	// - galleta central: pop elástico (scale + rotate, backOut)
-	// - tira inferior: subida en stagger
-	// - respeta prefers-reduced-motion y re-corre en SPA (astro:page-load)
+	// MenuBanner: entrada + carrusel de pósters (crossfade con leve zoom).
+	// - Entrada: caja fade + subida + escala (mismo lenguaje del home).
+	// - Carrusel: autoplay 6s, flechas, dots, pausa en hover/focus.
+	// - Respeta prefers-reduced-motion y re-inicializa en SPA (page-load).
 	// ======================================================================
 	const BANNER_EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
+	const CROSSFADE_MS = 600;
+	const AUTOPLAY_MS = 6000;
+
+	const reduceMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 	function setMenuBannerStart() {
-		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+		if (reduceMotion()) return;
 		const instant = { duration: 0 };
 		const box = document.getElementById('menu-banner-box');
-		const left = document.querySelector<HTMLElement>('#menu-banner .menu-banner-title-left');
-		const right = document.querySelector<HTMLElement>('#menu-banner .menu-banner-title-right');
-		const cookie = document.getElementById('menu-banner-cookie');
-		const bottom = Array.from(document.querySelectorAll<HTMLElement>('#menu-banner .menu-banner-bottom-cookie'));
 		const prev = document.getElementById('menu-banner-prev');
 		const next = document.getElementById('menu-banner-next');
+		const dots = document.getElementById('menu-banner-dots');
 		if (!box) return;
 		animate(box, { opacity: 0, y: 28, scale: 0.97 }, instant);
-		if (left) animate(left, { opacity: 0, x: -70 }, instant);
-		if (right) animate(right, { opacity: 0, x: 70 }, instant);
-		if (cookie) animate(cookie, { opacity: 0, scale: 0.7, rotate: -14 }, instant);
-		bottom.forEach((el) => animate(el, { opacity: 0, y: 56 }, instant));
 		if (prev) animate(prev, { opacity: 0 }, instant);
 		if (next) animate(next, { opacity: 0 }, instant);
+		if (dots) animate(dots, { opacity: 0 }, instant);
 	}
 
 	function playMenuBannerEnter() {
-		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+		if (reduceMotion()) return;
 		const box = document.getElementById('menu-banner-box');
-		const left = document.querySelector<HTMLElement>('#menu-banner .menu-banner-title-left');
-		const right = document.querySelector<HTMLElement>('#menu-banner .menu-banner-title-right');
-		const cookie = document.getElementById('menu-banner-cookie');
-		const bottom = Array.from(document.querySelectorAll<HTMLElement>('#menu-banner .menu-banner-bottom-cookie'));
 		const prev = document.getElementById('menu-banner-prev');
 		const next = document.getElementById('menu-banner-next');
+		const dots = document.getElementById('menu-banner-dots');
 		if (!box) return;
 		// Keyframes [origen, destino] para forzar el estado inicial en el primer frame.
 		animate(box, { opacity: [0, 1], y: [28, 0], scale: [0.97, 1] }, { duration: 0.7, ease: BANNER_EASE });
-		if (left) animate(left, { opacity: [0, 1], x: [-70, 0] }, { duration: 0.8, delay: 0.15, ease: BANNER_EASE });
-		if (right) animate(right, { opacity: [0, 1], x: [70, 0] }, { duration: 0.8, delay: 0.15, ease: BANNER_EASE });
-		if (cookie)
+		if (prev) animate(prev, { opacity: [0, 1] }, { duration: 0.5, delay: 0.4, ease: 'easeOut' });
+		if (next) animate(next, { opacity: [0, 1] }, { duration: 0.5, delay: 0.4, ease: 'easeOut' });
+		if (dots) animate(dots, { opacity: [0, 1] }, { duration: 0.5, delay: 0.5, ease: 'easeOut' });
+	}
+
+	function paintDots(dots: HTMLElement[], active: number) {
+		dots.forEach((dot, i) => {
+			const on = i === active;
 			animate(
-				cookie,
-				{ opacity: [0, 1], scale: [0.7, 1], rotate: [-14, 0] },
-				{ duration: 0.9, delay: 0.25, ease: 'backOut' }
+				dot,
+				{ opacity: 1, scale: 1 },
+				{ duration: 0 }
 			);
-		bottom.forEach((el, i) => {
-			animate(el, { opacity: [0, 1], y: [56, 0] }, { duration: 0.6, delay: 0.35 + i * 0.06, ease: BANNER_EASE });
+			dot.style.width = on ? '28px' : '10px';
+			dot.style.backgroundColor = on ? '#fff' : 'rgba(255,255,255,0.5)';
 		});
-		if (prev) animate(prev, { opacity: [0, 1] }, { duration: 0.5, delay: 0.5, ease: 'easeOut' });
-		if (next) animate(next, { opacity: [0, 1] }, { duration: 0.5, delay: 0.5, ease: 'easeOut' });
+	}
+
+	function initMenuBannerCarousel() {
+		const box = document.getElementById('menu-banner-box');
+		// Guard por vista: evita doble-init en carga inicial (módulo + page-load).
+		// En SPA el DOM se reemplaza y el dataset se pierde, así que re-inicializa solo.
+		if (!box || box.dataset.carouselInit === '1') return;
+		box.dataset.carouselInit = '1';
+
+		const track = document.getElementById('menu-banner-track');
+		const slides = track ? Array.from(track.querySelectorAll<HTMLElement>('.menu-banner-slide')) : [];
+		const dots = Array.from(document.querySelectorAll<HTMLElement>('#menu-banner-dots .menu-banner-dot'));
+		const prevBtn = document.getElementById('menu-banner-prev');
+		const nextBtn = document.getElementById('menu-banner-next');
+		if (slides.length <= 1) return;
+
+		let current = 0;
+		let busy = false;
+		let timer: ReturnType<typeof setInterval> | null = null;
+
+		function show(index: number) {
+			if (busy || index === current || !slides[index]) return;
+			busy = true;
+			const from = slides[current];
+			const to = slides[index];
+			const d = CROSSFADE_MS / 1000;
+
+			if (!reduceMotion()) {
+				animate(from, { opacity: [1, 0] }, { duration: d, ease: 'easeInOut' }).then(() => {
+					from.style.visibility = 'hidden';
+					from.style.pointerEvents = 'none';
+				});
+			} else {
+				from.style.opacity = '0';
+				from.style.visibility = 'hidden';
+				from.style.pointerEvents = 'none';
+			}
+
+			to.style.visibility = 'visible';
+			to.style.pointerEvents = 'auto';
+			if (!reduceMotion()) {
+				animate(to, { opacity: [0, 1], scale: [1.04, 1] }, { duration: d, ease: 'easeOut' }).then(() => {
+					busy = false;
+				});
+			} else {
+				to.style.opacity = '1';
+				busy = false;
+			}
+
+			current = index;
+			paintDots(dots, current);
+		}
+
+		function next() {
+			show((current + 1) % slides.length);
+		}
+		function prev() {
+			show((current - 1 + slides.length) % slides.length);
+		}
+		function restartAutoplay() {
+			stopAutoplay();
+			if (reduceMotion()) return;
+			timer = setInterval(next, AUTOPLAY_MS);
+		}
+		function stopAutoplay() {
+			if (timer) {
+				clearInterval(timer);
+				timer = null;
+			}
+		}
+
+		prevBtn?.addEventListener('click', () => {
+			prev();
+			restartAutoplay();
+		});
+		nextBtn?.addEventListener('click', () => {
+			next();
+			restartAutoplay();
+		});
+		dots.forEach((dot) => {
+			dot.addEventListener('click', () => {
+				show(Number(dot.dataset.dot ?? 0));
+				restartAutoplay();
+			});
+		});
+
+		// Pausa el autoplay al interactuar con el banner.
+		box.addEventListener('mouseenter', stopAutoplay);
+		box.addEventListener('mouseleave', restartAutoplay);
+		box.addEventListener('focusin', stopAutoplay);
+		box.addEventListener('focusout', restartAutoplay);
+
+		restartAutoplay();
 	}
 
 	let menuBannerScheduled = false;
@@ -184,6 +248,7 @@ const bottomCookies = [item1, item2, item3, item4, item5, item6, item7, item1, i
 		setMenuBannerStart();
 		// Pequeño retardo para solaparse con la cortina de transición de página.
 		setTimeout(playMenuBannerEnter, 120);
+		initMenuBannerCarousel();
 	}
 
 	scheduleMenuBannerEnter();

@@ -335,15 +335,6 @@ export default function BoxBuilder({ boxProduct }: BoxBuilderProps) {
 								Caja con {maxCapacity} galletas. Escoge tus {maxCapacity} sabores favoritos.
 							</p>
 						</div>
-
-						{/* Botón X de volver al menú */}
-						<a
-							href="/menu"
-							className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-brown/60 hover:text-pink shadow-xs border border-brown/10 transition-colors"
-							aria-label="Cerrar y volver al menú"
-						>
-							<span className="text-base font-bold leading-none">✕</span>
-						</a>
 					</div>
 
 					<div className="mt-4 flex items-center justify-between border-b border-brown/10 pb-3">

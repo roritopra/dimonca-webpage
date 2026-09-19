@@ -8,6 +8,47 @@ import redVelvetImg from "../../assets/images/home/our-products/card-red-velvet.
 import redVelvetCrackedImg from "../../assets/images/home/our-products/card-red-velvet-cracked.png";
 import rocheImg from "../../assets/images/home/our-products/card-roche.png";
 import rocheCrackedImg from "../../assets/images/home/our-products/card-roche-cracked.png";
+
+const cookies = [
+  {},
+  {
+    img: oreoImg,
+    imgCracked: oreoCrackedImg,
+    color: "#F45D8C",
+    scriptTop: "Cookies",
+    scriptBottom: "Cream",
+    title: "Cookies & Cream",
+    price: "$ 13.000",
+    description: "Galleta premium de oreo con trozos reales y relleno suave ...",
+  },
+  {
+    img: redVelvetImg,
+    imgCracked: redVelvetCrackedImg,
+    color: "#3A200E",
+    scriptTop: "Red",
+    scriptBottom: "Velvet",
+    title: "Red Velvet",
+    price: "$ 13.000",
+    description: "Galleta premium de red velvet con centro cremoso y chips de chocolate blanco ...",
+  },
+  {
+    img: rocheImg,
+    imgCracked: rocheCrackedImg,
+    color: "#979255",
+    hoverBg: "#FCF48D",
+    hoverPrice: "#32311C",
+    scriptTop: "Galleta",
+    scriptBottom: "Roche",
+    title: "Galleta Roche",
+    price: "$ 13.000",
+    description: "Galleta premium estilo bombón roche con avellanas y chocolate ...",
+  },
+];
+
+// Grupos idénticos para el loop infinito: el track avanza un ancho de grupo y
+// envuelve (módulo), como los grupos son iguales el corte es invisible.
+// 4 grupos cubren viewports anchos (se necesita track >= viewport + 1 grupo).
+const groups = [0, 1, 2, 3];
 ---
 
 <section id="galletas" class="relative z-10 w-full overflow-hidden bg-beige">
@@ -48,179 +89,108 @@ import rocheCrackedImg from "../../assets/images/home/our-products/card-roche-cr
     </div>
   </div>
 
-  <div
-    class="relative mx-auto flex max-w-[1440px] flex-col items-center px-0 lg:px-20 pt-[240px] sm:pt-[275px] lg:pt-[310px] pb-12 lg:pb-16"
-  >
-    <!-- Carrusel en móvil/tablet, grid en desktop -->
-    <div
-      class="cookie-cards-wrapper w-full lg:w-auto overflow-x-auto scroll-smooth snap-x snap-mandatory lg:overflow-visible flex lg:grid lg:grid-cols-4 gap-[20px] sm:gap-[24px] lg:gap-[30px] px-6 sm:px-10 lg:px-0 pb-4 lg:pb-0"
-      style="-webkit-overflow-scrolling: touch; scrollbar-width: none;"
-    >
-      <CookieCard />
-      <CookieCard
-        img={oreoImg}
-        imgCracked={oreoCrackedImg}
-        color="#F45D8C"
-        scriptTop="Cookies"
-        scriptBottom="Cream"
-        title="Cookies & Cream"
-        price="$ 13.000"
-        description="Galleta premium de oreo con trozos reales y relleno suave ..."
-      />
-      <CookieCard
-        img={redVelvetImg}
-        imgCracked={redVelvetCrackedImg}
-        color="#3A200E"
-        scriptTop="Red"
-        scriptBottom="Velvet"
-        title="Red Velvet"
-        price="$ 13.000"
-        description="Galleta premium de red velvet con centro cremoso y chips de chocolate blanco ..."
-      />
-      <CookieCard
-        img={rocheImg}
-        imgCracked={rocheCrackedImg}
-        color="#979255"
-        hoverBg="#FCF48D"
-        hoverPrice="#32311C"
-        scriptTop="Galleta"
-        scriptBottom="Roche"
-        title="Galleta Roche"
-        price="$ 13.000"
-        description="Galleta premium estilo bombón roche con avellanas y chocolate ..."
-      />
+  <!-- Carrusel infinito de borde a borde (sin max-width: toca ambos finales).
+    Se mueve solo, despacio, sin botones ni puntos, en mobile y desktop. -->
+  <div class="relative w-full pt-[240px] sm:pt-[275px] lg:pt-[310px]">
+    <div class="w-full overflow-hidden py-8">
+      <div class="cookie-marquee-track flex w-max will-change-transform">
+        {
+          groups.map((g) => (
+            <div
+              class="cookie-marquee-group flex shrink-0 items-stretch gap-[20px] pr-[20px] sm:gap-[24px] sm:pr-[24px] lg:gap-[30px] lg:pr-[30px]"
+              aria-hidden={g > 0 ? "true" : undefined}
+            >
+              {cookies.map((c) => (
+                <CookieCard {...c} />
+              ))}
+            </div>
+          ))
+        }
+      </div>
     </div>
 
-    <!-- Indicadores de puntos (solo visibles en móvil/tablet) -->
-    <div class="flex lg:hidden items-center justify-center gap-2 mt-5 py-2" aria-hidden="true" id="cookie-dots">
-      <button class="cookie-dot transition-all duration-300 rounded-full h-2.5 w-6 bg-blue-500" data-index="0" data-active="true" aria-label="Ir a galleta 1"></button>
-      <button class="cookie-dot transition-all duration-300 rounded-full h-2.5 w-2.5 bg-blue-500/30" data-index="1" data-active="false" aria-label="Ir a galleta 2"></button>
-      <button class="cookie-dot transition-all duration-300 rounded-full h-2.5 w-2.5 bg-blue-500/30" data-index="2" data-active="false" aria-label="Ir a galleta 3"></button>
-      <button class="cookie-dot transition-all duration-300 rounded-full h-2.5 w-2.5 bg-blue-500/30" data-index="3" data-active="false" aria-label="Ir a galleta 4"></button>
-    </div>
-
-    <a
-      class="group mt-8 lg:mt-10 flex h-[48px] sm:h-[52px] w-[190px] sm:w-[210px] items-center justify-center gap-3
-      whitespace-nowrap rounded-[57px] bg-[#6CA7D5] px-6 py-3 font-sans text-[17px] sm:text-[19px]
-      leading-[1.2] font-bold text-beige no-underline
-      transition-all duration-300 hover:brightness-95"
-      href="#galletas"
-    >
-      Ver más
-      <span
-        class="flex h-[30px] w-[30px] sm:h-[32px] sm:w-[32px] shrink-0 items-center justify-center rounded-full bg-beige transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+    <div class="mx-auto flex max-w-[1440px] flex-col items-center px-6 sm:px-10 lg:px-20 pb-12 lg:pb-16">
+      <a
+        class="group flex h-[48px] sm:h-[52px] w-[190px] sm:w-[210px] items-center justify-center gap-3
+        whitespace-nowrap rounded-[57px] bg-[#6CA7D5] px-6 py-3 font-sans text-[17px] sm:text-[19px]
+        leading-[1.2] font-bold text-beige no-underline
+        transition-all duration-300 hover:brightness-95"
+        href="#galletas"
       >
-        <Icon
-          name="lucide:arrow-up-right"
-          class="h-4 w-4 sm:h-[18px] sm:w-[18px] text-[#6CA7D5]"
-          aria-hidden="true"
-        />
-      </span>
-    </a>
+        Ver más
+        <span
+          class="flex h-[30px] w-[30px] sm:h-[32px] sm:w-[32px] shrink-0 items-center justify-center rounded-full bg-beige transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+        >
+          <Icon
+            name="lucide:arrow-up-right"
+            class="h-4 w-4 sm:h-[18px] sm:w-[18px] text-[#6CA7D5]"
+            aria-hidden="true"
+          />
+        </span>
+      </a>
+    </div>
   </div>
 </section>
 
-<style>
-  .cookie-cards-wrapper::-webkit-scrollbar {
-    display: none;
-  }
-  @media (max-width: 1023px) {
-    .cookie-cards-wrapper > :global(.cookie-card) {
-      snap-align: center;
-      flex-shrink: 0;
-      scroll-snap-align: center;
-      width: 270px;
-    }
-  }
-  @media (max-width: 479px) {
-    .cookie-cards-wrapper > :global(.cookie-card) {
-      width: 250px;
-    }
-  }
-</style>
-
 <script>
-  function initCookieCarousel() {
-    const wrapper = document.querySelector<HTMLElement>('.cookie-cards-wrapper');
-    const dots = Array.from(document.querySelectorAll<HTMLElement>('.cookie-dot'));
-    if (!wrapper || dots.length === 0) return;
+  // Carrusel infinito: avance lineal lento (px/s) con envolvimiento por módulo
+  // sobre el ancho de un grupo. Solo avanza cuando la sección está visible.
+  const MARQUEE_SPEED = 28;
 
-    function updateDots(activeIndex: number) {
-      dots.forEach((dot, i) => {
-        const isActive = i === activeIndex;
-        dot.setAttribute('data-active', isActive ? 'true' : 'false');
-        if (isActive) {
-          dot.className = 'cookie-dot transition-all duration-300 rounded-full h-2.5 w-6 bg-blue-500';
-        } else {
-          dot.className = 'cookie-dot transition-all duration-300 rounded-full h-2.5 w-2.5 bg-blue-500/30';
-        }
-      });
-    }
+  function initCookieMarquee() {
+    const track = document.querySelector<HTMLElement>('.cookie-marquee-track');
+    if (!track) return;
+    const group = track.querySelector<HTMLElement>('.cookie-marquee-group');
+    if (!group) return;
 
-    const cards = Array.from(wrapper.querySelectorAll<HTMLElement>('.cookie-card'));
-    if (cards.length === 0) return;
-
-    let observer: IntersectionObserver | null = null;
-    let isClicking = false;
-    let clickTimeout: number | undefined;
-
-    function setupObserver() {
-      if (observer) {
-        observer.disconnect();
-      }
-
-      observer = new IntersectionObserver(
-        (entries) => {
-          if (isClicking) return;
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              const idx = cards.indexOf(entry.target as HTMLElement);
-              if (idx !== -1) {
-                updateDots(idx);
-              }
-            }
-          });
-        },
-        {
-          root: wrapper,
-          threshold: 0.55,
-        }
-      );
-
-      cards.forEach((card) => observer?.observe(card));
-    }
-
-    dots.forEach((dot) => {
-      dot.addEventListener('click', () => {
-        const index = parseInt(dot.dataset.index ?? '0', 10);
-        const targetCard = cards[index];
-
-        if (targetCard) {
-          isClicking = true;
-          updateDots(index);
-
-          targetCard.scrollIntoView({
-            behavior: 'smooth',
-            inline: 'center',
-            block: 'nearest'
-          });
-
-          window.clearTimeout(clickTimeout);
-          clickTimeout = window.setTimeout(() => {
-            isClicking = false;
-          }, 500);
-        }
-      });
+    // Los grupos clonados repiten los mismos links: sacarlos del tab order.
+    track.querySelectorAll('.cookie-marquee-group[aria-hidden="true"] a').forEach((a) => {
+      (a as HTMLElement).tabIndex = -1;
     });
 
-    setupObserver();
-    updateDots(0);
+    // Invalidar el loop anterior si existía (navegación SPA reemplaza el DOM).
+    const prev = (window as unknown as { __cookieMq?: { dead: boolean; io: IntersectionObserver | null } }).__cookieMq;
+    if (prev) {
+      prev.dead = true;
+      prev.io?.disconnect();
+    }
+    const state = { dead: false, io: null as IntersectionObserver | null };
+    (window as unknown as { __cookieMq?: typeof state }).__cookieMq = state;
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    let visible = true;
+    if ('IntersectionObserver' in window) {
+      state.io = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            visible = entry.isIntersecting;
+          });
+        },
+        { threshold: 0 }
+      );
+      state.io.observe(track);
+    }
+
+    let dist = 0;
+    let last = performance.now();
+
+    const tick = (now: number) => {
+      if (state.dead) return;
+      const dt = Math.min(Math.max((now - last) / 1000, 0), 0.1);
+      last = now;
+      if (visible) {
+        const w = group.offsetWidth;
+        if (w > 0) {
+          dist = (dist + MARQUEE_SPEED * dt) % w;
+          track.style.transform = `translate3d(${-dist}px, 0, 0)`;
+        }
+      }
+      requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initCookieCarousel);
-  } else {
-    initCookieCarousel();
-  }
-  document.addEventListener('astro:page-load', initCookieCarousel);
+  initCookieMarquee();
+  document.addEventListener('astro:page-load', initCookieMarquee);
 </script>

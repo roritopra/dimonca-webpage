@@ -46,6 +46,16 @@ export default function MenuCard({ product, withTransition = false }: MenuCardPr
 			className="group relative col-span-1 flex h-full flex-col justify-between rounded-[18px] border-2 border-pink-500 bg-beige backdrop-blur-xs pb-4 sm:pb-5 shadow-[0_4px_16px_rgba(58,32,14,0.04)] hover:shadow-[0_12px_28px_rgba(58,32,14,0.09)] transition-[background-color,box-shadow] duration-300 ease-out hover:bg-pink-100"
 			data-vt-card={useNames ? product.id : undefined}
 		>
+			{/* En mobile (<764px) el "Ver más" se oculta y TODA la card es el botón:
+			    overlay invisible encima de todo, EXCEPTO la píldora de cantidad
+			    (z-30) para que el +/− siga funcionando sin navegar. En desktop
+			    (min-[764px]) el overlay se desmonta visualmente y todo sigue igual. */}
+			<a
+				href={`/menu/${product.id}`}
+				className="absolute inset-0 z-20 min-[764px]:hidden cursor-pointer"
+				aria-label={`Ver ${product.name}`}
+			/>
+
 			{/* Área Superior: Imagen (Sin padding, ocupa todo el ancho y alto asignado de la card) */}
 			{/* Franja de imagen más baja y la card empuja el contenido hacia abajo (justify-between);
 			    en reposo galleta tapada a media vista (clip-path); en hover el clip se expande hacia
@@ -80,8 +90,8 @@ export default function MenuCard({ product, withTransition = false }: MenuCardPr
 						{product.priceFormatted}
 					</span>
 
-					{/* Píldora de Cantidad (-  0  +) */}
-					<div className="flex w-full items-center justify-between rounded-full border border-pink/40 bg-pink-100 px-2 py-1 shadow-2xs">
+					{/* Píldora de Cantidad (-  0  +): por encima del overlay mobile */}
+					<div className="relative z-30 flex w-full items-center justify-between rounded-full border border-pink/40 bg-pink-100 px-2 py-1 shadow-2xs">
 						<button
 							type="button"
 							onClick={handleDecrease}
@@ -106,10 +116,10 @@ export default function MenuCard({ product, withTransition = false }: MenuCardPr
 						</button>
 					</div>
 
-					{/* Botón Ver más ↗ */}
+					{/* Botón Ver más ↗ (solo desktop ≥764px; en mobile toda la card es el botón) */}
 					<a
 						href={`/menu/${product.id}`}
-						className="flex w-full items-center justify-center gap-1.5 rounded-full bg-pink py-2 px-4 text-xs sm:text-sm font-bold text-white shadow-xs transition-transform hover:scale-[1.02] active:scale-95 no-underline cursor-pointer"
+						className="hidden min-[764px]:flex w-full items-center justify-center gap-1.5 rounded-full bg-pink py-2 px-4 text-xs sm:text-sm font-bold text-white shadow-xs transition-transform hover:scale-[1.02] active:scale-95 no-underline cursor-pointer"
 					>
 						<span>Ver más</span>
 						<span className="flex h-4 w-4 items-center justify-center rounded-full bg-white text-pink text-[10px] font-extrabold">

@@ -91,7 +91,7 @@ export default function MenuCard({ product, withTransition = false }: MenuCardPr
 					</span>
 
 					{/* Píldora de Cantidad (-  0  +): por encima del overlay mobile */}
-					<div className="relative z-30 flex w-full items-center justify-between rounded-full border border-pink/40 bg-pink-100 px-2 py-1 shadow-2xs">
+					<div className="relative z-30 flex w-full items-center justify-between rounded-full border border-pink/40 bg-white px-2 py-1 shadow-2xs">
 						<button
 							type="button"
 							onClick={handleDecrease}

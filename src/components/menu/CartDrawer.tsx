@@ -272,7 +272,7 @@ export default function CartDrawer() {
 												className="relative flex items-center gap-4 sm:gap-6 bg-transparent pb-5 border-b border-brown/10 last:border-b-0"
 											>
 												{/* Marco de Imagen Cuadrado con borde rosa suave (escalado para desktop) */}
-												<div className="relative h-24 w-24 sm:h-36 sm:w-36 md:h-40 md:w-40 shrink-0 rounded-2xl sm:rounded-3xl border-2 border-pink-500 bg-beige-300 p-2 sm:p-3 flex items-center justify-center overflow-hidden shadow-xs">
+												<div className="relative h-24 w-24 sm:h-36 sm:w-36 md:h-40 md:w-40 shrink-0 rounded-2xl sm:rounded-3xl border-2 border-pink-500 p-2 sm:p-3 flex items-center justify-center overflow-hidden shadow-xs">
 													<img
 														src={item.imageSrc}
 														alt={item.name}
@@ -320,7 +320,7 @@ export default function CartDrawer() {
 
 													<div className="mt-3 sm:mt-4 flex items-center justify-between gap-3">
 														{/* Píldora de Cantidad (-  qty  +) */}
-														<div className="flex items-center rounded-full border border-pink/40 bg-pink-100 px-2.5 py-1 sm:py-1.5 shadow-2xs">
+														<div className="flex items-center rounded-full border border-pink/40 bg-white px-2.5 py-1 sm:py-1.5 shadow-2xs">
 															<button
 																type="button"
 																onClick={() => {
@@ -409,7 +409,7 @@ export default function CartDrawer() {
 														</span>
 
 														{/* Píldora de Cantidad (-  qty  +) */}
-														<div className="flex w-full items-center justify-between rounded-full border border-pink/40 bg-pink-100 px-1.5 py-0.5 shadow-2xs">
+														<div className="flex w-full items-center justify-between rounded-full border border-pink/40 bg-white px-1.5 py-0.5 shadow-2xs">
 															<button
 																type="button"
 																onClick={() => {

@@ -289,10 +289,10 @@ export default function BoxBuilder({ boxProduct }: BoxBuilderProps) {
 							<h1 className="font-sans text-3xl lg:text-4xl font-black text-pink tracking-tight">
 								{boxProduct.name.toLowerCase().includes('x3') ? 'Caja X3 galletas' : boxProduct.name}
 							</h1>
-							<p className="font-sans text-xl lg:text-2xl font-black text-brown mt-1">
+							<p className="font-sans text-xl lg:text-2xl font-black text-brown-400 mt-1">
 								{boxProduct.priceFormatted}
 							</p>
-							<p className="text-xs lg:text-sm text-brown/70 mt-1 leading-relaxed">
+							<p className="text-sm lg:text-base text-brown-500 mt-1 leading-relaxed">
 								Caja con {maxCapacity} galletas. Escoge tus {maxCapacity} sabores favoritos.
 							</p>
 						</div>
@@ -308,7 +308,7 @@ export default function BoxBuilder({ boxProduct }: BoxBuilderProps) {
 					</div>
 
 					<div className="mt-4 flex items-center justify-between border-b border-brown/10 pb-3">
-						<p className="font-sans text-sm font-extrabold text-brown">
+						<p className="font-sans text-[18px] font-extrabold text-brown-400">
 							Elije máximo {maxCapacity}:
 						</p>
 						<span className="font-sans text-xs font-bold px-2.5 py-0.5 rounded-full bg-pink/15 text-pink">
@@ -398,7 +398,7 @@ export default function BoxBuilder({ boxProduct }: BoxBuilderProps) {
 									{/* Info + Contador (Centrado vertical en mobile, flex-between pegado abajo) */}
 									<div className="flex flex-col flex-1 w-full sm:w-auto items-center sm:items-start justify-between sm:justify-start min-w-0 mt-2 sm:mt-0 text-center sm:text-left">
 										<div className="flex flex-col items-center sm:items-start">
-											<span className="font-sans text-sm sm:text-xs xl:text-sm font-extrabold text-brown leading-tight truncate max-w-full">
+											<span className="font-sans text-sm sm:text-xs xl:text-sm font-extrabold text-brown-500 leading-tight truncate max-w-full">
 												{cookie.name.replace('Galleta ', '')}
 											</span>
 											{hasExtra && (
@@ -408,29 +408,30 @@ export default function BoxBuilder({ boxProduct }: BoxBuilderProps) {
 											)}
 										</div>
 
-										{/* Selector de cantidad (- 0 +) (Siempre pegado abajo en móvil) */}
+										{/* Selector de cantidad: misma píldora del MenuCard —
+										    fondo blanco, borde pink, botones pink. */}
 										<div className="mt-3 sm:mt-1.5 flex items-center justify-center sm:justify-start w-full">
-											<div className="inline-flex items-center gap-3 sm:gap-1.5">
+											<div className="flex w-full items-center justify-between rounded-full border border-pink/40 bg-white px-1.5 py-1 shadow-2xs">
 												<button
 													type="button"
 													onClick={() => handleDecrease(cookie.id)}
 													disabled={count <= 0}
-													className="flex h-7 w-7 sm:h-5 sm:w-5 xl:h-6 xl:w-6 items-center justify-center rounded-full bg-pink text-white text-sm sm:text-xs font-bold hover:opacity-90 active:scale-90 disabled:opacity-35 disabled:cursor-not-allowed cursor-pointer transition-transform shadow-xs sm:shadow-none"
+													className="flex h-6 w-6 sm:h-7 sm:w-7 items-center justify-center rounded-full bg-pink text-white text-sm sm:text-base font-bold hover:opacity-90 active:scale-90 disabled:opacity-35 disabled:cursor-not-allowed cursor-pointer transition-all"
 													aria-label={`Disminuir ${cookie.name}`}
 												>
-													−
+													<span className="text-sm sm:text-base font-extrabold leading-none">−</span>
 												</button>
-												<span className="min-w-5 sm:min-w-4 text-center font-sans text-sm sm:text-xs xl:text-sm font-extrabold text-pink">
+												<span className="text-center font-sans text-xs sm:text-sm font-semibold text-brown/70 select-none">
 													{count}
 												</span>
 												<button
 													type="button"
 													onClick={() => handleIncrease(cookie.id)}
 													disabled={totalSelectedCookies >= maxCapacity}
-													className="flex h-7 w-7 sm:h-5 sm:w-5 xl:h-6 xl:w-6 items-center justify-center rounded-full bg-pink text-white text-sm sm:text-xs font-bold hover:opacity-90 active:scale-90 disabled:opacity-35 disabled:cursor-not-allowed cursor-pointer transition-transform shadow-xs sm:shadow-none"
+													className="flex h-6 w-6 sm:h-7 sm:w-7 items-center justify-center rounded-full bg-pink text-white text-sm sm:text-base font-bold hover:opacity-90 active:scale-90 disabled:opacity-35 disabled:cursor-not-allowed cursor-pointer transition-all"
 													aria-label={`Aumentar ${cookie.name}`}
 												>
-													+
+													<span className="text-sm sm:text-base font-extrabold leading-none">+</span>
 												</button>
 											</div>
 										</div>
@@ -443,10 +444,10 @@ export default function BoxBuilder({ boxProduct }: BoxBuilderProps) {
 				</div>
 
 				{/* 1. Footer Desktop (visible solo desde sm: >=640px) */}
-				<div className="hidden sm:block border-t border-brown/15 bg-[#f5efe3] px-6 lg:px-10 py-5">
+				<div className="hidden sm:block border-t border-brown/15 bg-[#f5efe3] px-6 lg:px-5 py-5 lg:py-2">
 					<div className="flex items-center gap-2 mb-4">
-						<span className="font-sans text-lg font-black text-brown">Total:</span>
-						<span className="font-sans text-xl font-medium text-brown">
+						<span className="font-sans text-xl font-black text-brown-400">Total:</span>
+						<span className="font-sans text-2xl font-medium text-brown-400">
 							{formatCurrency(totalPrice)}
 						</span>
 					</div>
@@ -490,10 +491,10 @@ export default function BoxBuilder({ boxProduct }: BoxBuilderProps) {
 					>
 						<div className="flex items-center justify-between gap-4 max-w-md mx-auto">
 							<div className="flex flex-col">
-								<span className="text-[11px] font-bold text-brown/60 uppercase tracking-wider">
+								<span className="text-[11px] font-bold text-brown-400/60 uppercase tracking-wider">
 									Total ({totalSelectedCookies}/{maxCapacity})
 								</span>
-								<span className="font-sans text-lg font-black text-brown leading-tight">
+								<span className="font-sans text-lg font-black text-brown-400 leading-tight">
 									{formatCurrency(totalPrice)}
 								</span>
 							</div>

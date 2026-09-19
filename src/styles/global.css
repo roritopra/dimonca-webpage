@@ -159,16 +159,21 @@
 	}
 }
 
-::view-transition-group(root) {
-	animation-duration: 900ms;
-}
+/* La cortina es SOLO desktop (>= 640px): en mobile la navegación
+   card → detalle usa el morph de view-transitions.css y la cortina
+   (sobre todo el group(root) de 900ms) lo interrumpe. */
+@media (min-width: 640px) {
+	::view-transition-group(root) {
+		animation-duration: 900ms;
+	}
 
-::view-transition-old(root) {
-	animation: 450ms cubic-bezier(0.7, 0, 0.3, 1) 0ms both curtain-wipe-close;
-	z-index: 1;
-}
+	::view-transition-old(root) {
+		animation: 450ms cubic-bezier(0.7, 0, 0.3, 1) 0ms both curtain-wipe-close;
+		z-index: 1;
+	}
 
-::view-transition-new(root) {
-	animation: 450ms cubic-bezier(0.7, 0, 0.3, 1) 450ms both curtain-wipe-open;
-	z-index: 2;
+	::view-transition-new(root) {
+		animation: 450ms cubic-bezier(0.7, 0, 0.3, 1) 450ms both curtain-wipe-open;
+		z-index: 2;
+	}
 }

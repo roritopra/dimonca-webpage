@@ -16,6 +16,12 @@
    ========================================================================== */
 
 @media (max-width: 639px) {
+	/* Telón de fondo neutro durante el morph: sin el color de la cortina,
+	   que se leería como un flash rosado/azul detrás del contenido. */
+	::view-transition {
+		background-color: #f7f2e8;
+	}
+
 	/* Los grupos de transición (card, imagen, título, precio) interpolan
 	   posición/tamaño con un overshoot suave = mini rebote */
 	::view-transition-group(*) {

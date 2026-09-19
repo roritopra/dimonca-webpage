@@ -1,5 +1,4 @@
 ---
-import { Icon } from "astro-icon/components";
 import { Image } from "astro:assets";
 
 import cuchareableNormal from "../../assets/images/home/more-than/cuchareable.png";
@@ -19,24 +18,30 @@ const products = [
     normalImg: cuchareableNormal,
     hoverImg: cuchareableHover,
     alt: "Cuchareable de Red Velvet",
+    badge: "Cuchareable de Red Velvet",
   },
   {
     normalImg: miniCakeNormal,
     hoverImg: miniCakeHover,
     alt: "Mini Cake",
+    badge: "Mini Cake",
   },
   {
     normalImg: cakeNormal,
     hoverImg: cakeHover,
     alt: "Pastel artesanal Dimonca",
+    badge: "Pastel Artesanal",
   },
 ];
 
+// Las 4 imágenes de la derecha son los detonantes: hover/tap en cada una muestra
+// su producto en el centro. Hay 3 productos, así que la última repite el primero
+// (foto de cuchareable) hasta tener la cuarta foto de diseño.
 const gridImages = [
-  { src: moreThan1, alt: "Variedad de cuchareables Dimonca", borderColor: "#6ca7d5" },
-  { src: moreThan2, alt: "Torre de brownies Dimonca", borderColor: "#3A200E" },
-  { src: moreThan3, alt: "Caja de galletas y helados Dimonca", borderColor: "#F45D8C" },
-  { src: moreThan4, alt: "Cuchareable personal Dimonca", borderColor: "#979255" },
+  { src: moreThan1, alt: "Variedad de cuchareables Dimonca", borderColor: "#6ca7d5", product: 0 },
+  { src: moreThan2, alt: "Torre de brownies Dimonca", borderColor: "#3A200E", product: 1 },
+  { src: moreThan3, alt: "Caja de galletas y helados Dimonca", borderColor: "#F45D8C", product: 2 },
+  { src: moreThan4, alt: "Cuchareable personal Dimonca", borderColor: "#979255", product: 0 },
 ];
 ---
 
@@ -44,7 +49,7 @@ const gridImages = [
   <!-- Sección Interactiva del Producto Central -->
   <div
     id="more-than-interactive"
-    class="relative flex w-full max-w-[340px] sm:max-w-[370px] xl:w-[370px] flex-col items-center justify-center cursor-pointer shrink-0"
+    class="relative flex w-full max-w-[340px] sm:max-w-[370px] xl:w-[370px] flex-col items-center justify-center shrink-0"
   >
     <div class="product-container relative flex h-[340px] sm:h-[400px] xl:h-[430px] w-full items-center justify-center">
       {products.map((item, idx) => (
@@ -53,6 +58,7 @@ const gridImages = [
             idx === 0 ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
           }`}
           data-index={idx}
+          data-badge={item.badge}
         >
           <!-- Imagen Normal -->
           <Image
@@ -61,7 +67,7 @@ const gridImages = [
             class="product-img-normal block h-full w-auto object-contain drop-shadow-[0px_14px_24px_rgba(58,32,14,0.18)]"
             loading="lazy"
           />
-          <!-- Imagen Hover -->
+          <!-- Imagen Hover (detalle al pasar el mouse sobre el centro) -->
           <Image
             src={item.hoverImg}
             alt={`${item.alt} detalle`}
@@ -72,42 +78,37 @@ const gridImages = [
         </div>
       ))}
 
-      <!-- Texto flotante estático en estilo script superpuesto permanentemente -->
+      <!-- Texto flotante en estilo script: cambia según el producto activo -->
       <div class="product-title-badge pointer-events-none absolute top-4 sm:top-[40px] xl:top-[55px] -right-2 sm:-right-8 xl:right-[-80px] z-30 max-w-[170px] sm:max-w-[210px]">
         <p
+          id="more-than-badge-text"
           class="font-exmouth text-[30px] sm:text-[38px] xl:text-[44px] leading-[1.05] text-brown [-webkit-text-stroke:5px_#ffffff] sm:[-webkit-text-stroke:6px_#ffffff] xl:[-webkit-text-stroke:8px_#ffffff] [filter:drop-shadow(0px_4px_4px_rgba(58,32,14,0.5))]"
           style="paint-order: stroke fill;"
           aria-hidden="true"
         >
-          Cuchareable de Red Velvet
+          {products[0].badge}
         </p>
       </div>
-
-      <!-- Botón flotante inferior izquierdo con corazón -->
-      <button
-        id="more-than-next-btn"
-        type="button"
-        class="group absolute bottom-4 sm:bottom-[30px] xl:bottom-[35px] left-2 sm:left-[15px] z-20 flex h-[48px] w-[48px] sm:h-[54px] sm:w-[54px] xl:h-[58px] xl:w-[58px] items-center justify-center rounded-full border-[2.5px] sm:border-[3px] border-white bg-[#6ca7d5] text-white shadow-[0px_8px_16px_rgba(108,167,213,0.4)] transition-transform duration-200 hover:scale-105 hover:bg-[#5b96c4]"
-        aria-label="Ver siguiente producto"
-      >
-        <Icon name="lucide:heart" class="h-5 w-5 sm:h-6 sm:w-6 xl:h-7 xl:w-7 transition-transform duration-200 group-hover:scale-110" aria-hidden="true" />
-      </button>
     </div>
   </div>
 
-  <!-- Grid de 4 imágenes a la derecha (o abajo en móvil) -->
-  <div class="grid grid-cols-2 gap-2.5 sm:gap-3.5 w-full max-w-[340px] sm:max-w-[390px] xl:w-[390px] shrink-0">
+  <!-- Grid de 4 imágenes detonantes a la derecha (o abajo en móvil) -->
+  <div id="more-than-triggers" class="grid grid-cols-2 gap-2.5 sm:gap-3.5 w-full max-w-[340px] sm:max-w-[390px] xl:w-[390px] shrink-0">
     {gridImages.map((img) => (
-      <div
-        class="group relative w-full overflow-hidden rounded-[16px] sm:rounded-none transition-all duration-300 hover:scale-[1.03]"
+      <button
+        type="button"
+        data-product={img.product}
+        data-border={img.borderColor}
+        aria-label={`Ver ${products[img.product].alt}`}
+        class="more-than-trigger group relative w-full cursor-pointer overflow-hidden rounded-[16px] sm:rounded-none border-0 bg-transparent p-0 transition-all duration-300 hover:scale-[1.03] focus-visible:scale-[1.03]"
       >
         <Image
           src={img.src}
           alt={img.alt}
-          class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+          class="pointer-events-none h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
           loading="lazy"
         />
-      </div>
+      </button>
     ))}
   </div>
 </div>
@@ -115,75 +116,124 @@ const gridImages = [
 <script>
   import { animate } from "motion";
 
+  // Interacción por hover/tap en los detonantes: muestran su producto en el
+  // centro con crossfade + pop. Al quitar el mouse NO pasa nada (queda el último).
+  // El click para cambiar de producto se eliminó; el centro solo alterna su
+  // imagen normal/detalle con hover propio.
+  const MT_EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
+
   function initMoreThanInteractive() {
     const root = document.getElementById("more-than-interactive");
-    if (!root) return;
+    const grid = document.getElementById("more-than-triggers");
+    if (!root || !grid) return;
 
     const slides = Array.from(root.querySelectorAll<HTMLElement>(".product-slide"));
-    const nextBtn = document.getElementById("more-than-next-btn");
-    let currentIndex = 0;
-    let isHovered = false;
+    const triggers = Array.from(grid.querySelectorAll<HTMLElement>(".more-than-trigger"));
+    const badgeText = document.getElementById("more-than-badge-text");
+    if (slides.length === 0 || triggers.length === 0) return;
 
-    // Control de hover para cada slide
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let currentIndex = 0;
+
+    function paintTriggerState() {
+      triggers.forEach((t) => {
+        const active = Number(t.dataset.product) === currentIndex;
+        t.setAttribute("aria-current", active ? "true" : "false");
+        t.style.boxShadow = active ? `0 0 0 3px ${t.dataset.border ?? "#F45D8C"}` : "";
+      });
+    }
+
+    function setBadge(idx: number) {
+      const label = slides[idx]?.dataset.badge;
+      if (!badgeText || !label) return;
+      if (reduced || badgeText.textContent === label) {
+        badgeText.textContent = label;
+        return;
+      }
+      animate(badgeText, { opacity: [1, 0], y: [0, -10] }, { duration: 0.15, ease: "easeIn" }).then(() => {
+        if (!badgeText) return;
+        badgeText.textContent = label;
+        animate(badgeText, { opacity: [0, 1], y: [10, 0] }, { duration: 0.3, ease: MT_EASE });
+      });
+    }
+
+    function showProduct(idx: number) {
+      if (idx === currentIndex || !slides[idx]) return;
+      const prevSlide = slides[currentIndex];
+      const nextSlide = slides[idx];
+      currentIndex = idx;
+
+      // El slide saliente vuelve a su imagen normal al instante.
+      const prevNormal = prevSlide?.querySelector<HTMLElement>(".product-img-normal");
+      const prevHover = prevSlide?.querySelector<HTMLElement>(".product-img-hover");
+      if (prevNormal) prevNormal.style.opacity = "1";
+      if (prevHover) prevHover.style.opacity = "0";
+
+      if (prevSlide) {
+        const done = () => {
+          prevSlide.style.pointerEvents = "none";
+        };
+        if (reduced) {
+          prevSlide.style.opacity = "0";
+          done();
+        } else {
+          animate(prevSlide, { opacity: 0, scale: 0.96 }, { duration: 0.25, ease: "easeIn" }).then(done);
+        }
+      }
+
+      nextSlide.style.pointerEvents = "auto";
+      if (reduced) {
+        nextSlide.style.opacity = "1";
+      } else {
+        animate(
+          nextSlide,
+          { opacity: [0, 1], scale: [0.94, 1], y: [14, 0] },
+          { duration: 0.45, ease: MT_EASE }
+        );
+      }
+
+      setBadge(idx);
+      paintTriggerState();
+    }
+
+    // Detonantes: hover (desktop), tap/click (móvil) y foco (teclado).
+    triggers.forEach((t) => {
+      const idx = Number(t.dataset.product ?? 0);
+      t.addEventListener("mouseenter", () => showProduct(idx));
+      t.addEventListener("click", () => showProduct(idx));
+      t.addEventListener("focus", () => showProduct(idx));
+    });
+
+    // Hover propio del centro: alterna imagen normal/detalle del producto activo.
     slides.forEach((slide) => {
       const normal = slide.querySelector<HTMLElement>(".product-img-normal");
       const hover = slide.querySelector<HTMLElement>(".product-img-hover");
+      if (!normal || !hover) return;
 
-      if (normal && hover) {
-        slide.addEventListener("mouseenter", () => {
-          isHovered = true;
-          animate(normal, { opacity: 0 }, { duration: 0.2, ease: "easeOut" });
-          animate(hover, { opacity: 1 }, { duration: 0.2, ease: "easeOut" });
-        });
-
-        slide.addEventListener("mouseleave", () => {
-          isHovered = false;
-          animate(normal, { opacity: 1 }, { duration: 0.2, ease: "easeInOut" });
-          animate(hover, { opacity: 0 }, { duration: 0.2, ease: "easeInOut" });
-        });
-      }
-    });
-
-    // Cambio de producto al hacer click (crossfade limpio)
-    const nextProduct = () => {
-      if (slides.length <= 1) return;
-
-      const prevIndex = currentIndex;
-      currentIndex = (currentIndex + 1) % slides.length;
-
-      const prevSlide = slides[prevIndex];
-      const nextSlide = slides[currentIndex];
-
-      if (prevSlide && nextSlide) {
-        const nextNormal = nextSlide.querySelector<HTMLElement>(".product-img-normal");
-        const nextHover = nextSlide.querySelector<HTMLElement>(".product-img-hover");
-
-        if (nextNormal && nextHover) {
-          if (isHovered) {
-            nextNormal.style.opacity = "0";
-            nextHover.style.opacity = "1";
-          } else {
-            nextNormal.style.opacity = "1";
-            nextHover.style.opacity = "0";
-          }
+      slide.addEventListener("mouseenter", () => {
+        if (reduced) {
+          normal.style.opacity = "0";
+          hover.style.opacity = "1";
+          return;
         }
+        animate(normal, { opacity: 0 }, { duration: 0.2, ease: "easeOut" });
+        animate(hover, { opacity: 1 }, { duration: 0.2, ease: "easeOut" });
+      });
 
-        animate(prevSlide, { opacity: 0 }, { duration: 0.2, ease: "easeInOut" }).then(() => {
-          prevSlide.style.pointerEvents = "none";
-        });
-
-        nextSlide.style.pointerEvents = "auto";
-        animate(nextSlide, { opacity: [0, 1] }, { duration: 0.2, ease: "easeInOut" });
-      }
-    };
-
-    nextBtn?.addEventListener("click", (e) => {
-      e.stopPropagation();
-      nextProduct();
+      slide.addEventListener("mouseleave", () => {
+        if (reduced) {
+          normal.style.opacity = "1";
+          hover.style.opacity = "0";
+          return;
+        }
+        animate(normal, { opacity: 1 }, { duration: 0.2, ease: "easeInOut" });
+        animate(hover, { opacity: 0 }, { duration: 0.2, ease: "easeInOut" });
+      });
     });
 
-    root.addEventListener("click", nextProduct);
+    paintTriggerState();
   }
 
+  initMoreThanInteractive();
   document.addEventListener("astro:page-load", initMoreThanInteractive);
 </script>

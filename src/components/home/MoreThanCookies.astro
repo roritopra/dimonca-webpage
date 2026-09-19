@@ -3,9 +3,66 @@ import MuchoMasQue from './MoreThan.astro';
 import MoreThanInteractive from './MoreThanInteractive.astro';
 ---
 
-<section class="relative z-10 w-full overflow-hidden bg-beige">
+<section id="more-than-cookies" class="relative z-10 w-full overflow-hidden bg-beige">
 	<div class="mx-auto flex max-w-[1440px] flex-col xl:flex-row items-center justify-between gap-12 xl:gap-8 px-6 sm:px-12 xl:px-20 py-16 sm:py-20 xl:py-32">
 		<MuchoMasQue />
 		<MoreThanInteractive />
 	</div>
 </section>
+
+<script>
+	import { animate } from 'motion';
+
+	// Entrada por vista (estándar: 0.7s, ease [0.22,1,0.36,1], stagger 0.12s):
+	// info izquierda, interactivo centro y triggers derecha entran con rise.
+	const MTQ_EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
+	const MTQ_DUR = 0.7;
+	const MTQ_STAGGER = 0.12;
+	const MTQ_Y = 24;
+
+	function setupMoreThanEnter() {
+		const section = document.getElementById('more-than-cookies');
+		if (!section || section.dataset.enterInit === '1') return;
+		section.dataset.enterInit = '1';
+
+		const blocks = [
+			section.querySelector<HTMLElement>('#more-than-copy'),
+			section.querySelector<HTMLElement>('#more-than-interactive'),
+			section.querySelector<HTMLElement>('#more-than-triggers'),
+		].filter((el): el is HTMLElement => el !== null);
+		if (blocks.length === 0) return;
+
+		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+		blocks.forEach((el) => animate(el, { opacity: 0, y: MTQ_Y }, { duration: 0 }));
+
+		const play = () => {
+			blocks.forEach((el, i) =>
+				animate(
+					el,
+					{ opacity: [0, 1], y: [MTQ_Y, 0] },
+					{ duration: MTQ_DUR, delay: i * MTQ_STAGGER, ease: MTQ_EASE }
+				)
+			);
+		};
+
+		if (!('IntersectionObserver' in window)) {
+			play();
+			return;
+		}
+		const io = new IntersectionObserver(
+			(entries) => {
+				entries.forEach((entry) => {
+					if (!entry.isIntersecting) return;
+					play();
+					io.disconnect();
+				});
+			},
+			{ threshold: 0.2, rootMargin: '0px 0px -10% 0px' }
+		);
+		io.observe(section);
+	}
+
+	setupMoreThanEnter();
+	document.addEventListener('astro:page-load', setupMoreThanEnter);
+</script>

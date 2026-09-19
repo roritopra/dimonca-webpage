@@ -189,8 +189,8 @@ export default function CartDrawer() {
 				{/* 1. Header del Carrito */}
 				<div className="flex items-center justify-between px-6 py-5 border-b border-brown/10 bg-[#fbf8f2]">
 					<div className="flex items-center gap-3">
-						<div className="flex h-8 w-8 items-center justify-center rounded-lg p-1 text-pink">
-							<svg className="h-6 w-6 stroke-current stroke-2" fill="none" viewBox="0 0 24 24">
+						<div className="flex h-10 w-10 items-center justify-center rounded-lg p-1 text-pink">
+							<svg className="h-8 w-8 stroke-current stroke-2" fill="none" viewBox="0 0 24 24">
 								<path
 									strokeLinecap="round"
 									strokeLinejoin="round"
@@ -198,7 +198,7 @@ export default function CartDrawer() {
 								/>
 							</svg>
 						</div>
-						<h2 className="font-sans text-2xl font-black tracking-tight text-brown">
+						<h2 className="font-sans text-2xl font-black tracking-tight text-brown-400">
 							Tu carrito
 						</h2>
 					</div>
@@ -285,7 +285,7 @@ export default function CartDrawer() {
 												className="relative flex items-center gap-4 sm:gap-6 bg-transparent pb-5 border-b border-brown/10 last:border-b-0"
 											>
 												{/* Marco de Imagen Cuadrado con borde rosa suave (escalado para desktop) */}
-												<div className="relative h-24 w-24 sm:h-36 sm:w-36 md:h-40 md:w-40 shrink-0 rounded-2xl sm:rounded-3xl border-2 border-pink/60 bg-beige-300 p-2 sm:p-3 flex items-center justify-center overflow-hidden shadow-xs">
+												<div className="relative h-24 w-24 sm:h-36 sm:w-36 md:h-40 md:w-40 shrink-0 rounded-2xl sm:rounded-3xl border-2 border-pink-500 bg-beige-300 p-2 sm:p-3 flex items-center justify-center overflow-hidden shadow-xs">
 													<img
 														src={item.imageSrc}
 														alt={item.name}
@@ -296,7 +296,7 @@ export default function CartDrawer() {
 												{/* Detalles del Ítem */}
 												<div className="flex flex-1 flex-col justify-between self-stretch py-1">
 													<div className="flex items-start justify-between gap-2">
-														<h3 className="font-sans text-base sm:text-xl font-extrabold text-brown leading-snug">
+														<h3 className="font-sans text-base sm:text-xl font-extrabold text-brown-400 leading-snug">
 															{item.name}
 														</h3>
 														<button
@@ -316,16 +316,16 @@ export default function CartDrawer() {
 													</div>
 
 													{isBox && item.selectedItems && item.selectedItems.length > 0 ? (
-														<ul className="mt-1.5 space-y-1 text-xs sm:text-sm text-brown/70">
+														<ul className="mt-1.5 space-y-1 text-xs sm:text-sm text-brown-400/70">
 															{item.selectedItems.map((cookieName, idx) => (
 																<li key={`${idx}-${cookieName}`} className="flex items-center gap-2">
-																	<span className="h-1.5 w-1.5 rounded-full bg-brown/50 inline-block shrink-0"></span>
+																	<span className="h-1.5 w-1.5 rounded-full bg-brown-400/50 inline-block shrink-0"></span>
 																	<span className="truncate">{cookieName}</span>
 																</li>
 															))}
 														</ul>
 													) : (
-														<p className="mt-1.5 text-xs sm:text-sm text-brown/65 line-clamp-2 leading-relaxed">
+														<p className="mt-1.5 text-xs sm:text-sm text-brown-400/70 line-clamp-2 leading-relaxed">
 															{item.shortDescription ||
 																'El postre que nos transporta a la infancia en cada bocado...'}
 														</p>
@@ -383,7 +383,7 @@ export default function CartDrawer() {
 							<hr className="border-t-2 border-pink/30 my-4" />
 
 							<div className="pt-1">
-								<h3 className="font-sans text-xl font-extrabold text-brown mb-3">
+								<h3 className="font-sans text-xl font-extrabold text-brown-400 mb-3">
 									¿Un último antojo?
 								</h3>
 
@@ -502,10 +502,10 @@ export default function CartDrawer() {
 						</AnimatePresence>
 
 						{/* 3. Footer Fijo con Subtotal y Botón Comprar */}
-						<div className="border-t border-brown/10 bg-[#f5efe3] px-6 py-5">
-							<div className="flex items-center justify-between mb-4">
-								<span className="font-sans text-lg font-black text-brown">Subtotal:</span>
-								<span className="font-sans text-xl font-black text-brown">
+						<div className="border-t border-brown/10 bg-[#f5efe3] px-6 py-3">
+							<div className="flex items-center justify-between mb-3">
+								<span className="font-sans text-lg font-black text-brown-400">Subtotal:</span>
+								<span className="font-sans text-xl font-normal text-brown-400">
 									{formatCurrency(total)}
 								</span>
 							</div>

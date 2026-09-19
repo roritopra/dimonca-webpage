@@ -90,13 +90,19 @@ export default function NavbarAuthButton() {
 	}
 
 	if (authStatus === 'loggedOut') {
+		// Mobile (<640px): solo icono — la píldora de texto no cabe junto al
+		// carrito en los 84px del contenedor y se comía el logo central.
+		// Desde sm en adelante vuelve la píldora "Iniciar sesión".
 		return (
 			<a
 				href="/login"
 				aria-label="Iniciar sesión"
-				className="flex h-9 items-center justify-center rounded-full border border-current px-3 font-sans text-xs font-bold whitespace-nowrap transition-transform hover:scale-105 active:scale-95 sm:px-3.5 sm:text-[13px]"
+				className="flex h-9 w-9 items-center justify-center rounded-full transition-transform hover:scale-105 active:scale-95 sm:h-9 sm:w-auto sm:border sm:border-current sm:px-3.5 font-sans font-bold sm:text-[13px]"
 			>
-				Iniciar sesión
+				<span className="flex sm:hidden">
+					<UserIcon />
+				</span>
+				<span className="hidden sm:inline whitespace-nowrap">Iniciar sesión</span>
 			</a>
 		);
 	}

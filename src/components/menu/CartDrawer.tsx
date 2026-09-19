@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useMemo, useState, useRef } from 'react';
 import { useStore } from '@nanostores/react';
 import { AnimatePresence, motion } from 'motion/react';
 import {
@@ -21,56 +21,20 @@ import emptyBoxImg from '../../assets/images/menu/home/empty-box.png';
 // Aviso de fallo de sincronización (carrito híbrido)
 import { $cartSyncError } from '../../stores/cartStore';
 
-// Mock de sugerencias para "¿Un último antojo?" (estilo de galletas del menú)
-import carameloSaladoImg from '../../assets/images/menu/home/galleta-item-banner-3.png';
-import rocheImg from '../../assets/images/menu/home/galleta-item-banner-4.png';
-import klimImg from '../../assets/images/menu/home/galleta-item-banner-5.png';
+// Sugerencias para "¿Un último antojo?": galletas REALES de la API (imágenes
+// completas, nombre y precio correctos). Se eligen 3 al azar excluyendo las
+// que ya están en el carrito.
+import { getAvailableCookies } from '../../lib/productsApi';
 import type { Product } from '../../types/products';
 
-const UPSELL_ITEMS: Product[] = [
-	{
-		id: 'galleta-caramelo-salado',
-		name: 'Galleta Caramelo Salado',
-		productType: 'single',
-		category: 'galletas',
-		categoryLabel: 'Galletas',
-		price: 11000,
-		priceFormatted: '$11.000',
-		shortDescription: 'Galleta con trozos de caramelo suave y un toque de sal marina.',
-		fullDescription: 'Galleta con trozos de caramelo suave y un toque de sal marina.',
-		imageSrc: carameloSaladoImg.src,
-		available: true,
-		variant: 'standard',
-	},
-	{
-		id: 'galleta-roche',
-		name: 'Galleta Roché',
-		productType: 'single',
-		category: 'galletas',
-		categoryLabel: 'Galletas',
-		price: 11000,
-		priceFormatted: '$11.000',
-		shortDescription: 'Galleta estilo bombón roche con avellanas y centro de chocolate.',
-		fullDescription: 'Galleta estilo bombón roche con avellanas y centro de chocolate.',
-		imageSrc: rocheImg.src,
-		available: true,
-		variant: 'standard',
-	},
-	{
-		id: 'galleta-klim',
-		name: 'Galleta Klim',
-		productType: 'single',
-		category: 'galletas',
-		categoryLabel: 'Galletas',
-		price: 11000,
-		priceFormatted: '$11.000',
-		shortDescription: 'La consentida de la casa con deliciosa leche en polvo Klim.',
-		fullDescription: 'La consentida de la casa con deliciosa leche en polvo Klim.',
-		imageSrc: klimImg.src,
-		available: true,
-		variant: 'standard',
-	},
-];
+function pickRandom<T>(items: T[], count: number): T[] {
+	const pool = [...items];
+	for (let i = pool.length - 1; i > 0; i--) {
+		const j = Math.floor(Math.random() * (i + 1));
+		[pool[i], pool[j]] = [pool[j], pool[i]];
+	}
+	return pool.slice(0, count);
+}
 
 export default function CartDrawer() {
 	const cart = useStore($cart);
@@ -80,12 +44,26 @@ export default function CartDrawer() {
 	const cartSyncError = useStore($cartSyncError);
 	const [mounted, setMounted] = useState(false);
 	const [lastRemovedItem, setLastRemovedItem] = useState<{ item: CartItem; index: number } | null>(null);
+	const [upsellPool, setUpsellPool] = useState<Product[]>([]);
 	const undoTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
 	useEffect(() => {
 		setMounted(true);
 		return () => {
 			if (undoTimerRef.current) clearTimeout(undoTimerRef.current);
+		};
+	}, []);
+
+	// Pool de galletas para sugerir: se carga una vez en cliente.
+	useEffect(() => {
+		let cancelled = false;
+		getAvailableCookies()
+			.then((cookies) => {
+				if (!cancelled) setUpsellPool(cookies);
+			})
+			.catch((err) => console.error('[CartDrawer] No se pudieron cargar sugerencias:', err));
+		return () => {
+			cancelled = true;
 		};
 	}, []);
 
@@ -158,6 +136,15 @@ export default function CartDrawer() {
 		window.location.href = '/checkout';
 	}
 
+	// 3 sugerencias al azar entre las galletas que NO están en el carrito.
+	const upsellItems = useMemo(() => {
+		const inCart = new Set(cart.map((i) => i.productId));
+		return pickRandom(
+			upsellPool.filter((p) => !inCart.has(p.id)),
+			3
+		);
+	}, [upsellPool, cart]);
+
 	if (!mounted) return null;
 
 	const isEmpty = cart.length === 0;
@@ -181,13 +168,13 @@ export default function CartDrawer() {
 			{/* Panel lateral */}
 			{/* Panel lateral */}
 			<aside
-				className={`fixed inset-y-0 right-0 z-10 flex w-full max-w-[500px] sm:max-w-[580px] lg:max-w-[640px] flex-col bg-[#f7f3eb] text-brown shadow-2xl transition-transform duration-300 ease-out overscroll-contain touch-auto ${
+				className={`fixed inset-y-0 right-0 z-10 flex w-full max-w-[500px] sm:max-w-[580px] lg:max-w-[640px] flex-col bg-beige-500 text-brown shadow-2xl transition-transform duration-300 ease-out overscroll-contain touch-auto ${
 					isOpen ? 'translate-x-0' : 'translate-x-full'
 				}`}
 				onWheel={(e) => e.stopPropagation()}
 			>
 				{/* 1. Header del Carrito */}
-				<div className="flex items-center justify-between px-6 py-5 border-b border-brown/10 bg-[#fbf8f2]">
+				<div className="relative z-10 flex items-center justify-between px-6 py-5 bg-beige-500 shadow-[0px_20px_18.7px_rgba(123,64,15,0.15)]">
 					<div className="flex items-center gap-3">
 						<div className="flex h-10 w-10 items-center justify-center rounded-lg p-1 text-pink">
 							<svg className="h-8 w-8 stroke-current stroke-2" fill="none" viewBox="0 0 24 24">
@@ -198,7 +185,7 @@ export default function CartDrawer() {
 								/>
 							</svg>
 						</div>
-						<h2 className="font-sans text-2xl font-black tracking-tight text-brown-400">
+						<h2 className="font-sans text-4xl font-black tracking-tight text-brown-400">
 							Tu carrito
 						</h2>
 					</div>
@@ -260,7 +247,7 @@ export default function CartDrawer() {
 
 						<div
 							id="cart-scroll-body"
-							className="flex-1 overflow-y-auto px-6 py-5 space-y-6 overscroll-contain cart-scrollbar"
+							className="flex-1 overflow-y-auto px-6 py-10 space-y-6 overscroll-contain cart-scrollbar"
 						>
 							<div className="space-y-5">
 								<AnimatePresence initial={false}>
@@ -382,27 +369,30 @@ export default function CartDrawer() {
 
 							<hr className="border-t-2 border-pink/30 my-4" />
 
+							{upsellItems.length > 0 && (
 							<div className="pt-1">
 								<h3 className="font-sans text-xl font-extrabold text-brown-400 mb-3">
 									¿Un último antojo?
 								</h3>
 
 								<div className="grid grid-cols-2 md:grid-cols-3 gap-2.5 sm:gap-3">
-									{UPSELL_ITEMS.map((upsell) => {
+									{upsellItems.map((upsell) => {
 										const currentItemInCart = cart.find((item) => item.productId === upsell.id);
 										const itemQty = currentItemInCart ? currentItemInCart.quantity : 0;
 
 										return (
 											<article
 												key={upsell.id}
-												className="flex flex-col justify-between rounded-[22px] sm:rounded-[26px] border border-pink/60 bg-beige overflow-hidden pb-3 shadow-[0_2px_10px_rgba(58,32,14,0.04)] hover:shadow-[0_6px_16px_rgba(58,32,14,0.08)] transition-all duration-300"
+												className="group flex flex-col justify-between rounded-[18px] border-2 border-pink-500 bg-beige pb-3 shadow-[0_2px_10px_rgba(58,32,14,0.04)] hover:shadow-[0_6px_16px_rgba(58,32,14,0.08)] transition-[background-color,box-shadow] duration-300 ease-out hover:bg-pink-100"
 											>
-												{/* Imagen de la galleta centrada y más arriba */}
-												<div className="relative h-20 sm:h-24 w-full overflow-hidden bg-transparent flex items-center justify-center pt-2">
+												{/* Misma mecánica que MenuCard: en reposo la galleta se ve a
+												    media vista (clip-path); en hover el clip se expande y la
+												    galleta sube completa. */}
+												<div className="relative h-20 sm:h-24 w-full bg-transparent [clip-path:inset(0_0_0_0)] transition-[clip-path] duration-[450ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:[clip-path:inset(-140px_0_0_0)]">
 													<img
 														src={upsell.imageSrc}
 														alt={upsell.name}
-														className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-28 sm:w-32 max-w-none object-contain drop-shadow-[0_4px_10px_rgba(58,32,14,0.12)] transition-transform duration-300 hover:scale-105"
+														className="absolute bottom-0 left-1/2 z-10 -translate-x-1/2 translate-y-1/2 w-36 sm:w-40 max-w-none object-contain drop-shadow-[0_4px_10px_rgba(58,32,14,0.12)] transition-transform duration-[450ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-y-[16px] sm:group-hover:translate-y-[18px]"
 														loading="lazy"
 													/>
 												</div>
@@ -464,6 +454,7 @@ export default function CartDrawer() {
 									})}
 								</div>
 							</div>
+							)}
 						</div>
 
 						{/* Toast / Alerta de Artículo Eliminado con Botón Deshacer */}
@@ -502,7 +493,7 @@ export default function CartDrawer() {
 						</AnimatePresence>
 
 						{/* 3. Footer Fijo con Subtotal y Botón Comprar */}
-						<div className="border-t border-brown/10 bg-[#f5efe3] px-6 py-3">
+						<div className="relative z-10 bg-beige-500 px-6 py-3 shadow-[0px_-8px_22.8px_rgba(157,99,45,0.21)]">
 							<div className="flex items-center justify-between mb-3">
 								<span className="font-sans text-lg font-black text-brown-400">Subtotal:</span>
 								<span className="font-sans text-xl font-normal text-brown-400">

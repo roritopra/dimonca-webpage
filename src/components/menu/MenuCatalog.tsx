@@ -26,7 +26,7 @@ function MenuCardSkeleton({ premium }: { premium: boolean }) {
 	return (
 		<article
 			aria-hidden="true"
-			className={`flex flex-col justify-between rounded-[28px] sm:rounded-[34px] border border-pink/60 bg-beige overflow-hidden pb-4 sm:pb-5 shadow-[0_4px_16px_rgba(58,32,14,0.04)] ${
+			className={`flex flex-col justify-between rounded-[18px] border-2 border-pink-500 bg-beige overflow-hidden pb-4 sm:pb-5 shadow-[0_4px_16px_rgba(58,32,14,0.04)] ${
 				premium ? 'col-span-2' : 'col-span-1'
 			}`}
 		>
@@ -205,7 +205,7 @@ export default function MenuCatalog() {
 									whileInView={{ opacity: 1, y: 0, scale: 1 }}
 									viewport={{ once: true, amount: 0.15 }}
 									transition={{ duration: 0.7, delay, ease: GRID_EASE }}
-									className={product.variant === 'premium' ? 'col-span-2' : 'col-span-1'}
+									className={`h-full ${product.variant === 'premium' ? 'col-span-2' : 'col-span-1'}`}
 								>
 									{product.variant === 'premium' ? (
 										<MenuBoxCard product={product} />

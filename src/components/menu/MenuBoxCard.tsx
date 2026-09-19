@@ -35,7 +35,7 @@ export default function MenuBoxCard({ product }: MenuBoxCardProps) {
 				},
 			}}
 			transition={CARD_SPRING}
-			className="relative col-span-2 flex flex-col justify-between rounded-[28px] sm:rounded-[34px] border border-pink/60 backdrop-blur-xs"
+			className="relative col-span-2 flex h-full flex-col justify-between rounded-[18px] border-2 border-pink-500 backdrop-blur-xs"
 		>
 			{/* Imagen de la caja: en hover solo escala, sin desplazarse */}
 			<div className="relative flex h-48 sm:h-56 w-full items-center justify-center overflow-hidden bg-transparent">

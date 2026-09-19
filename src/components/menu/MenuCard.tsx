@@ -43,7 +43,7 @@ export default function MenuCard({ product, withTransition = false }: MenuCardPr
 
 	return (
 		<article
-			className="group relative col-span-1 flex flex-col justify-between rounded-[28px] sm:rounded-[34px] border border-pink/60 bg-beige backdrop-blur-xs pb-4 sm:pb-5 shadow-[0_4px_16px_rgba(58,32,14,0.04)] hover:shadow-[0_12px_28px_rgba(58,32,14,0.09)] transition-[background-color,box-shadow] duration-300 ease-out hover:bg-pink-100"
+			className="group relative col-span-1 flex h-full flex-col justify-between rounded-[18px] border-2 border-pink-500 bg-beige backdrop-blur-xs pb-4 sm:pb-5 shadow-[0_4px_16px_rgba(58,32,14,0.04)] hover:shadow-[0_12px_28px_rgba(58,32,14,0.09)] transition-[background-color,box-shadow] duration-300 ease-out hover:bg-pink-100"
 			data-vt-card={useNames ? product.id : undefined}
 		>
 			{/* Área Superior: Imagen (Sin padding, ocupa todo el ancho y alto asignado de la card) */}

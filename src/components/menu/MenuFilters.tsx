@@ -85,8 +85,8 @@ export default function MenuFilters({
 							onClick={() => handleCategoryClick(cat.id)}
 							className={`shrink-0 rounded-full px-4 sm:px-5 py-1.5 sm:py-2 font-sans text-xs sm:text-sm font-medium transition-all duration-200 cursor-pointer ${
 								isActive
-									? 'bg-pink-100 text-pink border border-pink font-bold shadow-xs'
-									: 'bg-transparent text-brown/80 border border-brown/30 hover:border-brown/60 hover:text-brown'
+									? 'bg-pink-100 text-pink border border-pink font-extrabold shadow-xs'
+									: 'bg-[#efe9df] text-brown/80 border border-brown/30 hover:border-brown/60 hover:text-brown'
 							}`}
 						>
 							{cat.label}
